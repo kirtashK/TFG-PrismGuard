@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b839aa1ac52df64ca4036114f616d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskName: Talar arbol
   workDuration: 3
+  priority: 1
 --- !u!1001 &6086734057126185482
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1457557627152511298, guid: 3637238427c093d4082c824f45fc4383, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1457557627152511298, guid: 3637238427c093d4082c824f45fc4383, type: 3}
       propertyPath: m_LocalPosition.z
