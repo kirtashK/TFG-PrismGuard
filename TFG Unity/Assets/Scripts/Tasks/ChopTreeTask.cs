@@ -9,6 +9,9 @@ public class ChopTreeTask : MonoBehaviour, ITask
     [SerializeField]
     private int priority = 1;
 
+    [SerializeField]
+    private float interactionRange = 1.5f;
+
     public Vector3 TaskPosition
     {
         get
@@ -22,6 +25,14 @@ public class ChopTreeTask : MonoBehaviour, ITask
         get
         {
             return priority;
+        }
+    }
+
+    public float InteractionRange
+    {
+        get
+        {
+            return interactionRange;
         }
     }
 

@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 160101471}
   - component: {fileID: 160101470}
   - component: {fileID: 160101474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pared
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,6 +317,10 @@ PrefabInstance:
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_Name
       value: WorkerAgent 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -718,7 +722,7 @@ GameObject:
   - component: {fileID: 529543649}
   - component: {fileID: 529543648}
   - component: {fileID: 529543647}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pared (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,10 +882,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6283706265685560150, guid: 474f5c519a19da7478cbba706466d7b4, type: 3}
-      propertyPath: m_Carve
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8304148610584032307, guid: 474f5c519a19da7478cbba706466d7b4, type: 3}
       propertyPath: m_Name
       value: Arbol (5)
@@ -904,7 +904,8 @@ GameObject:
   - component: {fileID: 761696953}
   - component: {fileID: 761696952}
   - component: {fileID: 761696951}
-  m_Layer: 0
+  - component: {fileID: 761696956}
+  m_Layer: 7
   m_Name: Pared (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1016,6 +1017,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 888538556}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &761696956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761696950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 888538556}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Paredes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1181,12 +1202,12 @@ GameObject:
   - component: {fileID: 1224687707}
   - component: {fileID: 1224687706}
   - component: {fileID: 1224687710}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Suelo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!64 &1224687706
 MeshCollider:
@@ -1297,7 +1318,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -1385,7 +1406,7 @@ GameObject:
   - component: {fileID: 1689342967}
   - component: {fileID: 1689342966}
   - component: {fileID: 1689342965}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pared (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1653,7 +1674,7 @@ GameObject:
   - component: {fileID: 1981955818}
   - component: {fileID: 1981955817}
   - component: {fileID: 1981955816}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pared (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

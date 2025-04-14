@@ -49,12 +49,6 @@ public class TaskManager : MonoBehaviour
         foreach (ITask task in availableTasks)
         {
             int taskPriority = task.Priority;
-            
-            
-            //float taskDistance = Vector3.Distance(workerPosition, task.TaskPosition);
-
-
-
             float taskDistance = GetPathLength(workerPosition, task.TaskPosition);
 
             Debug.Log("Task distance: " + taskDistance);
@@ -63,9 +57,6 @@ public class TaskManager : MonoBehaviour
             {
                 continue;
             }
-
-
-
 
             if (taskPriority > highestPriority)
             {
@@ -88,26 +79,13 @@ public class TaskManager : MonoBehaviour
         return bestTask;
     }
 
-
-
     private float GetPathLength(Vector3 start, Vector3 end)
     {
         Debug.DrawRay(start, Vector3.up * 2, Color.green, 2f);
         Debug.DrawRay(end, Vector3.up * 2, Color.red, 2f);
 
-        NavMeshHit hitStart, hitEnd;
-
-        // Comprobar si ambos puntos están cerca de una posición válida en el NavMesh
-        bool validStart = NavMesh.SamplePosition(start, out hitStart, 3.0f, NavMesh.AllAreas);
-        bool validEnd = NavMesh.SamplePosition(end, out hitEnd, 3.0f, NavMesh.AllAreas);
-
-        if (!validStart || !validEnd)
-        {
-            return -1f;
-        }
-
         NavMeshPath path = new NavMeshPath();
-        if (NavMesh.CalculatePath(hitStart.position, hitEnd.position, NavMesh.AllAreas, path))
+        if (NavMesh.CalculatePath(start, end, NavMesh.AllAreas, path))
         {
             if (path.status != NavMeshPathStatus.PathComplete)
             {
@@ -127,7 +105,6 @@ public class TaskManager : MonoBehaviour
             {
                 length += Vector3.Distance(path.corners[i], path.corners[i + 1]);
             }
-
             return length;
         }
 

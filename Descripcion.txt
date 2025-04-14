@@ -1,6 +1,14 @@
-TO DO:
-- Arreglar TaskManager, hace falta usar sample para pillar path,
-    intentar que baste con el objeto tocando el suelo
+#########	
+To do	
+#########
+Comprobar si tarea sigue existiendo ?
+
+
+
+
+#########
+Descripción
+##########
 
 Defender cristal mágico, que es la estructura principal que da magia a las islas
 Los recursos se regeneran poco a poco gracias a la magia de este cristal
@@ -66,10 +74,16 @@ Si aserradero tiene herramientas,
 los trabajadores asignados a ese aserradero lo hacen mejor ?
 pero se degradan con el tiempo
 
-
-Tecnico
+#########
+Detalles técnicos
+#########
 Las IAs se mueven mediante NavMesh, nativo de Unity
 Los trabajadores siguen un finite state machine de tareas
 las tareas heredan de una tarea abstracta, por ejemplo, talar arboles es una tarea
 
 La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
+
+Cada tarea tiene una distancia customizable a la que el worker se parará, 
+para evitar que el worker se mueva al centro
+
+Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
