@@ -3,6 +3,9 @@ To do
 #########
 Comprobar si tarea sigue existiendo ?
 
+Al mover items por trabajador, por ahora simplemente los estamos "teletransportando", 
+modificar para que se muevan de forma fiel
+
 
 
 
@@ -87,3 +90,8 @@ Cada tarea tiene una distancia customizable a la que el worker se parará,
 para evitar que el worker se mueva al centro
 
 Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
+
+Los items tienen un ScriptableObject
+
+Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
+por ejemplo, se crea un tronco al talar un arbol

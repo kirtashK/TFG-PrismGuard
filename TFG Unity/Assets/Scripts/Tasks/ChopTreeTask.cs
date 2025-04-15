@@ -68,6 +68,9 @@ public class ChopTreeTask : MonoBehaviour, ITask
     {
         yield return new WaitForSeconds(workDuration);
         Debug.Log(name + " - Árbol talado.");
+
+        ItemManager.Instance.CreateTronco(transform.position);
+
         onComplete?.Invoke();
         Destroy(gameObject);
     }

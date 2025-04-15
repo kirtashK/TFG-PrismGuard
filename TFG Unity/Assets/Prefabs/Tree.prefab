@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3154139229096967092}
   - component: {fileID: 3340656902042960206}
   m_Layer: 0
-  m_Name: ArbolModel
+  m_Name: Tree Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4634826861694142956}
   - component: {fileID: 8548568865763263404}
   m_Layer: 0
-  m_Name: Arbol
+  m_Name: Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
