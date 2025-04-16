@@ -1,0 +1,119 @@
+#########	
+To do	
+#########
+
+Sawmill procesa un tronco varias veces en vez de solo una cada tronco, impares ?
+
+Sawmill marca arboles alrededor para talar, en vez de todos los arboles estar marcados
+
+### Far...  ###
+
+Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+
+Research
+
+Worker inventory, capacidad mejorada por researches
+
+
+
+#########
+Detalles técnicos
+#########
+Las IAs se mueven mediante NavMesh, nativo de Unity
+Los trabajadores siguen un finite state machine de estados
+
+Estados:
+- IdleState
+- WorkingState
+- MovingState
+- TransportItemState
+
+los workers cumplen tareas, las cuales heredan de una tarea abstracta
+Tareas:
+- ChopTreeTask
+- MoveItemTask
+
+La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
+
+Cada tarea tiene una distancia customizable a la que el worker se parará, 
+para evitar que el worker se mueva al centro
+
+Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
+
+Los items tienen un ScriptableObject
+
+Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
+por ejemplo, se crea un tronco al talar un arbol
+
+Tambien hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
+eligiendo primero tareas cercanas al worker o de mayor prioridad
+
+
+
+#########
+Descripción
+##########
+
+Defender cristal mágico, que es la estructura principal que da magia a las islas
+Los recursos se regeneran poco a poco gracias a la magia de este cristal
+trabajadores y soldados son IAs
+Los trabajadores hacen tareas de forma automatica
+Por ejemplo, recolectar recursos, construir, reparar, mover recursos, investigar
+Para recolectar recursos, se construye un edificio, 
+por ejemplo un aserradero, y se talan un area alrededor del edificio
+
+El jugador mueve una camara, capaz de moverse horizontalmente y verticalmente, es capaz de hacer zoom
+La camara tiene limites de pitch, para evitar ciertos ángulos
+Al pulsar Shift la cámara se mueve mas rápido tanto horizontalmente como verticalmente
+
+El jugador elige donde se construiran los edificios o bloques, 
+y los trabajadores se encargaran de distribuir los materiales necesarios y construirlo
+
+Recursos:
+- Tronco de madera y tabla madera
+- Piedra
+- Mena de cobre y lingote de cobre
+- Mena de hierro y lingote de hierro
+- Carbon
+- Lingote de acero
+
+Estructuras:
+- Aserradero: corta arboles alrededor, transforma logs a tablas, puede usar herramientas
+- Cantera: mina piedras alrededor, puede usar herramientas
+- Similar a cantera pero para minerales y carbon, o unificar?
+- pallet y/o almacen donde guardar items
+- Workbench para crear herramientas y armas, puede usar herramientas
+- Charcoal klin donde crear carbon a partir de madera
+- Smeltery, para smelt cobre, hierro, crear acero, etc... puede usar herramientas
+
+Comida ? Granjas? Molinos? Animales para cuero y comida ?
+
+El jugador puede crear mas trabajadores o soldados en el cristal mágico
+Necesita recursos y almas de los enemigos, obtenidas al sobrevivir cada noche
+
+Los soldados pueden ser cuerpo a cuerpo o con rango
+- Escudo ligero y espada: la unidad mas básica y barata
+- Escudo pesado y lanza: Defensivo, lento
+- Espada y daga: veneno, esquivar
+- Halberd: daño en area, lento, buen alcanze
+- Espada larga: caballero, armadura, buen alcanze, caro
+
+- Arco simple: unidad de rango básica, barato pero poco efectivo,
+especialmente contra enemigos con armadura
+- Arco recurvo: mas alcance y daño
+- Ballesta: mas alcance y daño, efectivo contra enemigos con armadura, recarga lenta
+- Mago ?: daño en area
+
+Estas armas se han de construir en workbench antes de poder ser usadas para crear la unidad
+
+Por la noche, aparecen oleadas enemigos, 
+el jugador ha de defender el cristal mágico, si es destruido, pierde
+
+El jugador puede hacer research, 
+por ejemplo para poder crear ciertas unidades o construir ciertos edificios
+Research consume recursos y tiempo de los trabajadores
+
+Crear herramientas para mejorar trabajadores en ciertos edificios ?
+Si aserradero tiene herramientas, 
+los trabajadores asignados a ese aserradero lo hacen mejor ?
+pero se degradan con el tiempo
