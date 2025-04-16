@@ -31,6 +31,12 @@ public class SawmillProcessor : MonoBehaviour
     private int maxConcurrentProcessing = 2;
     private int currentProcessingCount = 0;
 
+    private Collider[] overlapResults = new Collider[10];
+
+    // Detectar troncos alrededor cada x tiempo en vez de cada update()
+    private float detectionInterval = 2f;
+    private float nextDetectionTime = 0f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,18 +49,10 @@ public class SawmillProcessor : MonoBehaviour
 
     private void Update()
     {
-        // Detectar troncos en el radio de detección y generar tareas de traslado
-        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius, logLayer);
-        foreach (Collider col in colliders)
+        if (Time.time >= nextDetectionTime)
         {
-            if (col.CompareTag("Log"))
-            {
-                if (col.GetComponent<MoveLogTask>() == null)
-                {
-                    MoveLogTask moveTask = col.gameObject.AddComponent<MoveLogTask>();
-                    moveTask.Destination = transform.position;
-                }
-            }
+            nextDetectionTime = Time.time + detectionInterval;
+            DetectLogs();
         }
 
         if (currentPlankCount < maxPlanks && currentLogCount > 0 && currentProcessingCount < maxConcurrentProcessing)
@@ -63,10 +61,10 @@ public class SawmillProcessor : MonoBehaviour
         }
     }
 
-    // Método llamado desde MoveLogTask cuando el tronco es entregado al aserradero
     public void OnLogDelivered(GameObject log)
     {
         currentLogCount++;
+        Destroy(log);
         Debug.Log("Aserradero: Tronco entregado. Total de troncos en aserradero: " + currentLogCount);
     }
 
@@ -80,5 +78,27 @@ public class SawmillProcessor : MonoBehaviour
         Debug.Log("Aserradero: Tronco procesado. Se han producido " + planksPerLog +
                   " tablones. Total de tablones: " + currentPlankCount + " | Troncos restantes: " + currentLogCount);
         currentProcessingCount--;
+    }
+
+    private void DetectLogs()
+    {
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, overlapResults, logLayer);
+        for (int i = 0; i < numColliders; i++)
+        {
+            Collider col = overlapResults[i];
+            GameObject logObject = col.transform.root.gameObject;
+            if (logObject.CompareTag("Log"))
+            {
+                if (logObject.GetComponent<MoveItemTask>() == null)
+                {
+                    MoveItemTask moveTask = logObject.AddComponent<MoveItemTask>();
+                    moveTask.Destination = transform.position;
+                    moveTask.OnArrivalCallback = (item) =>
+                    {
+                        SawmillProcessor.Instance.OnLogDelivered(item);
+                    };
+                }
+            }
+        }
     }
 }

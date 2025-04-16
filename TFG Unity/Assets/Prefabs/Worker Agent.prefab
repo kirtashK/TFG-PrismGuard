@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6648219003927765443}
   - component: {fileID: 6805369548378288826}
   - component: {fileID: 423437163158893341}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Worker Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 8837244650898311105}
   - component: {fileID: 1391396505683991130}
   - component: {fileID: 2658543494623460779}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Worker Agent
   m_TagString: Untagged
   m_Icon: {fileID: 0}

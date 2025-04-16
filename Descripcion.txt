@@ -1,11 +1,52 @@
 #########	
 To do	
 #########
-Comprobar si tarea sigue existiendo ?
 
-Al mover items por trabajador, por ahora simplemente los estamos "teletransportando", 
-modificar para que se muevan de forma fiel
+Sawmill procesa un tronco varias veces en vez de solo una cada tronco, impares ?
 
+Sawmill marca arboles alrededor para talar, en vez de todos los arboles estar marcados
+
+### Far...  ###
+
+Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+
+Research
+
+Worker inventory, capacidad mejorada por researches
+
+
+
+#########
+Detalles técnicos
+#########
+Las IAs se mueven mediante NavMesh, nativo de Unity
+Los trabajadores siguen un finite state machine de estados
+
+Estados:
+- IdleState
+- WorkingState
+- MovingState
+- TransportItemState
+
+los workers cumplen tareas, las cuales heredan de una tarea abstracta
+Tareas:
+- ChopTreeTask
+- MoveItemTask
+
+La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
+
+Cada tarea tiene una distancia customizable a la que el worker se parará, 
+para evitar que el worker se mueva al centro
+
+Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
+
+Los items tienen un ScriptableObject
+
+Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
+por ejemplo, se crea un tronco al talar un arbol
+
+Tambien hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
+eligiendo primero tareas cercanas al worker o de mayor prioridad
 
 
 
@@ -17,7 +58,7 @@ Defender cristal mágico, que es la estructura principal que da magia a las isla
 Los recursos se regeneran poco a poco gracias a la magia de este cristal
 trabajadores y soldados son IAs
 Los trabajadores hacen tareas de forma automatica
-Por ejemplo, recolectar recursos, construir, reparar, mover recursos, research
+Por ejemplo, recolectar recursos, construir, reparar, mover recursos, investigar
 Para recolectar recursos, se construye un edificio, 
 por ejemplo un aserradero, y se talan un area alrededor del edificio
 
@@ -29,15 +70,15 @@ El jugador elige donde se construiran los edificios o bloques,
 y los trabajadores se encargaran de distribuir los materiales necesarios y construirlo
 
 Recursos:
-- Madera
+- Tronco de madera y tabla madera
 - Piedra
-- Cobre
-- Hierro
+- Mena de cobre y lingote de cobre
+- Mena de hierro y lingote de hierro
 - Carbon
-- Acero
+- Lingote de acero
 
 Estructuras:
-- Aserradero: corta arboles alrededor, transforma logs a madera, puede usar herramientas
+- Aserradero: corta arboles alrededor, transforma logs a tablas, puede usar herramientas
 - Cantera: mina piedras alrededor, puede usar herramientas
 - Similar a cantera pero para minerales y carbon, o unificar?
 - pallet y/o almacen donde guardar items
@@ -76,22 +117,3 @@ Crear herramientas para mejorar trabajadores en ciertos edificios ?
 Si aserradero tiene herramientas, 
 los trabajadores asignados a ese aserradero lo hacen mejor ?
 pero se degradan con el tiempo
-
-#########
-Detalles técnicos
-#########
-Las IAs se mueven mediante NavMesh, nativo de Unity
-Los trabajadores siguen un finite state machine de tareas
-las tareas heredan de una tarea abstracta, por ejemplo, talar arboles es una tarea
-
-La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
-
-Cada tarea tiene una distancia customizable a la que el worker se parará, 
-para evitar que el worker se mueva al centro
-
-Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
-
-Los items tienen un ScriptableObject
-
-Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
-por ejemplo, se crea un tronco al talar un arbol

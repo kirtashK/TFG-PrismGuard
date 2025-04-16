@@ -22,6 +22,10 @@ public class WorkingState : IWorkerState
                 Debug.Log(worker.name + " - Tarea completada, volviendo a Idle.");
             });
         }
+        else if (worker.CurrentTask is MoveItemTask)
+        {
+            worker.ChangeState(new TransportItemState());
+        }
     }
 
     public void ExitState(Worker worker)
