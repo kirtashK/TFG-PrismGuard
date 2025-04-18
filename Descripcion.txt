@@ -2,17 +2,13 @@
 To do	
 #########
 
-Sawmill procesa un tronco varias veces en vez de solo una cada tronco, impares ?
-
-Sawmill marca arboles alrededor para talar, en vez de todos los arboles estar marcados
-
 Almacen/pallets
 
 Tablones creados por sawmill, mover a almacen
 
-Los recursos se regeneran, mismo spot
-no se destruye el recurso, se desactiva, al cabo de x  segundos, reactivar
 Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
+
+Al regenerar recursos, comprobar primero si item en suelo ?
 
 ### 
 Far...  

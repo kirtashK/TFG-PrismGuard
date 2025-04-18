@@ -7,12 +7,15 @@ public class SawmillProcessor : MonoBehaviour
 {
     public static SawmillProcessor Instance { get; private set; }
 
-    [Header("Detección de troncos")]
-    [Tooltip("Radio en el que se detectan los troncos para ser trasladados al aserradero")]
+    [Header("Detección")]
+    [Tooltip("Radio de deteccion")]
     public float detectionRadius = 10f;
 
     [Tooltip("Capa donde se encuentran los troncos")]
     public LayerMask logLayer;
+
+    [Tooltip("Capa donde se encuentran los árboles")]
+    public LayerMask treeLayer;
 
     [Header("Procesamiento")]
     [Tooltip("Máximo de tablones que puede producir el aserradero")]
@@ -31,7 +34,8 @@ public class SawmillProcessor : MonoBehaviour
     private int maxConcurrentProcessing = 2;
     private int currentProcessingCount = 0;
 
-    private Collider[] overlapResults = new Collider[10];
+    private Collider[] treeResults = new Collider[20];
+    private Collider[] logResults = new Collider[10];
 
     private float detectionInterval = 2f;
     private float nextDetectionTime = 0f;
@@ -44,6 +48,9 @@ public class SawmillProcessor : MonoBehaviour
             return;
         }
         Instance = this;
+
+        SphereCollider detectionCollider = GetComponent<SphereCollider>();
+        detectionCollider.radius = detectionRadius;
     }
 
     private void Update()
@@ -51,6 +58,7 @@ public class SawmillProcessor : MonoBehaviour
         if (Time.time >= nextDetectionTime)
         {
             nextDetectionTime = Time.time + detectionInterval;
+            DetectTrees();
             DetectLogs();
         }
 
@@ -83,23 +91,55 @@ public class SawmillProcessor : MonoBehaviour
 
     private void DetectLogs()
     {
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, overlapResults, logLayer);
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, 
+            detectionRadius, 
+            logResults, 
+            logLayer
+        );
+
         for (int i = 0; i < numColliders; i++)
         {
-            Collider col = overlapResults[i];
-            GameObject logObject = col.transform.root.gameObject;
-            if (logObject.CompareTag("Log"))
+            Collider col = logResults[i];
+            GameObject logObject = col.transform.parent.gameObject;
+
+            if (logObject.CompareTag("Log") 
+                && logObject.GetComponent<MoveItemTask>() == null)
             {
-                if (logObject.GetComponent<MoveItemTask>() == null)
+                MoveItemTask moveTask = logObject.AddComponent<MoveItemTask>();
+                moveTask.Destination = transform.position;
+                moveTask.OnArrivalCallback = (item) =>
                 {
-                    MoveItemTask moveTask = logObject.AddComponent<MoveItemTask>();
-                    moveTask.Destination = transform.position;
-                    moveTask.OnArrivalCallback = (item) =>
-                    {
-                        SawmillProcessor.Instance.OnLogDelivered(item);
-                    };
-                }
+                    SawmillProcessor.Instance.OnLogDelivered(item);
+                };
             }
         }
+    }
+
+    private void DetectTrees()
+    {
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position,
+            detectionRadius,
+            treeResults,
+            treeLayer
+        );
+
+        for (int i = 0; i < numColliders; i++)
+        {
+            Collider col = treeResults[i];
+            GameObject treeObject = col.transform.parent.gameObject;
+
+            if (treeObject.CompareTag("Tree") 
+                && treeObject.GetComponent<ChopTreeTask>() != null
+                )
+            {
+                treeObject.GetComponent<ChopTreeTask>().enabled = true;
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }

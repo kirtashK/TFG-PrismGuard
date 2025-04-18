@@ -4,7 +4,7 @@ public class ItemInstance : MonoBehaviour
 {
     public ItemData itemData;
 
-    private void Start()
+    /*private void Start()
     {
         if (itemData == null)
         {
@@ -23,5 +23,5 @@ public class ItemInstance : MonoBehaviour
             + "Peso: " + itemData.weight + ".");
 
         // Implementar la lógica de recoger el ítem, etc.
-    }
+    }*/
 }
