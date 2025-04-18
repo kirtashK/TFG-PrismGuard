@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5287419866405069590}
   - component: {fileID: 3154139229096967092}
   - component: {fileID: 3340656902042960206}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tree Model
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,10 +118,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3747072488252904037}
   - component: {fileID: 4634826861694142956}
+  - component: {fileID: 1718797453295485573}
   - component: {fileID: 8548568865763263404}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tree
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +150,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8304148610584032307}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b839aa1ac52df64ca4036114f616d5d, type: 3}
   m_Name: 
@@ -157,6 +158,19 @@ MonoBehaviour:
   workDuration: 3
   priority: 1
   interactionRange: 1.5
+--- !u!114 &1718797453295485573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304148610584032307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7690b7f51b47c934e871c7b4c67db2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: c5126d6f9a2b9564b98891072f0ee9ec, type: 2}
 --- !u!208 &8548568865763263404
 NavMeshObstacle:
   m_ObjectHideFlags: 0

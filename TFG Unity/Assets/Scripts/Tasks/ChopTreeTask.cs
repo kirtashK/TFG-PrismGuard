@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Mono.Cecil;
 
 public class ChopTreeTask : MonoBehaviour, ITask
 {
@@ -69,9 +70,13 @@ public class ChopTreeTask : MonoBehaviour, ITask
         yield return new WaitForSeconds(workDuration);
         Debug.Log(name + " - Árbol talado.");
 
+        //TODO poder generar mas de un tronco, rng ?
         ItemManager.Instance.CreateTronco(transform.position);
 
         onComplete?.Invoke();
-        Destroy(gameObject);
+
+        ResourceManager.Instance.NotifyResourceCollected(gameObject.GetComponent<ResourceInstance>());
+
+        gameObject.GetComponent<ChopTreeTask>().enabled = false;
     }
 }
