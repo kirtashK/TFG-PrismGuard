@@ -33,7 +33,6 @@ public class SawmillProcessor : MonoBehaviour
 
     private Collider[] overlapResults = new Collider[10];
 
-    // Detectar troncos alrededor cada x tiempo en vez de cada update()
     private float detectionInterval = 2f;
     private float nextDetectionTime = 0f;
 
@@ -55,7 +54,9 @@ public class SawmillProcessor : MonoBehaviour
             DetectLogs();
         }
 
-        if (currentPlankCount < maxPlanks && currentLogCount > 0 && currentProcessingCount < maxConcurrentProcessing)
+        while (currentPlankCount < maxPlanks &&
+        currentLogCount > currentProcessingCount &&
+        currentProcessingCount < maxConcurrentProcessing)
         {
             StartCoroutine(ProcessLogCoroutine());
         }

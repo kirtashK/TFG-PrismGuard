@@ -6,7 +6,17 @@ Sawmill procesa un tronco varias veces en vez de solo una cada tronco, impares ?
 
 Sawmill marca arboles alrededor para talar, en vez de todos los arboles estar marcados
 
-### Far...  ###
+Almacen/pallets
+
+Tablones creados por sawmill, mover a almacen
+
+Los recursos se regeneran, mismo spot
+no se destruye el recurso, se desactiva, al cabo de x  segundos, reactivar
+Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
+
+### 
+Far...  
+###
 
 Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
@@ -20,7 +30,7 @@ Worker inventory, capacidad mejorada por researches
 Detalles técnicos
 #########
 Las IAs se mueven mediante NavMesh, nativo de Unity
-Los trabajadores siguen un finite state machine de estados
+Los trabajadores siguen una maquina finita de estados
 
 Estados:
 - IdleState
@@ -28,12 +38,12 @@ Estados:
 - MovingState
 - TransportItemState
 
-los workers cumplen tareas, las cuales heredan de una tarea abstracta
+La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
+
+Los trabajadores cumplen tareas, las cuales heredan de una interfaz
 Tareas:
 - ChopTreeTask
 - MoveItemTask
-
-La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
 
 Cada tarea tiene una distancia customizable a la que el worker se parará, 
 para evitar que el worker se mueva al centro
@@ -70,7 +80,7 @@ El jugador elige donde se construiran los edificios o bloques,
 y los trabajadores se encargaran de distribuir los materiales necesarios y construirlo
 
 Recursos:
-- Tronco de madera y tabla madera
+- Tronco de madera y tabla de madera
 - Piedra
 - Mena de cobre y lingote de cobre
 - Mena de hierro y lingote de hierro
@@ -109,8 +119,8 @@ Estas armas se han de construir en workbench antes de poder ser usadas para crea
 Por la noche, aparecen oleadas enemigos, 
 el jugador ha de defender el cristal mágico, si es destruido, pierde
 
-El jugador puede hacer research, 
-por ejemplo para poder crear ciertas unidades o construir ciertos edificios
+El jugador puede investigar, 
+por ejemplo para poder crear ciertas unidades o construir ciertos edificios, o mejorar stats
 Research consume recursos y tiempo de los trabajadores
 
 Crear herramientas para mejorar trabajadores en ciertos edificios ?
