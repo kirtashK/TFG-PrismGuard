@@ -34,11 +34,28 @@ public class SawmillProcessor : MonoBehaviour
     private int maxConcurrentProcessing = 2;
     private int currentProcessingCount = 0;
 
-    private Collider[] treeResults = new Collider[20];
+    private Collider[] treeResults = new Collider[5];
     private Collider[] logResults = new Collider[10];
 
     private float detectionInterval = 2f;
     private float nextDetectionTime = 0f;
+
+    [Header("Producción")]
+    [Tooltip("Prefab de los tablones")]
+    public GameObject plankPrefab;
+
+    [Tooltip("Datos de los tablones")]
+    public ItemData plankData;
+
+    [Tooltip("Intervalo en segundos para intentar enviar tablones a almacén")]
+    public float dispatchInterval = 5f;
+    private float nextDispatchTime = 0f;
+
+    [Tooltip("Lugar donde crear los tablones")]
+    [SerializeField]
+    private Transform plankDropSpot;
+
+
 
     private void Awake()
     {
@@ -48,9 +65,6 @@ public class SawmillProcessor : MonoBehaviour
             return;
         }
         Instance = this;
-
-        SphereCollider detectionCollider = GetComponent<SphereCollider>();
-        detectionCollider.radius = detectionRadius;
     }
 
     private void Update()
@@ -68,6 +82,13 @@ public class SawmillProcessor : MonoBehaviour
         {
             StartCoroutine(ProcessLogCoroutine());
         }
+
+        if (Time.time >= nextDispatchTime)
+        {
+            nextDispatchTime = Time.time + dispatchInterval;
+            DispatchPlanksToWarehouse();
+        }
+
     }
 
     public void OnLogDelivered(GameObject log)
@@ -80,12 +101,13 @@ public class SawmillProcessor : MonoBehaviour
     private IEnumerator ProcessLogCoroutine()
     {
         currentProcessingCount++;
-        Debug.Log("Aserradero: Procesando tronco. Tiempo: " + processingTime + " segundos.");
+        Debug.Log($"Aserradero: Procesando tronco ({processingTime}s)...");
         yield return new WaitForSeconds(processingTime);
+
         currentLogCount--;
         currentPlankCount += planksPerLog;
-        Debug.Log("Aserradero: Tronco procesado. Se han producido " + planksPerLog +
-                  " tablones. Total de tablones: " + currentPlankCount + " | Troncos restantes: " + currentLogCount);
+        Debug.Log($"Aserradero: +{planksPerLog} tablones internos. Stock interno = {currentPlankCount}, troncos = {currentLogCount}");
+
         currentProcessingCount--;
     }
 
@@ -134,6 +156,42 @@ public class SawmillProcessor : MonoBehaviour
             {
                 treeObject.GetComponent<ChopTreeTask>().enabled = true;
             }
+        }
+    }
+
+    private void DispatchPlanksToWarehouse()
+    {
+        if (currentPlankCount <= 0)
+            return;
+
+        var warehouses = WarehouseManager.Instance.GetWarehousesThatCanStore(plankData);
+
+        foreach (Warehouse warehouse in warehouses)
+        {
+            int freeSlots = warehouse.capacity - warehouse.currentCount;
+            int toSend = Mathf.Min(currentPlankCount, freeSlots);
+
+            for (int i = 0; i < toSend; i++)
+            {
+                GameObject plank = Instantiate(plankPrefab, plankDropSpot.position, Quaternion.identity);
+
+                MoveItemTask task = plank.AddComponent<MoveItemTask>();
+                task.Destination = warehouse.GetStoragePosition();
+                task.OnArrivalCallback = item =>
+                {
+                    item.transform.position = warehouse.GetStoragePosition();
+                    Destroy(item.GetComponent<MoveItemTask>());
+                    item.SetActive(true);
+                    warehouse.StoreItem(plankData);
+                };
+            }
+            currentPlankCount -= toSend;
+            // Reservar espacio en el almacen
+            // TODO si el item se suelta por el camino, liberar el espacio reservado
+            warehouse.currentCount += toSend;
+
+            if (currentPlankCount <= 0)
+                break;
         }
     }
 

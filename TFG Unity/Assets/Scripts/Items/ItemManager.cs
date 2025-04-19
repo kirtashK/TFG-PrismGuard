@@ -35,7 +35,7 @@ public class ItemManager : MonoBehaviour
         if (itemInstance != null)
         {
             itemInstance.itemData = logData;
-            Debug.Log("Se ha creado un tronco en la posición: " + position);
+            //Debug.Log("Se ha creado un tronco en la posición: " + position);
         }
         else
         {

@@ -54,6 +54,6 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     public void Execute(Worker worker, System.Action onComplete)
     {
-        Debug.Log(name + " - El worker " + worker.name + " comienza a mover el item a " + Destination);
+        //Debug.Log(name + " - El worker " + worker.name + " comienza a mover el item a " + Destination);
     }
 }

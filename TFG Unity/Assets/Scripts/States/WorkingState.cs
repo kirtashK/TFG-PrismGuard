@@ -6,7 +6,7 @@ public class WorkingState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        Debug.Log(worker.name + " - Comenzando tarea.");
+        //Debug.Log(worker.name + " - Comenzando tarea.");
         started = false;
     }
 
@@ -19,7 +19,7 @@ public class WorkingState : IWorkerState
             {
                 worker.CurrentTask = null;
                 worker.ChangeState(new IdleState());
-                Debug.Log(worker.name + " - Tarea completada, volviendo a Idle.");
+                //Debug.Log(worker.name + " - Tarea completada, volviendo a Idle.");
             });
         }
         else if (worker.CurrentTask is MoveItemTask)
