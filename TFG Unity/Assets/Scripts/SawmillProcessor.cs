@@ -168,27 +168,31 @@ public class SawmillProcessor : MonoBehaviour
 
         foreach (Warehouse warehouse in warehouses)
         {
-            int freeSlots = warehouse.capacity - warehouse.currentCount;
+            int freeSlots = warehouse.FreeSlots;
+
+            if (freeSlots <= 0)
+            {
+                continue;
+            }
+
             int toSend = Mathf.Min(currentPlankCount, freeSlots);
 
             for (int i = 0; i < toSend; i++)
             {
+                warehouse.ReserveSlot();
+
                 GameObject plank = Instantiate(plankPrefab, plankDropSpot.position, Quaternion.identity);
 
                 MoveItemTask task = plank.AddComponent<MoveItemTask>();
                 task.Destination = warehouse.GetStoragePosition();
-                task.OnArrivalCallback = item =>
+                task.OnArrivalCallback = itemObject =>
                 {
-                    item.transform.position = warehouse.GetStoragePosition();
-                    Destroy(item.GetComponent<MoveItemTask>());
-                    item.SetActive(true);
-                    warehouse.StoreItem(plankData);
+                    itemObject.SetActive(true);
+                    warehouse.StoreItem(itemObject, plankData);
+                    Destroy(itemObject.GetComponent<MoveItemTask>());
                 };
             }
             currentPlankCount -= toSend;
-            // Reservar espacio en el almacen
-            // TODO si el item se suelta por el camino, liberar el espacio reservado
-            warehouse.currentCount += toSend;
 
             if (currentPlankCount <= 0)
                 break;

@@ -154,6 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   warehouseType: {fileID: 11400000, guid: 126a67e466f268f49a9cceac73a06e1b, type: 2}
-  capacity: 12
+  capacity: 6
   currentCount: 0
   storedItem: {fileID: 0}

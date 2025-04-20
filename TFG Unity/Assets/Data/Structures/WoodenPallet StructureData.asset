@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Wooden pallet
   builtPrefab: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
-  blueprintPrefab: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
+  blueprintPrefab: {fileID: 197590645339865634, guid: 09b6bb50f15c7674193b8246919a3a03, type: 3}
   requirements:
-  - item: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+  - item: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 2

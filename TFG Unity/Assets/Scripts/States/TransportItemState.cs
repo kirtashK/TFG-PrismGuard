@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TransportItemState : IWorkerState
@@ -26,10 +27,15 @@ public class TransportItemState : IWorkerState
             if (!worker.Agent.pathPending && worker.Agent.remainingDistance <= worker.CurrentTask.InteractionRange)
             {
                 // "Recoge" el ítem: se desactiva para simular que el worker lo ha cogido
-                // TODO, meter en el inventario del worker si hay espacio
-                GameObject itemObj = ((MoveItemTask)worker.CurrentTask).gameObject;
-                itemObj.SetActive(false);
+                GameObject itemObject = ((MoveItemTask)worker.CurrentTask).gameObject;
+                itemObject.SetActive(false);
                 itemPickedUp = true;
+
+                itemObject.transform.SetParent(worker.transform, worldPositionStays: true);
+                itemObject.transform.position = worker.transform.position;
+
+                // TODO, meter en el inventario del worker si hay espacio
+
                 //Debug.Log(worker.name + " - Ítem recogido, iniciando transporte al destino.");
 
                 worker.Agent.SetDestination(((MoveItemTask)worker.CurrentTask).Destination);

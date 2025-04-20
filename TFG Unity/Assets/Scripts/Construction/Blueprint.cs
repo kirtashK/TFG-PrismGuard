@@ -9,16 +9,19 @@ public class Blueprint : MonoBehaviour
     [Tooltip("Spot donde dejar los recursos")]
     public Transform dropSpot;
 
-    private Dictionary<ItemData, int> delivered = new Dictionary<ItemData, int>();
+    private readonly Dictionary<ItemData, int> delivered = new Dictionary<ItemData, int>();
+    private readonly Dictionary<ItemData, int> pending = new Dictionary<ItemData, int>();
 
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
 
         delivered.Clear();
-        foreach (var req in data.requirements)
+        pending.Clear();
+        foreach (var requirement in data.requirements)
         {
-            delivered[req.item] = 0;
+            delivered[requirement.item] = 0;
+            pending[requirement.item] = 0;
         }
     }
 
@@ -37,9 +40,14 @@ public class Blueprint : MonoBehaviour
     }
 
     // Llamado cuando llega un recurso
-    public void DeliverResource(ItemData item)
+    public void DeliverResource(ItemData item, GameObject itemObject)
     {
+        pending[item]--;
         delivered[item]++;
+
+        itemObject.transform.SetParent(transform, worldPositionStays: true);
+        itemObject.transform.position = dropSpot.position;
+
         TryConstruct();
     }
 
@@ -50,16 +58,32 @@ public class Blueprint : MonoBehaviour
         return 0;
     }
 
+    public int PendingCount(ItemData item)
+    {
+        if (pending.TryGetValue(item, out var count))
+        {
+            return count;
+        }
+        return 0;
+    }
+
+    public void RegisterPending(ItemData item)
+    {
+        pending[item]++;
+    }
+
     private void TryConstruct()
     {
-        foreach (var req in data.requirements)
+        foreach (var requirement in data.requirements)
         {
-            if (delivered[req.item] < req.quantity)
+            if (DeliveredCount(requirement.item) < requirement.quantity)
                 return;
         }
 
+
         // Construir una vez tiene todos los recursos
         Instantiate(data.builtPrefab, transform.position, transform.rotation);
+        // Destruir el blueprint y los recursos entregados
         Destroy(gameObject);
     }
 }

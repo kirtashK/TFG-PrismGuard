@@ -69,15 +69,15 @@ public class WarehouseManager : MonoBehaviour
         Warehouse best = null;
         float bestDist = float.MaxValue;
 
-        foreach (var wh in allWarehouses)
+        foreach (var warehouse in allWarehouses)
         {
-            if (wh.CanRetrieve(item))
+            if (warehouse.CanRetrieve(item))
             {
-                float d = Vector3.Distance(fromPosition, wh.transform.position);
-                if (d < bestDist)
+                float distance = Vector3.Distance(fromPosition, warehouse.transform.position);
+                if (distance < bestDist)
                 {
-                    bestDist = d;
-                    best = wh;
+                    bestDist = distance;
+                    best = warehouse;
                 }
             }
         }

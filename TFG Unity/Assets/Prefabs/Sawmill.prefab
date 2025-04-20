@@ -85,7 +85,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   maxPlanks: 100
-  processingTime: 10
+  processingTime: 2
   planksPerLog: 5
   currentPlankCount: 0
   currentLogCount: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Warehouse : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class Warehouse : MonoBehaviour
     public int currentCount = 0;
 
     public ItemData storedItem;
+
+    private readonly Queue<GameObject> storedItemsQueue = new Queue<GameObject>();
+
+    private int reservedCount;
 
     private void OnEnable()
     {
@@ -42,36 +47,64 @@ public class Warehouse : MonoBehaviour
 
     public bool CanStore(ItemData item)
     {
-        if (currentCount == 0)
+        /*if (currentCount == 0)
         {
             return item.storedIn.Contains(warehouseType);
         }
 
-        return storedItem == item && currentCount < capacity;
+        return storedItem == item && currentCount < capacity;*/
+        bool accepts = currentCount == 0
+            ? item.storedIn.Contains(warehouseType)
+            : storedItem == item;
+        return accepts && FreeSlots > 0;
     }
 
-    public void StoreItem(ItemData item)
+    public void StoreItem(GameObject itemObject, ItemData item)
     {
         if (storedItem == null)
-        {
             storedItem = item;
-        }
 
-        //currentCount++;
-        //currentCount se aumenta donde se genere la tarea, para reservar el espacio y 
-        // evitar problemas de varias tareas cuando no hay suficiente capacidad
-        
+        currentCount++;
+
+        itemObject.transform.SetParent(transform, worldPositionStays: true);
+        itemObject.transform.position = GetStoragePosition();
+        storedItemsQueue.Enqueue(itemObject);
+
+        ReleaseReservation();
+
         // TODO: actualizar UI
     }
 
     public bool CanRetrieve(ItemData item)
     {
+        //Debug.LogWarning("Can retrieve: " + (storedItem == item && currentCount > 0)
+        //    + "\nQueue: " + storedItemsQueue.Count);
         return storedItem == item && currentCount > 0;
     }
 
-    public void RetrieveItem()
+    public GameObject RetrieveItem()
     {
+        if (currentCount == 0)
+            return null;
+
         currentCount--;
+        GameObject obj = storedItemsQueue.Dequeue();
+        if (currentCount == 0)
+            storedItem = null;
+        return obj;
+
         // TODO: actualizar UI
+    }
+
+    public int FreeSlots => capacity - (currentCount + reservedCount);
+
+    public void ReserveSlot()
+    {
+        reservedCount++;
+    }
+
+    public void ReleaseReservation()
+    {
+        reservedCount--;
     }
 }

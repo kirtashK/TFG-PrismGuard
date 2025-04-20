@@ -7,6 +7,9 @@ public class ConstructionManager : MonoBehaviour
 
     private List<Blueprint> blueprints = new List<Blueprint>();
 
+    private float generateTasksInterval = 2f;
+    private float nextGenerateTasksTime = 0f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,48 +33,72 @@ public class ConstructionManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (var blueprint in blueprints)
+        if (Time.time >= nextGenerateTasksTime)
         {
-            GenerateTasksFor(blueprint);
+            nextGenerateTasksTime = Time.time + generateTasksInterval;
+
+            foreach (var blueprint in blueprints)
+            {
+                GenerateTasksFor(blueprint);
+            }
         }
+        
     }
 
     private void GenerateTasksFor(Blueprint blueprint)
     {
         foreach (var requirement in blueprint.data.requirements)
         {
-            int alreadyDelivered = blueprint.DeliveredCount(requirement.item);
-            int remainingNeeded = requirement.quantity - alreadyDelivered;
-            
-            if (remainingNeeded <= 0)
+            int deliveredCount = blueprint.DeliveredCount(requirement.item);
+            int pendingCount = blueprint.PendingCount(requirement.item);
+            int totalAssigned = deliveredCount + pendingCount;
+            int stillNeeded = requirement.quantity;
+
+            //Debug.Log("DeliveredCount = " + deliveredCount
+            //    + "\nPendingCount = " + pendingCount
+            //    + "\nTotalAssigned = " + totalAssigned
+            //    + "\nStillNeeded = " + stillNeeded);
+
+            if (stillNeeded <= 0 || pendingCount > 0)
                 continue;
 
-            // Para cada unidad pendiente, creamos una tarea de transporte
-            for (int i = 0; i < remainingNeeded; i++)
+            while (totalAssigned < stillNeeded)
             {
                 Warehouse warehouse =
                     WarehouseManager.Instance.FindNearestForRetrieve(
                         requirement.item,
                         blueprint.transform.position
-                        
                     );
+
                 if (warehouse == null)
+                {
+                    //Debug.Log($"[{blueprint.data.structureName}] Sin stock de {requirement.item.itemName}");
                     break;
+                }
 
-                warehouse.RetrieveItem();
+                GameObject itemObject = warehouse.RetrieveItem();
+                if (itemObject == null)
+                {
+                    Debug.LogWarning($"[{warehouse.name}] Error en RetrieveItem para {requirement.item.itemName}");
+                    return;
+                }
 
-                // Instancia un item invisible que el worker recogerá
-                GameObject ghostItem = new GameObject($"Ghost_{requirement.item.itemName}");
-                ghostItem.transform.position = warehouse.GetStoragePosition();
+                MoveItemTask transportTask = itemObject.GetComponent<MoveItemTask>()
+                                                ?? itemObject.AddComponent<MoveItemTask>();
 
-                MoveItemTask transportTask = ghostItem.AddComponent<MoveItemTask>();
                 transportTask.Destination = blueprint.dropSpot.position;
-                //transportTask.InteractionRange = requirement.item.interactionRange;
                 transportTask.OnArrivalCallback = deliveredObject =>
                 {
-                    blueprint.DeliverResource(requirement.item);
-                    Destroy(deliveredObject);
+                    blueprint.DeliverResource(requirement.item, deliveredObject);
+                    Destroy(deliveredObject.GetComponent<MoveItemTask>());
+                    deliveredObject.SetActive(true);
                 };
+
+                blueprint.RegisterPending(requirement.item);
+
+                totalAssigned++;
+
+                //Debug.Log($"[Construction] Tarea creada: mover {requirement.item.itemName} desde {warehouse.name} al blueprint de {blueprint.data.structureName}");
             }
         }
     }
