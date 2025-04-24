@@ -47,12 +47,6 @@ public class Warehouse : MonoBehaviour
 
     public bool CanStore(ItemData item)
     {
-        /*if (currentCount == 0)
-        {
-            return item.storedIn.Contains(warehouseType);
-        }
-
-        return storedItem == item && currentCount < capacity;*/
         bool accepts = currentCount == 0
             ? item.storedIn.Contains(warehouseType)
             : storedItem == item;

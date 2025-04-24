@@ -2,31 +2,35 @@
 To do	
 #########
 
-Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
-
 Worker inventory, capacidad mejorada por researches
     - Mover los items al worker, de forma que el worker es padre
     - Worker llevar mas de un item a la vez
     - Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
+Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
+Al regenerar recursos, comprobar primero si item en suelo ?
+
+
 Para construir un edificio, comprobar collider de blueprint para ver si cabe
 Ademas, ajustar Y del edificio por el suelo u otros bloques automaticamente
+una vez comprobado, borrar ese collider para evitar problemas con otros blueprints
 
-Crafting, smeltery, herramientas
+
+Smeltery, recibe ores y madera y los procesa a lingotes
 
 
 Recurso piedra -> cantera -> bloques de piedra -> almacen/pallet
+
+Qué minerales? hierro vale, pero y otro mas basico?
 
 Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
 -> lingotes -> almacen/pallet
 
 
-Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
-Al regenerar recursos, comprobar primero si item en suelo ?
+Crafting, herramientas
 
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
-
-
+Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
 
 
 Research
@@ -43,6 +47,7 @@ Animaciones
 #########
 Detalles técnicos
 #########
+
 Las IAs se mueven mediante NavMesh, nativo de Unity
 Los trabajadores siguen una maquina finita de estados
 
