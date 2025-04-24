@@ -110,4 +110,38 @@ public class TaskManager : MonoBehaviour
 
         return -1f;
     }
+
+    public void CompleteTask(ITask task)
+    {
+        if (availableTasks.Contains(task))
+        {
+            availableTasks.Remove(task);
+        }
+    }
+
+    public MoveItemTask FindNearestMoveTask(Vector3 fromPosition, float maxCarryWeight)
+    {
+        MoveItemTask best = null;
+        float bestDist = float.MaxValue;
+
+        foreach (ITask task in availableTasks)
+        {
+            if (task is MoveItemTask mit && mit.TaskData.weight <= maxCarryWeight)
+            {
+                float dist = Vector3.Distance(fromPosition, mit.TaskPosition);
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = mit;
+                }
+            }
+        }
+
+        if (best != null)
+        {
+            availableTasks.Remove(best);
+        }
+
+        return best;
+    }
 }

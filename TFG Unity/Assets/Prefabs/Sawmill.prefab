@@ -84,13 +84,14 @@ MonoBehaviour:
   treeLayer:
     serializedVersion: 2
     m_Bits: 256
+  logData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
   maxPlanks: 100
   processingTime: 2
   planksPerLog: 5
   currentPlankCount: 0
   currentLogCount: 0
-  plankPrefab: {fileID: 0}
-  plankData: {fileID: 0}
+  plankPrefab: {fileID: 2180502447430453359, guid: 89b1ec36216bc8d49a4e4ba547e08587, type: 3}
+  plankData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
   dispatchInterval: 5
   plankDropSpot: {fileID: 1892020334360069814}
 --- !u!1 &8726005977139929510

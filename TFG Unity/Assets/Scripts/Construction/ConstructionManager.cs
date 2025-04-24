@@ -86,6 +86,7 @@ public class ConstructionManager : MonoBehaviour
                 MoveItemTask transportTask = itemObject.GetComponent<MoveItemTask>()
                                                 ?? itemObject.AddComponent<MoveItemTask>();
 
+                transportTask.TaskData = requirement.item;
                 transportTask.Destination = blueprint.dropSpot.position;
                 transportTask.OnArrivalCallback = deliveredObject =>
                 {

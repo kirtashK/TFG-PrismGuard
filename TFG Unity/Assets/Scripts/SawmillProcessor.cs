@@ -17,6 +17,9 @@ public class SawmillProcessor : MonoBehaviour
     [Tooltip("Capa donde se encuentran los árboles")]
     public LayerMask treeLayer;
 
+    [Tooltip("Datos de los troncos")]
+    public ItemData logData;
+
     [Header("Procesamiento")]
     [Tooltip("Máximo de tablones que puede producir el aserradero")]
     public int maxPlanks = 100;
@@ -128,6 +131,7 @@ public class SawmillProcessor : MonoBehaviour
                 && logObject.GetComponent<MoveItemTask>() == null)
             {
                 MoveItemTask moveTask = logObject.AddComponent<MoveItemTask>();
+                moveTask.TaskData = logData;
                 moveTask.Destination = transform.position;
                 moveTask.OnArrivalCallback = (item) =>
                 {
@@ -184,6 +188,7 @@ public class SawmillProcessor : MonoBehaviour
                 GameObject plank = Instantiate(plankPrefab, plankDropSpot.position, Quaternion.identity);
 
                 MoveItemTask task = plank.AddComponent<MoveItemTask>();
+                task.TaskData = plankData;
                 task.Destination = warehouse.GetStoragePosition();
                 task.OnArrivalCallback = itemObject =>
                 {
