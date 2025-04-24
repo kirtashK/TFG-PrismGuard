@@ -11,7 +11,7 @@ public class MovingState : IWorkerState
             Vector3 approachPosition = (direction != Vector3.zero)
                                          ? taskPos + direction * worker.CurrentTask.InteractionRange
                                          : taskPos;
-            Debug.Log(worker.name + " - Moviéndose hacia la posición de aproximación: " + approachPosition);
+            //Debug.Log(worker.name + " - Moviéndose hacia la posición de aproximación: " + approachPosition);
             worker.Agent.SetDestination(approachPosition);
         }
     }

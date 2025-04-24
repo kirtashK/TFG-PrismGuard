@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TransportItemState : IWorkerState
@@ -6,7 +7,7 @@ public class TransportItemState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        Debug.Log(worker.name + " - Iniciando transporte de ítem.");
+        //Debug.Log(worker.name + " - Iniciando transporte de ítem.");
         if (worker.CurrentTask != null)
         {
             worker.Agent.SetDestination(worker.CurrentTask.TaskPosition);
@@ -26,11 +27,16 @@ public class TransportItemState : IWorkerState
             if (!worker.Agent.pathPending && worker.Agent.remainingDistance <= worker.CurrentTask.InteractionRange)
             {
                 // "Recoge" el ítem: se desactiva para simular que el worker lo ha cogido
-                // TODO, meter en el inventario del worker si hay espacio
-                GameObject itemObj = ((MoveItemTask)worker.CurrentTask).gameObject;
-                itemObj.SetActive(false);
+                GameObject itemObject = ((MoveItemTask)worker.CurrentTask).gameObject;
+                itemObject.SetActive(false);
                 itemPickedUp = true;
-                Debug.Log(worker.name + " - Ítem recogido, iniciando transporte al destino.");
+
+                itemObject.transform.SetParent(worker.transform, worldPositionStays: true);
+                itemObject.transform.position = worker.transform.position;
+
+                // TODO, meter en el inventario del worker si hay espacio
+
+                //Debug.Log(worker.name + " - Ítem recogido, iniciando transporte al destino.");
 
                 worker.Agent.SetDestination(((MoveItemTask)worker.CurrentTask).Destination);
             }
@@ -39,8 +45,9 @@ public class TransportItemState : IWorkerState
         {
             if (!worker.Agent.pathPending && worker.Agent.remainingDistance <= worker.CurrentTask.InteractionRange)
             {
-                Debug.Log(worker.name + " - Ítem entregado en destino.");
-                ((MoveItemTask)worker.CurrentTask).OnArrivalCallback?.Invoke(((MoveItemTask)worker.CurrentTask).gameObject);
+                //Debug.Log(worker.name + " - Ítem entregado en destino.");
+                ((MoveItemTask)worker.CurrentTask).OnArrivalCallback?.
+                    Invoke(((MoveItemTask)worker.CurrentTask).gameObject);
 
                 worker.CurrentTask = null;
                 worker.ChangeState(new IdleState());

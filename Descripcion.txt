@@ -2,29 +2,52 @@
 To do	
 #########
 
-Almacen/pallets
-
-Tablones creados por sawmill, mover a almacen
+Worker inventory, capacidad mejorada por researches
+    - Mover los items al worker, de forma que el worker es padre
+    - Worker llevar mas de un item a la vez
+    - Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
 Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
-
 Al regenerar recursos, comprobar primero si item en suelo ?
 
-### 
-Far...  
-###
 
-Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+Para construir un edificio, comprobar collider de blueprint para ver si cabe
+Ademas, ajustar Y del edificio por el suelo u otros bloques automaticamente
+una vez comprobado, borrar ese collider para evitar problemas con otros blueprints
+
+
+Smeltery, recibe ores y madera y los procesa a lingotes
+
+
+Recurso piedra -> cantera -> bloques de piedra -> almacen/pallet
+
+Qué minerales? hierro vale, pero y otro mas basico?
+
+Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
+-> lingotes -> almacen/pallet
+
+
+Crafting, herramientas
+
+Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
+Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
+
 
 Research
 
-Worker inventory, capacidad mejorada por researches
+
+Sonidos
+Efectos (respawn de arboles etc)
+Texturas
+Modelos
+Animaciones
 
 
 
 #########
 Detalles técnicos
 #########
+
 Las IAs se mueven mediante NavMesh, nativo de Unity
 Los trabajadores siguen una maquina finita de estados
 
@@ -46,13 +69,15 @@ para evitar que el worker se mueva al centro
 
 Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
 
-Los items tienen un ScriptableObject
+Los items tienen un ScriptableObject que sirve como datos (Data driven)
 
 Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
 por ejemplo, se crea un tronco al talar un arbol
 
-Tambien hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
+Hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
 eligiendo primero tareas cercanas al worker o de mayor prioridad
+
+De forma similar, hay manager de construccion, de almacenes
 
 
 
@@ -77,20 +102,18 @@ y los trabajadores se encargaran de distribuir los materiales necesarios y const
 
 Recursos:
 - Tronco de madera y tabla de madera
-- Piedra
+- Piedra y bloque de piedra
 - Mena de cobre y lingote de cobre
 - Mena de hierro y lingote de hierro
-- Carbon
 - Lingote de acero
 
 Estructuras:
-- Aserradero: corta arboles alrededor, transforma logs a tablas, puede usar herramientas
-- Cantera: mina piedras alrededor, puede usar herramientas
-- Similar a cantera pero para minerales y carbon, o unificar?
+- Aserradero: marca arboles para cortar alrededor, transforma troncos a tablas, puede usar herramientas
+- Cantera: marca piedras alrededor para minar, transforma a bloques de piedra, puede usar herramientas
+- Similar a cantera pero para minerales, solo almacenan temporalmente minerales, no procesan
 - pallet y/o almacen donde guardar items
 - Workbench para crear herramientas y armas, puede usar herramientas
-- Charcoal klin donde crear carbon a partir de madera
-- Smeltery, para smelt cobre, hierro, crear acero, etc... puede usar herramientas
+- Smeltery, para smelt cobre, hierro, crear acero, etc... consume madera, puede usar herramientas
 
 Comida ? Granjas? Molinos? Animales para cuero y comida ?
 

@@ -8,7 +8,7 @@ public class IdleState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        Debug.Log(worker.name + " - Entrando en estado IDLE");
+        //Debug.Log(worker.name + " - Entrando en estado IDLE");
     }
 
     public void UpdateState(Worker worker)
@@ -27,7 +27,7 @@ public class IdleState : IWorkerState
         }
         else
         {
-            Debug.Log(worker.name + " - No hay tareas disponibles, reintentando en " + searchRetryDelay + " segundos.");
+            //Debug.Log(worker.name + " - No hay tareas disponibles, reintentando en " + searchRetryDelay + " segundos.");
             isSearching = true;
             worker.StartCoroutine(RetrySearch(worker));
         }

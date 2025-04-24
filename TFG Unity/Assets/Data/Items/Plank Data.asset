@@ -16,3 +16,5 @@ MonoBehaviour:
   icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   weight: 1
   interactionRange: 1
+  storedIn:
+  - {fileID: 11400000, guid: 126a67e466f268f49a9cceac73a06e1b, type: 2}
