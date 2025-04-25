@@ -1,20 +1,13 @@
+Awake()
+OnEnable()
+Start()
+Update()
+
 #########	
 To do	
 #########
 
-Worker inventory
-    - Mover los items al worker, de forma que el worker es padre
-    - Worker llevar mas de un item a la vez
-    
-    Mover items a un objeto vacio en el worker llamado inventario por limpieza
-    Parece que intenta meter items aunque ya este lleno o no quepan
-
-    Awake() en vez de Start() ? investigar
-
-    No hace falta TransportItemState una vez inventario funcione ?
-    y MovingState ?
-
-
+Reemplazar Var por lo que sea, en develop o rama feature/fixes
 
 Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
 Al regenerar recursos, comprobar primero si item en suelo ?
@@ -50,6 +43,10 @@ Almacen tiene spots donde se colocan los objetos, que sea un vector de empty obj
 
 Research
 capacidad inventario max. mejorada por researches
+
+Skills basicas
+
+Necesidades basicas
 
 Sonidos
 Efectos (respawn de arboles etc)

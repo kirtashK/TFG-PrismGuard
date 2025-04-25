@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 
 public class Worker : MonoBehaviour
 {
@@ -9,8 +11,16 @@ public class Worker : MonoBehaviour
     public NavMeshAgent Agent { get; private set; }
     public ITask CurrentTask { get; set; }
 
+    [Tooltip("Capacidad máxima del inventario")]
     public float maxCarryWeight = 10f;
-    private float currentLoad = 0f;
+
+    [SerializeField]
+    [Tooltip("Capacidad actual")]
+    public float currentLoad = 0f;
+
+    [SerializeField]
+    private Transform InventorySpot;
+
     private readonly List<GameObject> inventory = new List<GameObject>();
 
     private void Start()
@@ -36,7 +46,9 @@ public class Worker : MonoBehaviour
         currentState?.EnterState(this);
     }
 
-    // Inventario
+    // ##############
+    // # Inventario #
+    // ##############
 
     public bool CanCarry(ItemData data)
         => currentLoad + data.weight <= maxCarryWeight;
@@ -45,7 +57,7 @@ public class Worker : MonoBehaviour
     {
         inventory.Add(obj);
         currentLoad += data.weight;
-        obj.transform.SetParent(transform, worldPositionStays: true);
+        obj.transform.SetParent(InventorySpot, worldPositionStays: true);
         obj.SetActive(false);
     }
 
