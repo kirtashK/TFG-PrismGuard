@@ -122,7 +122,8 @@ public class TaskManager : MonoBehaviour
     public MoveItemTask RequestMoveItemTask(
         Vector3 fromPosition,
         float maxWeight,
-        Vector3 destination
+        Vector3 destination,
+        float maxDistance = Mathf.Infinity
     )
     {
         MoveItemTask best = null;
@@ -135,7 +136,7 @@ public class TaskManager : MonoBehaviour
                 && moveItemTask.Destination == destination)
             {
                 float dist = Vector3.Distance(fromPosition, moveItemTask.TaskPosition);
-                if (dist < bestDist)
+                if (dist <= maxDistance && dist < bestDist)
                 {
                     bestDist = dist;
                     best = moveItemTask;

@@ -63,7 +63,7 @@ public class Worker : MonoBehaviour
 
     public void DropAll(Vector3 dropPosition)
     {
-        foreach (var obj in inventory)
+        foreach (GameObject obj in inventory)
         {
             obj.transform.SetParent(null, worldPositionStays: true);
             obj.transform.position = dropPosition;

@@ -37,7 +37,7 @@ public class ConstructionManager : MonoBehaviour
         {
             nextGenerateTasksTime = Time.time + generateTasksInterval;
 
-            foreach (var blueprint in blueprints)
+            foreach (Blueprint blueprint in blueprints)
             {
                 GenerateTasksFor(blueprint);
             }
@@ -47,7 +47,7 @@ public class ConstructionManager : MonoBehaviour
 
     private void GenerateTasksFor(Blueprint blueprint)
     {
-        foreach (var requirement in blueprint.data.requirements)
+        foreach (StructureData.ResourceRequirement requirement in blueprint.data.requirements)
         {
             int deliveredCount = blueprint.DeliveredCount(requirement.item);
             int pendingCount = blueprint.PendingCount(requirement.item);

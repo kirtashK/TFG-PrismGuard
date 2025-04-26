@@ -14,6 +14,8 @@ public class MultiTransportState : IWorkerState
 
     private readonly List<MoveItemTask> collectedTasks = new List<MoveItemTask>();
 
+    private const float maxPickupRadius = 10f;
+
     public void EnterState(Worker worker)
     {
         workerRef = worker;
@@ -79,7 +81,8 @@ public class MultiTransportState : IWorkerState
             MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
                 workerRef.transform.position,
                 remainingCapacity,
-                deliveryTarget
+                deliveryTarget,
+                maxPickupRadius
             );
 
             if (next != null)
