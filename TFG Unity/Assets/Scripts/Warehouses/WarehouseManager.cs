@@ -32,7 +32,7 @@ public class WarehouseManager : MonoBehaviour
 
     public List<Warehouse> GetWarehousesThatCanStore(ItemData item)
     {
-        var result = new List<Warehouse>();
+        List<Warehouse> result = new();
         foreach (Warehouse warehouse in allWarehouses)
         {
             if (warehouse.CanStore(item))
@@ -69,7 +69,7 @@ public class WarehouseManager : MonoBehaviour
         Warehouse best = null;
         float bestDist = float.MaxValue;
 
-        foreach (var warehouse in allWarehouses)
+        foreach (Warehouse warehouse in allWarehouses)
         {
             if (warehouse.CanRetrieve(item))
             {

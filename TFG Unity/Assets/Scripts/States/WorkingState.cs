@@ -15,16 +15,18 @@ public class WorkingState : IWorkerState
         if (!started && worker.CurrentTask != null)
         {
             started = true;
-            worker.CurrentTask.Execute(worker, () =>
+            if (worker.CurrentTask is MoveItemTask)
             {
-                worker.CurrentTask = null;
-                worker.ChangeState(new IdleState());
-                //Debug.Log(worker.name + " - Tarea completada, volviendo a Idle.");
-            });
-        }
-        else if (worker.CurrentTask is MoveItemTask)
-        {
-            worker.ChangeState(new TransportItemState());
+                worker.ChangeState(new MultiTransportState());
+            }
+            else
+            {
+                worker.CurrentTask.Execute(worker, () =>
+                {
+                    worker.CurrentTask = null;
+                    worker.ChangeState(new IdleState());
+                });
+            }
         }
     }
 

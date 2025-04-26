@@ -29,6 +29,8 @@ public class MoveItemTask : MonoBehaviour, ITask
     // Callback genérico ejecutado cuando el ítem llega a su destino.
     public System.Action<GameObject> OnArrivalCallback { get; set; }
 
+    public ItemData TaskData { get; set; }
+
 
     private void OnEnable()
     {

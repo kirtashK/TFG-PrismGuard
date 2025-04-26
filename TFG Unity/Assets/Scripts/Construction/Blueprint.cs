@@ -18,7 +18,7 @@ public class Blueprint : MonoBehaviour
 
         delivered.Clear();
         pending.Clear();
-        foreach (var requirement in data.requirements)
+        foreach (StructureData.ResourceRequirement requirement in data.requirements)
         {
             delivered[requirement.item] = 0;
             pending[requirement.item] = 0;
@@ -60,7 +60,7 @@ public class Blueprint : MonoBehaviour
 
     public int PendingCount(ItemData item)
     {
-        if (pending.TryGetValue(item, out var count))
+        if (pending.TryGetValue(item, out int count))
         {
             return count;
         }
@@ -74,7 +74,7 @@ public class Blueprint : MonoBehaviour
 
     private void TryConstruct()
     {
-        foreach (var requirement in data.requirements)
+        foreach (StructureData.ResourceRequirement requirement in data.requirements)
         {
             if (DeliveredCount(requirement.item) < requirement.quantity)
                 return;

@@ -1,11 +1,11 @@
+Awake()
+OnEnable()
+Start()
+Update()
+
 #########	
 To do	
 #########
-
-Worker inventory, capacidad mejorada por researches
-    - Mover los items al worker, de forma que el worker es padre
-    - Worker llevar mas de un item a la vez
-    - Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
 Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
 Al regenerar recursos, comprobar primero si item en suelo ?
@@ -29,12 +29,23 @@ Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
 
 Crafting, herramientas
 
+
+Enemigos
+
+Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+
+
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
 Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
 
 
 Research
+capacidad inventario max. mejorada por researches
+Mejor sawmill, mas radio y velocidad de procesamiento y mas procesamiento concurrente
 
+Skills basicas
+
+Necesidades basicas
 
 Sonidos
 Efectos (respawn de arboles etc)

@@ -110,4 +110,45 @@ public class TaskManager : MonoBehaviour
 
         return -1f;
     }
+
+    public void CompleteTask(ITask task)
+    {
+        if (availableTasks.Contains(task))
+        {
+            availableTasks.Remove(task);
+        }
+    }
+
+    public MoveItemTask RequestMoveItemTask(
+        Vector3 fromPosition,
+        float maxWeight,
+        Vector3 destination,
+        float maxDistance = Mathf.Infinity
+    )
+    {
+        MoveItemTask best = null;
+        float bestDist = float.MaxValue;
+
+        foreach (ITask task in availableTasks)
+        {
+            if (task is MoveItemTask moveItemTask
+                && moveItemTask.TaskData.weight <= maxWeight
+                && moveItemTask.Destination == destination)
+            {
+                float dist = Vector3.Distance(fromPosition, moveItemTask.TaskPosition);
+                if (dist <= maxDistance && dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = moveItemTask;
+                }
+            }
+        }
+
+        if (best != null)
+        {
+            availableTasks.Remove(best);
+        }
+
+        return best;
+    }
 }
