@@ -39,6 +39,7 @@ public class SawmillProcessor : MonoBehaviour
     private int currentProcessingCount = 0;
 
     private int reservedPlankCount = 0;
+    private int reservedLogCount = 0;
 
     private Collider[] treeResults = new Collider[5];
     private Collider[] logResults = new Collider[10];
@@ -65,7 +66,7 @@ public class SawmillProcessor : MonoBehaviour
     private void Update()
     {
         if (Time.time >= nextDetectionTime &&
-            currentLogCount < maxLogs)
+            currentLogCount + reservedLogCount < maxLogs)
         {
             nextDetectionTime = Time.time + detectionInterval;
             DetectTrees();
@@ -91,8 +92,8 @@ public class SawmillProcessor : MonoBehaviour
     public void OnLogDelivered(GameObject log)
     {
         currentLogCount++;
+        reservedLogCount--;
         Destroy(log);
-        //Debug.Log("Aserradero: Tronco entregado. Total de troncos en aserradero: " + currentLogCount);
     }
 
     private IEnumerator ProcessLogCoroutine()
@@ -117,7 +118,10 @@ public class SawmillProcessor : MonoBehaviour
             logLayer
         );
 
-        for (int i = 0; i < numColliders; i++)
+        for (int i = 0; 
+            i < numColliders 
+            && i + currentLogCount + reservedLogCount < maxLogs; 
+            i++)
         {
             Collider col = logResults[i];
             GameObject logObject = col.transform.parent.gameObject;
@@ -128,6 +132,8 @@ public class SawmillProcessor : MonoBehaviour
                 MoveItemTask moveTask = logObject.AddComponent<MoveItemTask>();
                 moveTask.TaskData = logData;
                 moveTask.Destination = transform.position;
+
+                reservedLogCount++;
 
                 moveTask.OnArrivalCallback = (item) =>
                 {
