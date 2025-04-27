@@ -54,11 +54,6 @@ public class ConstructionManager : MonoBehaviour
             int totalAssigned = deliveredCount + pendingCount;
             int stillNeeded = requirement.quantity;
 
-            //Debug.Log("DeliveredCount = " + deliveredCount
-            //    + "\nPendingCount = " + pendingCount
-            //    + "\nTotalAssigned = " + totalAssigned
-            //    + "\nStillNeeded = " + stillNeeded);
-
             if (stillNeeded <= 0 || pendingCount > 0)
                 continue;
 
@@ -72,7 +67,6 @@ public class ConstructionManager : MonoBehaviour
 
                 if (warehouse == null)
                 {
-                    //Debug.Log($"[{blueprint.data.structureName}] Sin stock de {requirement.item.itemName}");
                     break;
                 }
 
@@ -98,8 +92,6 @@ public class ConstructionManager : MonoBehaviour
                 blueprint.RegisterPending(requirement.item);
 
                 totalAssigned++;
-
-                //Debug.Log($"[Construction] Tarea creada: mover {requirement.item.itemName} desde {warehouse.name} al blueprint de {blueprint.data.structureName}");
             }
         }
     }

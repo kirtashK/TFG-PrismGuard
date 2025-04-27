@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Mono.Cecil;
+using System.Collections.Generic;
 
 public class ChopTreeTask : MonoBehaviour, ITask
 {
@@ -12,6 +13,19 @@ public class ChopTreeTask : MonoBehaviour, ITask
 
     [SerializeField]
     private float interactionRange = 1.5f;
+
+    [Header("Troncos a generar")]
+    [Tooltip("Minimo de troncos a generar")]
+    [SerializeField]
+    private int minLogs = 1;
+
+    [Tooltip("Maximo de troncos a generar")]
+    [SerializeField]
+    private int maxLogs = 2;
+
+    [Tooltip("Lista de posiciones donde pueden generarse troncos, dentro del rango de minLogs y maxLogs")]
+    [SerializeField]
+    private List<Transform> logSpawnPoints = new List<Transform>();
 
     public Vector3 TaskPosition
     {
@@ -68,15 +82,19 @@ public class ChopTreeTask : MonoBehaviour, ITask
     private IEnumerator WorkCoroutine(System.Action onComplete)
     {
         yield return new WaitForSeconds(workDuration);
-        Debug.Log(name + " - Árbol talado.");
 
-        //TODO poder generar mas de un tronco, rng ?
-        ItemManager.Instance.CreateTronco(transform.position);
+        int logsToSpawn = Random.Range(minLogs, maxLogs + 1);
+        for (int i = 0; i < logsToSpawn; i++)
+        {
+            Vector3 spawnPos = logSpawnPoints[i].position;
+            ItemManager.Instance.CreateTronco(spawnPos);
+        }
 
         onComplete?.Invoke();
 
-        ResourceManager.Instance.NotifyResourceCollected(gameObject.GetComponent<ResourceInstance>());
+        ResourceManager.Instance.NotifyResourceCollected(
+            gameObject.GetComponent<ResourceInstance>());
 
-        gameObject.GetComponent<ChopTreeTask>().enabled = false;
+        enabled = false;
     }
 }

@@ -51,8 +51,6 @@ public class TaskManager : MonoBehaviour
             int taskPriority = task.Priority;
             float taskDistance = GetPathLength(workerPosition, task.TaskPosition);
 
-            //Debug.Log("Task distance: " + taskDistance);
-
             if (taskDistance < 0f)
             {
                 continue;

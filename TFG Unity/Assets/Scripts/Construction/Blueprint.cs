@@ -39,7 +39,7 @@ public class Blueprint : MonoBehaviour
         ConstructionManager.Instance.UnregisterBlueprint(this);
     }
 
-    // Llamado cuando llega un recurso
+    // Llamado cuando llega un recurso mediante callbacks genéricos
     public void DeliverResource(ItemData item, GameObject itemObject)
     {
         pending[item]--;
@@ -80,10 +80,9 @@ public class Blueprint : MonoBehaviour
                 return;
         }
 
-
-        // Construir una vez tiene todos los recursos
         Instantiate(data.builtPrefab, transform.position, transform.rotation);
-        // Destruir el blueprint y los recursos entregados
+
+        // Destruye el blueprint y todos los recursos entregados
         Destroy(gameObject);
     }
 }
