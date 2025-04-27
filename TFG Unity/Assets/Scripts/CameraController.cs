@@ -69,7 +69,6 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        // Acción de movimiento horizontal: WASD
         moveAction = new InputAction("Move");
         moveAction.AddCompositeBinding("2DVector")
         .With("Up", "<Keyboard>/w")
@@ -77,16 +76,13 @@ public class CameraController : MonoBehaviour
         .With("Left", "<Keyboard>/a")
         .With("Right", "<Keyboard>/d");
 
-        // Acción de movimiento vertical: E para subir y Q para bajar
         verticalAction = new InputAction("Vertical");
         verticalAction.AddCompositeBinding("1DAxis")
         .With("Positive", "<Keyboard>/e")
         .With("Negative", "<Keyboard>/q");
 
-        // Acción para hacer zoom con la rueda del ratón
         zoomAction = new InputAction("Zoom", binding: "<Mouse>/scroll");
 
-        // Acción para apuntar la cámara con el movimiento del ratón
         lookAction = new InputAction("Look", binding: "<Mouse>/delta");
 
         moveAction.Enable();
@@ -94,7 +90,6 @@ public class CameraController : MonoBehaviour
         zoomAction.Enable();
         lookAction.Enable();
 
-        // Yaw y Pitch iniciales
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x;
@@ -121,7 +116,6 @@ public class CameraController : MonoBehaviour
         HandleZoom();
     }
 
-    // Movimiento relativo a la dirección de la cámara
     private void HandleMovement()
     {
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
@@ -134,7 +128,6 @@ public class CameraController : MonoBehaviour
         right.y = 0f;
         right.Normalize();
 
-        // Si Shift está pulsado se da un boost de velocidad al movimiento
         float multiplier = 1f;
         if (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed)
         {
@@ -149,7 +142,6 @@ public class CameraController : MonoBehaviour
         transform.Translate(horizontalMove + verticalMove, Space.World);
     }
 
-    // Rotación de la cámara con límite de pitch
     private void HandleRotation()
     {
         Vector2 lookInput = lookAction.ReadValue<Vector2>();
@@ -161,7 +153,6 @@ public class CameraController : MonoBehaviour
         transform.eulerAngles = new Vector3(pitch, yaw, 0f);
     }
 
-    // Zoom (FOV) de la cámara
     private void HandleZoom()
     {
         Vector2 scrollInput = zoomAction.ReadValue<Vector2>();

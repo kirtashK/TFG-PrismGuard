@@ -3,7 +3,7 @@ using System.Collections;
 
 public class IdleState : IWorkerState
 {
-    private float searchRetryDelay = 2f;
+    private float searchRetryDelay = 1f;
     private bool isSearching = false;
 
     public void EnterState(Worker worker)
@@ -27,7 +27,6 @@ public class IdleState : IWorkerState
         }
         else
         {
-            //Debug.Log(worker.name + " - No hay tareas disponibles, reintentando en " + searchRetryDelay + " segundos.");
             isSearching = true;
             worker.StartCoroutine(RetrySearch(worker));
         }

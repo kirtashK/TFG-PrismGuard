@@ -7,10 +7,6 @@ Update()
 To do	
 #########
 
-Recursos sueltan numero random, en vez de siempre un tronco por ejemplo, 1-3
-Al regenerar recursos, comprobar primero si item en suelo ?
-
-
 Para construir un edificio, comprobar collider de blueprint para ver si cabe
 Ademas, ajustar Y del edificio por el suelo u otros bloques automaticamente
 una vez comprobado, borrar ese collider para evitar problemas con otros blueprints
@@ -18,35 +14,35 @@ una vez comprobado, borrar ese collider para evitar problemas con otros blueprin
 
 Smeltery, recibe ores y madera y los procesa a lingotes
 
+Refactorizar SawmillProcessor para que funcione de forma generica? troncos, piedras...
 
 Recurso piedra -> cantera -> bloques de piedra -> almacen/pallet
-
-Qué minerales? hierro vale, pero y otro mas basico?
+Qué minerales? hierro & acero vale, pero y otro mas basico?
 
 Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
 -> lingotes -> almacen/pallet
 
-
-Crafting, herramientas
-
-
 Enemigos
-
+Al morir, % de soltar alma, cada tipo de enemigo tiene un % distinto ?
 Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+
+Crafting, herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
 
 
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
 Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
 
 
-Research
+Research, consume recursos y tiempo
 capacidad inventario max. mejorada por researches
 Mejor sawmill, mas radio y velocidad de procesamiento y mas procesamiento concurrente
+Desbloquear Acero en smeltery
 
 Skills basicas
 
 Necesidades basicas
 
+UI
 Sonidos
 Efectos (respawn de arboles etc)
 Texturas

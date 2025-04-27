@@ -5,10 +5,10 @@ public class ItemManager : MonoBehaviour
     public static ItemManager Instance { get; private set; }
 
     [Header("Prefabs & Items")]
-    [Tooltip("Prefab of log")]
+    [Tooltip("Prefab del tronco")]
     public GameObject logPrefab;
 
-    [Tooltip("ItemData of log")]
+    [Tooltip("ItemData del tronco")]
     public ItemData logData;
 
     private void Awake()
@@ -26,7 +26,7 @@ public class ItemManager : MonoBehaviour
     {
         if (logPrefab == null || logData == null)
         {
-            Debug.LogError("Falta asignar el prefab o el ItemData en el ItemManager.");
+            Debug.LogError("Falta asignar el prefab o el ItemData.");
             return;
         }
 
@@ -35,7 +35,6 @@ public class ItemManager : MonoBehaviour
         if (itemInstance != null)
         {
             itemInstance.itemData = logData;
-            //Debug.Log("Se ha creado un tronco en la posición: " + position);
         }
         else
         {

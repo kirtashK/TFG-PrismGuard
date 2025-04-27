@@ -71,8 +71,6 @@ public class Warehouse : MonoBehaviour
 
     public bool CanRetrieve(ItemData item)
     {
-        //Debug.LogWarning("Can retrieve: " + (storedItem == item && currentCount > 0)
-        //    + "\nQueue: " + storedItemsQueue.Count);
         return storedItem == item && currentCount > 0;
     }
 

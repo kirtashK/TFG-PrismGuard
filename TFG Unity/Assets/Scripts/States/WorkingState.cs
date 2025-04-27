@@ -6,7 +6,6 @@ public class WorkingState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        //Debug.Log(worker.name + " - Comenzando tarea.");
         started = false;
     }
 
