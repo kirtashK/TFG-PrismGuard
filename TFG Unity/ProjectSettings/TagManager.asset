@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Log
   - Tree
+  - Crystal
   layers:
   - Default
   - TransparentFX

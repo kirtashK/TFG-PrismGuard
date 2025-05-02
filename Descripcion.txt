@@ -22,12 +22,27 @@ Qué minerales? hierro & acero vale, pero y otro mas basico?
 Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
 -> lingotes -> almacen/pallet
 
+
 Enemigos
-Al morir, % de soltar alma, cada tipo de enemigo tiene un % distinto ?
-Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+	Atacar workers y estructuras ?
+		Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+	Al morir, % de soltar alma, cada tipo de enemigo tiene un % distinto ?
+		
+Oleadas por noche o, simplemente cada x tiempo, mostrar en UI mensaje que oleada empieza
+	Enemigos a generar aleatorio, basado en coste del enemigo y oleada
+
+
+NPCs defensa, arqueros, caballeros, se mueven a un spot indicado por usuario y defienden en area, si se alejan, vuelven al spot indicado, se regeneran por el día o poco a poco
+	Ganan experiencia conforme matan enemigos que mejora sus stats ?
+
+Cristal, si destruido, se pierde, se crean unidades en cristal, almas + recursos
 
 Crafting, herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
 
+GameManager
+	Cuando se completa una oleada, notifica a gameManager y se muestra hud, puntuacion ? etc
+	Cuando el cristal es destruido, notifica a GameManager y se mostraría el game over
+	Tienda para comprar recursos, matar enemigos genera puntos
 
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
 Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
