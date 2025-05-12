@@ -17,4 +17,7 @@ public class EnemyData : ScriptableObject
     [Header("IA")]
     [Tooltip("Distancia máxima a la que consideran atacar obstáculo")]
     public float maxChaseDistance = 20f;
+
+    [Tooltip("Radio en el que el enemigo detecta soldados para atacar")]
+    public float AggroRadius = 5f;
 }

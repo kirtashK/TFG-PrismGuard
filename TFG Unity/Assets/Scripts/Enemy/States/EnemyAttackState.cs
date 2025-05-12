@@ -1,38 +1,55 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
-using TMPro;
+using UnityEngine.AI;
 
 public class EnemyAttackState : IEnemyState
 {
+    private readonly ICombatTarget target;
     private bool onCooldown;
+
+    public EnemyAttackState(ICombatTarget target)
+    {
+        this.target = target;
+    }
 
     public void EnterState(Enemy enemy)
     {
-        onCooldown = false;
         enemy.agent.isStopped = true;
+        onCooldown = false;
     }
 
     public void UpdateState(Enemy enemy)
     {
-        if (enemy.agent.remainingDistance > enemy.data.attackRange + 0.1f)
+        if (target == null || !target.IsAlive)
         {
             enemy.agent.isStopped = false;
-            enemy.ChangeState(new EnemyChaseState());
+            enemy.ChangeState(
+                new EnemyChaseState(enemy.MainTarget)
+            );
+            return;
+        }
+
+        float dist = Vector3.Distance(
+            enemy.transform.position,
+            target.Position
+        );
+        if (dist > enemy.data.attackRange + 0.1f)
+        {
+            enemy.agent.isStopped = false;
+            enemy.ChangeState(new EnemyChaseState(target));
             return;
         }
 
         if (!onCooldown)
         {
-            enemy.crystalTransform.GetComponent<Crystal>()?.
-                TakeDamage(enemy.data.attackDamage);
+            Debug.Log($"{enemy.name} ataca {target}");
 
-            Debug.Log("Atacado con daño = " + enemy.data.attackRange);
-
+            target.TakeDamage(enemy.data.attackDamage);
             enemy.StartCoroutine(AttackCooldown(enemy));
         }
     }
 
-    public void ExitState(Enemy enemy) 
+    public void ExitState(Enemy enemy)
     {
         enemy.agent.isStopped = false;
     }

@@ -2,38 +2,40 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ICombatTarget
 {
-    [Header("Stats")]
     public EnemyData data;
-
-    [Header("Target")]
     public Transform crystalTransform;
+
+    private float currentHealth;
 
     [HideInInspector] 
     public NavMeshAgent agent;
 
-    private float currentHealth;
-
     private IEnemyState currentState;
+
+    public ICombatTarget MainTarget { get; private set; }
+
+    private readonly int maxColliders = 10;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
 
-        // Idle al ser generados, WaveManager le asigna objetivo y cambia de estado
-        Debug.Log("Cambiando a estado idle");
-        ChangeState(new EnemyIdleState());
+        MainTarget = crystalTransform != null
+            ? crystalTransform.GetComponent<ICombatTarget>()
+            : GameObject.FindWithTag("Crystal")
+                .GetComponent<ICombatTarget>();
     }
 
     private void Start()
     {
         currentHealth = data.maxHealth;
+
         agent.speed = data.moveSpeed;
         agent.stoppingDistance = data.attackRange;
 
-        if (crystalTransform == null)
-            crystalTransform = GameObject.FindWithTag("Crystal").transform;
+        ChangeState(new EnemyChaseState(MainTarget));
     }
 
     private void Update()
@@ -48,21 +50,55 @@ public class Enemy : MonoBehaviour
         currentState.EnterState(this);
     }
 
-    public void TakeDamage(float dmg)
+    public Vector3 Position => transform.position;
+
+    public bool IsAlive => currentHealth > 0f;
+
+    public void TakeDamage(float amount)
     {
-        currentHealth -= dmg;
-        if (currentHealth <= 0f)
+        currentHealth = Mathf.Max(currentHealth - amount, 0f);
+        if (currentHealth == 0f)
             Die();
     }
 
     private void Die()
     {
-        // TODO
-        // animacion
-        // notificar a WaveManager de un enemigo menos
-        // Añadir experiencia al soldado que ha matado este enemigo
-        // Añadir oro a GameManager que el jugador puede usar para comprar en la tienda
-
+        // TODO Sonido, animaciones, efectos, quizas recompensas?
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Busca la unidad del jugador viva mas cercano dentro de data.AggroRadius
+    /// </summary>
+    public ICombatTarget FindNearestPlayerUnit()
+    {
+        Collider[] aggroBuffer = new Collider[maxColliders];
+
+        int hitCount = Physics.OverlapSphereNonAlloc(
+            transform.position,
+            data.AggroRadius,
+            aggroBuffer,
+            LayerMask.GetMask("PlayerUnit")
+        );
+
+        ICombatTarget best = null;
+        float bestDist = float.MaxValue;
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            ICombatTarget playerUnit = aggroBuffer[i].GetComponent<ICombatTarget>();
+            if (playerUnit != null 
+                && playerUnit.IsAlive 
+                && playerUnit is not Crystal)
+            {
+                float dist = Vector3.Distance(transform.position, playerUnit.Position);
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = playerUnit;
+                }
+            }
+        }
+        return best;
     }
 }

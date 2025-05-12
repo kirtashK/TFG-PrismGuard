@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Crystal : MonoBehaviour
+public class Crystal : MonoBehaviour, ICombatTarget
 {
     [Header("Stats")]
     public float maxHealth = 200f;
@@ -12,12 +12,16 @@ public class Crystal : MonoBehaviour
     {
         currentHealth = maxHealth;
     }
+
+    public Vector3 Position => transform.position;
+    
+    public bool IsAlive => currentHealth > 0f;
+
     public void TakeDamage(float amount)
     {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0f);
+        currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud del cristal = {currentHealth}/{maxHealth}");
+        Debug.Log($"Salud de {name} = {currentHealth}/{maxHealth}");
 
         // TODO Efectos, sonido
 
@@ -32,6 +36,7 @@ public class Crystal : MonoBehaviour
         Debug.Log("El cristal ha sido destruido!");
         // TODO Notifica al GameManager la derrota
         // GameManager.Instance.OnCrystalDestroyed();
+
         // TODO OnCrystalDestroyed() se encarga de mostrar pantalla de derrota
         // y mover la camara al cristal, cambiar modelo de cristal a uno roto
         // desactivar enemigos o similar

@@ -43,8 +43,8 @@ public class WaveManager : MonoBehaviour
         {
             for (int i = 0; i < entry.count; i++)
             {
-                GameObject go = Instantiate(entry.enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-                Enemy enemy = go.GetComponent<Enemy>();
+                GameObject gameObject = Instantiate(entry.enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+                Enemy enemy = gameObject.GetComponent<Enemy>();
                 if (enemy == null)
                 {
                     Debug.LogError("Enemy prefab sin componente Enemy.");
@@ -55,7 +55,7 @@ public class WaveManager : MonoBehaviour
                 if (enemy.crystalTransform == null)
                     enemy.crystalTransform = GameObject.FindWithTag("Crystal")?.transform;
 
-                enemy.ChangeState(new EnemyChaseState());
+                enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
 
                 yield return new WaitForSeconds(entry.spawnDelay);
             }
