@@ -57,12 +57,16 @@ public class Enemy : MonoBehaviour, ICombatTarget
     public void TakeDamage(float amount)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
+
+        Debug.Log($"Salud de {name} = {currentHealth}/{data.maxHealth}");
+
         if (currentHealth == 0f)
             Die();
     }
 
     private void Die()
     {
+        Debug.Log($"{name} ha muerto");
         // TODO Sonido, animaciones, efectos, quizas recompensas?
         Destroy(gameObject);
     }

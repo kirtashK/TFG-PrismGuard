@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "NewStructure", menuName = "Structure/Structure Data")]
+[CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure")]
 public class StructureData : ScriptableObject
 {
     [Tooltip("Nombre de la estructura")]

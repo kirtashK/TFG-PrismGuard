@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "newWarehouseType", menuName = "Warehouse/Type")]
+[CreateAssetMenu(fileName = "newWarehouseType", menuName = "Data/Warehouse")]
 public class WarehouseType : ScriptableObject
 {
     [Tooltip("Nombre del tipo de almacén")]

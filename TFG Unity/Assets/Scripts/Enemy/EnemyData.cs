@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewEnemyType", menuName = "Enemies/Enemy Type")]
+[CreateAssetMenu(fileName = "NewEnemyData", menuName = "Data/Enemy")]
 public class EnemyData : ScriptableObject
 {
     [Header("Stats")]
@@ -10,14 +10,18 @@ public class EnemyData : ScriptableObject
     public float attackDamage = 10f;
     public float attackCooldown = 1f;
 
-    [Header("Rewards upon defeating")]
-    public int rewardGold = 5;
+    [Header("Wave")]
+    [Tooltip("Coste para generar este enemigo, tambien es la puntuacion añadida al derrotar este enemigo")]
+    public int spawnCost = 5;
+
+    [Header("Rewards")]
+    [Tooltip("Experienca añadida al soldado que derrote este enemigo")]
     public int rewardExperience = 2;
 
     [Header("IA")]
-    [Tooltip("Distancia máxima a la que consideran atacar obstáculo")]
+    [Tooltip("Distancia máxima a la que consideran atacar un obstáculo")]
     public float maxChaseDistance = 20f;
 
-    [Tooltip("Radio en el que el enemigo detecta soldados para atacar")]
+    [Tooltip("Radio en el que detecta soldados a atacar")]
     public float AggroRadius = 5f;
 }
