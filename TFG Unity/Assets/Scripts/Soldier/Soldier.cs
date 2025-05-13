@@ -1,16 +1,26 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Soldier : MonoBehaviour, ICombatTarget
 {
-    [Header("Stats")]
-    public float maxHealth = 50f;
+    public SoldierData data;
+
     private float currentHealth;
 
-    public bool IsDead => currentHealth <= 0f;
+    [HideInInspector]
+    public NavMeshAgent agent;
 
     private void Awake()
     {
-        currentHealth = maxHealth;
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Start()
+    {
+        currentHealth = data.maxHealth;
+
+        agent.speed = data.moveSpeed;
+        agent.stoppingDistance = data.attackRange;
     }
 
     public Vector3 Position => transform.position;
@@ -21,7 +31,7 @@ public class Soldier : MonoBehaviour, ICombatTarget
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{maxHealth}");
+        Debug.Log($"Salud de {name} = {currentHealth}/{data.maxHealth}");
 
         if (currentHealth <= 0f)
         {
@@ -31,6 +41,7 @@ public class Soldier : MonoBehaviour, ICombatTarget
 
     private void Die()
     {
+        Debug.Log($"{name} ha muerto");
         // TODO Animacion muerte, sonido
         Destroy(gameObject);
     }

@@ -154,7 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300db306b945d1c43a32311dac5bd560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  data: {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
+  agent: {fileID: 0}
 --- !u!65 &8623334058126263026
 BoxCollider:
   m_ObjectHideFlags: 0
