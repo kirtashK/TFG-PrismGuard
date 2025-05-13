@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6648219003927765443}
   - component: {fileID: 6805369548378288826}
   - component: {fileID: 423437163158893341}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Worker Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,8 +98,8 @@ GameObject:
   - component: {fileID: 8837244650898311105}
   - component: {fileID: 1391396505683991130}
   - component: {fileID: 2658543494623460779}
-  m_Layer: 0
-  m_Name: Worker Agent
+  m_Layer: 9
+  m_Name: Worker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,6 +158,7 @@ MonoBehaviour:
   maxCarryWeight: 10
   currentLoad: 0
   InventorySpot: {fileID: 5389797990047835591}
+  maxHealth: 25
 --- !u!195 &2658543494623460779
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -189,7 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5389797990047835591}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: InventorySpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 
-public class Worker : MonoBehaviour
+public class Worker : MonoBehaviour, ICombatTarget
 {
     private IWorkerState currentState;
 
@@ -23,6 +23,9 @@ public class Worker : MonoBehaviour
 
     private readonly List<GameObject> inventory = new List<GameObject>();
 
+    public float maxHealth = 25f;
+    private float currentHealth;
+
     private void Start()
     {
         Agent = GetComponent<NavMeshAgent>();
@@ -30,6 +33,8 @@ public class Worker : MonoBehaviour
         {
             Debug.LogError("El trabajador debe tener un componente NavMeshAgent.");
         }
+
+        currentHealth = maxHealth;
 
         ChangeState(new IdleState());
     }
@@ -44,6 +49,29 @@ public class Worker : MonoBehaviour
         currentState?.ExitState(this);
         currentState = newState;
         currentState?.EnterState(this);
+    }
+
+    public Vector3 Position => transform.position;
+
+    public bool IsAlive => currentHealth > 0f;
+
+    public void TakeDamage(float amount)
+    {
+        currentHealth = Mathf.Max(currentHealth - amount, 0f);
+
+        Debug.Log($"Salud de {name} = {currentHealth}/{maxHealth}");
+
+        if (currentHealth <= 0f)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log($"{name} ha muerto");
+        // TODO Animacion muerte, sonido
+        Destroy(gameObject);
     }
 
     // ##############
