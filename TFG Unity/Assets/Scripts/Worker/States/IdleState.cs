@@ -13,7 +13,7 @@ public class IdleState : IWorkerState
 
     public void UpdateState(Worker worker)
     {
-        if (isSearching || worker.CurrentTask != null)
+        if (isSearching || worker.currentTask != null)
         {
             return;
         }
@@ -22,7 +22,7 @@ public class IdleState : IWorkerState
 
         if (task != null)
         {
-            worker.CurrentTask = task;
+            worker.currentTask = task;
             worker.ChangeState(new MovingState());
         }
         else

@@ -44,7 +44,9 @@ public class EnemyAttackState : IEnemyState
         {
             Debug.Log($"{enemy.name} ataca {target}");
 
-            target.TakeDamage(enemy.data.attackDamage);
+            target.TakeDamage(
+                enemy.data.attackDamage, 
+                enemy.Position);
             enemy.StartCoroutine(AttackCooldown(enemy));
         }
     }

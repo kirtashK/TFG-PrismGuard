@@ -155,10 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3eefcfcaad8fe7498ce67d1c38eb065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCarryWeight: 10
+  workerData: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
   currentLoad: 0
-  InventorySpot: {fileID: 5389797990047835591}
-  maxHealth: 25
+  inventorySpot: {fileID: 5389797990047835591}
 --- !u!195 &2658543494623460779
 NavMeshAgent:
   m_ObjectHideFlags: 0

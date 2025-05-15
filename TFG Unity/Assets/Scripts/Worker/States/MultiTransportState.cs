@@ -20,13 +20,13 @@ public class MultiTransportState : IWorkerState
     {
         workerRef = worker;
 
-        MoveItemTask firstTask = worker.CurrentTask as MoveItemTask;
+        MoveItemTask firstTask = worker.currentTask as MoveItemTask;
         pickupTarget = firstTask.TaskPosition;
         deliveryTarget = firstTask.Destination;
         arrivalRange = firstTask.InteractionRange;
 
         phase = Phase.Pickup;
-        worker.Agent.SetDestination(pickupTarget);
+        worker.agent.SetDestination(pickupTarget);
     }
 
     public void UpdateState(Worker worker)
@@ -54,7 +54,7 @@ public class MultiTransportState : IWorkerState
 
     private void HandlePickupPhase()
     {
-        MoveItemTask task = workerRef.CurrentTask as MoveItemTask;
+        MoveItemTask task = workerRef.currentTask as MoveItemTask;
 
         if (task == null)
         {
@@ -62,13 +62,13 @@ public class MultiTransportState : IWorkerState
             return;
         }
 
-        if (!workerRef.Agent.pathPending 
-            && workerRef.Agent.remainingDistance <= arrivalRange)
+        if (!workerRef.agent.pathPending 
+            && workerRef.agent.remainingDistance <= arrivalRange)
         {
             if (!workerRef.CanCarry(task.TaskData))
             {
                 phase = Phase.Delivery;
-                workerRef.Agent.SetDestination(deliveryTarget);
+                workerRef.agent.SetDestination(deliveryTarget);
                 return;
             }
 
@@ -76,7 +76,7 @@ public class MultiTransportState : IWorkerState
             TaskManager.Instance.CompleteTask(task);
             collectedTasks.Add(task);
 
-            float remainingCapacity = workerRef.maxCarryWeight - workerRef.currentLoad;
+            float remainingCapacity = workerRef.workerData.maxCarryWeight - workerRef.currentLoad;
 
             MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
                 workerRef.transform.position,
@@ -87,14 +87,14 @@ public class MultiTransportState : IWorkerState
 
             if (next != null)
             {
-                workerRef.CurrentTask = next;
+                workerRef.currentTask = next;
                 pickupTarget = next.TaskPosition;
-                workerRef.Agent.SetDestination(pickupTarget);
+                workerRef.agent.SetDestination(pickupTarget);
                 return;
             }
 
             phase = Phase.Delivery;
-            workerRef.Agent.SetDestination(deliveryTarget);
+            workerRef.agent.SetDestination(deliveryTarget);
         }
     }
 
@@ -106,7 +106,7 @@ public class MultiTransportState : IWorkerState
     {
         Worker worker = workerRef;
 
-        if (!worker.Agent.pathPending && worker.Agent.remainingDistance <= arrivalRange)
+        if (!worker.agent.pathPending && worker.agent.remainingDistance <= arrivalRange)
         {
             foreach (MoveItemTask task in collectedTasks)
             {
@@ -114,7 +114,7 @@ public class MultiTransportState : IWorkerState
                 worker.currentLoad -= task.TaskData.weight;
             }
 
-            worker.CurrentTask = null;
+            worker.currentTask = null;
             worker.ChangeState(new IdleState());
         }
     }

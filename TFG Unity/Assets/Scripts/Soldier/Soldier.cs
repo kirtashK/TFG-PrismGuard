@@ -27,7 +27,7 @@ public class Soldier : MonoBehaviour, ICombatTarget
 
     public bool IsAlive => currentHealth > 0f;
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 

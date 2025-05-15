@@ -11,18 +11,18 @@ public class WorkingState : IWorkerState
 
     public void UpdateState(Worker worker)
     {
-        if (!started && worker.CurrentTask != null)
+        if (!started && worker.currentTask != null)
         {
             started = true;
-            if (worker.CurrentTask is MoveItemTask)
+            if (worker.currentTask is MoveItemTask)
             {
                 worker.ChangeState(new MultiTransportState());
             }
             else
             {
-                worker.CurrentTask.Execute(worker, () =>
+                worker.currentTask.Execute(worker, () =>
                 {
-                    worker.CurrentTask = null;
+                    worker.currentTask = null;
                     worker.ChangeState(new IdleState());
                 });
             }

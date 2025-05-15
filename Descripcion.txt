@@ -28,14 +28,13 @@ Recursos
 ==========
 
 Workers
-	Datos hardcodeados, usar Scriptable data quizas ?
+	Hecho || Si un worker es atacado, debe reaccionar de alguna manera al daño y alejarse del enemigo
+		!! Si un worker tiene una tarea asignada y es interruptido, la tarea debe dejar de estar reservada
+			Al terminar de huir, la tarea acaba como si se hubiera hecho, moviendo items abandonados al huir al almacen por ejemplo
+		Hecho || Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
 Enemigos
 	Hecho || Atacar workers
-		Si un worker es atacado, debe reaccionar de alguna manera al daño y alejarse del enemigo
-		Si un worker tiene una tarea asignada y es interruptido, la tarea debe dejar de estar reservada
-		Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
-			El item debe tener tarea para ser movido, reusar la que tenia (activar/desactivar) o crear nueva?
 	Hecho || Atacar soldados
 	Atacar ciertas estructuras
 	Al morir, % de generar alma, cada tipo de enemigo tiene un % distinto ? o % por oleada ?
@@ -70,7 +69,9 @@ Cristal
 		Mostrar menu derrota para volver al menu principal y/o cargar 
 	Se crean unidades en cristal, coste: almas & recursos
 
+Stat de armadura, reduce daño por un valor o porcentaje?
 
+Documentar metodos con ///
 
 Crafting
 	Herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?

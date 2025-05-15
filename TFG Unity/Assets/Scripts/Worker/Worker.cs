@@ -8,33 +8,33 @@ public class Worker : MonoBehaviour, ICombatTarget
 {
     private IWorkerState currentState;
 
-    public NavMeshAgent Agent { get; private set; }
-    public ITask CurrentTask { get; set; }
+    public NavMeshAgent agent { get; private set; }
+    public ITask currentTask { get; set; }
 
-    [Tooltip("Capacidad máxima del inventario")]
-    public float maxCarryWeight = 10f;
+    public WorkerData workerData;
 
     [SerializeField]
     [Tooltip("Capacidad actual")]
     public float currentLoad = 0f;
 
     [SerializeField]
-    private Transform InventorySpot;
+    private Transform inventorySpot;
 
     private readonly List<GameObject> inventory = new();
 
-    public float maxHealth = 25f;
     private float currentHealth;
 
     private void Start()
     {
-        Agent = GetComponent<NavMeshAgent>();
-        if (Agent == null)
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
         {
             Debug.LogError("El trabajador debe tener un componente NavMeshAgent.");
         }
 
-        currentHealth = maxHealth;
+        currentHealth = workerData.maxHealth;
+
+        agent.speed = workerData.moveSpeed;
 
         ChangeState(new IdleState());
     }
@@ -55,13 +55,24 @@ public class Worker : MonoBehaviour, ICombatTarget
 
     public bool IsAlive => currentHealth > 0f;
 
-    public void TakeDamage(float amount)
+    /// <summary>
+    /// Daña al worker, si sobrevive huye del peligro
+    /// </summary>
+    /// <param name="amount">Daño a recibir</param>
+    /// <param name="attackerOrigin">Posicion del atacante</param>
+    public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{maxHealth}");
+        Debug.Log($"Salud de {name} = {currentHealth}/{workerData.maxHealth}");
 
-        if (currentHealth <= 0f)
+        DropAll(inventorySpot.position);
+
+        if (currentHealth > 0f)
+        {
+            Retreat(attackOrigin);
+        }
+        else
         {
             Die();
         }
@@ -74,28 +85,56 @@ public class Worker : MonoBehaviour, ICombatTarget
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// El worker huye en direccion opuesta a threatPosition
+    /// </summary>
+    /// <param name="threatPosition">Posicion del peligro</param>
+    /// <param name="retreatDistance">Distancia a huir</param>
+    public void Retreat(Vector3 threatPosition, float retreatDistance = 5f)
+    {
+        Vector3 fleeDir = (transform.position - threatPosition).normalized;
+
+        Vector3 rawTarget = transform.position + fleeDir * retreatDistance;
+
+        // Comprobar si la posición de huida esta en un navmesh
+        if (NavMesh.SamplePosition(rawTarget,
+                                   out NavMeshHit hit,
+                                   retreatDistance,
+                                   NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+        else
+        {
+            //agent.SetDestination(rawTarget);
+        }
+    }
+
     // ##############
     // # Inventario #
     // ##############
 
-    public bool CanCarry(ItemData data)
-        => currentLoad + data.weight <= maxCarryWeight;
+    public bool CanCarry(ItemData itemData)
+        => currentLoad + itemData.weight <= workerData.maxCarryWeight;
 
-    public void PickUp(GameObject obj, ItemData data)
+    public void PickUp(GameObject gameObject, ItemData itemData)
     {
-        inventory.Add(obj);
-        currentLoad += data.weight;
-        obj.transform.SetParent(InventorySpot, worldPositionStays: true);
-        obj.SetActive(false);
+        inventory.Add(gameObject);
+        currentLoad += itemData.weight;
+        gameObject.transform.SetParent(inventorySpot, worldPositionStays: true);
+        gameObject.SetActive(false);
     }
 
     public void DropAll(Vector3 dropPosition)
     {
-        foreach (GameObject obj in inventory)
+        foreach (GameObject gameObject in inventory)
         {
-            obj.transform.SetParent(null, worldPositionStays: true);
-            obj.transform.position = dropPosition;
-            obj.SetActive(true);
+            if (gameObject != null)
+            {
+                gameObject.transform.SetParent(null, worldPositionStays: true);
+                gameObject.transform.position = dropPosition;
+                gameObject.SetActive(true);
+            }
         }
         inventory.Clear();
         currentLoad = 0f;
