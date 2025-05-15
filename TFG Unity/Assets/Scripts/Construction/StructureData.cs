@@ -20,5 +20,5 @@ public class StructureData : ScriptableObject
         public int quantity;
     }
 
-    public List<ResourceRequirement> requirements = new List<ResourceRequirement>();
+    public List<ResourceRequirement> requirements = new();
 }

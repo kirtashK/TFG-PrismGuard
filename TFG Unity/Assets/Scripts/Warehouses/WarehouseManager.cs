@@ -5,7 +5,7 @@ public class WarehouseManager : MonoBehaviour
 {
     public static WarehouseManager Instance { get; private set; }
 
-    public List<Warehouse> allWarehouses = new List<Warehouse>();
+    public List<Warehouse> allWarehouses = new();
 
     public IReadOnlyList<Warehouse> AllWarehouses => allWarehouses;
 

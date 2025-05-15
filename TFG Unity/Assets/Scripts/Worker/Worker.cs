@@ -21,7 +21,7 @@ public class Worker : MonoBehaviour, ICombatTarget
     [SerializeField]
     private Transform InventorySpot;
 
-    private readonly List<GameObject> inventory = new List<GameObject>();
+    private readonly List<GameObject> inventory = new();
 
     public float maxHealth = 25f;
     private float currentHealth;

@@ -11,5 +11,5 @@ public class ItemData : ScriptableObject
     //public int priority;
 
     [Tooltip("Tipos de almacen donde se puede guardar este item")]
-    public List<WarehouseType> storedIn = new List<WarehouseType>();
+    public List<WarehouseType> storedIn = new();
 }

@@ -12,7 +12,7 @@ public class MultiTransportState : IWorkerState
 
     private Worker workerRef;
 
-    private readonly List<MoveItemTask> collectedTasks = new List<MoveItemTask>();
+    private readonly List<MoveItemTask> collectedTasks = new();
 
     private const float maxPickupRadius = 10f;
 

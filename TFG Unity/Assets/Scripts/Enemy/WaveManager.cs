@@ -6,7 +6,7 @@ public class WaveManager : MonoBehaviour
 {
     [Header("Configuración de Oleadas")]
     [Tooltip("Definición de cada entrada en la ola")]
-    public List<WaveEntry> waveEntries = new List<WaveEntry>();
+    public List<WaveEntry> waveEntries = new();
 
     [Tooltip("Punto de salida de los enemigos")]
     public Transform spawnPoint;
