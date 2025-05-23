@@ -44,7 +44,7 @@ public class ResourceManager : MonoBehaviour
                 checkRadius
             );
 
-            foreach (var hit in hits)
+            foreach (Collider hit in hits)
             {
                 if (hit.CompareTag("Log"))
                 {

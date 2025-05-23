@@ -53,9 +53,9 @@ Soldados
 Oleadas 
 	Oleada cada x noche o, simplemente cada y tiempo
 	Mostrar en UI mensaje que oleada número x empieza en poco y que ha empezado
-	Enemigos a generar aleatorio, basado en coste del enemigo y oleada
-		Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
-		Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
+	Hecho || Enemigos a generar aleatorio, basado en coste del enemigo y oleada
+		Hecho || Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
+		Hecho || Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
 		Ciertos enemigos no pueden aparecer al principio, para evitar enemigos dificiles apareciendo muy pronto si el presupuesto es suficiente esa oleada
 	Cuando muere enemigo, avisar a WaveManager, cuando 0 enemigos, avisar a GameManager, recompensar con puntuación
 
