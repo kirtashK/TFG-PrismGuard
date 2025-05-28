@@ -9,8 +9,8 @@ public class Blueprint : MonoBehaviour
     [Tooltip("Spot donde dejar los recursos")]
     public Transform dropSpot;
 
-    private readonly Dictionary<ItemData, int> delivered = new Dictionary<ItemData, int>();
-    private readonly Dictionary<ItemData, int> pending = new Dictionary<ItemData, int>();
+    private readonly Dictionary<ItemData, int> delivered = new();
+    private readonly Dictionary<ItemData, int> pending = new();
 
     private void OnEnable()
     {

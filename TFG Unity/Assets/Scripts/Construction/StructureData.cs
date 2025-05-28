@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "NewStructure", menuName = "Structure/Structure Data")]
+[CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure")]
 public class StructureData : ScriptableObject
 {
     [Tooltip("Nombre de la estructura")]
@@ -20,5 +20,5 @@ public class StructureData : ScriptableObject
         public int quantity;
     }
 
-    public List<ResourceRequirement> requirements = new List<ResourceRequirement>();
+    public List<ResourceRequirement> requirements = new();
 }

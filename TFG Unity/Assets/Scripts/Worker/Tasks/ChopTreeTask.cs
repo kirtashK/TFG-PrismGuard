@@ -25,7 +25,7 @@ public class ChopTreeTask : MonoBehaviour, ITask
 
     [Tooltip("Lista de posiciones donde pueden generarse troncos, dentro del rango de minLogs y maxLogs")]
     [SerializeField]
-    private List<Transform> logSpawnPoints = new List<Transform>();
+    private List<Transform> logSpawnPoints = new();
 
     public Vector3 TaskPosition
     {

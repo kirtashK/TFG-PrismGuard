@@ -14,7 +14,7 @@ public class Warehouse : MonoBehaviour
 
     public ItemData storedItem;
 
-    private readonly Queue<GameObject> storedItemsQueue = new Queue<GameObject>();
+    private readonly Queue<GameObject> storedItemsQueue = new();
 
     private int reservedCount;
 

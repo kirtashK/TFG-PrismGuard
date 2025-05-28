@@ -5,7 +5,7 @@ public class ConstructionManager : MonoBehaviour
 {
     public static ConstructionManager Instance { get; private set; }
 
-    private List<Blueprint> blueprints = new List<Blueprint>();
+    private List<Blueprint> blueprints = new();
 
     private float generateTasksInterval = 2f;
     private float nextGenerateTasksTime = 0f;

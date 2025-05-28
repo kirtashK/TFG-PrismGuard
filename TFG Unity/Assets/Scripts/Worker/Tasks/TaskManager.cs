@@ -6,7 +6,7 @@ public class TaskManager : MonoBehaviour
 {
     public static TaskManager Instance { get; private set; }
 
-    private List<ITask> availableTasks = new List<ITask>();
+    private List<ITask> availableTasks = new();
 
     private void Awake()
     {
@@ -82,7 +82,7 @@ public class TaskManager : MonoBehaviour
         Debug.DrawRay(start, Vector3.up * 2, Color.green, 2f);
         Debug.DrawRay(end, Vector3.up * 2, Color.red, 2f);
 
-        NavMeshPath path = new NavMeshPath();
+        NavMeshPath path = new();
         if (NavMesh.CalculatePath(start, end, NavMesh.AllAreas, path))
         {
             if (path.status != NavMeshPathStatus.PathComplete)

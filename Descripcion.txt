@@ -1,96 +1,108 @@
-Awake()
-OnEnable()
-Start()
-Update()
 
-#########	
-To do	
-#########
+#############
+#	To do	#
+#############
 
-Para construir un edificio, comprobar collider de blueprint para ver si cabe
-Ademas, ajustar Y del edificio por el suelo u otros bloques automaticamente
-una vez comprobado, borrar ese collider para evitar problemas con otros blueprints
+Construcción
+	Para construir un edificio, comprobar collider de blueprint para ver si cabe
+	Grid para construir, solo mover el blueprint en intervalos de 0.5 unidades por ejemplo?
+	Ajustar Y del edificio por el suelo u otros bloques automaticamente
+		Una vez comprobado y colocado el blueprint, borrar ese collider para evitar problemas con otros blueprints
 
+Recursos
+	Smeltery, recibe ores y madera (charcoal ?) y los procesa a lingotes
 
-Smeltery, recibe ores y madera y los procesa a lingotes
+	Refactorizar SawmillProcessor para que funcione de forma generica? troncos, piedras, minerales...
 
-Refactorizar SawmillProcessor para que funcione de forma generica? troncos, piedras...
+	Tronco -> aserradero -> tablas de madera -> almacen/pallet
 
-Recurso piedra -> cantera -> bloques de piedra -> almacen/pallet
-Qué minerales? hierro & acero vale, pero y otro mas basico?
+	Piedra -> cantera -> bloques de piedra -> almacen/pallet
 
-Recurso minerales -> ?? -> almacen/pallet o Smeltery(recibe madera como fuel)
--> lingotes -> almacen/pallet
+	Minerales -> ?? -> almacen/pallet o Smeltery(recibe madera (charcoal ?) como fuel)
+	-> lingotes -> almacen/pallet
+
+==========
+#	Tier 1: piedra & madera
+#	Tier 2: cobre (hace falta smeltery, smeltery se desbloquea con research muy basico y barato)
+#	Tier 3: hierro (hace falta smeltery + research avanzado y caro que desbloquea producción hierro)
+==========
+
+Workers
+	Hecho || Si un worker es atacado, debe reaccionar de alguna manera al daño y alejarse del enemigo
+		!! Si un worker tiene una tarea asignada y es interruptido, la tarea debe dejar de estar reservada
+			Al terminar de huir, la tarea acaba como si se hubiera hecho, moviendo items abandonados al huir al almacen por ejemplo
+		Hecho || Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
 
 Enemigos
-Al morir, % de soltar alma, cada tipo de enemigo tiene un % distinto ?
-Si un worker esta moviendo un item y es interruptido, suelta el item en el lugar
+	Hecho || Atacar workers
+	Hecho || Atacar soldados
+	Atacar ciertas estructuras
+	Al morir, % de generar alma, cada tipo de enemigo tiene un % distinto ? o % por oleada ?
+	Al morir, dar su coste (para ser generado por la oleada) como puntuación a GameManager
 
-Crafting, herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
+Soldados
+	Estados
+		Perseguir enemigo
+		Atacar enemigo
+		Vigilar ?
+	Poder asignar un sitio que vigilar
+		Atacan a enemigos en radio, al acabar, si no hay mas enemigos, vuelven al sitio de vigia
+	Regeneran salud poco a poco por el día
+	Experiencia
+		
+Oleadas 
+	Oleada cada x noche o, simplemente cada y tiempo
+	Mostrar en UI mensaje que oleada número x empieza en poco y que ha empezado
+	Hecho || Enemigos a generar aleatorio, basado en coste del enemigo y oleada
+		Hecho || Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
+		Hecho || Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
+		Ciertos enemigos no pueden aparecer al principio, para evitar enemigos dificiles apareciendo muy pronto si el presupuesto es suficiente esa oleada
+	Cuando muere enemigo, avisar a WaveManager, cuando 0 enemigos, avisar a GameManager, recompensar con puntuación
 
+### GameManager ###
+	Cuando se completa una oleada, notifica a gameManager y se muestra hud, puntuacion ? etc
+	Cuando el cristal es destruido, notifica a GameManager y se mostraría el game over
+	Tienda para comprar recursos, matar enemigos genera puntuación
+
+Cristal
+	Si es destruido, el jugador es derrotado
+		Mostrar menu derrota para volver al menu principal y/o cargar 
+	Se crean unidades en cristal, coste: almas & recursos
+
+Stat de armadura, reduce daño por un valor o porcentaje?
+
+Documentar metodos con ///
+
+Crafting
+	Herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
+	Items necesarios para crear unidades, como espadas de hierro para crear un soldado especifico
 
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
 Almacen tiene spots donde se colocan los objetos, que sea un vector de empty objects
 
+
+Charcoal ?
 
 Research, consume recursos y tiempo
 capacidad inventario max. mejorada por researches
 Mejor sawmill, mas radio y velocidad de procesamiento y mas procesamiento concurrente
 Desbloquear Acero en smeltery
 
-Skills basicas
-
-Necesidades basicas
+Skills basicas ?
+Necesidades basicas ?
 
 UI
+Modelos
 Sonidos
 Efectos (respawn de arboles etc)
 Texturas
-Modelos
 Animaciones
 
 
 
-#########
-Detalles técnicos
-#########
-
-Las IAs se mueven mediante NavMesh, nativo de Unity
-Los trabajadores siguen una maquina finita de estados
-
-Estados:
-- IdleState
-- WorkingState
-- MovingState
-- TransportItemState
-
-La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
-
-Los trabajadores cumplen tareas, las cuales heredan de una interfaz
-Tareas:
-- ChopTreeTask
-- MoveItemTask
-
-Cada tarea tiene una distancia customizable a la que el worker se parará, 
-para evitar que el worker se mueva al centro
-
-Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
-
-Los items tienen un ScriptableObject que sirve como datos (Data driven)
-
-Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
-por ejemplo, se crea un tronco al talar un arbol
-
-Hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
-eligiendo primero tareas cercanas al worker o de mayor prioridad
-
-De forma similar, hay manager de construccion, de almacenes
-
-
-
-#########
-Descripción
-##########
+#################
+#	Descripción #
+#################
 
 Defender cristal mágico, que es la estructura principal que da magia a las islas
 Los recursos se regeneran poco a poco gracias a la magia de este cristal
@@ -112,7 +124,13 @@ Recursos:
 - Piedra y bloque de piedra
 - Mena de cobre y lingote de cobre
 - Mena de hierro y lingote de hierro
-- Lingote de acero
+- Lingote de acero ?
+
+==========
+#	Tier 1: piedra & madera
+#	Tier 2: cobre (hace falta smeltery, smeltery se desbloquea con research muy basico y barato)
+#	Tier 3: hierro (hace falta smeltery + research avanzado y caro que desbloquea producción hierro)
+==========
 
 Estructuras:
 - Aserradero: marca arboles para cortar alrededor, transforma troncos a tablas, puede usar herramientas
@@ -153,3 +171,40 @@ Crear herramientas para mejorar trabajadores en ciertos edificios ?
 Si aserradero tiene herramientas, 
 los trabajadores asignados a ese aserradero lo hacen mejor ?
 pero se degradan con el tiempo
+
+
+
+#########################
+#	Detalles técnicos	#
+#########################
+
+Las IAs se mueven mediante NavMesh, nativo de Unity
+Los trabajadores siguen una maquina finita de estados
+
+Estados:
+- IdleState
+- WorkingState
+- MovingState
+- TransportItemState
+
+La máquina de estados sigue el patron State Pattern, donde cada estado es una nueva clase
+
+Los trabajadores cumplen tareas, las cuales heredan de una interfaz
+Tareas:
+- ChopTreeTask
+- MoveItemTask
+
+Cada tarea tiene una distancia customizable a la que el worker se parará, 
+para evitar que el worker se mueva al centro
+
+Cualquier objeto que deba modificar NavMesh debe estar en la layer CollectedByNavMesh
+
+Los items tienen un ScriptableObject que sirve como datos (Data driven)
+
+Hay un manager de items, que se encarga de crearlos cuando ocurren ciertos eventos,
+por ejemplo, se crea un tronco al talar un arbol
+
+Hay un manager de tareas, que se encarga de registrarlas y asignarlas a los workers,
+eligiendo primero tareas cercanas al worker o de mayor prioridad
+
+De forma similar, hay manager de construccion, de almacenes
