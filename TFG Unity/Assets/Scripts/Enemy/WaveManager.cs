@@ -116,6 +116,9 @@ public class WaveManager : MonoBehaviour
 
         waveIndex++;
 
+        // Mostrar texto de nueva oleada
+        UIManager.Instance.ShowWaveBanner(waveIndex);
+
         // Calcula presupuesto: (initial + delta*n) * r^n
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);

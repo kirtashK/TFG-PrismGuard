@@ -64,6 +64,27 @@ Oleadas
 	Cuando el cristal es destruido, notifica a GameManager y se mostraría el game over
 	Tienda para comprar recursos, matar enemigos genera puntuación
 
+UI
+	cantidad que el jugador tiene de cada recurso
+	Hecho || indicar nueva oleada
+	cuando una oleada ha acabado (todos los enemigos muertos)
+	cuantos enemigos hay con vida durante una oleada
+	menu para la construcción de estructuras que dentro tenga categorias (menu construcción -> categorias (almacen, producción, defensa, etc)) 
+	seleccionar un soldado o worker y ver su salud y mas informacion
+
+Sonidos
+	Nueva oleada
+	Fin oleada
+	Enemigo dañado/muere
+	Soldado dañado/muere
+	Worker dañado/muere
+	Sonidos combate
+	Construcción
+	Tala arboles
+	Minería
+	Reparación
+	Dialogo al seleccionar soldado/worker
+
 Cristal
 	Si es destruido, el jugador es derrotado
 		Mostrar menu derrota para volver al menu principal y/o cargar 
@@ -91,9 +112,7 @@ Desbloquear Acero en smeltery
 Skills basicas ?
 Necesidades basicas ?
 
-UI
 Modelos
-Sonidos
 Efectos (respawn de arboles etc)
 Texturas
 Animaciones
