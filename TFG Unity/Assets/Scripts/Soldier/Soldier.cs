@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.XR;
 
 public class Soldier : MonoBehaviour, ICombatTarget
 {
@@ -9,6 +10,8 @@ public class Soldier : MonoBehaviour, ICombatTarget
 
     [HideInInspector]
     public NavMeshAgent agent;
+
+    private ISoldierState currentState;
 
     private void Awake()
     {
@@ -21,6 +24,20 @@ public class Soldier : MonoBehaviour, ICombatTarget
 
         agent.speed = data.moveSpeed;
         agent.stoppingDistance = data.attackRange;
+
+        ChangeState(new SoldierIdleState());
+    }
+
+    private void Update()
+    {
+        currentState?.Update();
+    }
+
+    public void ChangeState(ISoldierState newState)
+    {
+        currentState?.Exit();
+        currentState = newState;
+        currentState.Enter(this);
     }
 
     public Vector3 Position => transform.position;
