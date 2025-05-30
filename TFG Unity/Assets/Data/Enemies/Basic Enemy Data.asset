@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e63c8ab53e3064197bd3c7e09e67db, type: 3}
   m_Name: Basic Enemy Data
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  maxHealth: 35
   moveSpeed: 3.5
   attackRange: 1.5
   attackDamage: 10
   attackCooldown: 1
-  rewardGold: 5
+  spawnCost: 5
   rewardExperience: 2
   maxChaseDistance: 20
+  AggroRadius: 5

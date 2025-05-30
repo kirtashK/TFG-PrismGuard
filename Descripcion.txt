@@ -41,12 +41,9 @@ Enemigos
 	Al morir, dar su coste (para ser generado por la oleada) como puntuación a GameManager
 
 Soldados
-	Estados
-		Perseguir enemigo
-		Atacar enemigo
-		Vigilar ?
 	Poder asignar un sitio que vigilar
-		Atacan a enemigos en radio, al acabar, si no hay mas enemigos, vuelven al sitio de vigia
+		Hecho || Atacan a enemigos en radio
+		Al acabar, si no hay mas enemigos, vuelven al sitio de vigia
 	Regeneran salud poco a poco por el día
 	Experiencia
 		
