@@ -18,7 +18,7 @@ public class EnemyData : ScriptableObject
     [Tooltip("Experienca añadida al soldado que derrote este enemigo")]
     public int rewardExperience = 2;
 
-    [Header("IA")]
+    [Header("AI")]
     [Tooltip("Distancia máxima a la que consideran atacar un obstáculo")]
     public float maxChaseDistance = 20f;
 
