@@ -34,7 +34,7 @@ public class WaveBannerController : MonoBehaviour
 
     private IEnumerator ShowRoutine(int waveNumber)
     {
-        bannerText.text = $"Wave {waveNumber}";
+        bannerText.text = $"Wave {waveNumber} has started";
 
         // Fade in
         float time = 0f;

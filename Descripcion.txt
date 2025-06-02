@@ -38,36 +38,51 @@ Enemigos
 	Hecho || Atacar soldados
 	Atacar ciertas estructuras
 	Al morir, % de generar alma, cada tipo de enemigo tiene un % distinto ? o % por oleada ?
-	Al morir, dar su coste (para ser generado por la oleada) como puntuación a GameManager
+		Por oleada mejor
+	Al morir, dar su coste (para ser generado por la oleada) como puntuación a GameManager (usado para la tienda)
 
 Soldados
-	Poder asignar un sitio que vigilar
-		Hecho || Atacan a enemigos en radio
+	Jugador puede asignar un sitio que vigilar
+		Hecho || Atacan enemigos en radio
 		Al acabar, si no hay mas enemigos, vuelven al sitio de vigia
 	Regeneran salud poco a poco por el día
 	Experiencia
+		Ciertos stats mejorados cada nivel
 		
 Oleadas 
 	Oleada cada x noche o, simplemente cada y tiempo
+		Cada x tiempo por ahora
 	Mostrar en UI mensaje que oleada número x empieza en poco y que ha empezado
+		Oleada ha empezado hecho, falta el aviso
 	Hecho || Enemigos a generar aleatorio, basado en coste del enemigo y oleada
 		Hecho || Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
 		Hecho || Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
 		Ciertos enemigos no pueden aparecer al principio, para evitar enemigos dificiles apareciendo muy pronto si el presupuesto es suficiente esa oleada
-	Cuando muere enemigo, avisar a WaveManager, cuando 0 enemigos, avisar a GameManager, recompensar con puntuación
+	Cuando muere enemigo, avisar a UIManager (Número de enemigos con vida)
+	Cuando 0 enemigos, avisar a GameManager (recompensar con puntuación) y UIManager (Oleada acabada & puntuación obtenida)
 
 ### GameManager ###
-	Cuando se completa una oleada, notifica a gameManager y se muestra hud, puntuacion ? etc
-	Cuando el cristal es destruido, notifica a GameManager y se mostraría el game over
+	Cancelado || Cuando se completa una oleada, notificar a gameManager y se muestra hud, puntuacion ? etc
+		Tenemos UIManager para tema de UI
+	Cuando el cristal es destruido, notificar a GameManager y mostrar game over
 	Tienda para comprar recursos, matar enemigos genera puntuación
 
 UI
-	cantidad que el jugador tiene de cada recurso
+	Cantidad que el jugador tiene de cada recurso
 	Hecho || indicar nueva oleada
-	cuando una oleada ha acabado (todos los enemigos muertos)
-	cuantos enemigos hay con vida durante una oleada
-	menu para la construcción de estructuras que dentro tenga categorias (menu construcción -> categorias (almacen, producción, defensa, etc)) 
-	seleccionar un soldado o worker y ver su salud y mas informacion
+	Indicar que oleada empieza en poco
+	Indicar que una oleada ha acabado (todos los enemigos muertos)
+	Hecho || Indicar número de enemigos con vida (se ocultado si no hay enemigos con vida)
+		Mover ChangeEnemyCount de UIManager a su propio script como WaveBanner?
+	Menu para la construcción de estructuras que dentro tenga categorias (menu construcción -> categorias (almacen, producción, defensa, etc)) 
+	Seleccionar un soldado o worker y ver su salud y mas informacion
+		Dar ordenes ? Mover, vigilar, atacar ?
+
+	Retocar posiciones de UI
+
+Reusar GameObjects con un Pool en vez de borrarlos y instanciarlos cada vez
+En vez de comprobar todo en un radio, por ejemplo de los soldados viendo si hay enemigos, podría optimizarse si solo se comprueba el borde del radio, no toda la esfera
+	Enemigo entra/sale del borde
 
 Sonidos
 	Nueva oleada
@@ -88,11 +103,14 @@ Cristal
 	Se crean unidades en cristal, coste: almas & recursos
 
 Stat de armadura, reduce daño por un valor o porcentaje?
+	Añadir este stat a enemigos y soldados
 
-Documentar metodos con ///
+Documentar metodos públicos con ///sumary
 
 Crafting
-	Herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
+	Resource sink
+		Herramientas, las herramientas mejoran velocidad de trabajo pero se gastan ?
+		Armadura de hierro, mejora la armadura durante x tiempo del soldado que la consume ?
 	Items necesarios para crear unidades, como espadas de hierro para crear un soldado especifico
 
 Distintos tamaños de almacenes, pallet de madera pequeño/mediano/grande, etc
@@ -101,10 +119,12 @@ Almacen tiene spots donde se colocan los objetos, que sea un vector de empty obj
 
 Charcoal ?
 
-Research, consume recursos y tiempo
-capacidad inventario max. mejorada por researches
-Mejor sawmill, mas radio y velocidad de procesamiento y mas procesamiento concurrente
-Desbloquear Acero en smeltery
+Research
+	consume recursos y tiempo (resource sink)
+	Posibles research:
+		Capacidad inventario max. mejorada por researches
+		Mejor sawmill, mas radio y velocidad de procesamiento y mas procesamiento concurrente
+		Desbloquear Acero en smeltery
 
 Skills basicas ?
 Necesidades basicas ?
