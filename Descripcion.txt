@@ -3,6 +3,8 @@
 #	To do	#
 #############
 
+Mover notas a Obsidian? Mejor que usando txt
+
 Construcción
 	Para construir un edificio, comprobar collider de blueprint para ver si cabe
 	Grid para construir, solo mover el blueprint en intervalos de 0.5 unidades por ejemplo?
@@ -52,14 +54,14 @@ Soldados
 Oleadas 
 	Oleada cada x noche o, simplemente cada y tiempo
 		Cada x tiempo por ahora
-	Mostrar en UI mensaje que oleada número x empieza en poco y que ha empezado
-		Oleada ha empezado hecho, falta el aviso
+			Activar el temporizador cuando acaba la oleada anterior
 	Hecho || Enemigos a generar aleatorio, basado en coste del enemigo y oleada
 		Hecho || Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
 		Hecho || Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
 		Ciertos enemigos no pueden aparecer al principio, para evitar enemigos dificiles apareciendo muy pronto si el presupuesto es suficiente esa oleada
-	Cuando muere enemigo, avisar a UIManager (Número de enemigos con vida)
-	Cuando 0 enemigos, avisar a GameManager (recompensar con puntuación) y UIManager (Oleada acabada & puntuación obtenida)
+	Hecho || Cuando muere enemigo, avisar a UIManager (Número de enemigos con vida)
+	Cuando 0 enemigos, avisar a GameManager (recompensar con puntuación)
+	Cuando 0 enemigos, avisar a UIManager (Oleada acabada (hecho) & puntuación obtenida)
 
 ### GameManager ###
 	Cancelado || Cuando se completa una oleada, notificar a gameManager y se muestra hud, puntuacion ? etc
@@ -69,12 +71,16 @@ Oleadas
 
 UI
 	Cantidad que el jugador tiene de cada recurso
+
 	Hecho || indicar nueva oleada
 	Indicar que oleada empieza en poco
-	Indicar que una oleada ha acabado (todos los enemigos muertos)
+	Hecho || Indicar que una oleada ha acabado (todos los enemigos muertos)
 	Hecho || Indicar número de enemigos con vida (se ocultado si no hay enemigos con vida)
 		Mover ChangeEnemyCount de UIManager a su propio script como WaveBanner?
+	Cuando 0 enemigos, avisar a UIManager (Oleada acabada (hecho) & puntuación obtenida)
+	
 	Menu para la construcción de estructuras que dentro tenga categorias (menu construcción -> categorias (almacen, producción, defensa, etc)) 
+	
 	Seleccionar un soldado o worker y ver su salud y mas informacion
 		Dar ordenes ? Mover, vigilar, atacar ?
 

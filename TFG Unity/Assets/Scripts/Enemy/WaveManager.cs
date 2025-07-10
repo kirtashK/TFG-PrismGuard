@@ -49,6 +49,8 @@ public class WaveManager : MonoBehaviour
     [Tooltip("Segundos entre cada ola")]
     public float waveInterval = 100f;
 
+    private bool waitingForNextWave;
+
     private int waveIndex = 0;
 
     private List<EnemyPoolEntry> cheapList = new();
@@ -58,8 +60,20 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        // Suscribirse al evento de oleada completada de UIManager
+        UIManager.Instance.OnWaveCompleted += HandleWaveCompleted;
+
         CategorizePool();
         StartCoroutine(RunWaves());
+    }
+
+    private void OnDestroy()
+    {
+        // Limpiar suscripción si se destruye WaveManager
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OnWaveCompleted -= HandleWaveCompleted;
+        }
     }
 
     private IEnumerator RunWaves()
@@ -69,9 +83,20 @@ public class WaveManager : MonoBehaviour
 
         while (true)
         {
+            // Si hay una oleada en marcha, no se activa el
+            // temporizador para la siguiente oleada
+            waitingForNextWave = true;
+            yield return new WaitUntil(() => waitingForNextWave == false);
+
             yield return new WaitForSeconds(waveInterval);
             yield return SpawnWave();
         }
+    }
+    private void HandleWaveCompleted(int waveNumber)
+    {
+        // Cuando se lanze el evento (0 enemigos con vida)
+        // se activa el temporizador para la siguiente oleada
+        waitingForNextWave = false;
     }
 
     /// <summary>

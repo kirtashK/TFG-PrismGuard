@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,9 @@ public class UIManager : MonoBehaviour
     public TMP_Text enemyCountText;
     [Tooltip("CanvasGroup dl texto de enemigos")]
     public CanvasGroup enemyCountGroup;
+
+    // Evento que se dispara cuando termina una oleada
+    public event Action<int> OnWaveCompleted;
 
     private int currentEnemiesAlive = 0;
     private int lastWaveStarted = 0;
@@ -66,6 +70,10 @@ public class UIManager : MonoBehaviour
                 if (waveBanner != null)
                 {
                     waveBanner.Show($"Wave {lastWaveStarted} completed");
+
+                    // Disparar el evento indicando que oleada ha terminado
+                    OnWaveCompleted?.Invoke(lastWaveStarted);
+
                     lastWaveStarted = 0;
                 }
             }
