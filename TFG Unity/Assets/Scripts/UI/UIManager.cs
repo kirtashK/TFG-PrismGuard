@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public CanvasGroup enemyCountGroup;
 
     private int currentEnemiesAlive = 0;
+    private int lastWaveStarted = 0;
 
     private void Awake()
     {
@@ -28,20 +29,22 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Mostrar el banner de oleada.
+    /// Mostrar el banner de oleada al iniciarse una oleada.
     /// </summary>
     public void ShowWaveBanner(int waveNumber)
     {
         if (waveBanner != null)
         {
-            waveBanner.Show(waveNumber);
+            lastWaveStarted = waveNumber;
+            waveBanner.Show($"Wave {lastWaveStarted} has started");
         }
     }
 
     /// <summary>
     /// Cambia el contador de enemigos vivos (+1 o −1).
     /// Si queda al menos 1 enemigo, muestra el texto,
-    /// si llega a 0, lo oculta.
+    /// si llega a 0, lo oculta
+    /// y muestra texto indicando que la oleada ha acabado
     /// </summary>
     public void ChangeEnemyCount(int delta)
     {
@@ -57,6 +60,15 @@ public class UIManager : MonoBehaviour
         {
             enemyCountGroup.alpha = 0f;
             enemyCountGroup.blocksRaycasts = false;
+
+            if (lastWaveStarted > 0)
+            {
+                if (waveBanner != null)
+                {
+                    waveBanner.Show($"Wave {lastWaveStarted} completed");
+                    lastWaveStarted = 0;
+                }
+            }
         }
     }
 }

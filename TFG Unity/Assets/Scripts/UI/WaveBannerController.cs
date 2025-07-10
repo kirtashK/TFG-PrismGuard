@@ -18,9 +18,10 @@ public class WaveBannerController : MonoBehaviour
     private Coroutine showRoutine;
 
     /// <summary>
-    /// Muestra la oleada actual en pantalla.
+    /// Muestra un banner en UI con el texto recibido
+    /// Este banner aparece y desaparece con un fade
     /// </summary>
-    public void Show(int waveNumber)
+    public void Show(string text)
     {
         if (showRoutine != null)
         {
@@ -29,12 +30,12 @@ public class WaveBannerController : MonoBehaviour
         }
 
         canvasGroup.alpha = 0f;
-        showRoutine = StartCoroutine(ShowRoutine(waveNumber));
+        showRoutine = StartCoroutine(ShowRoutine(text));
     }
 
-    private IEnumerator ShowRoutine(int waveNumber)
+    private IEnumerator ShowRoutine(string text)
     {
-        bannerText.text = $"Wave {waveNumber} has started";
+        bannerText.text = text;
 
         // Fade in
         float time = 0f;
