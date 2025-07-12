@@ -21,7 +21,7 @@ public class WaveBannerController : MonoBehaviour
     /// Muestra un banner en UI con el texto recibido
     /// Este banner aparece y desaparece con un fade
     /// </summary>
-    public void Show(string text)
+    public void ShowText(string text)
     {
         if (showRoutine != null)
         {

@@ -88,7 +88,19 @@ public class WaveManager : MonoBehaviour
             waitingForNextWave = true;
             yield return new WaitUntil(() => waitingForNextWave == false);
 
-            yield return new WaitForSeconds(waveInterval);
+            float waveIntervalFirstWarning = waveInterval * 0.35f;
+            float waveIntervalSecondWarning = waveInterval * 0.15f;
+
+            yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
+
+            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+
+            yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
+
+            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+
+            yield return new WaitForSeconds(waveIntervalSecondWarning);
+
             yield return SpawnWave();
         }
     }
@@ -142,7 +154,7 @@ public class WaveManager : MonoBehaviour
         waveIndex++;
 
         // Mostrar texto de nueva oleada
-        UIManager.Instance.ShowWaveBanner(waveIndex);
+        UIManager.Instance.ShowWaveStartedBanner(waveIndex);
 
         // Calcula presupuesto: (initial + delta*n) * r^n
         float budget = (initialBudget + linearDelta * waveIndex)

@@ -54,7 +54,7 @@ Soldados
 Oleadas 
 	Oleada cada x noche o, simplemente cada y tiempo
 		Cada x tiempo por ahora
-			Activar el temporizador cuando acaba la oleada anterior
+			Hecho || Activar el temporizador cuando acaba la oleada anterior
 	Hecho || Enemigos a generar aleatorio, basado en coste del enemigo y oleada
 		Hecho || Cada enemigo tiene un coste, enemigos simples mas baratos, enemigos fuertes mas caros
 		Hecho || Cada oleada tiene un presupuesto y "compra" enemigos de forma aleatoria hasta que no puede comprar mas
@@ -72,8 +72,8 @@ Oleadas
 UI
 	Cantidad que el jugador tiene de cada recurso
 
-	Hecho || indicar nueva oleada
-	Indicar que oleada empieza en poco
+	Hecho || Indicar nueva oleada
+	Hecho || Indicar que oleada empieza en poco
 	Hecho || Indicar que una oleada ha acabado (todos los enemigos muertos)
 	Hecho || Indicar número de enemigos con vida (se ocultado si no hay enemigos con vida)
 		Mover ChangeEnemyCount de UIManager a su propio script como WaveBanner?
@@ -85,6 +85,9 @@ UI
 		Dar ordenes ? Mover, vigilar, atacar ?
 
 	Retocar posiciones de UI
+
+# Poder pausar el juego
+	Ha de pausar temporizadores tambien, como el de entre oleadas
 
 Reusar GameObjects con un Pool en vez de borrarlos y instanciarlos cada vez
 En vez de comprobar todo en un radio, por ejemplo de los soldados viendo si hay enemigos, podría optimizarse si solo se comprueba el borde del radio, no toda la esfera

@@ -35,12 +35,23 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Mostrar el banner de oleada al iniciarse una oleada.
     /// </summary>
-    public void ShowWaveBanner(int waveNumber)
+    public void ShowWaveStartedBanner(int waveNumber)
     {
         if (waveBanner != null)
         {
             lastWaveStarted = waveNumber;
-            waveBanner.Show($"Wave {lastWaveStarted} has started");
+            waveBanner.ShowText($"Wave {lastWaveStarted} has started");
+        }
+    }
+
+    /// <summary>
+    /// Mostrar tiempo restante para que empieze la siguiente oleada.
+    /// </summary>
+    public void ShowTimeUntilWaveBanner(int waveNumber, float timeRemaining)
+    {
+        if (waveBanner != null)
+        {
+            waveBanner.ShowText($"Wave {waveNumber} will start in {timeRemaining} seconds!");
         }
     }
 
@@ -69,7 +80,7 @@ public class UIManager : MonoBehaviour
             {
                 if (waveBanner != null)
                 {
-                    waveBanner.Show($"Wave {lastWaveStarted} completed");
+                    waveBanner.ShowText($"Wave {lastWaveStarted} completed");
 
                     // Disparar el evento indicando que oleada ha terminado
                     OnWaveCompleted?.Invoke(lastWaveStarted);
