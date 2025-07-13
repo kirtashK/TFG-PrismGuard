@@ -17,7 +17,10 @@ public class ConstructionManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void RegisterBlueprint(Blueprint blueprint)

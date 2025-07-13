@@ -17,7 +17,10 @@ public class ResourceManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void NotifyResourceCollected(ResourceInstance resource)

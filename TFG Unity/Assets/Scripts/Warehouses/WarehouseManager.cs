@@ -16,7 +16,10 @@ public class WarehouseManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void Register(Warehouse warehouse)

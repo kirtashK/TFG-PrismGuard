@@ -18,8 +18,10 @@ public class ItemManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void CreateTronco(Vector3 position)
