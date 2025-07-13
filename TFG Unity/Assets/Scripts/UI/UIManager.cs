@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -25,10 +26,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text scoreText;
 
     private void Start()
-    {
-        // Suscribirse al evento de cambio de puntuacion
-        ScoreManager.Instance.OnScoreChanged += UpdateScoreDisplay;
-        
+    {   
         // Mostrar valor inicial al iniciarse
         UpdateScoreDisplay(ScoreManager.Instance.CurrentScore);
     }
@@ -45,7 +43,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnEnable()
+    {
+        // Suscribirse al evento de cambio de puntuacion
+        StartCoroutine(RegisterWhenScoreManagerReady());
+    }
+
+    private void OnDisable()
     {
         // Limpiar suscripción si se destruye UIManager
         if (ScoreManager.Instance != null)
@@ -54,6 +58,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private IEnumerator RegisterWhenScoreManagerReady()
+    {
+        while (ScoreManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        ScoreManager.Instance.OnScoreChanged += UpdateScoreDisplay;
+    }
 
     private void UpdateScoreDisplay(int newScore)
     {
@@ -82,7 +95,7 @@ public class UIManager : MonoBehaviour
         if (waveBanner != null)
         {
             waveBanner.ShowText($"Wave {waveNumber} completed!" +
-                $"\nPuntuación ganada: {gainedScore}");
+                $"\nScore gained this wave: {gainedScore}");
         }
     }
 

@@ -15,8 +15,10 @@ public class TaskManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void RegisterTask(ITask newTask)
