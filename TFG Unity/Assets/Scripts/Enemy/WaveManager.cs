@@ -62,20 +62,33 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        // Suscribirse al evento de oleada completada de UIManager
-        UIManager.Instance.OnWaveCompleted += HandleWaveCompleted;
-
         CategorizePool();
         StartCoroutine(RunWaves());
     }
 
-    private void OnDestroy()
+    private void OnEnable()
+    {
+        // Suscribirse al evento de oleada completada de UIManager
+        StartCoroutine(RegisterWhenUIManagerReady());
+    }
+
+    private void OnDisable()
     {
         // Limpiar suscripción si se destruye WaveManager
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.OnWaveCompleted -= HandleWaveCompleted;
+            UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
         }
+    }
+
+    private IEnumerator RegisterWhenUIManagerReady()
+    {
+        while (UIManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
     }
 
     private IEnumerator RunWaves()
@@ -106,7 +119,7 @@ public class WaveManager : MonoBehaviour
             yield return SpawnWave();
         }
     }
-    private void HandleWaveCompleted(int waveNumber)
+    private void OnWaveCompleted(int waveNumber)
     {
         // Cuando se lanze el evento (0 enemigos con vida)
         // se activa el temporizador para la siguiente oleada
@@ -170,7 +183,7 @@ public class WaveManager : MonoBehaviour
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);
 
-        Debug.Log($"[WaveManager] Ola {waveIndex}: presupuesto = {budget:F1}");
+        Debug.Log($"[WaveManager] Wave {waveIndex}: Budget = {budget:F1}");
 
         // Mientras quede presupuesto suficiente para el enemigo más barato
         while (budget >= minCost)
