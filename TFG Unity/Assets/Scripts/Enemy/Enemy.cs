@@ -30,6 +30,8 @@ public class Enemy : MonoBehaviour, ICombatTarget
 
     private void Start()
     {
+        UIManager.Instance.ChangeEnemyCount(1);
+
         currentHealth = data.maxHealth;
 
         agent.speed = data.moveSpeed;
@@ -67,12 +69,18 @@ public class Enemy : MonoBehaviour, ICombatTarget
     private void Die()
     {
         Debug.Log($"{name} ha muerto");
+
+        // Añadir puntuación al derrotar el enemigo:
+        ScoreManager.Instance.AddScore(data.spawnCost);
+
+        UIManager.Instance.ChangeEnemyCount(-1);
+
         // TODO Sonido, animaciones, efectos, quizas recompensas?
         Destroy(gameObject);
     }
 
     /// <summary>
-    /// Busca la unidad del jugador viva mas cercano dentro de data.AggroRadius
+    /// Busca la unidad del jugador viva mas cercana dentro de data.AggroRadius
     /// </summary>
     public ICombatTarget FindNearestPlayerUnit()
     {
