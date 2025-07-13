@@ -70,11 +70,10 @@ public class Enemy : MonoBehaviour, ICombatTarget
     {
         Debug.Log($"{name} ha muerto");
 
-        // Quitar 1 al contador de enemigos
-        UIManager.Instance.ChangeEnemyCount(-1);
-
         // Añadir puntuación al derrotar el enemigo:
         ScoreManager.Instance.AddScore(data.spawnCost);
+
+        UIManager.Instance.ChangeEnemyCount(-1);
 
         // TODO Sonido, animaciones, efectos, quizas recompensas?
         Destroy(gameObject);

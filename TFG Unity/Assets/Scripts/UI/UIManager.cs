@@ -75,6 +75,18 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Muestra el banner de ola completada con puntuación
+    /// </summary>
+    public void ShowWaveCompletedBanner(int waveNumber, int gainedScore)
+    {
+        if (waveBanner != null)
+        {
+            waveBanner.ShowText($"Wave {waveNumber} completed!" +
+                $"\nPuntuación ganada: {gainedScore}");
+        }
+    }
+
+    /// <summary>
     /// Mostrar tiempo restante para que empieze la siguiente oleada.
     /// </summary>
     public void ShowTimeUntilWaveBanner(int waveNumber, float timeRemaining)
@@ -89,7 +101,6 @@ public class UIManager : MonoBehaviour
     /// Cambia el contador de enemigos vivos (+1 o −1).
     /// Si queda al menos 1 enemigo, muestra el texto,
     /// si llega a 0, lo oculta
-    /// y muestra texto indicando que la oleada ha acabado
     /// </summary>
     public void ChangeEnemyCount(int delta)
     {
@@ -110,8 +121,6 @@ public class UIManager : MonoBehaviour
             {
                 if (waveBanner != null)
                 {
-                    waveBanner.ShowText($"Wave {lastWaveStarted} completed");
-
                     // Disparar el evento indicando que oleada ha terminado
                     OnWaveCompleted?.Invoke(lastWaveStarted);
 

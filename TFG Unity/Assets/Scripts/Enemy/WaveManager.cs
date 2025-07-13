@@ -58,6 +58,8 @@ public class WaveManager : MonoBehaviour
     private List<EnemyPoolEntry> expensiveList = new();
     private int minCost;
 
+    private int scoreAtWaveStart;
+
     private void Start()
     {
         // Suscribirse al evento de oleada completada de UIManager
@@ -109,6 +111,12 @@ public class WaveManager : MonoBehaviour
         // Cuando se lanze el evento (0 enemigos con vida)
         // se activa el temporizador para la siguiente oleada
         waitingForNextWave = false;
+
+        // Puntuación obtenida en esta oleada:
+        int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
+
+        // Mostramos banner con ola + puntuación ganada
+        UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave);
     }
 
     /// <summary>
@@ -152,6 +160,8 @@ public class WaveManager : MonoBehaviour
         //TODO Animaciones, efectos, sonidos, mostrar en UI nueva oleada
 
         waveIndex++;
+
+        scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
 
         // Mostrar texto de nueva oleada
         UIManager.Instance.ShowWaveStartedBanner(waveIndex);
