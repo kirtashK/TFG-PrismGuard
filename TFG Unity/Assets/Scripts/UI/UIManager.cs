@@ -20,6 +20,19 @@ public class UIManager : MonoBehaviour
     private int currentEnemiesAlive = 0;
     private int lastWaveStarted = 0;
 
+    [Header("Puntuación")]
+    [Tooltip("Texto para mostrar la puntuación actual")]
+    public TMP_Text scoreText;
+
+    private void Start()
+    {
+        // Suscribirse al evento de cambio de puntuacion
+        ScoreManager.Instance.OnScoreChanged += UpdateScoreDisplay;
+        
+        // Mostrar valor inicial al iniciarse
+        UpdateScoreDisplay(ScoreManager.Instance.CurrentScore);
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -31,6 +44,23 @@ public class UIManager : MonoBehaviour
             Instance = this;
         }
     }
+
+    private void OnDestroy()
+    {
+        // Limpiar suscripción si se destruye UIManager
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnScoreChanged -= UpdateScoreDisplay;
+        }
+    }
+
+
+    private void UpdateScoreDisplay(int newScore)
+    {
+        if (scoreText != null)
+            scoreText.text = $"Score: {newScore}";
+    }
+
 
     /// <summary>
     /// Mostrar el banner de oleada al iniciarse una oleada.

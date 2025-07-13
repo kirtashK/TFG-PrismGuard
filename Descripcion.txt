@@ -3,7 +3,7 @@
 #	To do	#
 #############
 
-Mover notas a Obsidian? Mejor que usando txt
+Notas movidas a la aplicacion Obsidian, estas se quedan como legacy
 
 Construcción
 	Para construir un edificio, comprobar collider de blueprint para ver si cabe

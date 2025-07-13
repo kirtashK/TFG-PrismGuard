@@ -70,14 +70,18 @@ public class Enemy : MonoBehaviour, ICombatTarget
     {
         Debug.Log($"{name} ha muerto");
 
+        // Quitar 1 al contador de enemigos
         UIManager.Instance.ChangeEnemyCount(-1);
+
+        // Añadir puntuación al derrotar el enemigo:
+        ScoreManager.Instance.AddScore(data.spawnCost);
 
         // TODO Sonido, animaciones, efectos, quizas recompensas?
         Destroy(gameObject);
     }
 
     /// <summary>
-    /// Busca la unidad del jugador viva mas cercano dentro de data.AggroRadius
+    /// Busca la unidad del jugador viva mas cercana dentro de data.AggroRadius
     /// </summary>
     public ICombatTarget FindNearestPlayerUnit()
     {
