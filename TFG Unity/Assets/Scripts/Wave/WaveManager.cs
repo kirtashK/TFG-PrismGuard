@@ -60,6 +60,9 @@ public class WaveManager : MonoBehaviour
 
     private int scoreAtWaveStart;
 
+    [SerializeField]
+    private WaveRewardCurve rewardCurve;
+
     private void Start()
     {
         CategorizePool();
@@ -128,8 +131,21 @@ public class WaveManager : MonoBehaviour
         // Puntuación obtenida en esta oleada:
         int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
 
+        // Recompensar puntuación proporcional a la oleada completada:
+        int waveScoreReward = CalculateRewardForCompletingWave(waveNumber);
+        // Máximo 1000:
+        waveScoreReward = Mathf.Min(waveScoreReward, 1000);
+
+        ScoreManager.Instance.AddScore(waveScoreReward);
+
         // Mostramos banner con ola + puntuación ganada
-        UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave);
+        UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave, waveScoreReward);
+    }
+
+    private int CalculateRewardForCompletingWave(int waveNumber)
+    {
+        float raw = rewardCurve.rewardByWave.Evaluate(Mathf.Max(1, waveNumber));
+        return Mathf.RoundToInt(raw);
     }
 
     /// <summary>
