@@ -90,12 +90,13 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Muestra el banner de ola completada con puntuación
     /// </summary>
-    public void ShowWaveCompletedBanner(int waveNumber, int gainedScore)
+    public void ShowWaveCompletedBanner(int waveNumber, int gainedScore, int waveScoreReward)
     {
         if (waveBanner != null)
         {
             waveBanner.ShowText($"Wave {waveNumber} completed!" +
-                $"\nScore gained this wave: {gainedScore}");
+                $"\nScore gained this wave: {gainedScore}" +
+                $"\nReward for completing the wave: {waveScoreReward}");
         }
     }
 

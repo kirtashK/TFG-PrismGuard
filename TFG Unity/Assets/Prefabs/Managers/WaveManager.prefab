@@ -59,3 +59,4 @@ MonoBehaviour:
   exponentialRate: 1.02
   spawnPoint: {fileID: 0}
   waveInterval: 3
+  rewardCurve: {fileID: 11400000, guid: 8990b5db01519f843b702ec7b83cf98b, type: 2}
