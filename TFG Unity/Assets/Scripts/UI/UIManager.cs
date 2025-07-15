@@ -25,10 +25,21 @@ public class UIManager : MonoBehaviour
     [Tooltip("Texto para mostrar la puntuación actual")]
     public TMP_Text scoreText;
 
+    [Header("Pantalla de Derrota")]
+    [Tooltip("Panel que se activa al perder")]
+    public GameObject defeatPanel;
+    [Tooltip("Texto donde mostrar la puntuación final")]
+    public TMP_Text defeatScoreText;
+
     private void Start()
     {   
         // Mostrar valor inicial al iniciarse
         UpdateScoreDisplay(ScoreManager.Instance.CurrentScore);
+
+        if (defeatPanel != null)
+        {
+            defeatPanel.SetActive(false);
+        }
     }
 
     private void Awake()
@@ -71,7 +82,24 @@ public class UIManager : MonoBehaviour
     private void UpdateScoreDisplay(int newScore)
     {
         if (scoreText != null)
+        {
             scoreText.text = $"Score: {newScore}";
+        }
+    }
+
+    /// <summary>
+    /// Muestra la pantalla de derrota con la puntuación obtenida
+    /// </summary>
+    public void ShowDefeatScreen(int finalScore)
+    {
+        if (defeatScoreText != null)
+        {
+            defeatScoreText.text = $"Score obtained: {finalScore}";
+        }
+        if (defeatPanel != null)
+        {
+            defeatPanel.SetActive(true);
+        }
     }
 
 

@@ -34,14 +34,11 @@ public class Crystal : MonoBehaviour, ICombatTarget
     private void OnDestroyed()
     {
         Debug.Log("El cristal ha sido destruido!");
-        // TODO Notifica al GameManager la derrota
-        // GameManager.Instance.OnCrystalDestroyed();
+        // Notificar a GameManager
+        GameManager.Instance.OnCrystalDestroyed();
 
-        // TODO OnCrystalDestroyed() se encarga de mostrar pantalla de derrota
-        // y mover la camara al cristal, cambiar modelo de cristal a uno roto
-        // desactivar enemigos o similar
+        // TODO mover la camara al cristal, cambiar modelo de cristal a uno roto
 
         gameObject.SetActive(false);
-        //Destroy(gameObject);
     }
 }
