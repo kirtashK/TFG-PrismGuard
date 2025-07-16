@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -111,9 +112,12 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        HandleMovement();
-        HandleRotation();
-        HandleZoom();
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            HandleMovement();
+            HandleRotation();
+            HandleZoom();
+        }
     }
 
     private void HandleMovement()
