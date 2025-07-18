@@ -1126,7 +1126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1187,7 +1187,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2512,7 +2512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2768,7 +2768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3962,12 +3962,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 753564023}
     m_Modifications:
     - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
+      propertyPath: isEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: spawnPoint
       value: 
       objectReference: {fileID: 437850500}
     - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: waveInterval
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
+      propertyPath: InstantFirstWave
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3716179307939871500, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: m_LocalPosition.x
