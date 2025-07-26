@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 422f3942f9e62294d8da8b35e08f4c07, type: 3}
-  m_Name: Tree Data
+  m_Script: {fileID: 11500000, guid: 95cf5a2e0b8884d4eb5d3c463d8d01e2, type: 3}
+  m_Name: LogPallet
   m_EditorClassIdentifier: 
-  resourceName: Tree
-  resourcePrefab: {fileID: 8761663372451284708, guid: 474f5c519a19da7478cbba706466d7b4, type: 3}
-  respawnTime: 6.5
+  typeName: LogPallet

@@ -4,8 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Log
-  - Tree
   - Crystal
   layers:
   - Default
@@ -16,7 +14,7 @@ TagManager:
   - UI
   - Item
   - CollectedByNavMesh
-  - Resource
+  - ResourceNode
   - PlayerUnit
   - EnemyUnit
   - 

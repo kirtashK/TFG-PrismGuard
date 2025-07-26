@@ -4,13 +4,6 @@ public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance { get; private set; }
 
-    [Header("Prefabs & Items")]
-    [Tooltip("Prefab del tronco")]
-    public GameObject logPrefab;
-
-    [Tooltip("ItemData del tronco")]
-    public ItemData logData;
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,23 +17,14 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public void CreateTronco(Vector3 position)
+    public GameObject CreateItem(Vector3 position, GameObject resource)
     {
-        if (logPrefab == null || logData == null)
+        if (resource == null)
         {
-            Debug.LogError("Falta asignar el prefab o el ItemData.");
-            return;
+            Debug.LogError(name + " received null resource");
+            return null;
         }
 
-        GameObject newTronco = Instantiate(logPrefab, position, Quaternion.identity);
-        ItemInstance itemInstance = newTronco.GetComponent<ItemInstance>();
-        if (itemInstance != null)
-        {
-            itemInstance.itemData = logData;
-        }
-        else
-        {
-            Debug.LogError("El prefab de tronco no tiene el componente ItemInstance.");
-        }
+        return Instantiate(resource, position, Quaternion.identity);
     }
 }
