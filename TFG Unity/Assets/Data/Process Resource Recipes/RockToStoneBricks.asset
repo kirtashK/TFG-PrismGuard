@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
-  m_Name: LogsToPlanks
+  m_Name: RockToStoneBricks
   m_EditorClassIdentifier: 
-  recipeName: Process logs into planks
-  inputItemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+  recipeName: Process rock into stone bricks
+  inputItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
   inputMaxCapacity: 6
   requiresFuel: 0
   fuelItem: {fileID: 0}
   fuelPerBatch: 1
-  outputItemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-  outputPrefab: {fileID: 2180502447430453359, guid: 89b1ec36216bc8d49a4e4ba547e08587, type: 3}
-  outputMaxCapacity: 25
-  outputPerInput: 5
-  processingTime: 5
+  outputItemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+  outputPrefab: {fileID: 9190593886540071188, guid: 2404244e4ea86e64e8eb229c25d53fd8, type: 3}
+  outputMaxCapacity: 15
+  outputPerInput: 3
+  processingTime: 10
   maxConcurrentBatches: 2

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8938731537415104075}
   - component: {fileID: 2766791360177510924}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plank
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -52,8 +52,8 @@ public class ConstructionManager : MonoBehaviour
     {
         foreach (StructureData.ResourceRequirement requirement in blueprint.data.requirements)
         {
-            int deliveredCount = blueprint.DeliveredCount(requirement.item);
-            int pendingCount = blueprint.PendingCount(requirement.item);
+            int deliveredCount = blueprint.DeliveredCount(requirement.itemData);
+            int pendingCount = blueprint.PendingCount(requirement.itemData);
             int totalAssigned = deliveredCount + pendingCount;
             int stillNeeded = requirement.quantity;
 
@@ -64,7 +64,7 @@ public class ConstructionManager : MonoBehaviour
             {
                 Warehouse warehouse =
                     WarehouseManager.Instance.FindNearestForRetrieve(
-                        requirement.item,
+                        requirement.itemData,
                         blueprint.transform.position
                     );
 
@@ -76,23 +76,28 @@ public class ConstructionManager : MonoBehaviour
                 GameObject itemObject = warehouse.RetrieveItem();
                 if (itemObject == null)
                 {
-                    Debug.LogWarning($"[{warehouse.name}] Error en RetrieveItem para {requirement.item.itemName}");
+                    //Debug.LogWarning($"[{warehouse.name}] Error en RetrieveItem para {requirement.itemData.itemName}");
                     return;
                 }
 
-                MoveItemTask transportTask = itemObject.GetComponent<MoveItemTask>()
-                                                ?? itemObject.AddComponent<MoveItemTask>();
+                // Delete previous MoveItemTask if it had one
+                if (itemObject.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
+                {
+                    Destroy(existingMoveItemTask);
+                }
+                MoveItemTask transportTask = itemObject.AddComponent<MoveItemTask>();
 
-                transportTask.TaskData = requirement.item;
+                transportTask.TaskData = requirement.itemData;
                 transportTask.Destination = blueprint.dropSpot.position;
                 transportTask.OnArrivalCallback = deliveredObject =>
                 {
-                    blueprint.DeliverResource(requirement.item, deliveredObject);
+                    blueprint.DeliverResource(requirement.itemData, deliveredObject);
                     Destroy(deliveredObject.GetComponent<MoveItemTask>());
                     deliveredObject.SetActive(true);
+                    warehouse.ConfirmRetrieval();
                 };
 
-                blueprint.RegisterPending(requirement.item);
+                blueprint.RegisterPending(requirement.itemData);
 
                 totalAssigned++;
             }

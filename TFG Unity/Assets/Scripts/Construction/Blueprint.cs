@@ -20,8 +20,8 @@ public class Blueprint : MonoBehaviour
         pending.Clear();
         foreach (StructureData.ResourceRequirement requirement in data.requirements)
         {
-            delivered[requirement.item] = 0;
-            pending[requirement.item] = 0;
+            delivered[requirement.itemData] = 0;
+            pending[requirement.itemData] = 0;
         }
     }
 
@@ -39,6 +39,11 @@ public class Blueprint : MonoBehaviour
         ConstructionManager.Instance.UnregisterBlueprint(this);
     }
 
+    private void Awake()
+    {
+        TryConstruct();
+    }
+
     // Llamado cuando llega un recurso mediante callbacks genéricos
     public void DeliverResource(ItemData item, GameObject itemObject)
     {
@@ -54,7 +59,9 @@ public class Blueprint : MonoBehaviour
     public int DeliveredCount(ItemData item)
     {
         if (delivered.TryGetValue(item, out int count))
+        {
             return count;
+        }
         return 0;
     }
 
@@ -76,7 +83,7 @@ public class Blueprint : MonoBehaviour
     {
         foreach (StructureData.ResourceRequirement requirement in data.requirements)
         {
-            if (DeliveredCount(requirement.item) < requirement.quantity)
+            if (DeliveredCount(requirement.itemData) < requirement.quantity)
                 return;
         }
 

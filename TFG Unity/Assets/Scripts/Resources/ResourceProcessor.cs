@@ -78,8 +78,7 @@ public class ResourceProcessor : MonoBehaviour
             GameObject retrievedItem = sourceWarehouse.RetrieveItem();
             if (retrievedItem == null)
             {
-                sourceWarehouse.ReleaseStoreReservation();
-                recipeState.reservedInput--;
+                Debug.LogWarning($"{name} Error en RetrieveItem para {retrievedItem.name}");
                 continue;
             }
 

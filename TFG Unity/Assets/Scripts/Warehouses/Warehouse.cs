@@ -89,7 +89,7 @@ public class Warehouse : MonoBehaviour
 
         if (storedItemsQueue.Count == 0)
         {
-            Debug.LogWarning($"[{name}] RetrieveItem: empty queue");
+            //Debug.LogWarning($"[{name}] RetrieveItem: empty queue");
             return null;
         }
 

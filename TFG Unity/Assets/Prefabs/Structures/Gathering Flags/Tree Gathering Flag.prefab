@@ -153,5 +153,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedCategories: 
+  allowedCategories: 00000000
   detectionRadius: 10
