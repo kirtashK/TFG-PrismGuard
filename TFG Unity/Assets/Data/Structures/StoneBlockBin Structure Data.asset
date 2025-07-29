@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
+  m_Name: StoneBlockBin Structure Data
+  m_EditorClassIdentifier: 
+  structureName: Stone block bin
+  builtPrefab: {fileID: 730867866534482630, guid: c40f862d1e153fc4d9f0cfa21083f18f, type: 3}
+  blueprintPrefab: {fileID: 8271303382391458175, guid: 28dfa18ff9ab2f644bf82e443fc323f8, type: 3}
+  requirements:
+  - itemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
+    quantity: 3

@@ -18,6 +18,8 @@ public class ProcessResourceRecipe : ScriptableObject
     public ItemData fuelItem;
     [Tooltip("Fuel consumed per batch")]
     public int fuelPerBatch = 1;
+    [Tooltip("Max capacity of fuel")]
+    public int fuelMaxCapacity = 5;
 
     [Header("Output")]
     [Tooltip("Output's data")]
@@ -25,9 +27,9 @@ public class ProcessResourceRecipe : ScriptableObject
     [Tooltip("Output's prefab")]
     public GameObject outputPrefab;
     [Tooltip("Max capacity of output")]
-    public int outputMaxCapacity = 25;
+    public int outputMaxCapacity = 5;
     [Tooltip("Items generated per batch")]
-    public int outputPerInput = 5;
+    public int outputPerInput = 1;
 
     [Header("Processing")]
     [Tooltip("Time in seconds")]

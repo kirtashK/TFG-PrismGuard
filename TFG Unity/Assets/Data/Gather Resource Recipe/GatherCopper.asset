@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 071fda8c4ba09c04abe1ea37ace56983, type: 3}
-  m_Name: GatherStone
+  m_Name: GatherCopper
   m_EditorClassIdentifier: 
-  recipeName: Gather stone
-  resourceItemPrefab: {fileID: 833925854968732159, guid: 3cff17def3b087a45b52fe2ae71b67b9, type: 3}
-  resourceItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
-  workDuration: 5
+  recipeName: Gather copper
+  resourceItemPrefab: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  resourceItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
+  workDuration: 8
   interactionRange: 1.5
   priority: 1
   minResourcesToSpawn: 1

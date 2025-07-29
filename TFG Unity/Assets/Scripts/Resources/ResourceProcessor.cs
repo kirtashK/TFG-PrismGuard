@@ -21,8 +21,10 @@ public class ResourceProcessor : MonoBehaviour
         public ProcessResourceRecipe recipe;
         public int storedInput;
         public int reservedInput;
+
         public int storedFuel;
         public int reservedFuel;
+
         public int storedOutput;
         public int reservedOutput;
         public int processingCount;
@@ -65,8 +67,10 @@ public class ResourceProcessor : MonoBehaviour
             }
 
             // Search closest warehouse that has needed input
-            Warehouse sourceWarehouse = WarehouseManager.Instance
-                .FindNearestForRetrieve(recipe.inputItemData, transform.position);
+            Warehouse sourceWarehouse = WarehouseManager.Instance.FindNearestForRetrieve(
+                recipe.inputItemData, 
+                transform.position);
+
             if (sourceWarehouse == null || !sourceWarehouse.CanRetrieve(recipe.inputItemData))
             {
                 continue;
@@ -115,39 +119,54 @@ public class ResourceProcessor : MonoBehaviour
                 continue;
             }
 
-            // TODO Test if fuel works properly
-            // TODO Test if fuel reservation works properly
+            // Skip if we already have enough
+            if (recipeState.storedFuel + recipeState.reservedFuel
+                >= recipe.fuelMaxCapacity)
+            {
+                continue;
+            }
 
             while (recipeState.storedFuel + recipeState.reservedFuel < recipe.fuelPerBatch)
             {
-                Warehouse warehouse = WarehouseManager.Instance.FindNearestForRetrieve(
+                // Search closest warehouse that has needed fuel
+                Warehouse sourceWarehouse = WarehouseManager.Instance.FindNearestForRetrieve(
                     recipe.fuelItem,
-                    transform.position
-                );
-                // Couldnt find fuel or its not possible to retrieve from warehouse
-                if (warehouse == null || !warehouse.CanRetrieve(recipe.fuelItem))
+                    transform.position);
+
+                if (sourceWarehouse == null || !sourceWarehouse.CanRetrieve(recipe.fuelItem))
                 {
                     break;
                 }
 
-                GameObject fuelObject = warehouse.RetrieveItem();
-                if (fuelObject == null)
-                {
-                    Debug.LogError("Null item extracted: " + fuelObject.name);
-                    break;
-                }
-
+                sourceWarehouse.ReserveRetrieveSlot();
                 recipeState.reservedFuel++;
 
-                MoveItemTask fuelTask = fuelObject.GetComponent<MoveItemTask>()
-                               ?? fuelObject.AddComponent<MoveItemTask>();
+                GameObject retrievedFuel = sourceWarehouse.RetrieveItem();
+                if (retrievedFuel == null)
+                {
+                    Debug.LogError("Null item extracted: " + retrievedFuel.name);
+                    break;
+                }
+
+                // Delete previous MoveItemTask if it had one
+                if (retrievedFuel.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
+                {
+                    Destroy(existingMoveItemTask);
+                }
+                MoveItemTask fuelTask = retrievedFuel.AddComponent<MoveItemTask>();
+
                 fuelTask.TaskData = recipe.fuelItem;
                 fuelTask.Destination = transform.position;
                 fuelTask.OnArrivalCallback = deliveredFuel =>
                 {
+                    Destroy(deliveredFuel);
                     recipeState.storedFuel++;
                     recipeState.reservedFuel--;
-                    Destroy(deliveredFuel.GetComponent<MoveItemTask>());
+                    sourceWarehouse.ConfirmRetrieval();
+
+                    Debug.Log(name + " received fuel " + retrievedFuel.name
+                    + ". Current fuel amount = " + recipeState.storedFuel
+                    + ". Max amount of fuel = " + recipe.fuelMaxCapacity);
                 };
             }
         }
