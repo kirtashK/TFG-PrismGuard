@@ -179,8 +179,8 @@ public class ResourceProcessor : MonoBehaviour
             ProcessResourceRecipe recipe = recipeState.recipe;
 
             // Check if there is enough input & storage & fuel if needed:
-            bool readyForBatch = 
-                recipeState.storedInput >= 1
+            bool readyForBatch =
+                recipeState.storedInput >= recipe.inputPerBatch
                 && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                     <= recipeState.recipe.outputMaxCapacity
                 && (!recipe.requiresFuel
@@ -192,7 +192,7 @@ public class ResourceProcessor : MonoBehaviour
                 //Debug.Log(name + " procesando batch...");
 
                 // Consume input & fuel
-                recipeState.storedInput--;
+                recipeState.storedInput -= recipe.inputPerBatch;
                 if (recipe.requiresFuel)
                 {
                     recipeState.storedFuel -= recipe.fuelPerBatch;
@@ -268,7 +268,7 @@ public class ResourceProcessor : MonoBehaviour
                     };
                 }
                 remainingOutput -= outputToSend;
-                Debug.Log("RemaningOutput = " + remainingOutput + " & outputToSend = " + outputToSend);
+                Debug.Log(name + ": remaning output = " + remainingOutput + " & output to send = " + outputToSend);
             }
             recipeState.storedOutput = remainingOutput;
         }

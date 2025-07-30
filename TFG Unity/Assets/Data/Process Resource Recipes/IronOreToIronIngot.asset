@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
-  m_Name: CopperOreToCopperIngot
+  m_Name: IronOreToIronIngot
   m_EditorClassIdentifier: 
-  recipeName: Process copper ore into copper ingot
-  inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
-  inputMaxCapacity: 5
-  inputPerBatch: 1
+  recipeName: Process iron ore into iron ingot
+  inputItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
+  inputMaxCapacity: 6
+  inputPerBatch: 2
   requiresFuel: 1
   fuelItem: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-  fuelPerBatch: 1
-  fuelMaxCapacity: 5
-  outputItemData: {fileID: 11400000, guid: 482e4eaac704afb4f8f7254fab8742fc, type: 2}
-  outputPrefab: {fileID: 7800770291256045938, guid: 658d8a7b75c2ff746bbd67093b538e93, type: 3}
+  fuelPerBatch: 2
+  fuelMaxCapacity: 6
+  outputItemData: {fileID: 11400000, guid: 18ef1e3a316b70e4eaa16005a14b1cfa, type: 2}
+  outputPrefab: {fileID: 5842503896629669116, guid: d94c3f53b3e86114f914fd70cf570d20, type: 3}
   outputMaxCapacity: 5
   outputPerInput: 1
-  processingTime: 15
+  processingTime: 20
   maxConcurrentBatches: 2
