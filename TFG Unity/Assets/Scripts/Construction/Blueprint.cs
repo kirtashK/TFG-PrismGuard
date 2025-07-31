@@ -6,7 +6,7 @@ public class Blueprint : MonoBehaviour
 {
     public StructureData data;
 
-    [Tooltip("Spot donde dejar los recursos")]
+    [Tooltip("Spot where delivered items will be put")]
     public Transform dropSpot;
 
     private readonly Dictionary<ItemData, int> delivered = new();
@@ -39,12 +39,12 @@ public class Blueprint : MonoBehaviour
         ConstructionManager.Instance.UnregisterBlueprint(this);
     }
 
-    private void Awake()
+    private void Start()
     {
         TryConstruct();
     }
 
-    // Llamado cuando llega un recurso mediante callbacks genéricos
+    // Called whenever an item is delivered by generic callbacks
     public void DeliverResource(ItemData item, GameObject itemObject)
     {
         pending[item]--;
@@ -89,7 +89,7 @@ public class Blueprint : MonoBehaviour
 
         Instantiate(data.builtPrefab, transform.position, transform.rotation);
 
-        // Destruye el blueprint y todos los recursos entregados
+        // Destroy the blueprint and all delivered items
         Destroy(gameObject);
     }
 }
