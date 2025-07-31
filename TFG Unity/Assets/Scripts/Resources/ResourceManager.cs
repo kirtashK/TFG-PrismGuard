@@ -51,7 +51,7 @@ public class ResourceManager : MonoBehaviour
             scanResults,
             itemLayerMask);
 
-            if (results <= 0)
+            if (results == 0)
             {
                 break;
             }

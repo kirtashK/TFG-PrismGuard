@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95cf5a2e0b8884d4eb5d3c463d8d01e2, type: 3}
   m_Name: PlanksPallet
   m_EditorClassIdentifier: 
-  typeName: WoodenPallet
-  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  typeName: PlanksPallet

@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 4631047606837347540}
   - component: {fileID: 9004909576600917873}
   m_Layer: 0
-  m_Name: Wooden Pallet
+  m_Name: Planks Pallet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
