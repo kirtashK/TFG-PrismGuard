@@ -13,6 +13,14 @@ public struct EnemyPoolEntry
 
 public class WaveManager : MonoBehaviour
 {
+    [SerializeField]
+    [Tooltip("Si false, no se generan oleadas para facilitar testing")]
+    private bool isEnabled = true;
+
+    [SerializeField]
+    [Tooltip("Si true, la primera oleada ocurrirá al instante")]
+    private bool InstantFirstWave = true;
+
     [Header("Pool de Enemigos")]
 
     [Tooltip("Todos los tipos de enemigos disponibles")]
@@ -65,8 +73,11 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        CategorizePool();
-        StartCoroutine(RunWaves());
+        if (isEnabled)
+        {
+            CategorizePool();
+            StartCoroutine(RunWaves());
+        }
     }
 
     private void OnEnable()
@@ -97,30 +108,38 @@ public class WaveManager : MonoBehaviour
     private IEnumerator RunWaves()
     {
         // Primera ola inmediata para testing
-        yield return SpawnWave();
-
-        while (true)
+        if (InstantFirstWave)
         {
-            // Si hay una oleada en marcha, no se activa el
-            // temporizador para la siguiente oleada
-            waitingForNextWave = true;
-            yield return new WaitUntil(() => waitingForNextWave == false);
-
-            float waveIntervalFirstWarning = waveInterval * 0.35f;
-            float waveIntervalSecondWarning = waveInterval * 0.15f;
-
-            yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
-
-            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
-
-            yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
-
-            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
-
-            yield return new WaitForSeconds(waveIntervalSecondWarning);
-
             yield return SpawnWave();
+            waitingForNextWave = true;
         }
+        else
+        {
+            waitingForNextWave = false;
+        }
+
+            while (true)
+            {
+                // Si hay una oleada en marcha, no se activa el
+                // temporizador para la siguiente oleada
+                //waitingForNextWave = true;
+                yield return new WaitUntil(() => waitingForNextWave == false);
+
+                float waveIntervalFirstWarning = waveInterval * 0.35f;
+                float waveIntervalSecondWarning = waveInterval * 0.15f;
+
+                yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
+
+                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+
+                yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
+
+                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+
+                yield return new WaitForSeconds(waveIntervalSecondWarning);
+
+                yield return SpawnWave();
+            }
     }
     private void OnWaveCompleted(int waveNumber)
     {

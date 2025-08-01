@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
+  m_Name: IronOreToIronIngot
+  m_EditorClassIdentifier: 
+  recipeName: Process iron ore into iron ingot
+  inputItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
+  inputMaxCapacity: 6
+  inputPerBatch: 2
+  requiresFuel: 1
+  fuelItem: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+  fuelPerBatch: 2
+  fuelMaxCapacity: 6
+  outputItemData: {fileID: 11400000, guid: 18ef1e3a316b70e4eaa16005a14b1cfa, type: 2}
+  outputPrefab: {fileID: 5842503896629669116, guid: d94c3f53b3e86114f914fd70cf570d20, type: 3}
+  outputMaxCapacity: 5
+  outputPerInput: 1
+  processingTime: 20
+  maxConcurrentBatches: 2

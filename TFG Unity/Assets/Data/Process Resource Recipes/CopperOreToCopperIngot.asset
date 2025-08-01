@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
+  m_Name: CopperOreToCopperIngot
+  m_EditorClassIdentifier: 
+  recipeName: Process copper ore into copper ingot
+  inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
+  inputMaxCapacity: 5
+  inputPerBatch: 1
+  requiresFuel: 1
+  fuelItem: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+  fuelPerBatch: 1
+  fuelMaxCapacity: 5
+  outputItemData: {fileID: 11400000, guid: 482e4eaac704afb4f8f7254fab8742fc, type: 2}
+  outputPrefab: {fileID: 7800770291256045938, guid: 658d8a7b75c2ff746bbd67093b538e93, type: 3}
+  outputMaxCapacity: 5
+  outputPerInput: 1
+  processingTime: 15
+  maxConcurrentBatches: 2

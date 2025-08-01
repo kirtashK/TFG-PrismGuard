@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9168786598747747806}
   m_Layer: 6
   m_Name: Log
-  m_TagString: Log
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59,8 +59,8 @@ GameObject:
   - component: {fileID: 5620213062086360741}
   - component: {fileID: 327135899822999643}
   m_Layer: 6
-  m_Name: Log Model
-  m_TagString: Log
+  m_Name: Model
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

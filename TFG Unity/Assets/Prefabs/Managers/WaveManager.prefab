@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a7e49e3ae562d498d64e3627370c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEnabled: 1
+  InstantFirstWave: 0
   enemyPool:
   - prefab: {fileID: 3313289928608923168, guid: a70e0d193fd04154b8bbce7950c85ca0, type: 3}
     data: {fileID: 11400000, guid: 90f6b53b391572542b6f136330ee140a, type: 2}

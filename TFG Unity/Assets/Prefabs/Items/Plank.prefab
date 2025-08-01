@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8938731537415104075}
   - component: {fileID: 2766791360177510924}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,8 +58,8 @@ GameObject:
   - component: {fileID: 2625987365716844839}
   - component: {fileID: 3947654904706090271}
   - component: {fileID: 5550428691836988322}
-  m_Layer: 0
-  m_Name: Plank Model
+  m_Layer: 6
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

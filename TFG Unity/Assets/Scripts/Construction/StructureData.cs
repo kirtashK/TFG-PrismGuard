@@ -16,7 +16,7 @@ public class StructureData : ScriptableObject
     [System.Serializable]
     public struct ResourceRequirement
     {
-        public ItemData item;
+        public ItemData itemData;
         public int quantity;
     }
 

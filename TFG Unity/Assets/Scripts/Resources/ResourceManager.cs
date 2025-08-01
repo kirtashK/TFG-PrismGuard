@@ -9,6 +9,8 @@ public class ResourceManager : MonoBehaviour
 
     private const float CheckInterval = 3f;
 
+    private int itemLayerMask;
+    private readonly Collider[] scanResults = new Collider[5];
 
     private void Awake()
     {
@@ -20,6 +22,8 @@ public class ResourceManager : MonoBehaviour
         else
         {
             Instance = this;
+
+            itemLayerMask = 1 << LayerMask.NameToLayer("Item");
         }
     }
 
@@ -34,30 +38,23 @@ public class ResourceManager : MonoBehaviour
 
         yield return new WaitForSeconds(resource.data.respawnTime);
 
-        Collider col = resource.GetComponent<Collider>();
-        float checkRadius = col != null
-            ? col.bounds.extents.magnitude
+        Collider collider = resource.GetComponent<Collider>();
+        float checkRadius = (collider != null)
+            ? collider.bounds.extents.magnitude
             : 1f;
 
         while (true)
         {
-            bool anyLogs = false;
-            Collider[] hits = Physics.OverlapSphere(
-                resource.transform.position,
-                checkRadius
-            );
+            int results = Physics.OverlapSphereNonAlloc(
+            resource.transform.position,
+            checkRadius,
+            scanResults,
+            itemLayerMask);
 
-            foreach (Collider hit in hits)
+            if (results == 0)
             {
-                if (hit.CompareTag("Log"))
-                {
-                    anyLogs = true;
-                    break;
-                }
-            }
-
-            if (!anyLogs)
                 break;
+            }
 
             yield return new WaitForSeconds(CheckInterval);
         }

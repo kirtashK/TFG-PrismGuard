@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
+  m_Name: RockToStoneBlocks
+  m_EditorClassIdentifier: 
+  recipeName: Process rock into stone blocks
+  inputItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
+  inputMaxCapacity: 6
+  requiresFuel: 0
+  fuelItem: {fileID: 0}
+  fuelPerBatch: 1
+  outputItemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+  outputPrefab: {fileID: 9190593886540071188, guid: 2404244e4ea86e64e8eb229c25d53fd8, type: 3}
+  outputMaxCapacity: 15
+  outputPerInput: 3
+  processingTime: 10
+  maxConcurrentBatches: 2
