@@ -185,5 +185,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 298b4fe93bfe1fb41bbac6263bc7e86c, type: 2}
+  structureData: {fileID: 11400000, guid: 298b4fe93bfe1fb41bbac6263bc7e86c, type: 2}
   dropSpot: {fileID: 2510851946089878208}

@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68abfe54b46738b4b8298dfbefe47cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 10
   dropSpot: {fileID: 3496389811995932038}
   recipes:
   - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}

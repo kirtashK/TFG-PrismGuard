@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Worker 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.9328604
@@ -503,7 +507,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_Name
-      value: Worker 5
+      value: Worker Sacrifice
       objectReference: {fileID: 0}
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_IsActive
@@ -711,6 +715,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
   m_PrefabInstance: {fileID: 705900194}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &479169324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 479169325}
+  - component: {fileID: 479169326}
+  m_Layer: 0
+  m_Name: ItemConsumerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &479169325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479169324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 753564023}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &479169326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479169324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edc6c4f2ac4bca14687d312427f15f7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &511101350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1156,6 +1204,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Worker 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.9328604
@@ -1398,6 +1450,7 @@ Transform:
   - {fileID: 1245223846451323727}
   - {fileID: 1157108130}
   - {fileID: 622863453}
+  - {fileID: 479169325}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &761696950
@@ -1651,6 +1704,10 @@ PrefabInstance:
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_Name
       value: Worker 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1937,6 +1994,10 @@ PrefabInstance:
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_Name
       value: Worker 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2470,6 +2531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Worker 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.0671396
@@ -2544,11 +2609,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 773378014}
   - {fileID: 1407728768}
   - {fileID: 443366377}
   - {fileID: 1892605086}
   - {fileID: 881078027}
-  - {fileID: 773378014}
   - {fileID: 1099661638}
   - {fileID: 1763134785}
   - {fileID: 1751580895}
@@ -2565,6 +2630,10 @@ PrefabInstance:
     - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_Name
       value: Worker 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7974223372733510816, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3173,6 +3242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Copper Ingot Pallet
       objectReference: {fileID: 0}
+    - target: {fileID: 8910376219246138804, guid: 18dd7c564e237a645ac5974f23d94cc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3326,6 +3399,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Iron Ingot Pallet
       objectReference: {fileID: 0}
+    - target: {fileID: 7703942789902666600, guid: 85df75bc517570b4b9feffa53dd941ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3346,7 +3423,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
       propertyPath: m_Name
-      value: Rock Processor
+      value: Quarry
+      objectReference: {fileID: 0}
+    - target: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1038606458405097454, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3450,6 +3531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Iron Vein
       objectReference: {fileID: 0}
+    - target: {fileID: 7600283427041250181, guid: 73429d2705de48942aca34fdecda0b0f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3524,6 +3609,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree Gathering Flag
       objectReference: {fileID: 0}
+    - target: {fileID: 2959668300810766323, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7963810988927641105, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
@@ -3580,6 +3669,10 @@ PrefabInstance:
     - target: {fileID: 4468715666146783442, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
       propertyPath: m_Name
       value: Advanced Smeltery
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468715666146783442, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616624027669038374, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4117,6 +4210,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stone
       objectReference: {fileID: 0}
+    - target: {fileID: 8786161487783925421, guid: 303904a8935e5cf4aadda33791f46996, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4236,6 +4333,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Iron Ore Bin
       objectReference: {fileID: 0}
+    - target: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4249,6 +4350,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1849663828}
     m_Modifications:
+    - target: {fileID: 2383867308332388287, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
+      propertyPath: capacity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3980616430908451221, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -4292,10 +4397,6 @@ PrefabInstance:
     - target: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
       propertyPath: m_Name
       value: Log Pallet
-      objectReference: {fileID: 0}
-    - target: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4379,6 +4480,10 @@ PrefabInstance:
     - target: {fileID: 2461321596542129038, guid: 379c59da3177f964ebd808c959ebab3f, type: 3}
       propertyPath: m_Name
       value: Copper Vein
+      objectReference: {fileID: 0}
+    - target: {fileID: 2461321596542129038, guid: 379c59da3177f964ebd808c959ebab3f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8093166900217381450, guid: 379c59da3177f964ebd808c959ebab3f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4539,6 +4644,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Copper Ore Bin
       objectReference: {fileID: 0}
+    - target: {fileID: 5598523384713905151, guid: b852cbd5d4c06744b843486859c46ad3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4651,7 +4760,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
       propertyPath: m_Name
-      value: Copper Processor
+      value: Basic Smeltery
+      objectReference: {fileID: 0}
+    - target: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4897,6 +5010,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock Bin
       objectReference: {fileID: 0}
+    - target: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4920,7 +5037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4631047606837347540, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 4631047606837347540, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5028,17 +5145,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5980752072119883202, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 512eebec315dc6a4aa70ec0a38ba260a, type: 2}
     - target: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
       propertyPath: m_Name
       value: Sawmill
       objectReference: {fileID: 0}
     - target: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5056,6 +5169,10 @@ PrefabInstance:
     - target: {fileID: 730867866534482630, guid: c40f862d1e153fc4d9f0cfa21083f18f, type: 3}
       propertyPath: m_Name
       value: Stone brick pallet
+      objectReference: {fileID: 0}
+    - target: {fileID: 730867866534482630, guid: c40f862d1e153fc4d9f0cfa21083f18f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657895980437870977, guid: c40f862d1e153fc4d9f0cfa21083f18f, type: 3}
       propertyPath: m_LocalPosition.x
