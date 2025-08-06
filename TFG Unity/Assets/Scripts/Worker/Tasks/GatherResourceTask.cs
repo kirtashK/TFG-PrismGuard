@@ -74,31 +74,17 @@ public class GatherResourceTask : MonoBehaviour, ITask
 
             GameObject spawnedItem = ItemManager.Instance.CreateItem(spawnPos, gatherResourceRecipe.resourceItemPrefab);
             
-            // Search warehouse
-            Warehouse targetWarehouse = WarehouseManager.Instance
-                .FindNearestForStore(spawnPos, gatherResourceRecipe.resourceItemData);
-            if (targetWarehouse == null)
+            MoveItemTask moveTask;
+            if (spawnedItem.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
             {
-                //Debug.Log("No warehouse found for " + gatherResourceData.resourceItemPrefab.name);
-                continue;
+                moveTask = existingMoveItemTask;
+            }
+            else
+            {
+                moveTask = spawnedItem.AddComponent<MoveItemTask>();
             }
 
-            if (spawnedItem == null)
-            {
-                Debug.LogError(name + ": generated null output");
-            }
-
-            targetWarehouse.ReserveStoreSlot();
-
-            // Move item task
-            MoveItemTask moveTask = spawnedItem.AddComponent<MoveItemTask>();
             moveTask.TaskData = gatherResourceRecipe.resourceItemData;
-            moveTask.Destination = targetWarehouse.GetStoragePosition();
-            moveTask.OnArrivalCallback = arrivedGameObject =>
-            {
-                Destroy(arrivedGameObject.GetComponent<MoveItemTask>());
-                targetWarehouse.StoreItem(arrivedGameObject, gatherResourceRecipe.resourceItemData);
-            };
         }
 
         onComplete?.Invoke();

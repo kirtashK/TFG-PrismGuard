@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
 
-public class Warehouse : MonoBehaviour
+public class Warehouse : MonoBehaviour, IItemConsumer
 {
     [Tooltip("Tipo de almacen")]
     public WarehouseType warehouseType;
@@ -30,11 +30,13 @@ public class Warehouse : MonoBehaviour
 
     private IEnumerator RegisterWhenReady()
     {
-        while (WarehouseManager.Instance == null)
+        while (WarehouseManager.Instance == null 
+            || ItemConsumerManager.Instance == null)
         {
             yield return null;
         }
         WarehouseManager.Instance.Register(this);
+        ItemConsumerManager.Instance.Register(this);
     }
 
     private void OnDisable()
@@ -43,11 +45,10 @@ public class Warehouse : MonoBehaviour
         {
             WarehouseManager.Instance.Unregister(this);
         }
-    }
-
-    public Vector3 GetStoragePosition()
-    {
-        return transform.position;
+        if (ItemConsumerManager.Instance != null)
+        {
+            ItemConsumerManager.Instance.Unregister(this);
+        }
     }
 
     public bool CanStore(ItemData item)
@@ -58,26 +59,6 @@ public class Warehouse : MonoBehaviour
         return accepts && FreeSlots > 0;
     }
 
-    public void StoreItem(GameObject itemObject, ItemData itemData)
-    {
-        //Debug.Log($"[{name}] StoreItem called. Before: storedCount={storedCount}, reservedStore={reservedForStore}");
-
-        if (storedCount == 0)
-        {
-            storedItem = itemData;
-        }
-
-        ReleaseStoreReservation();
-        storedCount++;
-
-        itemObject.SetActive(true);
-        itemObject.transform.SetParent(transform, worldPositionStays: true);
-        itemObject.transform.position = GetStoragePosition();
-        storedItemsQueue.Enqueue(itemObject);
-
-        //Debug.Log($"[{name}] After Store: storedCount={storedCount}, reservedStore={reservedForStore}");
-    }
-
     public bool CanRetrieve(ItemData item)
     {
         return storedItem == item && AvailableForRetrieve > 0;
@@ -85,48 +66,57 @@ public class Warehouse : MonoBehaviour
 
     public GameObject RetrieveItem()
     {
-        //Debug.Log($"[{name}] RetrieveItem called. Before: storedCount={storedCount}, reservedRetrieve={reservedForRetrieve}");
-
         if (storedItemsQueue.Count == 0)
         {
-            //Debug.LogWarning($"[{name}] RetrieveItem: empty queue");
             return null;
         }
 
-        //Debug.Log($"[{name}] RetrieveItem succeeded. Queue now has {storedItemsQueue.Count - 1} items");
         return storedItemsQueue.Dequeue();
     }
 
-    public void ConfirmRetrieval()
+    public bool CanReceive(ItemData data)
     {
-        //Debug.Log($"[{name}] ConfirmRetrieval called. Before: storedCount={storedCount}, reservedRetrieve={reservedForRetrieve}");
-        
-        ReleaseRetrieveReservation();
-        storedCount = Mathf.Max(storedCount - 1, 0);
-        if (storedCount == 0)
+        bool accepts = (storedCount == 0
+                        ? data.storedIn.Contains(warehouseType)
+                        : storedItem == data);
+        return accepts && FreeSlots > 0;
+    }
+
+    public bool Reserve(ItemData data)
+    {
+        if (!CanReceive(data))
         {
-            storedItem = null;
+            return false;
         }
-
-        //Debug.Log($"[{name}] After ConfirmRetrieval: storedCount={storedCount}, reservedRetrieve={reservedForRetrieve}");
-    }
-
-    public void ReserveStoreSlot()
-    {
         reservedForStore = Mathf.Min(reservedForStore + 1, capacity);
+        return true;
     }
 
-    public void ReleaseStoreReservation()
+    public void Release(ItemData data)
     {
         reservedForStore = Mathf.Max(reservedForStore - 1, 0);
     }
 
-    public void ReserveRetrieveSlot()
+    public Vector3 GetReceivePosition() => transform.position;
+
+    public void OnReceived(GameObject item, ItemData data)
     {
-        reservedForRetrieve = Mathf.Min(reservedForRetrieve + 1, storedCount);
-    }
-    public void ReleaseRetrieveReservation()
-    {
-        reservedForRetrieve = Mathf.Max(reservedForRetrieve - 1, 0);
+        item.SetActive(true);
+
+        Release(data);
+        if (storedCount == 0)
+        {
+            storedItem = data;
+        }
+
+        storedCount++;
+        storedItemsQueue.Enqueue(item);
+        item.transform.SetParent(transform, worldPositionStays: true);
+        item.transform.position = GetReceivePosition();
+
+        if (item.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+        {
+            moveItemTask.Reset();
+        }
     }
 }
