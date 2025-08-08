@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 55b5770c2f82287438636c7bd8dca451, type: 2}
+  structureData: {fileID: 11400000, guid: 55b5770c2f82287438636c7bd8dca451, type: 2}
   dropSpot: {fileID: 7272159748905882531}
 --- !u!1 &1911607001084345104
 GameObject:

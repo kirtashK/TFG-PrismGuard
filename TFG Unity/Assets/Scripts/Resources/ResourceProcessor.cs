@@ -5,11 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
 
-public class ResourceProcessor : MonoBehaviour
+public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
     [Header("Configuration")]
-    [Tooltip("Radius to search input")]
-    public float detectionRadius = 10f;
     [Tooltip("Drop spot to generate outputs")]
     public Transform dropSpot;
     [Tooltip("List of recipes this building has availible")]
@@ -33,6 +31,8 @@ public class ResourceProcessor : MonoBehaviour
 
     private void Awake()
     {
+        StartCoroutine(RegisterWhenReady());
+
         recipeStates = new List<RecipeState>(recipes.Count);
         foreach (ProcessResourceRecipe recipe in recipes)
         {
@@ -40,10 +40,25 @@ public class ResourceProcessor : MonoBehaviour
         }
     }
 
+    private IEnumerator RegisterWhenReady()
+    {
+        while (ItemConsumerManager.Instance == null)
+        {
+            yield return null;
+        }
+        ItemConsumerManager.Instance.Register(this);
+    }
+
+    private void OnDestroy()
+    {
+        if (ItemConsumerManager.Instance != null)
+        {
+            ItemConsumerManager.Instance.Unregister(this);
+        }
+    }
+
     private void Update()
     {
-        ReserveInputs();
-        ReserveFuelFromWarehouse();
         StartProcessingBatches();
         
     }
@@ -51,125 +66,6 @@ public class ResourceProcessor : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DispatchOutputToWarehouse());
-    }
-
-    private void ReserveInputs()
-    {
-        foreach (RecipeState recipeState in recipeStates)
-        {
-            ProcessResourceRecipe recipe = recipeState.recipe;
-
-            // Skip if we already have enough
-            if (recipeState.storedInput + recipeState.reservedInput
-                >= recipe.inputMaxCapacity)
-            {
-                continue;
-            }
-
-            // Search closest warehouse that has needed input
-            Warehouse sourceWarehouse = WarehouseManager.Instance.FindNearestForRetrieve(
-                recipe.inputItemData, 
-                transform.position);
-
-            if (sourceWarehouse == null || !sourceWarehouse.CanRetrieve(recipe.inputItemData))
-            {
-                continue;
-            }
-
-            sourceWarehouse.ReserveRetrieveSlot();
-            recipeState.reservedInput++;
-
-            GameObject retrievedItem = sourceWarehouse.RetrieveItem();
-            if (retrievedItem == null)
-            {
-                Debug.LogWarning($"{name} Error en RetrieveItem para {retrievedItem.name}");
-                continue;
-            }
-
-            // Delete previous MoveItemTask if it had one
-            if (retrievedItem.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
-            {
-                Destroy(existingMoveItemTask);
-            }
-            MoveItemTask moveTask = retrievedItem.AddComponent<MoveItemTask>();
-                        
-            moveTask.TaskData = recipe.inputItemData;
-            moveTask.Destination = transform.position;
-            moveTask.OnArrivalCallback = arrivedInput =>
-            {
-                Destroy(arrivedInput);
-                recipeState.storedInput++;
-                recipeState.reservedInput--;
-                sourceWarehouse.ConfirmRetrieval();
-
-                Debug.Log(name + " received input " + retrievedItem.name
-                    + ". Current input amount = " + recipeState.storedInput
-                    + ". Max amount of input = " + recipe.inputMaxCapacity);
-            };
-        }
-    }
-
-    private void ReserveFuelFromWarehouse()
-    {
-        foreach (RecipeState recipeState in recipeStates)
-        {
-            ProcessResourceRecipe recipe = recipeState.recipe;
-            if (!recipe.requiresFuel)
-            {
-                continue;
-            }
-
-            // Skip if we already have enough
-            if (recipeState.storedFuel + recipeState.reservedFuel
-                >= recipe.fuelMaxCapacity)
-            {
-                continue;
-            }
-
-            while (recipeState.storedFuel + recipeState.reservedFuel < recipe.fuelPerBatch)
-            {
-                // Search closest warehouse that has needed fuel
-                Warehouse sourceWarehouse = WarehouseManager.Instance.FindNearestForRetrieve(
-                    recipe.fuelItem,
-                    transform.position);
-
-                if (sourceWarehouse == null || !sourceWarehouse.CanRetrieve(recipe.fuelItem))
-                {
-                    break;
-                }
-
-                sourceWarehouse.ReserveRetrieveSlot();
-                recipeState.reservedFuel++;
-
-                GameObject retrievedFuel = sourceWarehouse.RetrieveItem();
-                if (retrievedFuel == null)
-                {
-                    Debug.LogError("Null item extracted: " + retrievedFuel.name);
-                    break;
-                }
-
-                // Delete previous MoveItemTask if it had one
-                if (retrievedFuel.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
-                {
-                    Destroy(existingMoveItemTask);
-                }
-                MoveItemTask fuelTask = retrievedFuel.AddComponent<MoveItemTask>();
-
-                fuelTask.TaskData = recipe.fuelItem;
-                fuelTask.Destination = transform.position;
-                fuelTask.OnArrivalCallback = deliveredFuel =>
-                {
-                    Destroy(deliveredFuel);
-                    recipeState.storedFuel++;
-                    recipeState.reservedFuel--;
-                    sourceWarehouse.ConfirmRetrieval();
-
-                    Debug.Log(name + " received fuel " + retrievedFuel.name
-                    + ". Current fuel amount = " + recipeState.storedFuel
-                    + ". Max amount of fuel = " + recipe.fuelMaxCapacity);
-                };
-            }
-        }
     }
 
     private void StartProcessingBatches()
@@ -214,9 +110,6 @@ public class ResourceProcessor : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coroutine that waits processing time then generates output
-    /// </summary>
     private IEnumerator ProcessBatch(RecipeState recipeState)
     {
         yield return new WaitForSeconds(recipeState.recipe.processingTime);
@@ -224,6 +117,7 @@ public class ResourceProcessor : MonoBehaviour
         recipeState.storedOutput += recipeState.recipe.outputPerInput;
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;
         recipeState.processingCount--;
+
         Debug.Log(name + " has processed a batch of " + recipeState.recipe.name 
             + ". Stored amount = " + recipeState.storedOutput
             + ". Max amount = " + recipeState.recipe.outputMaxCapacity);
@@ -231,53 +125,111 @@ public class ResourceProcessor : MonoBehaviour
 
     private IEnumerator DispatchOutputToWarehouse()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.0f);
 
         foreach (RecipeState recipeState in recipeStates)
         {
             int remainingOutput = recipeState.storedOutput;
+            ItemData data = recipeState.recipe.outputItemData;
+            GameObject prefab = recipeState.recipe.outputPrefab;
 
             while (remainingOutput > 0)
             {
-                Warehouse targetWarehouse = WarehouseManager.Instance
-                    .FindNearestForStore(dropSpot.position, recipeState.recipe.outputItemData);
-                if (targetWarehouse == null)
-                {
-                    break;
-                }
+                GameObject output = ItemManager.Instance.CreateItem(
+                    dropSpot.position,
+                    prefab);
 
-                int outputToSend = Mathf.Min(remainingOutput, targetWarehouse.FreeSlots);
-                for (int i = 0; i < outputToSend; i++)
-                {
-                    GameObject output = ItemManager.Instance.CreateItem(dropSpot.position, recipeState.recipe.outputPrefab);
-                    if (output == null)
-                    {
-                        Debug.LogError(name + ": generated null output");
-                    }
+                MoveItemTask move = output.GetComponent<MoveItemTask>()
+                           ?? output.AddComponent<MoveItemTask>();
+                move.TaskData = data;
 
-                    targetWarehouse.ReserveStoreSlot();
-
-                    MoveItemTask moveOutTask = output.AddComponent<MoveItemTask>();
-                    moveOutTask.TaskData = recipeState.recipe.outputItemData;
-                    moveOutTask.Destination = targetWarehouse.GetStoragePosition();
-                    moveOutTask.OnArrivalCallback = storedItem =>
-                    {
-                        storedItem.SetActive(true);
-                        targetWarehouse.StoreItem(storedItem, recipeState.recipe.outputItemData);
-                        Destroy(storedItem.GetComponent<MoveItemTask>());
-                    };
-                }
-                remainingOutput -= outputToSend;
-                Debug.Log(name + ": remaning output = " + remainingOutput + " & output to send = " + outputToSend);
+                recipeState.storedOutput--;
+                remainingOutput--;
             }
-            recipeState.storedOutput = remainingOutput;
         }
         StartCoroutine(DispatchOutputToWarehouse());
     }
 
-    private void OnDrawGizmosSelected()
+    public bool CanReceive(ItemData data)
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        foreach (RecipeState state in recipeStates)
+        {
+            ProcessResourceRecipe recipe = state.recipe;
+            if (data == recipe.inputItemData)
+            {
+                if (state.storedInput + state.reservedInput < recipe.inputMaxCapacity)
+                {
+                    return true;
+                }
+            }
+            if (recipe.requiresFuel && data == recipe.fuelItem)
+            {
+                if (state.storedFuel + state.reservedFuel < recipe.fuelPerBatch)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool Reserve(ItemData data)
+    {
+        foreach (RecipeState state in recipeStates)
+        {
+            ProcessResourceRecipe recipe = state.recipe;
+            if (data == recipe.inputItemData)
+            {
+                state.reservedInput++;
+                return true;
+            }
+            if (recipe.requiresFuel && data == recipe.fuelItem)
+            {
+                state.reservedFuel++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Release(ItemData data)
+    {
+        foreach (RecipeState state in recipeStates)
+        {
+            ProcessResourceRecipe recipe = state.recipe;
+            if (data == recipe.inputItemData)
+            {
+                state.reservedInput = Mathf.Max(0, state.reservedInput - 1);
+                return;
+            }
+            if (recipe.requiresFuel && data == recipe.fuelItem)
+            {
+                state.reservedFuel = Mathf.Max(0, state.reservedFuel - 1);
+                return;
+            }
+        }
+    }
+    public Vector3 GetReceivePosition() => transform.position;
+
+    public void OnReceived(GameObject item, ItemData data)
+    {
+        Destroy(item);
+
+        foreach (RecipeState state in recipeStates)
+        {
+            ProcessResourceRecipe recipe = state.recipe;
+            if (data == recipe.inputItemData)
+            {
+                state.storedInput++;
+                Release(data);
+                return;
+            }
+            if (recipe.requiresFuel && data == recipe.fuelItem)
+            {
+                state.storedFuel++;
+                Release(data);
+                return;
+            }
+        }
     }
 }

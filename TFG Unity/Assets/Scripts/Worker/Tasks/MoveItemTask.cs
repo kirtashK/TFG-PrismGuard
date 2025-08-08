@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class MoveItemTask : MonoBehaviour, ITask
 {
@@ -9,53 +10,134 @@ public class MoveItemTask : MonoBehaviour, ITask
     [SerializeField]
     private float interactionRange = 1f;
 
-    public Vector3 TaskPosition
-    {
-        get { return transform.position; }
-    }
+    public Vector3 TaskPosition => transform.position;
 
-    public int Priority
-    {
-        get { return priority; }
-    }
+    public int Priority => priority;
 
-    public float InteractionRange
-    {
-        get { return interactionRange; }
-    }
+    public float InteractionRange => interactionRange;
 
-    public Vector3 Destination { get; set; }
-
-    // Callback genérico ejecutado cuando el ítem llega a su destino.
-    public System.Action<GameObject> OnArrivalCallback { get; set; }
+    public Vector3 Destination => target?.GetReceivePosition() ?? Vector3.zero;
 
     public ItemData TaskData { get; set; }
 
+    ItemInstance instance;
+
+    private IItemConsumer target;
+    private bool isRegistered;
+    private const float pollInterval = 1f;
+    public IItemConsumer TargetConsumer => target;
+
+    private IItemConsumer lastConsumer;
+
+    private void Awake()
+    {
+        instance = GetComponent<ItemInstance>();
+
+        if (instance == null)
+        {
+            Debug.LogError(name + ": no ItemInstance in this GameObject");
+        }
+    }
 
     private void OnEnable()
     {
-        StartCoroutine(RegisterWhenReady());
-    }
-
-    private IEnumerator RegisterWhenReady()
-    {
-        while (TaskManager.Instance == null)
+        if (TaskData == null && instance != null)
         {
-            yield return null;
+            TaskData = instance.itemData;
         }
-        TaskManager.Instance.RegisterTask(this);
+        StartCoroutine(RegisterWhenReady());
     }
 
     private void OnDisable()
     {
-        if (TaskManager.Instance != null)
+        if (isRegistered)
         {
             TaskManager.Instance.UnregisterTask(this);
+            isRegistered = false;
         }
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (ItemConsumerManager.Instance == null)
+        {
+            yield return null;
+        }
+        StartCoroutine(PollForConsumer());
+    }
+
+    private IEnumerator PollForConsumer()
+    {
+        WaitForSeconds wait = new(pollInterval);
+        while (target == null)
+        {
+            foreach (IItemConsumer consumer in ItemConsumerManager.Instance.Consumers)
+            {
+                if (consumer == lastConsumer)
+                {
+                    continue;
+                }
+                if (consumer is not Warehouse
+                    && consumer.CanReceive(TaskData) 
+                    && consumer.Reserve(TaskData))
+                {
+                    target = consumer;
+                    TaskManager.Instance.RegisterTask(this);
+                    isRegistered = true;
+                    yield break;
+                }
+            }
+
+            if (lastConsumer is not Warehouse)
+            {
+                foreach(IItemConsumer consumer in ItemConsumerManager.Instance.Consumers)
+            {
+                    if (consumer == lastConsumer)
+                    {
+                        continue;
+                    }
+                    if (consumer is Warehouse
+                        && consumer.CanReceive(TaskData)
+                        && consumer.Reserve(TaskData))
+                    {
+                        target = consumer;
+                        TaskManager.Instance.RegisterTask(this);
+                        isRegistered = true;
+                        yield break;
+                    }
+                }
+            }
+
+            yield return wait;
+        }
+    }
+
+    public void Reset()
+    {
+        lastConsumer = target;
+        target = null;
+
+        if (isRegistered)
+        {
+            TaskManager.Instance.UnregisterTask(this);
+            isRegistered = false;
+        }
+
+        StartCoroutine(PollForConsumer());
     }
 
     public void Execute(Worker worker, System.Action onComplete)
     {
-        //Debug.Log(name + " - El worker " + worker.name + " comienza a mover el item a " + Destination);
+        onComplete?.Invoke();
+
+        target.OnReceived(gameObject, TaskData);
+
+        lastConsumer = target;
+
+        if (isRegistered)
+        {
+            TaskManager.Instance.UnregisterTask(this);
+            isRegistered = false;
+        }
     }
 }

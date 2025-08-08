@@ -1,16 +1,16 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public class MultiTransportState : IWorkerState
 {
     private enum Phase { Pickup, Delivery }
-
     private Phase phase;
-    private Vector3 pickupTarget;
-    private Vector3 deliveryTarget;
+
     private float arrivalRange;
 
-    private Worker workerRef;
+    private Worker worker;
+
+    private MoveItemTask task;
+    private IItemConsumer consumer;
 
     private readonly List<MoveItemTask> collectedTasks = new();
 
@@ -18,15 +18,15 @@ public class MultiTransportState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        workerRef = worker;
+        this.worker = worker;
 
-        MoveItemTask firstTask = worker.currentTask as MoveItemTask;
-        pickupTarget = firstTask.TaskPosition;
-        deliveryTarget = firstTask.Destination;
-        arrivalRange = firstTask.InteractionRange;
+        task = worker.currentTask as MoveItemTask;
+        consumer = task.TargetConsumer;
+        arrivalRange = task.InteractionRange;
 
         phase = Phase.Pickup;
-        worker.agent.SetDestination(pickupTarget);
+        worker.agent.SetDestination(task.TaskPosition);
+        collectedTasks.Clear();
     }
 
     public void UpdateState(Worker worker)
@@ -48,74 +48,55 @@ public class MultiTransportState : IWorkerState
         collectedTasks.Clear();
     }
 
-    // ##########################
-    // #    Fase de Recogida    #
-    // ##########################
-
     private void HandlePickupPhase()
     {
-        MoveItemTask task = workerRef.currentTask as MoveItemTask;
-
-        if (task == null)
+        if (worker.agent.pathPending
+            || worker.agent.remainingDistance > arrivalRange)
         {
-            workerRef.ChangeState(new IdleState());
             return;
         }
 
-        if (!workerRef.agent.pathPending 
-            && workerRef.agent.remainingDistance <= arrivalRange)
+        worker.PickUp(task.gameObject, task.TaskData);
+        TaskManager.Instance.CompleteTask(task);
+        collectedTasks.Add(task);
+
+        MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
+            worker.transform.position,
+            worker.workerData.maxCarryWeight - worker.currentLoad,
+            consumer.GetReceivePosition(),
+            maxPickupRadius
+        );
+
+        if (next != null)
         {
-            if (!workerRef.CanCarry(task.TaskData))
-            {
-                phase = Phase.Delivery;
-                workerRef.agent.SetDestination(deliveryTarget);
-                return;
-            }
-
-            workerRef.PickUp(task.gameObject, task.TaskData);
-            TaskManager.Instance.CompleteTask(task);
-            collectedTasks.Add(task);
-
-            float remainingCapacity = workerRef.workerData.maxCarryWeight - workerRef.currentLoad;
-
-            MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
-                workerRef.transform.position,
-                remainingCapacity,
-                deliveryTarget,
-                maxPickupRadius
-            );
-
-            if (next != null)
-            {
-                workerRef.currentTask = next;
-                pickupTarget = next.TaskPosition;
-                workerRef.agent.SetDestination(pickupTarget);
-                return;
-            }
-
-            phase = Phase.Delivery;
-            workerRef.agent.SetDestination(deliveryTarget);
+            task = next;
+            arrivalRange = next.InteractionRange;
+            worker.currentTask = next;
+            worker.agent.SetDestination(next.TaskPosition);
+            return;
         }
+
+        phase = Phase.Delivery;
+        worker.agent.SetDestination(consumer.GetReceivePosition());
     }
 
-    // ##########################
-    // #    Fase de Entrega     #
-    // ##########################
 
     private void HandleDeliveryPhase()
     {
-        Worker worker = workerRef;
-
-        if (!worker.agent.pathPending && worker.agent.remainingDistance <= arrivalRange)
+        if (worker.agent.pathPending
+            || worker.agent.remainingDistance > arrivalRange)
         {
-            foreach (MoveItemTask task in collectedTasks)
-            {
-                task.OnArrivalCallback?.Invoke(task.gameObject);
-                worker.currentLoad -= task.TaskData.weight;
-            }
-
-            worker.currentTask = null;
-            worker.ChangeState(new IdleState());
+            return;
         }
+
+        foreach (MoveItemTask task in collectedTasks)
+        {
+            consumer.OnReceived(task.gameObject, task.TaskData);
+            worker.currentLoad -= task.TaskData.weight;
+        }
+
+        collectedTasks.Clear();
+        worker.currentTask = null;
+        worker.ChangeState(new IdleState());
     }
 }

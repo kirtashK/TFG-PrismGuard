@@ -1,13 +1,13 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ConstructionManager : MonoBehaviour
 {
     public static ConstructionManager Instance { get; private set; }
 
-    private List<Blueprint> blueprints = new();
+    private readonly List<Blueprint> blueprints = new();
 
-    private float generateTasksInterval = 2f;
+    private readonly float generateTasksInterval = 2f;
     private float nextGenerateTasksTime = 0f;
 
     private void Awake()
@@ -26,7 +26,9 @@ public class ConstructionManager : MonoBehaviour
     public void RegisterBlueprint(Blueprint blueprint)
     {
         if (!blueprints.Contains(blueprint))
+        {
             blueprints.Add(blueprint);
+        }
     }
 
     public void UnregisterBlueprint(Blueprint blueprint)
@@ -36,21 +38,22 @@ public class ConstructionManager : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time >= nextGenerateTasksTime)
+        if (Time.time < nextGenerateTasksTime)
         {
-            nextGenerateTasksTime = Time.time + generateTasksInterval;
-
-            foreach (Blueprint blueprint in blueprints)
-            {
-                GenerateTasksFor(blueprint);
-            }
+            return;
         }
-        
+
+        nextGenerateTasksTime = Time.time + generateTasksInterval;
+
+        foreach (Blueprint blueprint in blueprints)
+        {
+            GenerateTasksFor(blueprint);
+        }
     }
 
     private void GenerateTasksFor(Blueprint blueprint)
     {
-        foreach (StructureData.ResourceRequirement requirement in blueprint.data.requirements)
+        foreach (StructureData.ResourceRequirement requirement in blueprint.structureData.requirements)
         {
             int deliveredCount = blueprint.DeliveredCount(requirement.itemData);
             int pendingCount = blueprint.PendingCount(requirement.itemData);
@@ -73,33 +76,28 @@ public class ConstructionManager : MonoBehaviour
                     break;
                 }
 
-                GameObject itemObject = warehouse.RetrieveItem();
-                if (itemObject == null)
+                GameObject retrievedItem = warehouse.RetrieveItem();
+                if (retrievedItem == null)
                 {
                     //Debug.LogWarning($"[{warehouse.name}] Error en RetrieveItem para {requirement.itemData.itemName}");
-                    return;
+                    break;
                 }
 
-                // Delete previous MoveItemTask if it had one
-                if (itemObject.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
+                MoveItemTask transportTask;
+                if (retrievedItem.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
                 {
-                    Destroy(existingMoveItemTask);
+                    transportTask = existingMoveItemTask;
                 }
-                MoveItemTask transportTask = itemObject.AddComponent<MoveItemTask>();
+                else
+                {
+                    transportTask = retrievedItem.AddComponent<MoveItemTask>();
+                }
 
                 transportTask.TaskData = requirement.itemData;
-                transportTask.Destination = blueprint.dropSpot.position;
-                transportTask.OnArrivalCallback = deliveredObject =>
-                {
-                    blueprint.DeliverResource(requirement.itemData, deliveredObject);
-                    Destroy(deliveredObject.GetComponent<MoveItemTask>());
-                    deliveredObject.SetActive(true);
-                    warehouse.ConfirmRetrieval();
-                };
 
-                blueprint.RegisterPending(requirement.itemData);
+                //blueprint.RegisterPending(requirement.itemData);
 
-                totalAssigned++;
+                //totalAssigned++;
             }
         }
     }
