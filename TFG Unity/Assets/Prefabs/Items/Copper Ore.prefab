@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 847922553205075353}
   - component: {fileID: 5225377020228777904}
+  - component: {fileID: 2130000526833721667}
   m_Layer: 6
   m_Name: Copper Ore
   m_TagString: Untagged
@@ -46,6 +47,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
+--- !u!114 &2130000526833721667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4266297577157854077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165699825bbb5764e84af9c852899971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 2
+  interactionRange: 1
 --- !u!1 &6646715753962944184
 GameObject:
   m_ObjectHideFlags: 0

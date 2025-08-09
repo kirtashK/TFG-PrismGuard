@@ -118,6 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8437696960714790584}
   - component: {fileID: 2728817272554862866}
+  - component: {fileID: 5338008476115940108}
   m_Layer: 6
   m_Name: Iron Ingot
   m_TagString: Untagged
@@ -154,3 +155,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 18ef1e3a316b70e4eaa16005a14b1cfa, type: 2}
+--- !u!114 &5338008476115940108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5842503896629669116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165699825bbb5764e84af9c852899971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 2
+  interactionRange: 1

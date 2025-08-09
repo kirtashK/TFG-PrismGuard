@@ -1,3 +1,5 @@
+using NUnit.Framework.Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Search;
@@ -5,23 +7,23 @@ using UnityEngine;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
 {
-    [Tooltip("Tipo de almacen")]
     public WarehouseType warehouseType;
 
-    [Tooltip("Capacidad total")]
-    public int capacity = 12;
-
-    public int storedCount = 0;
+    public int maxCapacity = 12;
+    public int currentCapacity = 0;
 
     private int reservedForStore = 0;
-    private int reservedForRetrieve = 0;
+    private readonly int reservedForRetrieve = 0;
 
-    public int FreeSlots => capacity - (storedCount + reservedForStore);
-    public int AvailableForRetrieve => storedCount - reservedForRetrieve;
+    public int FreeSlots => maxCapacity - (currentCapacity + reservedForStore);
+    public int AvailableForRetrieve => currentCapacity - reservedForRetrieve;
 
     public ItemData storedItem;
 
     private readonly Queue<GameObject> storedItemsQueue = new();
+
+    public event Action<ItemData> OnItemStored;
+    public event Action<ItemData> OnItemRetrieved;
 
     private void OnEnable()
     {
@@ -35,6 +37,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             yield return null;
         }
+
         WarehouseManager.Instance.Register(this);
         ItemConsumerManager.Instance.Register(this);
     }
@@ -51,14 +54,6 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
     }
 
-    public bool CanStore(ItemData item)
-    {
-        bool accepts = storedCount == 0
-            ? item.storedIn.Contains(warehouseType)
-            : storedItem == item;
-        return accepts && FreeSlots > 0;
-    }
-
     public bool CanRetrieve(ItemData item)
     {
         return storedItem == item && AvailableForRetrieve > 0;
@@ -71,12 +66,14 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             return null;
         }
 
+        OnItemRetrieved?.Invoke(storedItem);
+
         return storedItemsQueue.Dequeue();
     }
 
     public bool CanReceive(ItemData data)
     {
-        bool accepts = (storedCount == 0
+        bool accepts = (currentCapacity == 0
                         ? data.storedIn.Contains(warehouseType)
                         : storedItem == data);
         return accepts && FreeSlots > 0;
@@ -88,7 +85,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             return false;
         }
-        reservedForStore = Mathf.Min(reservedForStore + 1, capacity);
+        reservedForStore = Mathf.Min(reservedForStore + 1, maxCapacity);
         return true;
     }
 
@@ -104,12 +101,12 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         item.SetActive(true);
 
         Release(data);
-        if (storedCount == 0)
+        if (currentCapacity == 0)
         {
             storedItem = data;
         }
 
-        storedCount++;
+        currentCapacity++;
         storedItemsQueue.Enqueue(item);
         item.transform.SetParent(transform, worldPositionStays: true);
         item.transform.position = GetReceivePosition();
@@ -118,5 +115,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             moveItemTask.Reset();
         }
+
+        OnItemStored?.Invoke(data);
     }
 }

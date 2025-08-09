@@ -4,7 +4,7 @@ using UnityEngine;
 public class SoldierAttackState : ISoldierState
 {
     private Soldier soldier;
-    private Transform target;
+    private readonly Transform target;
     private float lastAttackTime;
 
     public SoldierAttackState(Transform target)

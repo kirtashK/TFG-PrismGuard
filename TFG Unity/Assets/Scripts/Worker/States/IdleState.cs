@@ -3,7 +3,7 @@ using System.Collections;
 
 public class IdleState : IWorkerState
 {
-    private float searchRetryDelay = 1f;
+    private readonly float searchRetryDelay = 1f;
     private bool isSearching = false;
 
     public void EnterState(Worker worker)

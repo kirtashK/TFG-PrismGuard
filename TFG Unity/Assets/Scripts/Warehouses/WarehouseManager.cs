@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,15 @@ public class WarehouseManager : MonoBehaviour
     public List<Warehouse> allWarehouses = new();
 
     public IReadOnlyList<Warehouse> AllWarehouses => allWarehouses;
+
+    public event Action<Warehouse> OnWarehouseRegistered;
+    public event Action<Warehouse> OnWarehouseUnregistered;
+
+    public event Action<Warehouse, ItemData> OnWarehouseItemStored;
+    public event Action<Warehouse, ItemData> OnWarehouseItemRetrieved;
+
+    private readonly Dictionary<Warehouse, Action<ItemData>> storedHandlers = new();
+    private readonly Dictionary<Warehouse, Action<ItemData>> retrievedHandlers = new();
 
     private void Awake()
     {
@@ -25,12 +35,51 @@ public class WarehouseManager : MonoBehaviour
     public void Register(Warehouse warehouse)
     {
         if (!allWarehouses.Contains(warehouse))
+        {
             allWarehouses.Add(warehouse);
+
+            void onStoredHandler(ItemData item)
+            {
+                OnWarehouseItemStored?.Invoke(warehouse, item);
+            }
+            void onRetrievedHandler(ItemData item)
+            {
+                OnWarehouseItemRetrieved?.Invoke(warehouse, item);
+            }
+
+            storedHandlers[warehouse] = onStoredHandler;
+            retrievedHandlers[warehouse] = onRetrievedHandler;
+
+            warehouse.OnItemStored += onStoredHandler;
+            warehouse.OnItemRetrieved += onRetrievedHandler;
+
+            OnWarehouseRegistered?.Invoke(warehouse);
+        }
     }
 
     public void Unregister(Warehouse warehouse)
     {
-        allWarehouses.Remove(warehouse);
+        if (warehouse == null)
+        {
+            return;
+        }
+
+        if(allWarehouses.Remove(warehouse))
+        {
+            if (storedHandlers.TryGetValue(warehouse, out Action<ItemData> storedHandler))
+            {
+                warehouse.OnItemStored -= storedHandler;
+                storedHandlers.Remove(warehouse);
+            }
+
+            if (retrievedHandlers.TryGetValue(warehouse, out Action<ItemData> retrievedHandler))
+            {
+                warehouse.OnItemRetrieved -= retrievedHandler;
+                retrievedHandlers.Remove(warehouse);
+            }
+
+            OnWarehouseUnregistered?.Invoke(warehouse);
+        }
     }
 
     public List<Warehouse> GetWarehousesThatCanStore(ItemData item)
@@ -38,7 +87,7 @@ public class WarehouseManager : MonoBehaviour
         List<Warehouse> result = new();
         foreach (Warehouse warehouse in allWarehouses)
         {
-            if (warehouse.CanStore(item))
+            if (warehouse.CanReceive(item))
             {
                 result.Add(warehouse);
             }
@@ -53,7 +102,7 @@ public class WarehouseManager : MonoBehaviour
 
         foreach (Warehouse warehouse in allWarehouses)
         {
-            if (warehouse.CanStore(item))
+            if (warehouse.CanReceive(item))
             {
                 float distance = Vector3.Distance(fromPosition, warehouse.transform.position);
                 if (distance < bestDist)
