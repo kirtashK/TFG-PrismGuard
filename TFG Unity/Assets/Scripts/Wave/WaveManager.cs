@@ -61,9 +61,9 @@ public class WaveManager : MonoBehaviour
 
     private int waveIndex = 0;
 
-    private List<EnemyPoolEntry> cheapList = new();
-    private List<EnemyPoolEntry> mediumList = new();
-    private List<EnemyPoolEntry> expensiveList = new();
+    private readonly List<EnemyPoolEntry> cheapList = new();
+    private readonly List<EnemyPoolEntry> mediumList = new();
+    private readonly List<EnemyPoolEntry> expensiveList = new();
     private int minCost;
 
     private int scoreAtWaveStart;

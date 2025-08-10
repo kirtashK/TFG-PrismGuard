@@ -118,6 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7472371454793868557}
   - component: {fileID: 1430609991422744605}
+  - component: {fileID: -7895128339993018922}
   m_Layer: 6
   m_Name: Copper Ingot
   m_TagString: Untagged
@@ -154,3 +155,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 482e4eaac704afb4f8f7254fab8742fc, type: 2}
+--- !u!114 &-7895128339993018922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800770291256045938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165699825bbb5764e84af9c852899971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 2
+  interactionRange: 1

@@ -6,7 +6,7 @@ public class TaskManager : MonoBehaviour
 {
     public static TaskManager Instance { get; private set; }
 
-    private List<ITask> availableTasks = new();
+    private readonly List<ITask> availableTasks = new();
 
     private void Awake()
     {

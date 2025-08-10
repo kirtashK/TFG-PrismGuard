@@ -3,7 +3,7 @@ using UnityEngine;
 public class SoldierChaseState : ISoldierState
 {
     private Soldier soldier;
-    private Transform target;
+    private readonly Transform target;
 
     public SoldierChaseState(Transform target)
     {
