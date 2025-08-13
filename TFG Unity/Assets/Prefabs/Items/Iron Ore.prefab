@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3309801041308906564}
   - component: {fileID: 940633342399477845}
   - component: {fileID: -2322404254217322152}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Iron Ore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 5568508365041498365}
   - component: {fileID: 1813907899840325162}
   - component: {fileID: 3348351935370655867}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

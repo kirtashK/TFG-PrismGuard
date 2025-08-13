@@ -1,6 +1,4 @@
-using Mono.Cecil;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
@@ -9,8 +7,13 @@ public class ResourceManager : MonoBehaviour
 
     private const float CheckInterval = 3f;
 
-    private int itemLayerMask;
-    private readonly Collider[] scanResults = new Collider[5];
+    private readonly Collider[] scanResults = new Collider[16];
+
+    [Tooltip("Layers that will be considered 'blocking' for the respawn check. Default = Everything.")]
+    public LayerMask blockingLayers = ~0;
+
+    [Tooltip("Optional tags to ignore when checking for blocking colliders.")]
+    public string[] ignoreTags = new string[0];
 
     private void Awake()
     {
@@ -22,8 +25,6 @@ public class ResourceManager : MonoBehaviour
         else
         {
             Instance = this;
-
-            itemLayerMask = 1 << LayerMask.NameToLayer("Item");
         }
     }
 
@@ -34,6 +35,11 @@ public class ResourceManager : MonoBehaviour
 
     private IEnumerator RespawnRoutine(ResourceInstance resource)
     {
+        if (resource == null)
+        {
+            yield break;
+        }
+
         resource.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(resource.data.respawnTime);
@@ -49,9 +55,46 @@ public class ResourceManager : MonoBehaviour
             resource.transform.position,
             checkRadius,
             scanResults,
-            itemLayerMask);
+            blockingLayers);
 
-            if (results == 0)
+            bool blocked = false;
+
+            for (int i = 0; i < results; i++)
+            {
+                Collider hit = scanResults[i];
+                if (hit == null)
+                {
+                    continue;
+                }
+
+                if (hit.isTrigger)
+                {
+                    continue;
+                }
+
+                bool skipByTag = false;
+                if (ignoreTags != null && ignoreTags.Length > 0)
+                {
+                    for (int countTag = 0; countTag < ignoreTags.Length; countTag++)
+                    {
+                        string tag = ignoreTags[countTag];
+                        if (!string.IsNullOrEmpty(tag) && hit.CompareTag(tag))
+                        {
+                            skipByTag = true;
+                            break;
+                        }
+                    }
+                }
+                if (skipByTag)
+                {
+                    continue;
+                }
+
+                blocked = true;
+                break;
+            }
+
+            if (!blocked)
             {
                 break;
             }

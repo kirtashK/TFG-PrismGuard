@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4820044730561677791}
   - component: {fileID: 2153307527058565046}
   - component: {fileID: 7056630262671299461}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 7972058987784189264}
   - component: {fileID: 8979556246586553842}
   - component: {fileID: 7413839031318988048}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Stone Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
