@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8142441174700472510}
   - component: {fileID: 6924909455211894005}
   - component: {fileID: 4418029591270288734}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8437696960714790584}
   - component: {fileID: 2728817272554862866}
   - component: {fileID: 5338008476115940108}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Iron Ingot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
