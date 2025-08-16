@@ -8,6 +8,8 @@ public class ItemConsumerManager : MonoBehaviour
     private readonly List<IItemConsumer> consumers = new();
     public IReadOnlyList<IItemConsumer> Consumers => consumers;
 
+    public event System.Action<IItemConsumer> OnConsumerUnregistered;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,6 +32,38 @@ public class ItemConsumerManager : MonoBehaviour
 
     public void Unregister(IItemConsumer consumer)
     {
-        consumers.Remove(consumer);
+        if (consumer == null)
+        {
+            return;
+        }
+
+        OnConsumerUnregistered?.Invoke(consumer);
+
+        if (consumers.Contains(consumer))
+        {
+            //Debug.Log($"{name} removed {consumer} from its list");
+            consumers.Remove(consumer);
+        }
+    }
+
+    public IEnumerable<IItemConsumer> ActiveConsumers
+    {
+        get
+        {
+            foreach (IItemConsumer consumer in consumers)
+            {
+                if (consumer is MonoBehaviour monoBehaviour)
+                {
+                    if (monoBehaviour.isActiveAndEnabled)
+                    {
+                        yield return consumer;
+                    }
+                }
+                else
+                {
+                    yield return consumer;
+                }
+            }
+        }
     }
 }

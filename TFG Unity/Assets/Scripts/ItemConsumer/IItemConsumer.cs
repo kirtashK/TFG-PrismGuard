@@ -15,4 +15,8 @@ public interface IItemConsumer
 
     // Action to execute when the item is received
     void OnReceived(GameObject item, ItemData data);
+
+    // For IItemConsumers that can store items that can later be taken, 
+    // this reduces the current capacity
+    void ConfirmRetrieval();
 }

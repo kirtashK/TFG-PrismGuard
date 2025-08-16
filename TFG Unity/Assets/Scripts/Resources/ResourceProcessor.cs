@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
@@ -29,15 +26,39 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     }
     private List<RecipeState> recipeStates;
 
+    private bool isRegistered = false;
+
     private void Awake()
     {
-        StartCoroutine(RegisterWhenReady());
+        InitializeRecipeStates();
+    }
 
+    private void InitializeRecipeStates()
+    {
         recipeStates = new List<RecipeState>(recipes.Count);
         foreach (ProcessResourceRecipe recipe in recipes)
         {
-            recipeStates.Add(new RecipeState { recipe = recipe });
+            recipeStates.Add(new RecipeState
+            {
+                recipe = recipe,
+                storedInput = 0,
+                reservedInput = 0,
+                storedFuel = 0,
+                reservedFuel = 0,
+                storedOutput = 0,
+                reservedOutput = 0,
+                processingCount = 0
+            });
         }
+    }
+
+    private void OnEnable()
+    {
+        StopAllCoroutines();
+
+        StartCoroutine(RegisterWhenReady());
+
+        ResetInternalStateAndReleaseReservations();
     }
 
     private IEnumerator RegisterWhenReady()
@@ -47,13 +68,48 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             yield return null;
         }
         ItemConsumerManager.Instance.Register(this);
+        isRegistered = true;
+
+        StartCoroutine(DispatchOutputToWarehouse());
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        if (ItemConsumerManager.Instance != null)
+        StopAllCoroutines();
+
+        if (isRegistered && ItemConsumerManager.Instance != null)
         {
+            //Debug.Log(name + " has unregistered");
             ItemConsumerManager.Instance.Unregister(this);
+            isRegistered = false;
+        }
+
+        ResetInternalStateAndReleaseReservations();
+    }
+
+    private void ResetInternalStateAndReleaseReservations()
+    {
+        // Release any reserved input/fuel and internal counters
+        foreach (RecipeState state in recipeStates)
+        {
+            while (state.reservedInput > 0)
+            {
+                Release(state.recipe.inputItemData);
+            }
+
+            if (state.recipe.requiresFuel)
+            {
+                while (state.reservedFuel > 0)
+                {
+                    Release(state.recipe.fuelItem);
+                }
+            }
+
+            state.reservedOutput = 0;
+            state.storedInput = 0;
+            state.storedFuel = 0;
+            state.storedOutput = 0;
+            state.processingCount = 0;
         }
     }
 
@@ -61,11 +117,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     {
         StartProcessingBatches();
         
-    }
-
-    private void Start()
-    {
-        StartCoroutine(DispatchOutputToWarehouse());
     }
 
     private void StartProcessingBatches()
@@ -101,7 +152,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
                 // Check if another batch is possible
                 readyForBatch =
-                    recipeState.storedInput >= 1
+                    recipeState.storedInput >= recipe.inputPerBatch
                     && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                         <= recipeState.recipe.outputMaxCapacity
                     && (!recipe.requiresFuel
@@ -125,29 +176,31 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private IEnumerator DispatchOutputToWarehouse()
     {
-        yield return new WaitForSeconds(3.0f);
-
-        foreach (RecipeState recipeState in recipeStates)
+        while (true)
         {
-            int remainingOutput = recipeState.storedOutput;
-            ItemData data = recipeState.recipe.outputItemData;
-            GameObject prefab = recipeState.recipe.outputPrefab;
+            yield return new WaitForSeconds(3.0f);
 
-            while (remainingOutput > 0)
+            foreach (RecipeState recipeState in recipeStates)
             {
-                GameObject output = ItemManager.Instance.CreateItem(
-                    dropSpot.position,
-                    prefab);
+                int remainingOutput = recipeState.storedOutput;
+                ItemData data = recipeState.recipe.outputItemData;
+                GameObject prefab = recipeState.recipe.outputPrefab;
 
-                MoveItemTask move = output.GetComponent<MoveItemTask>()
-                           ?? output.AddComponent<MoveItemTask>();
-                move.TaskData = data;
+                while (remainingOutput > 0)
+                {
+                    GameObject output = ItemManager.Instance.CreateItem(
+                        dropSpot.position,
+                        prefab);
 
-                recipeState.storedOutput--;
-                remainingOutput--;
+                    MoveItemTask moveItemTask = output.GetComponent<MoveItemTask>()
+                               ?? output.AddComponent<MoveItemTask>();
+                    moveItemTask.TaskData = data;
+
+                    recipeState.storedOutput--;
+                    remainingOutput--;
+                }
             }
         }
-        StartCoroutine(DispatchOutputToWarehouse());
     }
 
     public bool CanReceive(ItemData data)
@@ -222,6 +275,10 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             {
                 state.storedInput++;
                 Release(data);
+
+                Debug.Log(name + "Stored amount = " + state.storedInput
+                    + ". Max amount = " + state.recipe.inputMaxCapacity);
+
                 return;
             }
             if (recipe.requiresFuel && data == recipe.fuelItem)
@@ -231,5 +288,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 return;
             }
         }
+    }
+
+    public void ConfirmRetrieval()
+    {
+        // Does nothing as ResourceProcessor doesnt currently 
+        // store items to be picked up, instead throws output on ground
     }
 }
