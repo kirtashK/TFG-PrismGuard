@@ -169,24 +169,14 @@ public class MoveItemTask : MonoBehaviour, ITask
     {
         if (consumer != target)
         {
-            //Debug.Log($"{name} NOT my target consumer {target} unregistered: {consumer}");
             return;
         }
 
         Debug.Log($"{name} target consumer {target} unregistered: {consumer}");
 
-        // Defensive: tries to release, if there is no release its fine
-        try
-        {
-            Debug.Log(name + " releasing data " + TaskData);
-            consumer.Release(TaskData);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning($"Release threw in HandleConsumerUnregistered: {ex.Message}");
-        }
+        consumer.Release(TaskData);
 
-        lastConsumer = target;
+        lastConsumer = null;
         target = null;
 
         if (isRegisteredToTaskManager)
@@ -198,14 +188,14 @@ public class MoveItemTask : MonoBehaviour, ITask
             isRegisteredToTaskManager = false;
         }
 
-        // Drop item if it was being transported to a consumer that no longer exists
+        // Drop item if it was being transported to
+        // a consumer that no longer exists
         if (instance != null && instance.carrier != null)
         {
             Worker carrier = instance.carrier;
 
-            Debug.Log(name + " dropping carried item");
             carrier.DropItem(gameObject, instance.carrier.Position);
-            Debug.Log($"{name} has been dropped by {carrier}");
+            Debug.Log($"{name} has been dropped by {carrier}. Resetting...");
 
             carrier.currentTask = null;
             carrier.ChangeState(new IdleState());
@@ -218,7 +208,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         // Item is not being carried yet (on the floor, warehouse etc)
         else
         {
-            Debug.Log($"{name} is not being carried");
+            Debug.Log($"{name} is not being carried, resetting...");
 
             Worker[] workers = FindObjectsByType<Worker>(FindObjectsSortMode.None);
             foreach (Worker worker in workers)
@@ -230,15 +220,13 @@ public class MoveItemTask : MonoBehaviour, ITask
 
                 if (worker.currentTask is MoveItemTask moveItemTask && moveItemTask == this)
                 {
-                    Debug.Log($"{name} is being tracked by {worker}, resetting");
-                    worker.DropItem(gameObject, worker.Position);
-                    Debug.Log($"{name} has been dropped by {worker}");
-
                     worker.currentTask = null;
                     worker.ChangeState(new IdleState());
                     worker.agent.SetDestination(worker.transform.position);
 
                     Reset();
+
+                    return;
                 }
             }
         }
@@ -254,7 +242,6 @@ public class MoveItemTask : MonoBehaviour, ITask
         }
 
         target = null;
-
         source = null;
 
         if (isRegisteredToTaskManager && TaskManager.Instance != null)
@@ -292,6 +279,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         lastConsumer = target;
         source = null;
+        instance.carrier = null;
 
         if (isRegisteredToTaskManager)
         {

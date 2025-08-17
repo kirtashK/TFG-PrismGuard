@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEditor.Progress;
 
 public class Worker : MonoBehaviour, ICombatTarget
 {
@@ -116,18 +117,23 @@ public class Worker : MonoBehaviour, ICombatTarget
     public bool CanCarry(ItemData itemData)
         => currentLoad + itemData.weight <= workerData.maxCarryWeight;
 
-    public void PickUp(GameObject gameObject)
+    public void PickUp(GameObject item)
     {
-        inventory.Add(gameObject);
+        inventory.Add(item);
 
-        if (gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
         {
             itemInstance.carrier = this;
             currentLoad += itemInstance.itemData.weight;
+            itemInstance.SetVisible(false);
         }
 
-        gameObject.transform.SetParent(inventorySpot, worldPositionStays: true);
-        //gameObject.SetActive(false);
+        item.transform.SetParent(inventorySpot, worldPositionStays: true);
+    }
+
+    public void ClearFromInventory(GameObject item)
+    {
+        inventory.Remove(item);
     }
 
     public void DropAll(Vector3 dropPosition)
@@ -142,11 +148,11 @@ public class Worker : MonoBehaviour, ICombatTarget
             if (carriedItem.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
             {
                 itemInstance.carrier = null;
+                itemInstance.SetVisible(true);
             }
 
             carriedItem.transform.SetParent(null, worldPositionStays: true);
             carriedItem.transform.position = dropPosition;
-            carriedItem.SetActive(true);
         }
         inventory.Clear();
         currentLoad = 0f;
@@ -162,13 +168,13 @@ public class Worker : MonoBehaviour, ICombatTarget
         if (carriedItem.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
         {
             itemInstance.carrier = null;
-            currentLoad -= itemInstance.itemData.weight;
+            currentLoad = Mathf.Max(0f, currentLoad - itemInstance.itemData.weight);
+            itemInstance.SetVisible(true);
         }
 
         inventory.Remove(carriedItem);
 
-        carriedItem.transform.SetParent(null);
+        carriedItem.transform.SetParent(null, worldPositionStays: true);
         carriedItem.transform.position = dropPosition;
-        carriedItem.SetActive(true);
     }
 }

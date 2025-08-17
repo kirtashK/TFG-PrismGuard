@@ -12,12 +12,16 @@ public class Blueprint : MonoBehaviour, IItemConsumer
     private readonly Dictionary<ItemData, int> delivered = new();
     private readonly Dictionary<ItemData, int> pending = new();
 
+    private readonly List<GameObject> storedObjects = new();
+
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
 
         delivered.Clear();
         pending.Clear();
+        storedObjects.Clear();
+
         foreach (StructureData.ResourceRequirement requirement in structureData.requirements)
         {
             delivered[requirement.itemData] = 0;
@@ -27,19 +31,19 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private IEnumerator RegisterWhenReady()
     {
-        while (ConstructionManager.Instance == null
-            || ItemConsumerManager.Instance == null)
+        while (ItemConsumerManager.Instance == null)
         {
             yield return null;
         }
-        ConstructionManager.Instance.RegisterBlueprint(this);
         ItemConsumerManager.Instance.Register(this);
     }
 
     private void OnDisable()
     {
-        ConstructionManager.Instance.UnregisterBlueprint(this);
-        ItemConsumerManager.Instance.Unregister(this);
+        if (ItemConsumerManager.Instance != null)
+        {
+            ItemConsumerManager.Instance.Unregister(this);
+        }
     }
 
     private void Start()
@@ -56,31 +60,28 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         return 0;
     }
 
-    public int PendingCount(ItemData item)
-    {
-        if (pending.TryGetValue(item, out int count))
-        {
-            return count;
-        }
-        return 0;
-    }
-
-    public void RegisterPending(ItemData item)
-    {
-        pending[item]++;
-    }
-
     private void TryConstruct()
     {
         foreach (StructureData.ResourceRequirement requirement in structureData.requirements)
         {
             if (DeliveredCount(requirement.itemData) < requirement.quantity)
+            {
                 return;
+            }
         }
+
+        for (int i = storedObjects.Count - 1; i >= 0; i--)
+        {
+            GameObject obj = storedObjects[i];
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        storedObjects.Clear();
 
         Instantiate(structureData.builtPrefab, transform.position, transform.rotation);
 
-        // Destroy the blueprint and all delivered items
         Destroy(gameObject);
     }
 
@@ -95,17 +96,28 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         int inFlight = pending[item];
         int needed = structureData.requirements
                           .Find(required => required.itemData == item).quantity;
+
         return (have + inFlight) < needed;
     }
 
     public bool Reserve(ItemData item)
     {
-        if (!CanReceive(item))
+        if (!delivered.ContainsKey(item))
         {
             return false;
         }
 
-        pending[item]++;
+        int have = delivered[item];
+        int inFlight = pending[item];
+        int needed = structureData.requirements
+                          .Find(required => required.itemData == item).quantity;
+
+        if ((have + inFlight) >= needed)
+        {
+            return false;
+        }
+
+        pending[item] = inFlight + 1;
         return true;
     }
 
@@ -124,14 +136,21 @@ public class Blueprint : MonoBehaviour, IItemConsumer
             : transform.position;
     }
 
-    public void OnReceived(GameObject itemObj, ItemData item)
+    public void OnReceived(GameObject itemObj, ItemData itemData)
     {
-        Release(item);
+        Release(itemData);
 
-        delivered[item]++;
+        delivered[itemData]++;
+
+        if (itemObj.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        {
+            itemInstance.SetVisible(true);
+        }
 
         itemObj.transform.SetParent(transform, worldPositionStays: true);
         itemObj.transform.position = GetReceivePosition();
+
+        storedObjects.Add(itemObj);
 
         TryConstruct();
     }

@@ -99,7 +99,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public void OnReceived(GameObject item, ItemData data)
     {
-        item.SetActive(true);
+        if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        {
+            itemInstance.SetVisible(true);
+        }
 
         Release(data);
 

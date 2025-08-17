@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class MultiTransportState : IWorkerState
 {
@@ -154,16 +155,14 @@ public class MultiTransportState : IWorkerState
             {
                 continue;
             }
-
-            if (!consumer.CanReceive(task.TaskData))
-            {
-                Debug.LogWarning("[MultiTransportState] HandlePickupPhase: consumer cant receive");
-                TryResetCollectedAndDrop();
-                return;
-            }
-
+            
             consumer.OnReceived(task.gameObject, task.TaskData);
             worker.currentLoad = Mathf.Max(0f, worker.currentLoad - task.TaskData.weight);
+            worker.ClearFromInventory(task.gameObject);
+            if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+            {
+                itemInstance.carrier = null;
+            }
         }
 
         collectedTasks.Clear();
@@ -180,24 +179,10 @@ public class MultiTransportState : IWorkerState
                 continue;
             }
 
-            try
-            {
-                collected.Reset();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogWarning($"[MultiTransportState] Error resetting MoveItemTask {collected.name}: {ex.Message}");
-            }
+            collected.Reset();
         }
 
-        try
-        {
-            worker.DropAll(worker.Position);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning($"[MultiTransportState] Error al forzar DropAll en worker {worker.name}: {ex.Message}");
-        }
+        worker.DropAll(worker.Position);
 
         collectedTasks.Clear();
         worker.currentTask = null;
