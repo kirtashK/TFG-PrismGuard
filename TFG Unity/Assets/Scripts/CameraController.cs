@@ -2,170 +2,237 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
-    [Header("Velocidades")]
+    [Header("Speeds")]
 
     [SerializeField]
-    [Tooltip("Velocidad de movimiento horizontal")]
-    [Range(5f, 30f)]
-    private float movementSpeed = 15f;
+    [Tooltip("Horizontal pan speed (keyboard)")]
+    [Range(1f, 100f)]
+    private float panSpeed = 15f;
 
     [SerializeField]
-    [Tooltip("Velocidad de movimiento vertical")]
-    [Range(1f, 20f)]
-    private float verticalSpeed = 10f;
-
-    [SerializeField]
-    [Tooltip("Velocidad del zoom")]
-    [Range(50f, 150f)]
-    private float zoomSpeed = 100f;
-
-    [SerializeField]
-    [Tooltip("Multiplicador de velocidad al pulsar Shift")]
+    [Tooltip("Multiplier when holding Shift")]
     [Range(1f, 5f)]
     private float speedMultiplier = 2f;
 
-
-    [Header("Sensibilidad")]
+    [SerializeField]
+    [Tooltip("Mouse drag pan sensitivity (right mouse)")]
+    [Range(0.01f, 5f)]
+    private float dragPanSensitivity = 0.5f;
 
     [SerializeField]
-    [Tooltip("Sensibilidad")]
-    [Range(0.01f, 1f)]
-    private float lookSensitivity = 0.1f;
+    [Tooltip("Rotate sensitivity (mouse delta while holding middle mouse)")]
+    [Range(0.01f, 3f)]
+    private float rotateSensitivity = 0.2f;
+
+    [SerializeField]
+    [Tooltip("Vertical (height) change speed via scroll wheel")]
+    [Range(5f, 200f)]
+    private float verticalScrollSpeed = 80f;
 
 
     [Header("Pitch")]
 
     [SerializeField]
-    [Tooltip("Ángulo mínimo de pitch")]
-    [Range(-90f, 0f)]
-    private float pitchMin = -45f;
+    [Tooltip("Minimun pitch angle")]
+    [Range(-89f, 0f)]
+    private float pitchMin = -60f;
 
     [SerializeField]
-    [Tooltip("Ángulo máximo de pitch")]
-    [Range(0f, 90f)]
-    private float pitchMax = 45f;
+    [Tooltip("Maximun pitch angle")]
+    [Range(0f, 89f)]
+    private float pitchMax = 60f;
 
 
-    [Header("Field Of View")]
-
-    [SerializeField]
-    [Range(15f, 60f)]
-    private float fovMin = 15f;
+    [Header("Zoom / Height limits")]
 
     [SerializeField]
-    [Range(15f, 60f)]
-    private float fovMax = 60f;
+    [Tooltip("Minimum camera height")]
+    private float minHeight = 5f;
+
+    [SerializeField]
+    [Tooltip("Maximum camera height")]
+    private float maxHeight = 80f;
 
 
     private InputAction moveAction;
-    private InputAction verticalAction;
+    private InputAction rotateModeAction;
+    private InputAction rightMouseAction;
     private InputAction zoomAction;
     private InputAction lookAction;
 
     private float yaw;
     private float pitch;
+
     private Camera cam;
 
     private void Awake()
     {
-        moveAction = new InputAction("Move");
+        cam = GetComponent<Camera>();
+
+        moveAction = new InputAction("Move", InputActionType.Value);
         moveAction.AddCompositeBinding("2DVector")
         .With("Up", "<Keyboard>/w")
         .With("Down", "<Keyboard>/s")
         .With("Left", "<Keyboard>/a")
         .With("Right", "<Keyboard>/d");
 
-        verticalAction = new InputAction("Vertical");
-        verticalAction.AddCompositeBinding("1DAxis")
-        .With("Positive", "<Keyboard>/e")
-        .With("Negative", "<Keyboard>/q");
-
         zoomAction = new InputAction("Zoom", binding: "<Mouse>/scroll");
 
         lookAction = new InputAction("Look", binding: "<Mouse>/delta");
 
+        rotateModeAction = new InputAction("RotateMode", InputActionType.Button, "<Mouse>/middleButton");
+        
+        rightMouseAction = new InputAction("RightMouse", InputActionType.Button, "<Mouse>/rightButton");
+
         moveAction.Enable();
-        verticalAction.Enable();
-        zoomAction.Enable();
         lookAction.Enable();
+        zoomAction.Enable();
+        rotateModeAction.Enable();
+        rightMouseAction.Enable();
 
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x;
-
-        cam = GetComponent<Camera>();
-        if (cam == null)
-        {
-            Debug.LogError("Este objeto no tiene Camera.");
-        }
     }
 
     private void OnDestroy()
     {
+        moveAction.Disable();
+        lookAction.Disable();
+        zoomAction.Disable();
+        rotateModeAction.Disable();
+        rightMouseAction.Disable();
+
         moveAction.Dispose();
-        verticalAction.Dispose();
-        zoomAction.Dispose();
         lookAction.Dispose();
+        zoomAction.Dispose();
+        rotateModeAction.Dispose();
+        rightMouseAction.Dispose();
     }
 
     private void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        HandleKeyboardPan();
+
+        bool pointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+
+        if (!pointerOverUI)
         {
-            HandleMovement();
-            HandleRotation();
-            HandleZoom();
+            HandleRightDragPan();
+            HandleRotationMode();
+        }
+        else
+        {
+            RestoreCursorIfNeeded();
+        }
+
+        HandleScrollVertical();
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
-    private void HandleMovement()
+    private void HandleKeyboardPan()
     {
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
 
-        Vector3 forward = transform.forward;
-        forward.y = 0f;
-        forward.Normalize();
-
-        Vector3 right = transform.right;
-        right.y = 0f;
-        right.Normalize();
-
         float multiplier = 1f;
-        if (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed)
+        if (Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
         {
             multiplier = speedMultiplier;
         }
 
-        Vector3 horizontalMove = (right * moveInput.x + forward * moveInput.y) * movementSpeed * multiplier * Time.deltaTime;
-
-        float verticalInput = verticalAction.ReadValue<float>();
-        Vector3 verticalMove = Vector3.up * verticalInput * verticalSpeed * multiplier * Time.deltaTime;
-
-        transform.Translate(horizontalMove + verticalMove, Space.World);
-    }
-
-    private void HandleRotation()
-    {
-        Vector2 lookInput = lookAction.ReadValue<Vector2>();
-        yaw += lookInput.x * lookSensitivity;
-        pitch += -lookInput.y * lookSensitivity;
-
-        pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
-
-        transform.eulerAngles = new Vector3(pitch, yaw, 0f);
-    }
-
-    private void HandleZoom()
-    {
-        Vector2 scrollInput = zoomAction.ReadValue<Vector2>();
-        float scroll = scrollInput.y;
-
-        if (Mathf.Abs(scroll) > 0.01f && cam != null)
+        if (moveInput.sqrMagnitude > 0.0001f)
         {
-            float newFOV = cam.fieldOfView - scroll * zoomSpeed * Time.deltaTime;
-            cam.fieldOfView = Mathf.Clamp(newFOV, fovMin, fovMax);
+            Vector3 forward = cam.transform.forward;
+            forward.y = 0f;
+            forward.Normalize();
+
+            Vector3 right = cam.transform.right;
+            right.y = 0f;
+            right.Normalize();
+
+            Vector3 move = multiplier * panSpeed * Time.deltaTime * (right * moveInput.x + forward * moveInput.y);
+            transform.Translate(move, Space.World);
+        }
+    }
+
+    private void HandleRightDragPan()
+    {
+        float rightHeld = rightMouseAction.ReadValue<float>();
+        if (rightHeld > 0f)
+        {
+            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+
+            Vector3 right = cam.transform.right;
+            right.y = 0f;
+            right.Normalize();
+
+            Vector3 forward = cam.transform.forward;
+            forward.y = 0f;
+            forward.Normalize();
+
+            Vector3 deltaWorld = dragPanSensitivity * Time.deltaTime * (-right * mouseDelta.x + -forward * mouseDelta.y);
+            transform.Translate(deltaWorld, Space.World);
+        }
+    }
+
+    private void HandleRotationMode()
+    {
+        float rotateHeld = rotateModeAction.ReadValue<float>();
+        if (rotateHeld > 0f)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Vector2 delta = lookAction.ReadValue<Vector2>();
+            yaw += delta.x * rotateSensitivity;
+            pitch += -delta.y * rotateSensitivity;
+            pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
+
+            transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+        }
+        else
+        {
+            RestoreCursorIfNeeded();
+        }
+    }
+
+    private void RestoreCursorIfNeeded()
+    {
+        if (Cursor.lockState != CursorLockMode.None || Cursor.visible == false)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    private void HandleScrollVertical()
+    {
+        Vector2 scroll = zoomAction.ReadValue<Vector2>();
+        float s = scroll.y;
+
+        if (Mathf.Abs(s) > 0.001f)
+        {
+            float multiplier = 1f;
+            if (Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
+            {
+                multiplier = speedMultiplier;
+            }
+
+            Vector3 pos = transform.position;
+            pos.y += s * verticalScrollSpeed * multiplier * Time.deltaTime;
+            pos.y = Mathf.Clamp(pos.y, minHeight, maxHeight);
+            transform.position = pos;
         }
     }
 }
