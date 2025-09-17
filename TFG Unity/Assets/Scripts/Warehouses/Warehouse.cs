@@ -13,7 +13,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     public int currentCapacity = 0;
 
     private int reservedForStore = 0;
-    private readonly int reservedForRetrieve = 0;
+    private int reservedForRetrieve = 0;
 
     public int FreeSlots => maxCapacity - (currentCapacity + reservedForStore);
     public int AvailableForRetrieve => currentCapacity - reservedForRetrieve;
@@ -86,6 +86,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             return false;
         }
         reservedForStore = Mathf.Min(reservedForStore + 1, maxCapacity);
+
         return true;
     }
 
@@ -98,9 +99,13 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public void OnReceived(GameObject item, ItemData data)
     {
-        item.SetActive(true);
+        if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        {
+            itemInstance.SetVisible(true);
+        }
 
         Release(data);
+
         if (currentCapacity == 0)
         {
             storedItem = data;
@@ -117,5 +122,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
 
         OnItemStored?.Invoke(data);
+    }
+
+    public void ConfirmRetrieval()
+    {
+        currentCapacity = Mathf.Max(0, currentCapacity - 1);
     }
 }

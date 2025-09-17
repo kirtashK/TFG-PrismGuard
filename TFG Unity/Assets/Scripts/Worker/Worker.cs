@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting;
+using static UnityEditor.Progress;
 
 public class Worker : MonoBehaviour, ICombatTarget
 {
@@ -46,6 +46,7 @@ public class Worker : MonoBehaviour, ICombatTarget
 
     public void ChangeState(IWorkerState newState)
     {
+        //Debug.Log($"New state: {newState}");
         currentState?.ExitState(this);
         currentState = newState;
         currentState?.EnterState(this);
@@ -56,10 +57,10 @@ public class Worker : MonoBehaviour, ICombatTarget
     public bool IsAlive => currentHealth > 0f;
 
     /// <summary>
-    /// Daña al worker, si sobrevive huye del peligro
+    /// Damages worker, if its still alive, it runs away
     /// </summary>
-    /// <param name="amount">Daño a recibir</param>
-    /// <param name="attackerOrigin">Posicion del atacante</param>
+    /// <param name="amount">Damage to receive</param>
+    /// <param name="attackerOrigin">Attacker's position</param>
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
@@ -80,23 +81,22 @@ public class Worker : MonoBehaviour, ICombatTarget
 
     private void Die()
     {
-        Debug.Log($"{name} ha muerto");
+        Debug.Log($"{name} has died");
         // TODO Animacion muerte, sonido
         Destroy(gameObject);
     }
 
     /// <summary>
-    /// El worker huye en direccion opuesta a threatPosition
+    /// Worker runs away from threatPosition
     /// </summary>
-    /// <param name="threatPosition">Posicion del peligro</param>
-    /// <param name="retreatDistance">Distancia a huir</param>
+    /// <param name="threatPosition">Threat's position</param>
+    /// <param name="retreatDistance">Distance to retreat</param>
     public void Retreat(Vector3 threatPosition, float retreatDistance = 5f)
     {
         Vector3 fleeDir = (transform.position - threatPosition).normalized;
 
         Vector3 rawTarget = transform.position + fleeDir * retreatDistance;
 
-        // Comprobar si la posición de huida esta en un navmesh
         if (NavMesh.SamplePosition(rawTarget,
                                    out NavMeshHit hit,
                                    retreatDistance,
@@ -110,33 +110,71 @@ public class Worker : MonoBehaviour, ICombatTarget
         }
     }
 
-    // ##############
-    // # Inventario #
-    // ##############
+    // #############
+    // # Inventory #
+    // #############
 
     public bool CanCarry(ItemData itemData)
         => currentLoad + itemData.weight <= workerData.maxCarryWeight;
 
-    public void PickUp(GameObject gameObject, ItemData itemData)
+    public void PickUp(GameObject item)
     {
-        inventory.Add(gameObject);
-        currentLoad += itemData.weight;
-        gameObject.transform.SetParent(inventorySpot, worldPositionStays: true);
-        gameObject.SetActive(false);
+        inventory.Add(item);
+
+        if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        {
+            itemInstance.carrier = this;
+            currentLoad += itemInstance.itemData.weight;
+            itemInstance.SetVisible(false);
+        }
+
+        item.transform.SetParent(inventorySpot, worldPositionStays: true);
+    }
+
+    public void ClearFromInventory(GameObject item)
+    {
+        inventory.Remove(item);
     }
 
     public void DropAll(Vector3 dropPosition)
     {
-        foreach (GameObject gameObject in inventory)
+        foreach (GameObject carriedItem in inventory)
         {
-            if (gameObject != null)
+            if (carriedItem == null)
             {
-                gameObject.transform.SetParent(null, worldPositionStays: true);
-                gameObject.transform.position = dropPosition;
-                gameObject.SetActive(true);
+                continue;
             }
+
+            if (carriedItem.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+            {
+                itemInstance.carrier = null;
+                itemInstance.SetVisible(true);
+            }
+
+            carriedItem.transform.SetParent(null, worldPositionStays: true);
+            carriedItem.transform.position = dropPosition;
         }
         inventory.Clear();
         currentLoad = 0f;
+    }
+
+    public void DropItem(GameObject carriedItem, Vector3 dropPosition)
+    {
+        if (carriedItem == null)
+        {
+            return;
+        }
+
+        if (carriedItem.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+        {
+            itemInstance.carrier = null;
+            currentLoad = Mathf.Max(0f, currentLoad - itemInstance.itemData.weight);
+            itemInstance.SetVisible(true);
+        }
+
+        inventory.Remove(carriedItem);
+
+        carriedItem.transform.SetParent(null, worldPositionStays: true);
+        carriedItem.transform.position = dropPosition;
     }
 }

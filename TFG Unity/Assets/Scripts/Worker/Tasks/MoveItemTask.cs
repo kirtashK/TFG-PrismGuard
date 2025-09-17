@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting;
+using UnityEngine;
 
 public class MoveItemTask : MonoBehaviour, ITask
 {
@@ -23,7 +22,11 @@ public class MoveItemTask : MonoBehaviour, ITask
     ItemInstance instance;
 
     private IItemConsumer target;
-    private bool isRegistered;
+    // Some items will come from intermediaries such as warehouses
+    // for those items, once picked up we reduce capacity of source
+    public IItemConsumer source = null;
+    private bool isRegisteredToTaskManager;
+    private bool isSubscribedToConsumerEvents;
     private const float pollInterval = 1f;
     public IItemConsumer TargetConsumer => target;
 
@@ -45,16 +48,27 @@ public class MoveItemTask : MonoBehaviour, ITask
         {
             TaskData = instance.itemData;
         }
-        StartCoroutine(RegisterWhenReady());
+
+        if (ItemConsumerManager.Instance != null)
+        {
+            SubscribeToConsumerEvents();
+            StartCoroutine(PollForConsumer());
+        }
+        else
+        {
+            StartCoroutine(RegisterWhenReady());
+        }
     }
 
     private void OnDisable()
     {
-        if (isRegistered)
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
         {
             TaskManager.Instance.UnregisterTask(this);
-            isRegistered = false;
+            isRegisteredToTaskManager = false;
         }
+
+        UnsubscribeFromConsumerEvents();
     }
 
     private IEnumerator RegisterWhenReady()
@@ -63,36 +77,74 @@ public class MoveItemTask : MonoBehaviour, ITask
         {
             yield return null;
         }
+
+        SubscribeToConsumerEvents();
+
         StartCoroutine(PollForConsumer());
+    }
+
+    private void SubscribeToConsumerEvents()
+    {
+        if (isSubscribedToConsumerEvents)
+        {
+            return;
+        }
+
+        ItemConsumerManager.Instance.OnConsumerUnregistered += HandleConsumerUnregistered;
+        isSubscribedToConsumerEvents = true;
+    }
+
+    private void UnsubscribeFromConsumerEvents()
+    {
+        if (!isSubscribedToConsumerEvents)
+        {
+            return;
+        }
+
+        if (ItemConsumerManager.Instance != null)
+        {
+            ItemConsumerManager.Instance.OnConsumerUnregistered -= HandleConsumerUnregistered;
+        }
+        isSubscribedToConsumerEvents = false;
     }
 
     private IEnumerator PollForConsumer()
     {
         WaitForSeconds wait = new(pollInterval);
+
         while (target == null)
         {
-            foreach (IItemConsumer consumer in ItemConsumerManager.Instance.Consumers)
+            foreach (IItemConsumer consumer in ItemConsumerManager.Instance.ActiveConsumers)
             {
                 if (consumer == lastConsumer)
                 {
                     continue;
                 }
+                if (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled)
+                {
+                    continue;
+                }
                 if (consumer is not Warehouse
-                    && consumer.CanReceive(TaskData) 
+                    && consumer.CanReceive(TaskData)
                     && consumer.Reserve(TaskData))
                 {
+                    source = GetComponentInParent<IItemConsumer>();
                     target = consumer;
                     TaskManager.Instance.RegisterTask(this);
-                    isRegistered = true;
+                    isRegisteredToTaskManager = true;
                     yield break;
                 }
             }
 
             if (lastConsumer is not Warehouse)
             {
-                foreach(IItemConsumer consumer in ItemConsumerManager.Instance.Consumers)
-            {
+                foreach (IItemConsumer consumer in ItemConsumerManager.Instance.ActiveConsumers)
+                {
                     if (consumer == lastConsumer)
+                    {
+                        continue;
+                    }
+                    if (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled)
                     {
                         continue;
                     }
@@ -100,9 +152,10 @@ public class MoveItemTask : MonoBehaviour, ITask
                         && consumer.CanReceive(TaskData)
                         && consumer.Reserve(TaskData))
                     {
+                        source = GetComponentInParent<IItemConsumer>();
                         target = consumer;
                         TaskManager.Instance.RegisterTask(this);
-                        isRegistered = true;
+                        isRegisteredToTaskManager = true;
                         yield break;
                     }
                 }
@@ -112,32 +165,126 @@ public class MoveItemTask : MonoBehaviour, ITask
         }
     }
 
-    public void Reset()
+    private void HandleConsumerUnregistered(IItemConsumer consumer)
     {
-        lastConsumer = target;
-        target = null;
-
-        if (isRegistered)
+        if (consumer != target)
         {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegistered = false;
+            return;
         }
 
+        Debug.Log($"{name} target consumer {target} unregistered: {consumer}");
+
+        consumer.Release(TaskData);
+
+        lastConsumer = null;
+        target = null;
+
+        if (isRegisteredToTaskManager)
+        {
+            if (TaskManager.Instance != null)
+            {
+                TaskManager.Instance.UnregisterTask(this);
+            }
+            isRegisteredToTaskManager = false;
+        }
+
+        // Drop item if it was being transported to
+        // a consumer that no longer exists
+        if (instance != null && instance.carrier != null)
+        {
+            Worker carrier = instance.carrier;
+
+            carrier.DropItem(gameObject, instance.carrier.Position);
+            Debug.Log($"{name} has been dropped by {carrier}. Resetting...");
+
+            carrier.currentTask = null;
+            carrier.ChangeState(new IdleState());
+            carrier.agent.SetDestination(carrier.transform.position);
+
+            Reset();
+
+            return;
+        }
+        // Item is not being carried yet (on the floor, warehouse etc)
+        else
+        {
+            Debug.Log($"{name} is not being carried, resetting...");
+
+            Worker[] workers = FindObjectsByType<Worker>(FindObjectsSortMode.None);
+            foreach (Worker worker in workers)
+            {
+                if (worker == null)
+                {
+                    continue;
+                }
+
+                if (worker.currentTask is MoveItemTask moveItemTask && moveItemTask == this)
+                {
+                    worker.currentTask = null;
+                    worker.ChangeState(new IdleState());
+                    worker.agent.SetDestination(worker.transform.position);
+
+                    Reset();
+
+                    return;
+                }
+            }
+        }
+
+        Reset();
+    }
+
+    public void Reset()
+    {
+        if (target != null)
+        {
+            lastConsumer = target;
+        }
+
+        target = null;
+        source = null;
+
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
+        {
+            TaskManager.Instance.UnregisterTask(this);
+            isRegisteredToTaskManager = false;
+        }
+
+        StopAllCoroutines();
         StartCoroutine(PollForConsumer());
     }
 
     public void Execute(Worker worker, System.Action onComplete)
     {
+        if (target == null || !target.CanReceive(TaskData))
+        {
+            Debug.Log($"[MoveItemTask] Execute: target invalid at delivery time for {name} - resetting task.");
+
+            worker.DropItem(gameObject, worker.Position);
+
+            if (isRegisteredToTaskManager && TaskManager.Instance != null)
+            {
+                TaskManager.Instance.UnregisterTask(this);
+                isRegisteredToTaskManager = false;
+            }
+
+            StartCoroutine(PollForConsumer());
+
+            return;
+        }
+
         onComplete?.Invoke();
 
         target.OnReceived(gameObject, TaskData);
 
         lastConsumer = target;
+        source = null;
+        instance.carrier = null;
 
-        if (isRegistered)
+        if (isRegisteredToTaskManager)
         {
             TaskManager.Instance.UnregisterTask(this);
-            isRegistered = false;
+            isRegisteredToTaskManager = false;
         }
     }
 }
