@@ -21,7 +21,7 @@ public class Crystal : MonoBehaviour, ICombatTarget
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{maxHealth}");
+        Debug.Log($"Health of {name}: {currentHealth}/{maxHealth}");
 
         // TODO Efectos, sonido
 
@@ -34,7 +34,7 @@ public class Crystal : MonoBehaviour, ICombatTarget
     private void OnDestroyed()
     {
         Debug.Log("El cristal ha sido destruido!");
-        // Notificar a GameManager
+        // Fire event
         GameManager.Instance.OnCrystalDestroyed();
 
         // TODO mover la camara al cristal, cambiar modelo de cristal a uno roto

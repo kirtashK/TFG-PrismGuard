@@ -36,7 +36,7 @@ public class Soldier : MonoBehaviour, ICombatTarget
 
     private void OnEnable()
     {
-        // Suscribirse al evento de oleada completada de UIManagerº
+        // Subscribe to wave completed event to regen hp
         StartCoroutine(RegisterWhenUIManagerReady());
     }
 
@@ -70,13 +70,13 @@ public class Soldier : MonoBehaviour, ICombatTarget
     public bool IsAlive => currentHealth > 0f;
 
     /// <summary>
-    /// Quita salud al soldado, si la salud pasa a ser 0 o menos, el soldado muere
+    /// Soldier takes damage, if hp is 0 or lower, soldier dies
     /// </summary>
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{data.maxHealth}");
+        Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
 
         if (currentHealth <= 0f)
         {
@@ -90,7 +90,7 @@ public class Soldier : MonoBehaviour, ICombatTarget
     }
 
     /// <summary>
-    /// Restaura un porcentaje de la salud máxima, si el soldado sigue vivo
+    /// Regenerates a percentage of the maximun health
     /// </summary>
     public void RegenerateHealth(float percent)
     {
@@ -100,16 +100,15 @@ public class Soldier : MonoBehaviour, ICombatTarget
         }
 
         float amountToRegenerate = data.maxHealth * percent;
-        // Sin pasarse de la salud máxima
         currentHealth = Mathf.Min(currentHealth + amountToRegenerate, data.maxHealth);
 
-        Debug.Log($"{name} regenerates {amountToRegenerate} health (now {currentHealth}/{data.maxHealth})");
+        Debug.Log($"{name} regenerated {amountToRegenerate} health (now {currentHealth}/{data.maxHealth})");
     }
 
 
     private void Die()
     {
-        Debug.Log($"{name} ha muerto");
+        Debug.Log($"{name} has died");
         // TODO Animacion muerte, sonido
         Destroy(gameObject);
     }

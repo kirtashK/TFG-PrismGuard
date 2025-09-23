@@ -22,31 +22,25 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Llamado cuando el cristal es destruido
-    /// Pausa el juego y muestra la pantalla de derrota
+    /// Called when the crystal is destroyed
+    /// Pauses the game and shows a defeat screen
     /// </summary>
     public void OnCrystalDestroyed()
     {
         finalScoreOnDefeat = ScoreManager.Instance.CurrentScore;
 
-        // Pausar el juego
+        // Pause game
         Time.timeScale = 0f;
 
         UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
     }
 
-    /// <summary>
-    /// Handler para el boton "Main Menu" en la pantalla de derrota
-    /// </summary>
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 
-    /// <summary>
-    /// Handler para el boton "Load Game"
-    /// </summary>
     public void LoadGame()
     {
         Debug.LogWarning("LoadGame() not implemented yet");

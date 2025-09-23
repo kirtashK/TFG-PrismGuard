@@ -9,17 +9,17 @@ public class WaveBannerController : MonoBehaviour
 
     public TMP_Text bannerText;
 
-    [Tooltip("Duración del fade-in y fade-out en segundos")]
+    [Tooltip("Duration of the fade (seconds)")]
     public float fadeDuration = 0.5f;
 
-    [Tooltip("Tiempo que permanece al máximo alpha antes de fade-out")]
+    [Tooltip("Time it stays at maximun alpha before fading (seconds)")]
     public float displayTime = 1.5f;
 
     private Coroutine showRoutine;
 
     /// <summary>
-    /// Muestra un banner en UI con el texto recibido
-    /// Este banner aparece y desaparece con un fade
+    /// Shows a banner in the UI with the received text.
+    /// The banner uses a fade
     /// </summary>
     public void ShowText(string text)
     {
@@ -48,7 +48,6 @@ public class WaveBannerController : MonoBehaviour
 
         canvasGroup.alpha = 1f;
 
-        // Mantener durante displayTime 
         yield return new WaitForSeconds(displayTime);
 
         // Fade out

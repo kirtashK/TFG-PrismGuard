@@ -3,19 +3,19 @@ using UnityEngine;
 public interface ICombatTarget
 {
     /// <summary>
-    /// Posición a la que dirigir la persecución
+    /// Position of the target
     /// </summary>
     Vector3 Position { get; }
 
     /// <summary>
-    /// Si ya ha sido destruido o está inactivo
+    /// Is alive or active
     /// </summary>
     bool IsAlive { get; }
 
     /// <summary>
-    /// Inflige daño y comunica desde qué punto viene el ataque.
+    /// Deals damage and tell from where
     /// </summary>
-    /// <param name="amount">Daño a infligir</param>
-    /// <param name="attackOrigin">Posicion del atacante</param>
+    /// <param name="amount">Damage dealt</param>
+    /// <param name="attackOrigin">Position of the attacker</param>
     void TakeDamage(float amount, Vector3 attackOrigin);
 }

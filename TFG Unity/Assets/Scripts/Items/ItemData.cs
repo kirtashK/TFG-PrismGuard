@@ -10,6 +10,6 @@ public class ItemData : ScriptableObject
     public float interactionRange;
     //public int priority;
 
-    [Tooltip("Tipos de almacen donde se puede guardar este item")]
+    [Tooltip("Warehouse type where this item can be stored")]
     public List<WarehouseType> storedIn = new();
 }

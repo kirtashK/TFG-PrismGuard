@@ -13,8 +13,6 @@ public class Worker : MonoBehaviour, ICombatTarget
 
     public WorkerData workerData;
 
-    [SerializeField]
-    [Tooltip("Capacidad actual")]
     public float currentLoad = 0f;
 
     [SerializeField]
@@ -29,7 +27,7 @@ public class Worker : MonoBehaviour, ICombatTarget
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
-            Debug.LogError("El trabajador debe tener un componente NavMeshAgent.");
+            Debug.LogError("Missing NavMeshAgent.");
         }
 
         currentHealth = workerData.maxHealth;

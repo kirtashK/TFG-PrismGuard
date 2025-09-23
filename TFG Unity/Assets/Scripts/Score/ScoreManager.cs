@@ -9,7 +9,7 @@ public class ScoreManager : MonoBehaviour
     public int CurrentScore => currentScore;
 
     /// <summary>
-    /// Evento que notifica la nueva puntuación tras un cambio.
+    /// Event that notifies new score after a change
     /// </summary>
     public event Action<int> OnScoreChanged;
 
@@ -28,7 +28,7 @@ public class ScoreManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Añade puntos a la puntuación y notifica a los suscriptores.
+    /// Adds points to the score and notifies subscribers
     /// </summary>
     public void AddScore(int points)
     {
@@ -40,9 +40,6 @@ public class ScoreManager : MonoBehaviour
         OnScoreChanged?.Invoke(currentScore);
     }
 
-    /// <summary>
-    /// Permite gastar puntos, usado por la tienda por el jugador.
-    /// </summary>
     public bool SpendScore(int cost)
     {
         if (currentScore < cost)
