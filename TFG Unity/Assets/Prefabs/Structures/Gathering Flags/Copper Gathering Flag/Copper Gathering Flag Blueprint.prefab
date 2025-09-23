@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4023158309522217276}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2051917417348401883}
   - component: {fileID: 3831265519426733952}
   - component: {fileID: 3893549868039951665}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8683216777675366745}
   - component: {fileID: 198718070377142209}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Copper Gathering Flag Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

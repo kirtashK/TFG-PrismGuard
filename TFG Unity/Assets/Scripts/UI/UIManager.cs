@@ -7,33 +7,28 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [Tooltip("Referencia a WaveBannerController en escena")]
     public WaveBannerController waveBanner;
 
-    [Header("Contador de Enemigos")]
     public TMP_Text enemyCountText;
-    [Tooltip("CanvasGroup dl texto de enemigos")]
+
     public CanvasGroup enemyCountGroup;
 
-    // Evento que se dispara cuando termina una oleada
+    // Event fired whenever a wave finishes
     public event Action<int> OnWaveCompleted;
 
     private int currentEnemiesAlive = 0;
     private int lastWaveStarted = 0;
 
-    [Header("Puntuación")]
-    [Tooltip("Texto para mostrar la puntuación actual")]
+    [Header("Score")]
     public TMP_Text scoreText;
 
-    [Header("Pantalla de Derrota")]
-    [Tooltip("Panel que se activa al perder")]
+    [Header("Defead screen")]
     public GameObject defeatPanel;
-    [Tooltip("Texto donde mostrar la puntuación final")]
     public TMP_Text defeatScoreText;
 
     private void Start()
     {   
-        // Mostrar valor inicial al iniciarse
+        // Initial values
         UpdateScoreDisplay(ScoreManager.Instance.CurrentScore);
 
         if (defeatPanel != null)
@@ -56,13 +51,11 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Suscribirse al evento de cambio de puntuacion
         StartCoroutine(RegisterWhenScoreManagerReady());
     }
 
     private void OnDisable()
     {
-        // Limpiar suscripción si se destruye UIManager
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.OnScoreChanged -= UpdateScoreDisplay;
@@ -88,7 +81,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Muestra la pantalla de derrota con la puntuación obtenida
+    /// Shows defeat screen with the obtained score
     /// </summary>
     public void ShowDefeatScreen(int finalScore)
     {
@@ -104,7 +97,7 @@ public class UIManager : MonoBehaviour
 
 
     /// <summary>
-    /// Mostrar el banner de oleada al iniciarse una oleada.
+    /// Show wave banner when a new wave starts
     /// </summary>
     public void ShowWaveStartedBanner(int waveNumber)
     {
@@ -116,7 +109,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Muestra el banner de ola completada con puntuación
+    /// Shows wave banner completed along with the score gained
     /// </summary>
     public void ShowWaveCompletedBanner(int waveNumber, int gainedScore, int waveScoreReward)
     {
@@ -129,7 +122,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Mostrar tiempo restante para que empieze la siguiente oleada.
+    /// Show remaining time till next wave
     /// </summary>
     public void ShowTimeUntilWaveBanner(int waveNumber, float timeRemaining)
     {
@@ -140,9 +133,9 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Cambia el contador de enemigos vivos (+1 o −1).
-    /// Si queda al menos 1 enemigo, muestra el texto,
-    /// si llega a 0, lo oculta
+    /// Changes enemy counter (+1 or −1).
+    /// If there is at least 1 enemy, shows the text,
+    /// hides it otherwise
     /// </summary>
     public void ChangeEnemyCount(int delta)
     {
@@ -150,7 +143,7 @@ public class UIManager : MonoBehaviour
 
         if (currentEnemiesAlive > 0)
         {
-            enemyCountText.text = $"Enemigos con vida: {currentEnemiesAlive}";
+            enemyCountText.text = $"Alive enemies: {currentEnemiesAlive}";
             enemyCountGroup.alpha = 1f;
             enemyCountGroup.blocksRaycasts = true;
         }
@@ -163,7 +156,7 @@ public class UIManager : MonoBehaviour
             {
                 if (waveBanner != null)
                 {
-                    // Disparar el evento indicando que oleada ha terminado
+                    // Fire event about wave completed
                     OnWaveCompleted?.Invoke(lastWaveStarted);
 
                     lastWaveStarted = 0;

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2510851946089878208}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8357266497613748156}
   - component: {fileID: 2558650052065303273}
   - component: {fileID: 2733981279921347016}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8291335788179838948}
   - component: {fileID: 8283879569981146493}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Log Pallet Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

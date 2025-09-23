@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 731925901652138357}
-  - component: {fileID: 7319245179392994022}
   - component: {fileID: 4623626415135787971}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,14 +37,6 @@ Transform:
   - {fileID: 8397417047096414228}
   m_Father: {fileID: 1007353728747331680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7319245179392994022
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 19583456335808004}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &4623626415135787971
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -78,8 +69,7 @@ GameObject:
   - component: {fileID: 8397417047096414228}
   - component: {fileID: 1924454011465780771}
   - component: {fileID: 1386314916884132113}
-  - component: {fileID: 6158133203801523806}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: metal-floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,27 +144,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6158133203801523806
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4095746658476863328}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5598523384713905151
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1007353728747331680}
   - component: {fileID: 5714893881558113113}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Copper Ore Bin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,6 +253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: metal-panel (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -353,6 +326,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
       propertyPath: m_Name
       value: metal-panel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -424,6 +401,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: metal-panel
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -493,6 +474,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
       propertyPath: m_Name
       value: metal-panel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 17e2fde9f84bc4a4ab9d14b6a910f6e7, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

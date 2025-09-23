@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1530263199604954038}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8155526133782579218}
   - component: {fileID: 5087684215796279493}
   - component: {fileID: 3149892117079552333}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6998465568871257550}
   - component: {fileID: 7114794411113920905}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Stone Gathering Flag Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

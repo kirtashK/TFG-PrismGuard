@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4939769454021502426}
   - component: {fileID: 1565747547030525960}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4631047606837347540}
   - component: {fileID: 9004909576600917873}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Planks Pallet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,6 +158,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d4c200b3d55fc4444b645b5ddbe688ac, type: 3}
       propertyPath: m_Name
       value: Pallet
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d4c200b3d55fc4444b645b5ddbe688ac, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
