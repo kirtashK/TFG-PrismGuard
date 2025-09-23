@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9176778158319309268}
   - component: {fileID: 4757912342284292222}
   - component: {fileID: 3928034655174637696}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6404190124556687482}
   - component: {fileID: 3230390979264353709}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Quarry Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3352268568422569064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

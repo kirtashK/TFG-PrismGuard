@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7870019747200498601}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7209728727575367985}
   - component: {fileID: 7576068838448287484}
   - component: {fileID: 1285684105725323123}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7093079860986441796}
   - component: {fileID: 4501050898641242703}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Advanced Smeltery Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

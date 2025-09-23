@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
+  m_Name: Sawmill Structure Data
+  m_EditorClassIdentifier: 
+  structureName: Sawmill
+  icon: {fileID: 0}
+  category: 1
+  builtPrefab: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
+  blueprintPrefab: {fileID: 3409900712911001480, guid: 325ee050961b3574aa38ad05e57485b9, type: 3}
+  previewPrefab: {fileID: 9147099120324929794, guid: 834c5e113de9f8b4e8d95cedcb7dc269, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  requirements:
+  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+    quantity: 4

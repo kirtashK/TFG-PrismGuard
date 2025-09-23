@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9074497587774549313}
   - component: {fileID: 316046758679753597}
   - component: {fileID: 4239196976269975502}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1506372201487998452}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8218151572509315909}
   - component: {fileID: 1403480334293379358}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Iron Ore Bin Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

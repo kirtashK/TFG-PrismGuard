@@ -123,13 +123,13 @@ public class CameraController : MonoBehaviour
         {
             HandleRightDragPan();
             HandleRotationMode();
+            HandleScrollVertical();
         }
         else
         {
             RestoreCursorIfNeeded();
         }
 
-        HandleScrollVertical();
     }
 
     private void OnApplicationFocus(bool hasFocus)
@@ -219,9 +219,9 @@ public class CameraController : MonoBehaviour
     private void HandleScrollVertical()
     {
         Vector2 scroll = zoomAction.ReadValue<Vector2>();
-        float s = scroll.y;
+        float scrollMove = scroll.y;
 
-        if (Mathf.Abs(s) > 0.001f)
+        if (Mathf.Abs(scrollMove) > 0.001f)
         {
             float multiplier = 1f;
             if (Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
@@ -229,10 +229,10 @@ public class CameraController : MonoBehaviour
                 multiplier = speedMultiplier;
             }
 
-            Vector3 pos = transform.position;
-            pos.y += s * verticalScrollSpeed * multiplier * Time.deltaTime;
-            pos.y = Mathf.Clamp(pos.y, minHeight, maxHeight);
-            transform.position = pos;
+            Vector3 position = transform.position;
+            position.y += scrollMove * verticalScrollSpeed * multiplier * Time.deltaTime;
+            position.y = Mathf.Clamp(position.y, minHeight, maxHeight);
+            transform.position = position;
         }
     }
 }

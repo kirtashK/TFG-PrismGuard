@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2692882595607139599}
   - component: {fileID: 397607246114310566}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Iron Ingot Pallet Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7272159748905882531}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 6197293209033342329}
   - component: {fileID: 3561022295234211904}
   - component: {fileID: 5717984409405117601}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

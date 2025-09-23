@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 44297048935609030}
   - component: {fileID: 6214041996897254941}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sawmill Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 8278272124939592739}
   - component: {fileID: 2984491994757690333}
   - component: {fileID: 9124429056063677417}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3572567812433203279}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

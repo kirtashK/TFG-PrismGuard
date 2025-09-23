@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3752679050124387514}
   - component: {fileID: 6808529225127247285}
   - component: {fileID: 5124885067223630013}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1708439095530186349}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1478311680380463458}
   - component: {fileID: 3350806450987677160}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Stone Blocks Pallet Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

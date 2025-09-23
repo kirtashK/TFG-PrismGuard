@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1325472323214795184}
   - component: {fileID: 4658569187008469609}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Planks Pallet Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 4590762327685697962}
   - component: {fileID: 8973242541202083227}
   - component: {fileID: 1527084016947095327}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8795106225984051394}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

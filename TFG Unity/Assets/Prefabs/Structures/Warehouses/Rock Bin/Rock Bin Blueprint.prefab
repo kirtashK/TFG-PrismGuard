@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5990841990166095019}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DropSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1215120218898716665}
   - component: {fileID: 62831013499966022}
   - component: {fileID: 2840582762123110515}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9019633041300948238}
   - component: {fileID: 2169271794644190987}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Rock Bin Blueprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

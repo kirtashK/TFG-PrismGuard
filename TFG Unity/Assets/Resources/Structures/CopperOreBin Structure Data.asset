@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
+  m_Name: CopperOreBin Structure Data
+  m_EditorClassIdentifier: 
+  structureName: Copper ore bin
+  icon: {fileID: 0}
+  category: 0
+  builtPrefab: {fileID: 5598523384713905151, guid: b852cbd5d4c06744b843486859c46ad3, type: 3}
+  blueprintPrefab: {fileID: 4193520597808467480, guid: 86cfdde883eaabc42b1b66976175e303, type: 3}
+  previewPrefab: {fileID: 5598523384713905151, guid: 4e3c3a46f5b98784691f30fe060708f6, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  requirements:
+  - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+    quantity: 3
