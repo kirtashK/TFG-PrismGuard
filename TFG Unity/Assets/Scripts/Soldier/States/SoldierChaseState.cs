@@ -21,7 +21,7 @@ public class SoldierChaseState : ISoldierState
     {
         if (target == null)
         {
-            soldier.ChangeState(new SoldierIdleState());
+            soldier.HandleCombatEnd();
             return;
         }
 

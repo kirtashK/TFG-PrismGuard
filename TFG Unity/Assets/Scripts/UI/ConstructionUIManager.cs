@@ -89,7 +89,7 @@ public class ConstructionUIManager : MonoBehaviour
         foreach (StructureCategory category in System.Enum.GetValues(typeof(StructureCategory)))
         {
             GameObject gameobject = Instantiate(categoryButtonPrefab, categoryBar);
-            if (!gameobject.TryGetComponent<CategoryButton>(out var categoryButton))
+            if (!gameobject.TryGetComponent<CategoryButton>(out CategoryButton categoryButton))
             {
                 Debug.LogError("categoryButtonPrefab missing CategoryButton script.");
                 continue;
@@ -127,7 +127,7 @@ public class ConstructionUIManager : MonoBehaviour
         foreach (StructureData structureData in list)
         {
             GameObject gameobject = Instantiate(blueprintEntryPrefab, blueprintGrid);
-            if (!gameobject.TryGetComponent<BlueprintEntry>(out var entry))
+            if (!gameobject.TryGetComponent<BlueprintEntry>(out BlueprintEntry entry))
             {
                 Debug.LogError("blueprintEntryPrefab missing BlueprintEntry script.");
                 continue;

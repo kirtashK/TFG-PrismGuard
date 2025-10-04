@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEditor.Progress;
 
-public class Worker : MonoBehaviour, ICombatTarget
+public class Worker : MonoBehaviour, ICombatTarget, IOrderable
 {
     private IWorkerState currentState;
 
@@ -44,7 +44,6 @@ public class Worker : MonoBehaviour, ICombatTarget
 
     public void ChangeState(IWorkerState newState)
     {
-        //Debug.Log($"New state: {newState}");
         currentState?.ExitState(this);
         currentState = newState;
         currentState?.EnterState(this);
@@ -63,7 +62,7 @@ public class Worker : MonoBehaviour, ICombatTarget
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{workerData.maxHealth}");
+        Debug.Log($"Health of {name}: {currentHealth}/{workerData.maxHealth}");
 
         DropAll(inventorySpot.position);
 
@@ -80,7 +79,6 @@ public class Worker : MonoBehaviour, ICombatTarget
     private void Die()
     {
         Debug.Log($"{name} has died");
-        // TODO Animacion muerte, sonido
         Destroy(gameObject);
     }
 
@@ -174,5 +172,25 @@ public class Worker : MonoBehaviour, ICombatTarget
 
         carriedItem.transform.SetParent(null, worldPositionStays: true);
         carriedItem.transform.position = dropPosition;
+    }
+
+    public void CancelCurrentTask()
+    {
+        if (currentTask == null)
+        {
+            return;
+        }
+
+        currentTask.Cancel(this);
+        currentTask = null;
+    }
+
+    // IOrderable
+    public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
+    {
+        CancelCurrentTask();
+
+        // Move to destination
+        ChangeState(new MovingState(destination, arrivalThreshold: 0.5f));
     }
 }

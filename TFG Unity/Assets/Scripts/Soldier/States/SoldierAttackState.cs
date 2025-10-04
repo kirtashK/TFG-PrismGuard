@@ -23,7 +23,7 @@ public class SoldierAttackState : ISoldierState
     {
         if (target == null)
         {
-            soldier.ChangeState(new SoldierIdleState());
+            soldier.HandleCombatEnd();
             return;
         }
 
@@ -44,7 +44,7 @@ public class SoldierAttackState : ISoldierState
             }
             else
             {
-                soldier.ChangeState(new SoldierIdleState());
+                soldier.HandleCombatEnd();
             }
         }
     }

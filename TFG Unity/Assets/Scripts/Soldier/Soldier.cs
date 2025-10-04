@@ -1,9 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.XR;
 
-public class Soldier : MonoBehaviour, ICombatTarget
+public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAttackMovable
 {
     public SoldierData data;
 
@@ -13,6 +12,12 @@ public class Soldier : MonoBehaviour, ICombatTarget
     public NavMeshAgent agent;
 
     private ISoldierState currentState;
+
+    // IGuardable
+    private Vector3 guardPoint;
+    private bool hasGuardPoint = false;
+    private bool returnToGuardOnFinish = false;
+    private bool attackMove = false;
 
     private void Awake()
     {
@@ -109,7 +114,57 @@ public class Soldier : MonoBehaviour, ICombatTarget
     private void Die()
     {
         Debug.Log($"{name} has died");
-        // TODO Animacion muerte, sonido
         Destroy(gameObject);
+    }
+
+    public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
+    {
+        attackMove = options.attackMove;
+
+        // Set guard point if required, otherwise clear it
+        if (options.returnToGuard)
+        {
+            SetGuardPoint(destination, true);
+        }
+        else
+        {
+            ClearGuardPoint();
+        }
+
+
+        ChangeState(new SoldierMoveState(destination, options.attackMove, options.returnToGuard));
+    }
+
+    public void SetGuardPoint(Vector3 point, bool returnToGuard)
+    {
+        hasGuardPoint = true;
+        guardPoint = point;
+        returnToGuardOnFinish = returnToGuard;
+    }
+
+    public void ClearGuardPoint()
+    {
+        hasGuardPoint = false;
+        returnToGuardOnFinish = false;
+    }
+
+    public void SetAttackMove(bool toggle)
+    {
+        attackMove = toggle;
+    }
+
+    // Called by states when combat finishes or target lost
+    public void HandleCombatEnd()
+    {
+        if (returnToGuardOnFinish && hasGuardPoint)
+        {
+            // Return to guard point
+            ChangeState(new SoldierMoveState(guardPoint, true, false));
+        }
+        else
+        {
+            // No guard, just go idle
+            ChangeState(new SoldierIdleState());
+        }
     }
 }

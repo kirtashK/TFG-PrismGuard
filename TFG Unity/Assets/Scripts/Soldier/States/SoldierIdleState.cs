@@ -4,7 +4,7 @@ public class SoldierIdleState : ISoldierState
 {
     private Soldier soldier;
 
-    private readonly int maxColliders = 10;
+    private readonly Collider[] aggroBuffer = new Collider[16];
 
     public void Enter(Soldier soldier)
     {
@@ -14,8 +14,6 @@ public class SoldierIdleState : ISoldierState
 
     public void Update()
     {
-        Collider[] aggroBuffer = new Collider[maxColliders];
-
         int hitCount = Physics.OverlapSphereNonAlloc(
             soldier.transform.position,
             soldier.data.AggroRadius,
