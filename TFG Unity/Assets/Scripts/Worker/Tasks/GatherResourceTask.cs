@@ -59,8 +59,15 @@ public class GatherResourceTask : MonoBehaviour, ITask
 
     public void Execute(Worker worker, System.Action onComplete)
     {
-        //Debug.Log(name + " - gathering resource by " + worker.name);
         StartCoroutine(WorkCoroutine(onComplete));
+    }
+
+    public void Cancel(Worker requester)
+    {
+        // Force reset so the task registers again in a clean state
+        TaskManager.Instance.UnregisterTask(this);
+        StopAllCoroutines();
+        StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator WorkCoroutine(System.Action onComplete)

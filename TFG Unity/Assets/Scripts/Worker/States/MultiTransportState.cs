@@ -69,6 +69,7 @@ public class MultiTransportState : IWorkerState
 
     private void HandlePickupPhase()
     {
+        // If we havent arrived yet, exit
         if (worker.agent.pathPending
             || worker.agent.remainingDistance > arrivalRange)
         {
@@ -136,6 +137,7 @@ public class MultiTransportState : IWorkerState
 
     private void HandleDeliveryPhase()
     {
+        // If we havent arrived yet, exit
         if (worker.agent.pathPending
             || worker.agent.remainingDistance > arrivalRange)
         {

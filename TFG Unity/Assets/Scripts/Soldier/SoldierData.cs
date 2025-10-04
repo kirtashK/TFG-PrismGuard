@@ -11,6 +11,6 @@ public class SoldierData : ScriptableObject
     public float attackCooldown = 1f;
 
     [Header("AI")]
-    [Tooltip("Radio en el que detecta enemigos a atacar")]
+    [Tooltip("Radius where soldier detects enemies to attack")]
     public float AggroRadius = 7.5f;
 }

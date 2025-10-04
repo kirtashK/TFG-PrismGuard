@@ -11,17 +11,17 @@ public class EnemyData : ScriptableObject
     public float attackCooldown = 1f;
 
     [Header("Wave")]
-    [Tooltip("Coste para generar este enemigo, tambien es la puntuacion añadida al derrotar este enemigo")]
+    [Tooltip("Cost to spawn this enemy, its also the score added once defeated")]
     public int spawnCost = 5;
 
     [Header("Rewards")]
-    [Tooltip("Experienca añadida al soldado que derrote este enemigo")]
+    [Tooltip("Experience added to the soldier that killed this enemy")]
     public int rewardExperience = 2;
 
     [Header("AI")]
-    [Tooltip("Distancia máxima a la que consideran atacar un obstáculo")]
+    [Tooltip("Maximun distance to chase an enemy/structure")]
     public float maxChaseDistance = 20f;
 
-    [Tooltip("Radio en el que detecta soldados a atacar")]
+    [Tooltip("Radius around enemy to detect targets")]
     public float AggroRadius = 5f;
 }

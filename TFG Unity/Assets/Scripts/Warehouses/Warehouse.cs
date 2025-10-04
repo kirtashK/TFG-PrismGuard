@@ -127,5 +127,6 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     public void ConfirmRetrieval()
     {
         currentCapacity = Mathf.Max(0, currentCapacity - 1);
+        RetrieveItem();
     }
 }

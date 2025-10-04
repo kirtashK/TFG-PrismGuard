@@ -29,11 +29,11 @@ public class EnemyAttackState : IEnemyState
             return;
         }
 
-        float dist = Vector3.Distance(
+        float distance = Vector3.Distance(
             enemy.transform.position,
             target.Position
         );
-        if (dist > enemy.data.attackRange + 0.1f)
+        if (distance > enemy.data.attackRange + 0.1f)
         {
             enemy.agent.isStopped = false;
             enemy.ChangeState(new EnemyChaseState(target));
@@ -42,11 +42,10 @@ public class EnemyAttackState : IEnemyState
 
         if (!onCooldown)
         {
-            Debug.Log($"{enemy.name} ataca {target}");
-
-            target.TakeDamage(
-                enemy.data.attackDamage, 
+            target.TakeDamage
+                (enemy.data.attackDamage, 
                 enemy.Position);
+
             enemy.StartCoroutine(AttackCooldown(enemy));
         }
     }

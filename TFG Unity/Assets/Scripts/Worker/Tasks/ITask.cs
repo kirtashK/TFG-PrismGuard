@@ -6,4 +6,5 @@ public interface ITask
     int Priority { get; }
     float InteractionRange { get; }
     void Execute(Worker worker, System.Action onComplete);
+    void Cancel(Worker requester);
 }

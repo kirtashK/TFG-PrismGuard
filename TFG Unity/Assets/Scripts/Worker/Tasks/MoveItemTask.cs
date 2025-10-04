@@ -19,7 +19,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     public ItemData TaskData { get; set; }
 
-    ItemInstance instance;
+    ItemInstance itemInstance;
 
     private IItemConsumer target;
     // Some items will come from intermediaries such as warehouses
@@ -34,9 +34,9 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private void Awake()
     {
-        instance = GetComponent<ItemInstance>();
+        itemInstance = GetComponent<ItemInstance>();
 
-        if (instance == null)
+        if (itemInstance == null)
         {
             Debug.LogError(name + ": no ItemInstance in this GameObject");
         }
@@ -44,9 +44,9 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private void OnEnable()
     {
-        if (TaskData == null && instance != null)
+        if (TaskData == null && itemInstance != null)
         {
-            TaskData = instance.itemData;
+            TaskData = itemInstance.itemData;
         }
 
         if (ItemConsumerManager.Instance != null)
@@ -90,7 +90,7 @@ public class MoveItemTask : MonoBehaviour, ITask
             return;
         }
 
-        ItemConsumerManager.Instance.OnConsumerUnregistered += HandleConsumerUnregistered;
+        ItemConsumerManager.Instance.OnConsumerUnregistered += HandleCancelTask;
         isSubscribedToConsumerEvents = true;
     }
 
@@ -103,7 +103,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         if (ItemConsumerManager.Instance != null)
         {
-            ItemConsumerManager.Instance.OnConsumerUnregistered -= HandleConsumerUnregistered;
+            ItemConsumerManager.Instance.OnConsumerUnregistered -= HandleCancelTask;
         }
         isSubscribedToConsumerEvents = false;
     }
@@ -165,7 +165,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         }
     }
 
-    private void HandleConsumerUnregistered(IItemConsumer consumer)
+    private void HandleCancelTask(IItemConsumer consumer)
     {
         if (consumer != target)
         {
@@ -179,22 +179,19 @@ public class MoveItemTask : MonoBehaviour, ITask
         lastConsumer = null;
         target = null;
 
-        if (isRegisteredToTaskManager)
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
         {
-            if (TaskManager.Instance != null)
-            {
-                TaskManager.Instance.UnregisterTask(this);
-            }
+            TaskManager.Instance.UnregisterTask(this);
             isRegisteredToTaskManager = false;
         }
 
         // Drop item if it was being transported to
         // a consumer that no longer exists
-        if (instance != null && instance.carrier != null)
+        if (itemInstance != null && itemInstance.carrier != null)
         {
-            Worker carrier = instance.carrier;
+            Worker carrier = itemInstance.carrier;
 
-            carrier.DropItem(gameObject, instance.carrier.Position);
+            carrier.DropItem(gameObject, itemInstance.carrier.Position);
             Debug.Log($"{name} has been dropped by {carrier}. Resetting...");
 
             carrier.currentTask = null;
@@ -279,12 +276,17 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         lastConsumer = target;
         source = null;
-        instance.carrier = null;
+        itemInstance.carrier = null;
 
         if (isRegisteredToTaskManager)
         {
             TaskManager.Instance.UnregisterTask(this);
             isRegisteredToTaskManager = false;
         }
+    }
+
+    public void Cancel(Worker requester)
+    {
+        HandleCancelTask(target);
     }
 }

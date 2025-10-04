@@ -5,35 +5,35 @@ using UnityEngine;
 [System.Serializable]
 public struct EnemyPoolEntry
 {
-    [Tooltip("Prefab que contiene el componente Enemy")]
+    [Tooltip("Enemy prefab")]
     public GameObject prefab;
-    [Tooltip("Datos de este tipo de enemigo")]
+    [Tooltip("Data of this enemy type")]
     public EnemyData data;
 }
 
 public class WaveManager : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("Si false, no se generan oleadas para facilitar testing")]
+    [Tooltip("If false, waves wont be generated (for testing)")]
     private bool isEnabled = true;
 
     [SerializeField]
-    [Tooltip("Si true, la primera oleada ocurrirá al instante")]
+    [Tooltip("If true, first wave will happen instantly")]
     private bool InstantFirstWave = true;
 
-    [Header("Pool de Enemigos")]
+    [Header("Enemies pool")]
 
-    [Tooltip("Todos los tipos de enemigos disponibles")]
+    [Tooltip("All enemy types to spawn")]
     public List<EnemyPoolEntry> enemyPool = new();
 
-    [Header("Categorización por Coste")]
+    [Header("Cost category")]
 
-    [Tooltip("Coste máximo para considerarlo 'Barato'")]
+    [Tooltip("Maximun cost to consider it cheap")]
     public int cheapMaxCost = 5;
-    [Tooltip("Coste máximo para considerarlo 'Medio' (>= cheapMaxCost)")]
+    [Tooltip("Maximun cost to consider it medium (>= cheapMaxCost)")]
     public int mediumMaxCost = 15;
 
-    [Header("Distribución de la Ola")]
+    [Header("Wave distribution")]
 
     [Range(0, 1)] 
     public float pctCheap = 0.6f;
@@ -42,19 +42,19 @@ public class WaveManager : MonoBehaviour
     [Range(0, 1)] 
     public float pctExpensive = 0.1f;
 
-    [Header("Presupuesto de Oleadas")]
+    [Header("Wave budget")]
 
-    [Tooltip("Presupuesto base para la ola 0")]
+    [Tooltip("Budget for first wave")]
     public float initialBudget = 10f;
-    [Tooltip("Incremento lineal por ola")]
+    [Tooltip("Linear increment per wave")]
     public float linearDelta = 5f;
-    [Tooltip("Factor exponencial r (>1)")]
+    [Tooltip("Exponential factor r (>1)")]
     public float exponentialRate = 1.02f;
 
     [Header("Spawn")]
 
     public Transform spawnPoint;
-    [Tooltip("Segundos entre cada ola")]
+    [Tooltip("Seconds between waves")]
     public float waveInterval = 100f;
 
     private bool waitingForNextWave;
@@ -82,13 +82,13 @@ public class WaveManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Suscribirse al evento de oleada completada de UIManager
+        // Subscribe to wave completed event
         StartCoroutine(RegisterWhenUIManagerReady());
     }
 
     private void OnDisable()
     {
-        // Limpiar suscripción si se destruye WaveManager
+        // Clean state
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
@@ -107,7 +107,6 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator RunWaves()
     {
-        // Primera ola inmediata para testing
         if (InstantFirstWave)
         {
             yield return SpawnWave();
@@ -118,46 +117,46 @@ public class WaveManager : MonoBehaviour
             waitingForNextWave = false;
         }
 
-            while (true)
-            {
-                // Si hay una oleada en marcha, no se activa el
-                // temporizador para la siguiente oleada
-                //waitingForNextWave = true;
-                yield return new WaitUntil(() => waitingForNextWave == false);
+        while (true)
+        {
+            // If there is an ongoing wave,
+            // the timer for next wave wont start
+            //waitingForNextWave = true;
+            yield return new WaitUntil(() => waitingForNextWave == false);
 
-                float waveIntervalFirstWarning = waveInterval * 0.35f;
-                float waveIntervalSecondWarning = waveInterval * 0.15f;
+            float waveIntervalFirstWarning = waveInterval * 0.35f;
+            float waveIntervalSecondWarning = waveInterval * 0.15f;
 
-                yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
+            yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
 
-                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
 
-                yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
+            yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
 
-                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
 
-                yield return new WaitForSeconds(waveIntervalSecondWarning);
+            yield return new WaitForSeconds(waveIntervalSecondWarning);
 
-                yield return SpawnWave();
-            }
+            yield return SpawnWave();
+        }
     }
     private void OnWaveCompleted(int waveNumber)
     {
-        // Cuando se lanze el evento (0 enemigos con vida)
-        // se activa el temporizador para la siguiente oleada
+        // Once the wave is completed (notified by event),
+        // timer will start
         waitingForNextWave = false;
 
-        // Puntuación obtenida en esta oleada:
+        // Scored obtained in this wave
         int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
 
-        // Recompensar puntuación proporcional a la oleada completada:
+        // Give extra score proportional to the completed wave number
         int waveScoreReward = CalculateRewardForCompletingWave(waveNumber);
-        // Máximo 1000:
+        // Maximun 1000 extra score:
         waveScoreReward = Mathf.Min(waveScoreReward, 1000);
 
         ScoreManager.Instance.AddScore(waveScoreReward);
 
-        // Mostramos banner con ola + puntuación ganada
+        // Show banner in UI
         UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave, waveScoreReward);
     }
 
@@ -168,7 +167,7 @@ public class WaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Configura las categorías de enemigos y el coste mínimo (enemigo mas barato)
+    /// Configure enemy categories and minimun cost
     /// </summary>
     private void CategorizePool()
     {
@@ -198,32 +197,31 @@ public class WaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Genera una oleada, primero se aumenta el presupuesto siguiendo una formula,
-    /// se generan todos los enemigos que quepan con el presupuesto,
-    /// hay tres categorias de enemigos, baratos, medios y carios, 
-    /// cada categoría ocupa un % del spawn, de forma que se garantiza que cada categoría se generé si hay presupuesto
+    /// Spawns a wave, first the budget is increased, then as many 
+    /// enemies as possible are spawned (limited by budget).
+    /// 3 categories of enemies: cheap, medium, expensive
+    /// Each category takes a % of the wave
     /// </summary>
     private IEnumerator SpawnWave()
     {
-        //TODO Animaciones, efectos, sonidos, mostrar en UI nueva oleada
+        //TODO Animaciones, efectos, sonidos
 
         waveIndex++;
 
         scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
 
-        // Mostrar texto de nueva oleada
+        // Show next wave text in UI
         UIManager.Instance.ShowWaveStartedBanner(waveIndex);
 
-        // Calcula presupuesto: (initial + delta*n) * r^n
+        // Obtain budget: (initial + delta*n) * r^n
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);
 
         Debug.Log($"[WaveManager] Wave {waveIndex}: Budget = {budget:F1}");
 
-        // Mientras quede presupuesto suficiente para el enemigo más barato
         while (budget >= minCost)
         {
-            // Selecciona categoría según porcentajes
+            // Select a category
             float randomValue = Random.value;
             List<EnemyPoolEntry> poolCat;
             if (randomValue < pctCheap)
@@ -239,23 +237,23 @@ public class WaveManager : MonoBehaviour
                 poolCat = expensiveList;
             }
 
-            // Filtrar los enemigos que caben en el presupuesto
+            // Filter enemies that fit within budget
             List<EnemyPoolEntry> candidates = poolCat.FindAll(enemy => enemy.data.spawnCost <= budget);
 
             if (candidates.Count == 0)
             {
-                // Si en esa categoría no cabe ninguno, intentar las otras
+                // if it doesnt fit, try another
                 candidates = new List<EnemyPoolEntry>();
                 foreach (List<EnemyPoolEntry> alt in new[] { cheapList, mediumList, expensiveList })
                     candidates.AddRange(alt.FindAll(enemy => enemy.data.spawnCost <= budget));
                 if (candidates.Count == 0)
-                    break; // no cabe mas
+                    break;
             }
 
-            // Elige uno al azar entre todos los candidatos
+            // Chose a random candidate
             EnemyPoolEntry chosen = candidates[Random.Range(0, candidates.Count)];
 
-            // Spawnear el enemigo
+            // Spawn the candidate
             GameObject gameObject = Instantiate(chosen.prefab, spawnPoint.position, spawnPoint.rotation);
             Enemy enemy = gameObject.GetComponent<Enemy>();
             enemy.data = chosen.data;
@@ -267,7 +265,7 @@ public class WaveManager : MonoBehaviour
 
             budget -= chosen.data.spawnCost;
 
-            // spawnear cada enemigo con una pausa pequeña
+            // Add a small delay so not all enemies spawn at the same instant
             yield return new WaitForSeconds(0.25f); 
         }
 

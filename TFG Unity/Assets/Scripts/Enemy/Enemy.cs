@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour, ICombatTarget
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Salud de {name} = {currentHealth}/{data.maxHealth}");
+        Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
 
         if (currentHealth == 0f)
             Die();
@@ -68,9 +68,9 @@ public class Enemy : MonoBehaviour, ICombatTarget
 
     private void Die()
     {
-        Debug.Log($"{name} ha muerto");
+        Debug.Log($"{name} has died");
 
-        // Añadir puntuación al derrotar el enemigo:
+        // Add score after defeating the enemy
         ScoreManager.Instance.AddScore(data.spawnCost);
 
         UIManager.Instance.ChangeEnemyCount(-1);
@@ -80,7 +80,7 @@ public class Enemy : MonoBehaviour, ICombatTarget
     }
 
     /// <summary>
-    /// Busca la unidad del jugador viva mas cercana dentro de data.AggroRadius
+    /// Finds the closests player unit inside data.AggroRadius
     /// </summary>
     public ICombatTarget FindNearestPlayerUnit()
     {
