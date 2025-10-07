@@ -12,6 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f57fbd35a47e249afefbfb7de11229, type: 3}
   m_Name: Basic Worker Data
   m_EditorClassIdentifier: 
+  Name: Worker
+  icon: {fileID: 0}
+  Prefab: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+  buildTime: 30
+  scoreCost: 75
+  createCosts:
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 10
+  - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+    quantity: 6
   maxHealth: 20
   moveSpeed: 3.5
   maxCarryWeight: 10

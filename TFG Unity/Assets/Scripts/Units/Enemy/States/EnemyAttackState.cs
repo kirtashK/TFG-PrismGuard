@@ -23,16 +23,14 @@ public class EnemyAttackState : IEnemyState
         if (target == null || !target.IsAlive)
         {
             enemy.agent.isStopped = false;
-            enemy.ChangeState(
-                new EnemyChaseState(enemy.MainTarget)
-            );
+            enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
             return;
         }
 
-        float distance = Vector3.Distance(
-            enemy.transform.position,
-            target.Position
-        );
+        float distance = Vector3.Distance
+            (enemy.transform.position,
+            target.Position);
+
         if (distance > enemy.data.attackRange + 0.1f)
         {
             enemy.agent.isStopped = false;

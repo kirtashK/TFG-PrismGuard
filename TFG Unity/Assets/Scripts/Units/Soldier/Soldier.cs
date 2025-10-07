@@ -36,7 +36,7 @@ public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAt
 
     private void Update()
     {
-        currentState?.Update();
+        currentState?.UpdateState(this);
     }
 
     private void OnEnable()
@@ -65,9 +65,9 @@ public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAt
 
     public void ChangeState(ISoldierState newState)
     {
-        currentState?.Exit();
+        currentState?.ExitState(this);
         currentState = newState;
-        currentState.Enter(this);
+        currentState.EnterState(this);
     }
 
     public Vector3 Position => transform.position;

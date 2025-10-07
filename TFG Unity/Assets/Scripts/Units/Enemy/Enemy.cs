@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, ICombatTarget
 
     public ICombatTarget MainTarget { get; private set; }
 
-    private readonly int maxColliders = 10;
+    private readonly Collider[] aggroBuffer = new Collider[16];
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour, ICombatTarget
 
     private void Update()
     {
-        currentState.UpdateState(this);
+        currentState?.UpdateState(this);
     }
 
     public void ChangeState(IEnemyState newState)
@@ -73,9 +73,10 @@ public class Enemy : MonoBehaviour, ICombatTarget
         // Add score after defeating the enemy
         ScoreManager.Instance.AddScore(data.spawnCost);
 
+        // Change enemy count in UI
         UIManager.Instance.ChangeEnemyCount(-1);
 
-        // TODO Sonido, animaciones, efectos, quizas recompensas?
+        // TODO Sonido, animaciones, efectos
         Destroy(gameObject);
     }
 
@@ -84,21 +85,18 @@ public class Enemy : MonoBehaviour, ICombatTarget
     /// </summary>
     public ICombatTarget FindNearestPlayerUnit()
     {
-        Collider[] aggroBuffer = new Collider[maxColliders];
-
-        int hitCount = Physics.OverlapSphereNonAlloc(
-            transform.position,
+        int hitCount = Physics.OverlapSphereNonAlloc
+            (transform.position,
             data.AggroRadius,
             aggroBuffer,
-            LayerMask.GetMask("PlayerUnit")
-        );
+            LayerMask.GetMask("PlayerUnit"));
 
         ICombatTarget best = null;
         float bestDist = float.MaxValue;
 
         for (int i = 0; i < hitCount; i++)
         {
-            ICombatTarget playerUnit = aggroBuffer[i].GetComponent<ICombatTarget>();
+            ICombatTarget playerUnit = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
             if (playerUnit != null 
                 && playerUnit.IsAlive 
                 && playerUnit is not Crystal)

@@ -2,37 +2,33 @@ using UnityEngine;
 
 public class SoldierIdleState : ISoldierState
 {
-    private Soldier soldier;
-
     private readonly Collider[] aggroBuffer = new Collider[16];
 
-    public void Enter(Soldier soldier)
+    public void EnterState(Soldier soldier)
     {
-        this.soldier = soldier;
         soldier.agent.isStopped = true;
     }
 
-    public void Update()
+    public void UpdateState(Soldier soldier)
     {
-        int hitCount = Physics.OverlapSphereNonAlloc(
-            soldier.transform.position,
+        int hitCount = Physics.OverlapSphereNonAlloc
+            (soldier.transform.position,
             soldier.data.AggroRadius,
             aggroBuffer,
-            LayerMask.GetMask("EnemyUnit")
-        );
+            LayerMask.GetMask("EnemyUnit"));
 
         for (int i = 0; i < hitCount; i++)
         {
-            Enemy enemy = aggroBuffer[i].GetComponent<Enemy>();
+            ICombatTarget enemy = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
             if (enemy != null && enemy.IsAlive)
             {
-                soldier.ChangeState(new SoldierChaseState(enemy.transform));
+                soldier.ChangeState(new SoldierChaseState(enemy));
                 break;
             }
         }
     }
 
-    public void Exit()
+    public void ExitState(Soldier soldier)
     {
 
     }

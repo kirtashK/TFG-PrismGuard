@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class SoldierMoveState : ISoldierState
 {
-    private Soldier soldier;
     private Vector3 destination;
     private readonly bool attackMove;
     private readonly bool setAsGuard;
@@ -16,32 +15,30 @@ public class SoldierMoveState : ISoldierState
         this.setAsGuard = setAsGuard;
     }
 
-    public void Enter(Soldier soldier)
+    public void EnterState(Soldier soldier)
     {
-        this.soldier = soldier;
         soldier.agent.isStopped = false;
         soldier.agent.stoppingDistance = 0.5f;
         soldier.agent.SetDestination(destination);
     }
 
-    public void Update()
+    public void UpdateState(Soldier soldier)
     {
         // If enemies and attackMove enabled, switch to chase/attack
         if (attackMove)
         {
-            int hitCount = Physics.OverlapSphereNonAlloc(
-            soldier.transform.position,
-            soldier.data.AggroRadius,
-            aggroBuffer,
-            LayerMask.GetMask("EnemyUnit")
-            );
+            int hitCount = Physics.OverlapSphereNonAlloc
+                (soldier.transform.position,
+                soldier.data.AggroRadius,
+                aggroBuffer,
+                LayerMask.GetMask("EnemyUnit"));
 
             for (int i = 0; i < hitCount; i++)
             {
-                Enemy enemy = aggroBuffer[i].GetComponent<Enemy>();
+                ICombatTarget enemy = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
                 if (enemy != null && enemy.IsAlive)
                 {
-                    soldier.ChangeState(new SoldierChaseState(enemy.transform));
+                    soldier.ChangeState(new SoldierChaseState(enemy));
                     break;
                 }
             }
@@ -58,7 +55,7 @@ public class SoldierMoveState : ISoldierState
         }
     }
 
-    public void Exit()
+    public void ExitState(Soldier soldier)
     {
         
     }

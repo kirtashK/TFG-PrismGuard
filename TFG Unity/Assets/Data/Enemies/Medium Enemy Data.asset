@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e63c8ab53e3064197bd3c7e09e67db, type: 3}
   m_Name: Medium Enemy Data
   m_EditorClassIdentifier: 
+  Name: Medium Enemy
+  icon: {fileID: 0}
+  Prefab: {fileID: 3313289928608923168, guid: f1816d2047e50fe428105a3dd684a121, type: 3}
+  buildTime: 0
+  scoreCost: 0
+  createCosts: []
   maxHealth: 55
   moveSpeed: 3.2
   attackRange: 1.5
@@ -19,5 +25,4 @@ MonoBehaviour:
   attackCooldown: 1.3
   spawnCost: 12
   rewardExperience: 5
-  maxChaseDistance: 20
   AggroRadius: 5

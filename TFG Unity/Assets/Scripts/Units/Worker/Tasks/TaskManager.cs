@@ -113,18 +113,14 @@ public class TaskManager : MonoBehaviour
 
     public void CompleteTask(ITask task)
     {
-        if (availableTasks.Contains(task))
-        {
-            availableTasks.Remove(task);
-        }
+        UnregisterTask(task);
     }
 
-    public MoveItemTask RequestMoveItemTask(
-        Vector3 fromPosition,
+    public MoveItemTask RequestMoveItemTask
+        (Vector3 fromPosition,
         float maxWeight,
         Vector3 destination,
-        float maxDistance = Mathf.Infinity
-    )
+        float maxDistance = Mathf.Infinity)
     {
         MoveItemTask best = null;
         float bestDist = float.MaxValue;
