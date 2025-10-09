@@ -15,9 +15,17 @@ MonoBehaviour:
   Name: Medium Enemy
   icon: {fileID: 0}
   Prefab: {fileID: 3313289928608923168, guid: f1816d2047e50fe428105a3dd684a121, type: 3}
+  PrefabReference:
+    m_AssetGUID: f1816d2047e50fe428105a3dd684a121
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   buildTime: 0
   scoreCost: 0
   createCosts: []
+  faction: 1
+  isPlayerControllable: 0
   maxHealth: 55
   moveSpeed: 3.2
   attackRange: 1.5

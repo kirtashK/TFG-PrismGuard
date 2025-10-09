@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.AddressableAssets;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour, ICombatTarget
@@ -17,6 +19,9 @@ public class Enemy : MonoBehaviour, ICombatTarget
     public ICombatTarget MainTarget { get; private set; }
 
     private readonly Collider[] aggroBuffer = new Collider[16];
+
+    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
+    private bool hasAddressableHandle = false;
 
     private void Awake()
     {
@@ -66,6 +71,12 @@ public class Enemy : MonoBehaviour, ICombatTarget
             Die();
     }
 
+    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    {
+        addressableInstanceHandle = handle;
+        hasAddressableHandle = handle.IsValid();
+    }
+
     private void Die()
     {
         Debug.Log($"{name} has died");
@@ -77,6 +88,15 @@ public class Enemy : MonoBehaviour, ICombatTarget
         UIManager.Instance.ChangeEnemyCount(-1);
 
         // TODO Sonido, animaciones, efectos
+
+        // Release addressable handle
+        if (hasAddressableHandle  && addressableInstanceHandle.IsValid())
+        {
+            Addressables.ReleaseInstance(addressableInstanceHandle);
+            hasAddressableHandle = false;
+            return;
+        }
+
         Destroy(gameObject);
     }
 

@@ -6008,6 +6008,14 @@ PrefabInstance:
       propertyPath: InstantFirstWave
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
+      propertyPath: 'enemyPool.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 90f6b53b391572542b6f136330ee140a, type: 2}
+    - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
+      propertyPath: 'enemyPool.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 0575f3ef668f3eb43b6296060b5aeb0b, type: 2}
     - target: {fileID: 3716179307939871500, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

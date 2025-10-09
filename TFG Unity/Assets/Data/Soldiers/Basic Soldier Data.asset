@@ -15,6 +15,12 @@ MonoBehaviour:
   Name: Basic Soldier
   icon: {fileID: 0}
   Prefab: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
+  PrefabReference:
+    m_AssetGUID: 9f3d6e970a529b74fbece11ddaabb6fa
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   buildTime: 10
   scoreCost: 30
   createCosts:
@@ -22,6 +28,8 @@ MonoBehaviour:
     quantity: 1
   - itemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
     quantity: 1
+  faction: 0
+  isPlayerControllable: 1
   maxHealth: 80
   moveSpeed: 4
   attackRange: 1.7

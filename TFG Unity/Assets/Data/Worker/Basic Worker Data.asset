@@ -15,6 +15,12 @@ MonoBehaviour:
   Name: Worker
   icon: {fileID: 0}
   Prefab: {fileID: 6105119252620098074, guid: c9118ed2c42dd014ca49170d806b707d, type: 3}
+  PrefabReference:
+    m_AssetGUID: c9118ed2c42dd014ca49170d806b707d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   buildTime: 30
   scoreCost: 75
   createCosts:
@@ -22,6 +28,8 @@ MonoBehaviour:
     quantity: 10
   - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
     quantity: 6
+  faction: 0
+  isPlayerControllable: 1
   maxHealth: 20
   moveSpeed: 3.5
   maxCarryWeight: 10

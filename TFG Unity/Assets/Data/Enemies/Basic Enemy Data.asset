@@ -15,9 +15,17 @@ MonoBehaviour:
   Name: Basic Enemy
   icon: {fileID: 0}
   Prefab: {fileID: 3313289928608923168, guid: a70e0d193fd04154b8bbce7950c85ca0, type: 3}
+  PrefabReference:
+    m_AssetGUID: a70e0d193fd04154b8bbce7950c85ca0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   buildTime: 0
   scoreCost: 0
   createCosts: []
+  faction: 1
+  isPlayerControllable: 0
   maxHealth: 35
   moveSpeed: 3.5
   attackRange: 1.5
