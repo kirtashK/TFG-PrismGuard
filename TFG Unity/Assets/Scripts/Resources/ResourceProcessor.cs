@@ -79,7 +79,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         if (isRegistered && ItemConsumerManager.Instance != null)
         {
-            //Debug.Log(name + " has unregistered");
             ItemConsumerManager.Instance.Unregister(this);
             isRegistered = false;
         }
@@ -136,8 +135,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             while (readyForBatch
                    && recipeState.processingCount < recipe.maxConcurrentBatches)
             {
-                //Debug.Log(name + " procesando batch...");
-
                 // Consume input & fuel
                 recipeState.storedInput -= recipe.inputPerBatch;
                 if (recipe.requiresFuel)

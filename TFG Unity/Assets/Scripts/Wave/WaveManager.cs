@@ -7,6 +7,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class WaveManager : MonoBehaviour
 {
+    [Header("Testing")]
+
     [SerializeField]
     [Tooltip("If false, waves wont be generated (for testing)")]
     private bool isEnabled = true;
@@ -14,6 +16,14 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     [Tooltip("If true, first wave will happen instantly")]
     private bool InstantFirstWave = true;
+
+    [SerializeField]
+    [Tooltip("True to enable a limit on the budget")]
+    private bool enableLimitBudget = false;
+
+    [SerializeField]
+    [Tooltip("If enableLimitBudget is enabled, the budget wont pass limitBudget amount")]
+    private int limitBudget = 0;
 
     [Header("Enemies pool")]
 
@@ -211,6 +221,12 @@ public class WaveManager : MonoBehaviour
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);
 
+        // Use a limit if set, to allow easy testing
+        if (enableLimitBudget)
+        {
+            budget = Mathf.Min(budget, limitBudget);
+        }
+
         Debug.Log($"[WaveManager] Wave {waveIndex}: Budget = {budget:F1}");
 
         while (budget >= minCost)
@@ -253,7 +269,7 @@ public class WaveManager : MonoBehaviour
 
             // Spawn the candidate
             GameObject gameObject = null;
-            var handle = chosen.PrefabReference.InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
+            AsyncOperationHandle<GameObject> handle = chosen.PrefabReference.InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
             
             yield return handle;
             if (handle.Status == AsyncOperationStatus.Succeeded)
