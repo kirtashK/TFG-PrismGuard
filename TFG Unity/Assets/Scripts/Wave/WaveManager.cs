@@ -277,8 +277,13 @@ public class WaveManager : MonoBehaviour
                 gameObject = handle.Result;
             }
 
+            // Give handle to the unit so it frees it upon death
+            if (gameObject.TryGetComponent<IAddressableInstance>(out IAddressableInstance addressable))
+            {
+                addressable.SetAddressableInstanceHandle(handle);
+            }
+
             Enemy enemy = gameObject.GetComponent<Enemy>();
-            enemy.SetAddressableInstanceHandle(handle);
 
             if (enemy.crystalTransform == null)
             {

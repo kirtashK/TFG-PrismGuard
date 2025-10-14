@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAttackMovable
+public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrderable, IGuardable, IAttackMovable
 {
     public SoldierData data;
 
@@ -18,6 +20,9 @@ public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAt
     private bool hasGuardPoint = false;
     private bool returnToGuardOnFinish = false;
     private bool attackMove = false;
+
+    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
+    private bool hasAddressableHandle = false;
 
     private void Awake()
     {
@@ -81,7 +86,7 @@ public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAt
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
+        //Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
 
         if (currentHealth <= 0f)
         {
@@ -110,10 +115,24 @@ public class Soldier : MonoBehaviour, ICombatTarget, IOrderable, IGuardable, IAt
         Debug.Log($"{name} regenerated {amountToRegenerate} health (now {currentHealth}/{data.maxHealth})");
     }
 
+    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    {
+        addressableInstanceHandle = handle;
+        hasAddressableHandle = handle.IsValid();
+    }
 
     private void Die()
     {
         Debug.Log($"{name} has died");
+
+        // Release addressable handle
+        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
+        {
+            Addressables.ReleaseInstance(addressableInstanceHandle);
+            hasAddressableHandle = false;
+            return;
+        }
+
         Destroy(gameObject);
     }
 

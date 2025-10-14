@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using static UnityEditor.Progress;
 
-public class Worker : MonoBehaviour, ICombatTarget, IOrderable
+public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrderable
 {
     private IWorkerState currentState;
 
@@ -21,6 +23,9 @@ public class Worker : MonoBehaviour, ICombatTarget, IOrderable
     private readonly List<GameObject> inventory = new();
 
     private float currentHealth;
+
+    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
+    private bool hasAddressableHandle = false;
 
     private void Start()
     {
@@ -62,7 +67,7 @@ public class Worker : MonoBehaviour, ICombatTarget, IOrderable
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Health of {name}: {currentHealth}/{workerData.maxHealth}");
+        //Debug.Log($"Health of {name}: {currentHealth}/{workerData.maxHealth}");
 
         DropAll(inventorySpot.position);
 
@@ -76,9 +81,24 @@ public class Worker : MonoBehaviour, ICombatTarget, IOrderable
         }
     }
 
+    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    {
+        addressableInstanceHandle = handle;
+        hasAddressableHandle = handle.IsValid();
+    }
+
     private void Die()
     {
         Debug.Log($"{name} has died");
+
+        // Release addressable handle
+        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
+        {
+            Addressables.ReleaseInstance(addressableInstanceHandle);
+            hasAddressableHandle = false;
+            return;
+        }
+
         Destroy(gameObject);
     }
 

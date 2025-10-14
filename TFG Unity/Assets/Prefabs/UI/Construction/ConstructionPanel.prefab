@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3954582474302563054}
+  - component: {fileID: 4066862202851699930}
   - component: {fileID: 3024209003751250373}
   - component: {fileID: 6810451304567017740}
-  - component: {fileID: 4066862202851699930}
   m_Layer: 5
   m_Name: ConstructionPanel
   m_TagString: Untagged
@@ -40,6 +40,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2000, y: 400}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &4066862202851699930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260851835057578451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a94c61ffc2e328244a200360a5f500e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structuresPath: Structures
+  structures: []
+  categoryBar: {fileID: 9112049201792181648}
+  blueprintGrid: {fileID: 1915953367678653344}
+  categoryButtonPrefab: {fileID: 2187536788510201229, guid: 752bc4874e28ae34e82b69998f63cd77, type: 3}
+  blueprintEntryPrefab: {fileID: 4538105264726046861, guid: fc223691d5cfca44f899d4096f1475d7, type: 3}
+  panelRoot: {fileID: 260851835057578451}
 --- !u!222 &3024209003751250373
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -78,25 +97,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4066862202851699930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 260851835057578451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a94c61ffc2e328244a200360a5f500e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  structuresPath: Structures
-  structures: []
-  categoryBar: {fileID: 9112049201792181648}
-  blueprintGrid: {fileID: 1915953367678653344}
-  categoryButtonPrefab: {fileID: 2187536788510201229, guid: 752bc4874e28ae34e82b69998f63cd77, type: 3}
-  blueprintEntryPrefab: {fileID: 4538105264726046861, guid: fc223691d5cfca44f899d4096f1475d7, type: 3}
-  panelRoot: {fileID: 260851835057578451}
 --- !u!1 &1296895208321267287
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,13 +225,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520699078580809759}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 0.9680954, b: 0.0141509175, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -484,7 +484,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4531528573071779074}
   m_HandleRect: {fileID: 3044630941797509228}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -545,13 +545,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4304347484147749672}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.06808472, g: 0.5110232, b: 0.9622642, a: 0.6313726}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

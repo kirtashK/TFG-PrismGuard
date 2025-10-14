@@ -4,7 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.AddressableAssets;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour, ICombatTarget
+public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
 {
     public EnemyData data;
     public Transform crystalTransform;
@@ -65,7 +65,7 @@ public class Enemy : MonoBehaviour, ICombatTarget
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
+        //Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
 
         if (currentHealth == 0f)
             Die();
