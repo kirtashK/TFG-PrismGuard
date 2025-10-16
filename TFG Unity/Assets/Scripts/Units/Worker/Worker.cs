@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static UnityEditor.Progress;
 
 public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrderable
 {

@@ -1,10 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class ConstructionUIManager : MonoBehaviour
+public class ConstructionUIManager : MonoBehaviour, IHideElement
 {
     [Header("Data source")]
 
@@ -38,6 +39,25 @@ public class ConstructionUIManager : MonoBehaviour
         LoadStructures();
         BuildCategoryBar();
         ShowCategory(currentCategory);
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (HideElementManager.Instance == null)
+        {
+            yield return null;
+        }
+        HideElementManager.Instance.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        HideElementManager.Instance.Unregister(this);
     }
 
     private void LoadStructures()
@@ -153,6 +173,19 @@ public class ConstructionUIManager : MonoBehaviour
         {
             return;
         }
+        // If not active, hide other elements then get activated
+        if (!panelRoot.activeSelf)
+        {
+            HideElementManager.Instance.ShowOnly(this);
+        }
         panelRoot.SetActive(!panelRoot.activeSelf);
+    }
+
+    public void HidePanel()
+    {
+        if (panelRoot != null)
+        {
+            panelRoot.SetActive(false);
+        }
     }
 }

@@ -14,14 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Basic Soldier
   icon: {fileID: 0}
-  Prefab: {fileID: 8811979255540775190, guid: 9f3d6e970a529b74fbece11ddaabb6fa, type: 3}
   PrefabReference:
     m_AssetGUID: 9f3d6e970a529b74fbece11ddaabb6fa
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  buildTime: 10
+  buildTime: 5
   scoreCost: 30
   createCosts:
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}

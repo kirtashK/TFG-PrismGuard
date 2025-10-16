@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: UnitPrefabGroup
   m_GUID: 5beb7bf814a4b0e4e9079fd2a1e0ecbb
   m_SerializeEntries:
+  - m_GUID: 83a4e4a3f3e5d644bb93f769b38f2314
+    m_Address: Assets/Prefabs/Soldiers/Medium Soldier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f3d6e970a529b74fbece11ddaabb6fa
     m_Address: Assets/Prefabs/Soldiers/Basic Soldier.prefab
     m_ReadOnly: 0

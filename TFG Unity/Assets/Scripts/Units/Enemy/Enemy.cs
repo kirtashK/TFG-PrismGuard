@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     private void Die()
     {
-        Debug.Log($"{name} has died");
+        //Debug.Log($"{name} has died");
 
         // Add score after defeating the enemy
         ScoreManager.Instance.AddScore(data.spawnCost);
