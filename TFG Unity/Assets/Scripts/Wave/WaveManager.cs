@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[System.Serializable]
-public struct EnemyPoolEntry
-{
-    [Tooltip("Enemy prefab")]
-    public GameObject prefab;
-    [Tooltip("Data of this enemy type")]
-    public EnemyData data;
-}
+using UnityEngine.UIElements;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class WaveManager : MonoBehaviour
 {
+    [Header("Testing")]
+
     [SerializeField]
     [Tooltip("If false, waves wont be generated (for testing)")]
     private bool isEnabled = true;
@@ -21,10 +17,18 @@ public class WaveManager : MonoBehaviour
     [Tooltip("If true, first wave will happen instantly")]
     private bool InstantFirstWave = true;
 
+    [SerializeField]
+    [Tooltip("True to enable a limit on the budget")]
+    private bool enableLimitBudget = false;
+
+    [SerializeField]
+    [Tooltip("If enableLimitBudget is enabled, the budget wont pass limitBudget amount")]
+    private int limitBudget = 0;
+
     [Header("Enemies pool")]
 
-    [Tooltip("All enemy types to spawn")]
-    public List<EnemyPoolEntry> enemyPool = new();
+    [Tooltip("Enemy types to spawn")]
+    public List<EnemyData> enemyPool = new();
 
     [Header("Cost category")]
 
@@ -61,9 +65,9 @@ public class WaveManager : MonoBehaviour
 
     private int waveIndex = 0;
 
-    private readonly List<EnemyPoolEntry> cheapList = new();
-    private readonly List<EnemyPoolEntry> mediumList = new();
-    private readonly List<EnemyPoolEntry> expensiveList = new();
+    private readonly List<EnemyData> cheapList = new();
+    private readonly List<EnemyData> mediumList = new();
+    private readonly List<EnemyData> expensiveList = new();
     private int minCost;
 
     private int scoreAtWaveStart;
@@ -176,9 +180,9 @@ public class WaveManager : MonoBehaviour
         expensiveList.Clear();
         minCost = int.MaxValue;
 
-        foreach (EnemyPoolEntry enemy in enemyPool)
+        foreach (EnemyData enemy in enemyPool)
         {
-            int cost = enemy.data.spawnCost;
+            int cost = enemy.spawnCost;
             minCost = Mathf.Min(minCost, cost);
 
             if (cost <= cheapMaxCost)
@@ -217,13 +221,19 @@ public class WaveManager : MonoBehaviour
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);
 
+        // Use a limit if set, to allow easy testing
+        if (enableLimitBudget)
+        {
+            budget = Mathf.Min(budget, limitBudget);
+        }
+
         Debug.Log($"[WaveManager] Wave {waveIndex}: Budget = {budget:F1}");
 
         while (budget >= minCost)
         {
             // Select a category
             float randomValue = Random.value;
-            List<EnemyPoolEntry> poolCat;
+            List<EnemyData> poolCat;
             if (randomValue < pctCheap)
             {
                 poolCat = cheapList;
@@ -238,32 +248,50 @@ public class WaveManager : MonoBehaviour
             }
 
             // Filter enemies that fit within budget
-            List<EnemyPoolEntry> candidates = poolCat.FindAll(enemy => enemy.data.spawnCost <= budget);
+            List<EnemyData> candidates = poolCat.FindAll(enemy => enemy.spawnCost <= budget);
 
             if (candidates.Count == 0)
             {
                 // if it doesnt fit, try another
-                candidates = new List<EnemyPoolEntry>();
-                foreach (List<EnemyPoolEntry> alt in new[] { cheapList, mediumList, expensiveList })
-                    candidates.AddRange(alt.FindAll(enemy => enemy.data.spawnCost <= budget));
+                candidates = new List<EnemyData>();
+                foreach (List<EnemyData> alt in new[] { cheapList, mediumList, expensiveList })
+                {
+                    candidates.AddRange(alt.FindAll(enemy => enemy.spawnCost <= budget));
+                }
                 if (candidates.Count == 0)
+                {
                     break;
+                }
             }
 
             // Chose a random candidate
-            EnemyPoolEntry chosen = candidates[Random.Range(0, candidates.Count)];
+            EnemyData chosen = candidates[Random.Range(0, candidates.Count)];
 
             // Spawn the candidate
-            GameObject gameObject = Instantiate(chosen.prefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject gameObject = null;
+            AsyncOperationHandle<GameObject> handle = chosen.PrefabReference.InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
+            
+            yield return handle;
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                gameObject = handle.Result;
+            }
+
+            // Give handle to the unit so it frees it upon death
+            if (gameObject.TryGetComponent<IAddressableInstance>(out IAddressableInstance addressable))
+            {
+                addressable.SetAddressableInstanceHandle(handle);
+            }
+
             Enemy enemy = gameObject.GetComponent<Enemy>();
-            enemy.data = chosen.data;
+
             if (enemy.crystalTransform == null)
             {
-                enemy.crystalTransform = GameObject.FindWithTag("Crystal")?.transform;
+                enemy.crystalTransform = GameObject.FindWithTag("Crystal").transform;
             }
             enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
 
-            budget -= chosen.data.spawnCost;
+            budget -= chosen.spawnCost;
 
             // Add a small delay so not all enemies spawn at the same instant
             yield return new WaitForSeconds(0.25f); 

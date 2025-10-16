@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e63c8ab53e3064197bd3c7e09e67db, type: 3}
   m_Name: Basic Enemy Data
   m_EditorClassIdentifier: 
+  Name: Basic Enemy
+  icon: {fileID: 0}
+  Prefab: {fileID: 3313289928608923168, guid: a70e0d193fd04154b8bbce7950c85ca0, type: 3}
+  PrefabReference:
+    m_AssetGUID: a70e0d193fd04154b8bbce7950c85ca0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  buildTime: 0
+  scoreCost: 0
+  createCosts: []
+  faction: 1
+  isPlayerControllable: 0
   maxHealth: 35
   moveSpeed: 3.5
   attackRange: 1.5
@@ -19,5 +33,4 @@ MonoBehaviour:
   attackCooldown: 1
   spawnCost: 5
   rewardExperience: 2
-  maxChaseDistance: 20
   AggroRadius: 5

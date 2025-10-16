@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6520323055955725538}
+  - component: {fileID: 4248604283509567418}
   - component: {fileID: 4816742679162404985}
   - component: {fileID: 8145446561391297122}
-  - component: {fileID: 4248604283509567418}
   - component: {fileID: 6296420296431180986}
   m_Layer: 5
   m_Name: ToolTipController
@@ -40,6 +40,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4248604283509567418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424357174575242814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c540cfb995ac4d448e226b9add6a150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipRect: {fileID: 6520323055955725538}
+  tooltipText: {fileID: 347698413623068942}
+  parentCanvas: {fileID: 0}
+  tooltipPadding: {x: 16, y: 12}
+  maxTooltipWidth: 400
+  screenPadding: {x: 8, y: 8}
+  followMouse: 1
 --- !u!222 &4816742679162404985
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -61,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.06808472, g: 0.5110232, b: 0.9622642, a: 0.6313726}
+  m_Color: {r: 0.06808472, g: 0.5110232, b: 0.9622642, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -78,23 +97,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4248604283509567418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424357174575242814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c540cfb995ac4d448e226b9add6a150, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tooltipRect: {fileID: 6520323055955725538}
-  tooltipText: {fileID: 347698413623068942}
-  parentCanvas: {fileID: 0}
-  screenPadding: {x: 8, y: 8}
-  followMouse: 1
 --- !u!225 &6296420296431180986
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -103,7 +105,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424357174575242814}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -141,8 +143,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.5869, y: -0.5869}
-  m_SizeDelta: {x: 310, y: 130}
+  m_AnchoredPosition: {x: 0.00077438, y: 0.00077391}
+  m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &695832115822431839
 CanvasRenderer:
@@ -206,8 +208,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
