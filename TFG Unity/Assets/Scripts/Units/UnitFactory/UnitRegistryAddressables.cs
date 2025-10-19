@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,7 +22,7 @@ public class UnitRegistryAddressables : MonoBehaviour
         StartCoroutine(LoadUnitsCoroutine());
     }
 
-    private System.Collections.IEnumerator LoadUnitsCoroutine()
+    private IEnumerator LoadUnitsCoroutine()
     {
         if (isLoaded)
         {
@@ -39,11 +40,13 @@ public class UnitRegistryAddressables : MonoBehaviour
         {
             allUnits = new List<UnitData>(loadHandle.Result);
             isLoaded = true;
+
+            // Notify listeners
             OnUnitsLoaded?.Invoke(allUnits);
         }
         else
         {
-            Debug.LogWarning("UnitRegistry: failed to load UnitData addressables.");
+            Debug.LogWarning($"{name}: failed to load UnitData addressables");
         }
     }
 
