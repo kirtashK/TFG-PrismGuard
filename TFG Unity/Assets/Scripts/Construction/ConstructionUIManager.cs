@@ -1,19 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class ConstructionUIManager : MonoBehaviour, IHideElement
 {
     [Header("Data source")]
 
-    [Tooltip("Path inside Resources to load all structures datas")]
-    public string structuresPath = "Structures";
+    [Tooltip("Label used in Addressables for StructureData")]
+    public string structureLabel = "Structure";
 
-    [Tooltip("Structures' list")]
-    public List<StructureData> structures = new();
+    public List<StructureData> allStructures = new();
+
+    private AsyncOperationHandle<IList<StructureData>> loadHandle;
+    private bool isLoaded = false;
+
+    public event Action<List<StructureData>> OnStructureLoaded;
 
     [Header("UI refs")]
     [Tooltip("Parent transform where category buttons will be created")]
@@ -32,11 +37,11 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
     private StructureCategory currentCategory = StructureCategory.Storage;
 
     // Public event
-    public System.Action<StructureData> OnStructureSelected;
+    public Action<StructureData> OnStructureSelected;
 
     private void Start()
     {
-        LoadStructures();
+        StartCoroutine(LoadStructures());
         BuildCategoryBar();
         ShowCategory(currentCategory);
     }
@@ -60,35 +65,68 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         HideElementManager.Instance.Unregister(this);
     }
 
-    private void LoadStructures()
+    private void OnDestroy()
     {
-        StructureData[] loaded = Resources.LoadAll<StructureData>(structuresPath);
-        structures = loaded.ToList();
-
-        grouped = new Dictionary<StructureCategory, List<StructureData>>();
-        foreach (StructureCategory category in System.Enum.GetValues(typeof(StructureCategory)))
+        if (isLoaded && loadHandle.IsValid())
         {
-            grouped[category] = new List<StructureData>();
+            Addressables.Release(loadHandle);
+            allStructures.Clear();
+            isLoaded = false;
+        }
+    }
+
+    private IEnumerator LoadStructures()
+    {
+        if (isLoaded)
+        {
+            yield break;
         }
 
-        foreach (StructureData structureData in structures)
+        loadHandle = Addressables.LoadAssetsAsync<StructureData>(
+            structureLabel,
+            structureData => { /* per-item callback (currently null...) */ }
+        );
+
+        yield return loadHandle;
+
+        if (loadHandle.Status == AsyncOperationStatus.Succeeded)
         {
-            if (structureData == null)
+            allStructures = new List<StructureData>(loadHandle.Result);
+            isLoaded = true;
+
+            grouped = new Dictionary<StructureCategory, List<StructureData>>();
+            foreach (StructureCategory category in Enum.GetValues(typeof(StructureCategory)))
             {
-                continue;
+                grouped[category] = new List<StructureData>();
             }
 
-            if (!grouped.ContainsKey(structureData.category))
+            foreach (StructureData structureData in allStructures)
             {
-                grouped[structureData.category] = new List<StructureData>();
+                if (structureData == null)
+                {
+                    continue;
+                }
+                if (!grouped.ContainsKey(structureData.category))
+                {
+                    grouped[structureData.category] = new List<StructureData>();
+                }
+                grouped[structureData.category].Add(structureData);
             }
-            grouped[structureData.category].Add(structureData);
+
+            // Sort by name
+            foreach (StructureCategory category in grouped.Keys.ToList())
+            {
+                grouped[category] = grouped[category].OrderBy(structure => structure.structureName).ToList();
+            }
+
+            // Notify listeners
+            OnStructureLoaded?.Invoke(allStructures);
+
+            PopulateBlueprintGrid(grouped.ContainsKey(currentCategory) ? grouped[currentCategory] : new List<StructureData>());
         }
-
-        // Sort by name
-        foreach (StructureCategory category in grouped.Keys.ToList())
+        else
         {
-            grouped[category] = grouped[category].OrderBy(x => x.structureName).ToList();
+            Debug.LogWarning($"{name} failed to load StructureData addressables");
         }
     }
 
@@ -106,7 +144,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             Destroy(categoryBar.GetChild(i).gameObject);
         }
 
-        foreach (StructureCategory category in System.Enum.GetValues(typeof(StructureCategory)))
+        foreach (StructureCategory category in Enum.GetValues(typeof(StructureCategory)))
         {
             GameObject gameobject = Instantiate(categoryButtonPrefab, categoryBar);
             if (!gameobject.TryGetComponent<CategoryButton>(out CategoryButton categoryButton))
