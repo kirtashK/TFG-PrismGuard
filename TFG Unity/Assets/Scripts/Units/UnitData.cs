@@ -13,9 +13,11 @@ public class UnitData : ScriptableObject
 {
     public string Name;
     public Sprite icon;
-    //public GameObject Prefab;
     public AssetReferenceGameObject PrefabReference;
+
+    [Range(0f, 1000f)]
     public float buildTime;
+    [Range(0f, 1000f)]
     public int scoreCost;
     public List<ResourceRequirement> createCosts = new();
 
@@ -26,13 +28,16 @@ public class UnitData : ScriptableObject
 
     [Header("Stats")]
 
+    [Range(0f, 1000f)]
     public float maxHealth = 20f;
+    [Range(0f, 100f)]
     public float moveSpeed = 3.5f;
 
     [System.Serializable]
     public struct ResourceRequirement
     {
         public ItemData itemData;
+        [Range(0f, 1000f)]
         public int quantity;
     }
 
