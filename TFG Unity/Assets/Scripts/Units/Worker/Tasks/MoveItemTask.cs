@@ -49,7 +49,7 @@ public class MoveItemTask : MonoBehaviour, ITask
             TaskData = itemInstance.itemData;
         }
 
-        if (ItemConsumerManager.Instance != null)
+        if (ItemConsumerManager.Instance != null && TaskManager.Instance != null)
         {
             SubscribeToConsumerEvents();
             StartCoroutine(PollForConsumer());
@@ -73,7 +73,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private IEnumerator RegisterWhenReady()
     {
-        while (ItemConsumerManager.Instance == null)
+        while (ItemConsumerManager.Instance == null || TaskManager.Instance == null)
         {
             yield return null;
         }

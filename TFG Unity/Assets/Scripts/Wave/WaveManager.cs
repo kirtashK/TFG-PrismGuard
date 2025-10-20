@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -25,10 +25,17 @@ public class WaveManager : MonoBehaviour
     [Tooltip("If enableLimitBudget is enabled, the budget wont pass limitBudget amount")]
     private int limitBudget = 0;
 
-    [Header("Enemies pool")]
+    [Header("Data source")]
 
-    [Tooltip("Enemy types to spawn")]
+    [Tooltip("Label used in Addressables for EnemyData")]
+    public string enemyLabel = "Unit";
+
     public List<EnemyData> enemyPool = new();
+
+    private AsyncOperationHandle<IList<EnemyData>> loadHandle;
+    private bool isLoaded = false;
+
+    public event Action<List<EnemyData>> OnEnemyLoaded;
 
     [Header("Cost category")]
 
@@ -79,8 +86,7 @@ public class WaveManager : MonoBehaviour
     {
         if (isEnabled)
         {
-            CategorizePool();
-            StartCoroutine(RunWaves());
+            StartCoroutine(LoadEnemies());
         }
     }
 
@@ -96,6 +102,47 @@ public class WaveManager : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (isLoaded && loadHandle.IsValid())
+        {
+            Addressables.Release(loadHandle);
+            enemyPool.Clear();
+            isLoaded = false;
+        }
+    }
+
+    private IEnumerator LoadEnemies()
+    {
+        if (isLoaded)
+        {
+            yield break;
+        }
+
+        loadHandle = Addressables.LoadAssetsAsync<EnemyData>(
+            enemyLabel,
+            enemyData => { /* per-item callback (currently null...) */ }
+        );
+
+        yield return loadHandle;
+
+        if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            enemyPool = new List<EnemyData>(loadHandle.Result);
+            isLoaded = true;
+
+            // Notify listeners
+            OnEnemyLoaded?.Invoke(enemyPool);
+
+            CategorizePool();
+            StartCoroutine(RunWaves());
+        }
+        else
+        {
+            Debug.LogWarning($"{name} failed to load EnemyData addressables");
         }
     }
 
@@ -232,7 +279,7 @@ public class WaveManager : MonoBehaviour
         while (budget >= minCost)
         {
             // Select a category
-            float randomValue = Random.value;
+            float randomValue = UnityEngine.Random.value;
             List<EnemyData> poolCat;
             if (randomValue < pctCheap)
             {
@@ -265,7 +312,7 @@ public class WaveManager : MonoBehaviour
             }
 
             // Chose a random candidate
-            EnemyData chosen = candidates[Random.Range(0, candidates.Count)];
+            EnemyData chosen = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 
             // Spawn the candidate
             GameObject gameObject = null;

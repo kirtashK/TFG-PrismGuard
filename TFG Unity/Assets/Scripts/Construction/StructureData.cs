@@ -26,9 +26,11 @@ public class StructureData : ScriptableObject
     public bool snapToGrid = true;
 
     [Tooltip("Size of the grid if snapToGrid is true")]
+    [Range(0f, 100f)]
     public float gridSize = 1f;
 
     [Tooltip("Radius to check colisions while placing")]
+    [Range(0f, 100f)]
     public float placementRadius = 1f;
 
     [Tooltip("Allow rotation during placement")]
@@ -38,8 +40,29 @@ public class StructureData : ScriptableObject
     public struct ResourceRequirement
     {
         public ItemData itemData;
+        [Range(0f, 100f)]
         public int quantity;
     }
 
     public List<ResourceRequirement> requirements = new();
+
+    void OnValidate()
+    {
+        // Fix negative values
+        gridSize = Mathf.Max(0f, gridSize);
+        placementRadius = Mathf.Max(0f, placementRadius);
+
+        if (builtPrefab == null)
+        {
+            Debug.LogWarning($"{name} missing builtPrefab");
+        }
+        if (blueprintPrefab == null)
+        {
+            Debug.LogWarning($"{name} missing blueprintPrefab");
+        }
+        if (previewPrefab == null)
+        {
+            Debug.LogWarning($"{name} missing previewPrefab");
+        }
+    }
 }
