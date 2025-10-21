@@ -219,7 +219,7 @@ public class CameraController : MonoBehaviour
     private void HandleScrollVertical()
     {
         Vector2 scroll = zoomAction.ReadValue<Vector2>();
-        float scrollMove = scroll.y;
+        float scrollMove = -scroll.y;
 
         if (Mathf.Abs(scrollMove) > 0.001f)
         {
