@@ -5,8 +5,9 @@ using UnityEngine;
 public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
     [Header("Configuration")]
-    [Tooltip("Drop spot to generate outputs")]
-    public Transform dropSpot;
+    [Tooltip("Gameobject where outputs will be stored")]
+    public Transform Storage;
+
     [Tooltip("List of recipes this building has availible")]
     public List<ProcessResourceRecipe> recipes;
 
@@ -14,6 +15,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private class RecipeState
     {
         public ProcessResourceRecipe recipe;
+
         public int storedInput;
         public int reservedInput;
 
@@ -88,6 +90,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private void ResetInternalStateAndReleaseReservations()
     {
+        if (recipeStates == null)
+        {
+            return;
+        }
+
         // Release any reserved input/fuel and internal counters
         foreach (RecipeState state in recipeStates)
         {
@@ -160,44 +167,88 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private IEnumerator ProcessBatch(RecipeState recipeState)
     {
+        if (recipeState == null || recipeState.recipe == null)
+        {
+            yield break;
+        }
+
         yield return new WaitForSeconds(recipeState.recipe.processingTime);
 
         recipeState.storedOutput += recipeState.recipe.outputPerInput;
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;
         recipeState.processingCount--;
 
-        Debug.Log(name + " has processed a batch of " + recipeState.recipe.name 
-            + ". Stored amount = " + recipeState.storedOutput
-            + ". Max amount = " + recipeState.recipe.outputMaxCapacity);
+        Debug.Log($"{name} has processed a batch of {recipeState.recipe.name}" +
+            $"\nStored amount = {recipeState.storedOutput}" +
+            $"\nMax amount = {recipeState.recipe.outputMaxCapacity}");
     }
 
     private IEnumerator DispatchOutputToWarehouse()
     {
+        const float dispatchInterval = 3.0f;
+
         while (true)
         {
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(dispatchInterval);
+
+            if (recipeStates == null)
+            {
+                continue;
+            }
 
             foreach (RecipeState recipeState in recipeStates)
             {
                 int remainingOutput = recipeState.storedOutput;
-                ItemData data = recipeState.recipe.outputItemData;
-                GameObject prefab = recipeState.recipe.outputPrefab;
-
-                while (remainingOutput > 0)
+                if (remainingOutput <= 0)
                 {
-                    GameObject output = ItemManager.Instance.CreateItem(
-                        dropSpot.position,
-                        prefab);
+                    continue;
+                }
 
-                    MoveItemTask moveItemTask = output.GetComponent<MoveItemTask>()
-                               ?? output.AddComponent<MoveItemTask>();
-                    moveItemTask.TaskData = data;
+                Transform recipeParent = GetRecipeStorage(recipeState.recipe);
+
+                ItemData itemData = recipeState.recipe.outputItemData;
+                GameObject itemPrefab = recipeState.recipe.outputPrefab;
+
+                int currentChildren = recipeParent.childCount;
+                int maxCapacity = Mathf.Max(0, recipeState.recipe.outputMaxCapacity);
+                int availableSlots = Mathf.Max(0, maxCapacity - currentChildren);
+                int outputToCreate = Mathf.Min(remainingOutput, availableSlots);
+
+                while (outputToCreate > 0)
+                {
+                    GameObject output = ItemManager.Instance.
+                        CreateItem(recipeParent.position,
+                                    itemPrefab);
+
+                    output.transform.SetParent(recipeParent, worldPositionStays: false);
+                    output.transform.localPosition = Vector3.zero;
+
+                    MoveItemTask moveItemTask = output.GetComponent<MoveItemTask>();
+                    moveItemTask.TaskData = itemData;
 
                     recipeState.storedOutput--;
-                    remainingOutput--;
+                    outputToCreate--;
                 }
             }
         }
+    }
+
+    // Returns the storage for a specific recipe,
+    // if it doesnt exist it creates it first
+    Transform GetRecipeStorage(ProcessResourceRecipe recipe)
+    {
+        string name = $"Storage_{recipe.outputItemData.itemName}";
+        Transform transform = Storage.Find(name);
+        if (transform != null)
+        {
+            return transform;
+        }
+
+        // This storage recipe doesnt exist yet, create it
+        GameObject gameObject = new(name);
+        gameObject.transform.SetParent(Storage, worldPositionStays: false);
+        gameObject.transform.localPosition = Vector3.zero;
+        return gameObject.transform;
     }
 
     public bool CanReceive(ItemData data)
@@ -273,8 +324,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 state.storedInput++;
                 Release(data);
 
-                Debug.Log(name + "Stored amount = " + state.storedInput
-                    + ". Max amount = " + state.recipe.inputMaxCapacity);
+                Debug.Log($"{name} stored amount = {state.storedInput}" +
+                    $"\nMax amount = {state.recipe.inputMaxCapacity}");
 
                 return;
             }
@@ -289,7 +340,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     public void ConfirmRetrieval()
     {
-        // Does nothing as ResourceProcessor doesnt currently 
-        // store items to be picked up, instead throws output on ground
+
     }
 }
