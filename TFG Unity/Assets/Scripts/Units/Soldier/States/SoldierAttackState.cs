@@ -19,7 +19,7 @@ public class SoldierAttackState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (target == null || !target.IsAlive)
+        if (target == null || !target.isAlive)
         {
             soldier.HandleCombatEnd();
             return;
@@ -34,7 +34,7 @@ public class SoldierAttackState : ISoldierState
 
         if (Time.time - lastAttackTime >= soldier.data.attackCooldown)
         {
-            target.TakeDamage(soldier.data.attackDamage, soldier.transform.position);
+            target.TakeDamage(soldier.data.attackDamage, soldier.Position);
             lastAttackTime = Time.time;
         }
     }

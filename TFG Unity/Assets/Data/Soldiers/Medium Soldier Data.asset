@@ -29,7 +29,7 @@ MonoBehaviour:
     quantity: 1
   faction: 0
   isPlayerControllable: 1
-  maxHealth: 150
+  maxHealth: 110
   moveSpeed: 4.3
   attackRange: 2
   attackDamage: 22

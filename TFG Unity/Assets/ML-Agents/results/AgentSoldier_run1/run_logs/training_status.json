@@ -1,0 +1,29 @@
+{
+    "AgentSoldierBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 21760,
+                "file_path": "results\\AgentSoldier_run1\\AgentSoldierBehaviour\\AgentSoldierBehaviour-21760.onnx",
+                "reward": null,
+                "creation_time": 1768837045.4724276,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_run1\\AgentSoldierBehaviour\\AgentSoldierBehaviour-21760.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 21760,
+            "file_path": "results\\AgentSoldier_run1\\AgentSoldierBehaviour.onnx",
+            "reward": null,
+            "creation_time": 1768837045.4724276,
+            "auxillary_file_paths": [
+                "results\\AgentSoldier_run1\\AgentSoldierBehaviour\\AgentSoldierBehaviour-21760.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.9.1+cpu"
+    }
+}

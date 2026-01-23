@@ -77,7 +77,7 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrde
 
     public Vector3 Position => transform.position;
 
-    public bool IsAlive => currentHealth > 0f;
+    public bool isAlive => currentHealth > 0f;
 
     /// <summary>
     /// Soldier takes damage, if hp is 0 or lower, soldier dies
@@ -86,7 +86,8 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrde
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        //Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
+        Debug.Log($"{name} took {amount} damage" +
+            $"\nHealth of {name}: {currentHealth}/{data.maxHealth}");
 
         if (currentHealth <= 0f)
         {
@@ -104,7 +105,7 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrde
     /// </summary>
     public void RegenerateHealth(float percent)
     {
-        if (!IsAlive || currentHealth >= data.maxHealth)
+        if (!isAlive || currentHealth >= data.maxHealth)
         {
             return;
         }

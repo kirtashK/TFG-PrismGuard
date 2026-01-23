@@ -19,7 +19,7 @@ public class EnemyChaseState : IEnemyState
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.IsAlive)
+        if (target == null || !target.isAlive)
         {
             enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
             return;
@@ -27,7 +27,7 @@ public class EnemyChaseState : IEnemyState
 
         ICombatTarget soldier = enemy.FindNearestPlayerUnit();
         if (soldier != null 
-            && soldier.IsAlive
+            && soldier.isAlive
             && soldier != target)
         {
             enemy.ChangeState(new EnemyChaseState(soldier));

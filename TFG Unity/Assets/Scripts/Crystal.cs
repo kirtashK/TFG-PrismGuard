@@ -15,7 +15,7 @@ public class Crystal : MonoBehaviour, ICombatTarget
 
     public Vector3 Position => transform.position;
     
-    public bool IsAlive => currentHealth > 0f;
+    public bool isAlive => currentHealth > 0f;
 
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
