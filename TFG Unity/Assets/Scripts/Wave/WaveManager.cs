@@ -324,6 +324,11 @@ public class WaveManager : MonoBehaviour
                 gameObject = handle.Result;
             }
 
+            if (gameObject == null)
+            {
+                continue;
+            }
+
             // Give handle to the unit so it frees it upon death
             if (gameObject.TryGetComponent<IAddressableInstance>(out IAddressableInstance addressable))
             {

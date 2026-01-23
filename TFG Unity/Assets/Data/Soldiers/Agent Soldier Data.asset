@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90ac0853e869d54e9f98e639aeb9aa3, type: 3}
+  m_Name: Agent Soldier Data
+  m_EditorClassIdentifier: Assembly-CSharp::SoldierData
+  Name: Hero Prototype
+  icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  PrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  buildTime: 60
+  scoreCost: 150
+  createCosts:
+  - itemData: {fileID: 11400000, guid: 18ef1e3a316b70e4eaa16005a14b1cfa, type: 2}
+    quantity: 10
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 30
+  faction: 0
+  isPlayerControllable: 1
+  maxHealth: 200
+  moveSpeed: 4.5
+  attackRange: 2
+  attackDamage: 26
+  attackCooldown: 1
+  AggroRadius: 20

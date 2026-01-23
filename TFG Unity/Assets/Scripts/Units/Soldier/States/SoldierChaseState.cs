@@ -17,7 +17,7 @@ public class SoldierChaseState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (target == null || !target.IsAlive)
+        if (target == null || !target.isAlive)
         {
             soldier.HandleCombatEnd();
             return;

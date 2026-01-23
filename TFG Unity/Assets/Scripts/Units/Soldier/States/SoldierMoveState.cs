@@ -36,7 +36,7 @@ public class SoldierMoveState : ISoldierState
             for (int i = 0; i < hitCount; i++)
             {
                 ICombatTarget enemy = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
-                if (enemy != null && enemy.IsAlive)
+                if (enemy != null && enemy.isAlive)
                 {
                     soldier.ChangeState(new SoldierChaseState(enemy));
                     break;

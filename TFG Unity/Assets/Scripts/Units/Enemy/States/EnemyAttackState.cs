@@ -20,7 +20,7 @@ public class EnemyAttackState : IEnemyState
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.IsAlive)
+        if (target == null || !target.isAlive)
         {
             enemy.agent.isStopped = false;
             enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));

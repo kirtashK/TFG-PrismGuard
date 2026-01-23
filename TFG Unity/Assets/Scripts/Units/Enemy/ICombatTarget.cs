@@ -10,7 +10,7 @@ public interface ICombatTarget
     /// <summary>
     /// Is alive or active
     /// </summary>
-    bool IsAlive { get; }
+    bool isAlive { get; }
 
     /// <summary>
     /// Deals damage and tell from where

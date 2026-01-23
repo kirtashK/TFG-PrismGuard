@@ -59,16 +59,19 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public Vector3 Position => transform.position;
 
-    public bool IsAlive => currentHealth > 0f;
+    public bool isAlive => currentHealth > 0f;
 
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        //Debug.Log($"Health of {name}: {currentHealth}/{data.maxHealth}");
+        Debug.Log($"{name} took {amount} damage" +
+            $"\nHealth of {name}: {currentHealth}/{data.maxHealth}");
 
-        if (currentHealth == 0f)
+        if (currentHealth <= 0f)
+        {
             Die();
+        }
     }
 
     public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
@@ -118,7 +121,7 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
         {
             ICombatTarget playerUnit = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
             if (playerUnit != null 
-                && playerUnit.IsAlive 
+                && playerUnit.isAlive 
                 && playerUnit is not Crystal)
             {
                 float dist = Vector3.Distance(transform.position, playerUnit.Position);

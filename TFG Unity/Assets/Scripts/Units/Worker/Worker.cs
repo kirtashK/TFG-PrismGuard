@@ -55,7 +55,7 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrder
 
     public Vector3 Position => transform.position;
 
-    public bool IsAlive => currentHealth > 0f;
+    public bool isAlive => currentHealth > 0f;
 
     /// <summary>
     /// Damages worker, if its still alive, it runs away
