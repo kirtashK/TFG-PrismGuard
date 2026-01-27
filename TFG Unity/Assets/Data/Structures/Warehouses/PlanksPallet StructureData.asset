@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlanksPallet StructureData
   m_EditorClassIdentifier: 
   structureName: Wooden pallet
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
   builtPrefab: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
   blueprintPrefab: {fileID: 197590645339865634, guid: 09b6bb50f15c7674193b8246919a3a03, type: 3}

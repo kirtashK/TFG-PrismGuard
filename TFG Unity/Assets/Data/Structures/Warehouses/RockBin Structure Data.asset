@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RockBin Structure Data
   m_EditorClassIdentifier: 
   structureName: Rock bin
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: afcfed9a124edf84c8ec8d01ab669aa9, type: 3}
   category: 0
   builtPrefab: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
   blueprintPrefab: {fileID: 3509752288190071438, guid: 253a22d805f4b6b4ea7f2c50c793e91a, type: 3}

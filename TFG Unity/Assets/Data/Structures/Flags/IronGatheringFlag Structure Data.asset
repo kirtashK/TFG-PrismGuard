@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronGatheringFlag Structure Data
   m_EditorClassIdentifier: 
   structureName: Iron gathering flag
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
   category: 2
   builtPrefab: {fileID: 3923448407394807079, guid: be91ff141696c29488dc17fc39a52ff7, type: 3}
   blueprintPrefab: {fileID: 4484192747599782844, guid: ed32beff4080fd540931c91405ac8dda, type: 3}

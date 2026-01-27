@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Plank Data
   m_EditorClassIdentifier: 
   itemName: Plank
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 5c707bc8f03ddc844b4e554bf788fd7d, type: 3}
   weight: 2
   interactionRange: 1
   storedIn:

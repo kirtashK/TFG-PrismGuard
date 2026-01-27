@@ -88,6 +88,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4468715666146783442
 GameObject:
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Advanced Smeltery
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   selectionVisual: {fileID: 968490775487190938}
   InformationVisual: {fileID: 0}
 --- !u!1 &6038108138648192566

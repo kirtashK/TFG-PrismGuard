@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stone Block Data
   m_EditorClassIdentifier: 
   itemName: Stone block
-  icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 8dce9f56c22eb79429bbe1bd158b048c, type: 3}
   weight: 2
   interactionRange: 1
   storedIn:

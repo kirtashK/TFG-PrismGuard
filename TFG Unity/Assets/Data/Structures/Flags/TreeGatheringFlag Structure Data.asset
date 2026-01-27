@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TreeGatheringFlag Structure Data
   m_EditorClassIdentifier: 
   structureName: Tree gathering flag
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 79f31b92ab0372745ac7dbfeb1b594f4, type: 3}
   category: 2
   builtPrefab: {fileID: 2959668300810766323, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
   blueprintPrefab: {fileID: 4062265799856888151, guid: cb9e57d7244bc8048a057c2e604919d8, type: 3}

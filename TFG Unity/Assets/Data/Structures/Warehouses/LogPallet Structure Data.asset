@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LogPallet Structure Data
   m_EditorClassIdentifier: 
   structureName: Log Pallet
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
   builtPrefab: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
   blueprintPrefab: {fileID: 7069512501854804613, guid: 500de2e763ac0be44a8eb3234a9b9ff6, type: 3}

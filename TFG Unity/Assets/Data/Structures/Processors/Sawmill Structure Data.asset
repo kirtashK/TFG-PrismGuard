@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sawmill Structure Data
   m_EditorClassIdentifier: 
   structureName: Sawmill
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   category: 1
   builtPrefab: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
   blueprintPrefab: {fileID: 3409900712911001480, guid: 325ee050961b3574aa38ad05e57485b9, type: 3}
