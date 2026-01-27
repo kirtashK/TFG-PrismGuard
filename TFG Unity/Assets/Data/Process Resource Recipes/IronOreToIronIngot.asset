@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeName: Process iron ore into iron ingot
   inputItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
-  inputMaxCapacity: 6
+  inputMaxCapacity: 4
   inputPerBatch: 2
   requiresFuel: 1
   fuelItem: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
@@ -24,5 +24,5 @@ MonoBehaviour:
   outputPrefab: {fileID: 5842503896629669116, guid: d94c3f53b3e86114f914fd70cf570d20, type: 3}
   outputMaxCapacity: 5
   outputPerInput: 1
-  processingTime: 20
+  processingTime: 75
   maxConcurrentBatches: 2
