@@ -27,7 +27,7 @@ public class PlacementController : MonoBehaviour
     public Material ghostMaterialInvalid;
 
     [Tooltip("Vertical offset of ghost")]
-    public float ghostYOffset = 0.02f;
+    public float ghostYOffset = 0.06f;
 
     [Header("Raycast / validation")]
 
