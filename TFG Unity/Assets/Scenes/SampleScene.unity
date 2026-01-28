@@ -6531,7 +6531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
       propertyPath: m_Name
-      value: Iron Ore Bin
+      value: Iron Ore WH
       objectReference: {fileID: 0}
     - target: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
       propertyPath: m_IsActive
@@ -7058,7 +7058,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5598523384713905151, guid: b852cbd5d4c06744b843486859c46ad3, type: 3}
       propertyPath: m_Name
-      value: Copper Ore Bin
+      value: Copper Ore WH
       objectReference: {fileID: 0}
     - target: {fileID: 5598523384713905151, guid: b852cbd5d4c06744b843486859c46ad3, type: 3}
       propertyPath: m_IsActive
@@ -7520,7 +7520,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8804429355315451904, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 8804429355315451904, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7528,7 +7528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8804429355315451904, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19
+      value: 18.9
       objectReference: {fileID: 0}
     - target: {fileID: 8804429355315451904, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7560,7 +7560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_Name
-      value: Rock Bin
+      value: Rock WH
       objectReference: {fileID: 0}
     - target: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_IsActive

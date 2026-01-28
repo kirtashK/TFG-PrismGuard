@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
   m_Name: Advanced Smeltery Structure Data
   m_EditorClassIdentifier: 
-  structureName: Advanced Smeltery
+  structureName: Advanced Smelter
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   category: 1
   builtPrefab: {fileID: 4468715666146783442, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
