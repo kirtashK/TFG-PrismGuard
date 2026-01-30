@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeName: Process copper ore into copper ingot
   inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
-  inputMaxCapacity: 5
+  inputMaxCapacity: 2
   inputPerBatch: 1
   requiresFuel: 1
   fuelItem: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
@@ -24,5 +24,5 @@ MonoBehaviour:
   outputPrefab: {fileID: 7800770291256045938, guid: 658d8a7b75c2ff746bbd67093b538e93, type: 3}
   outputMaxCapacity: 5
   outputPerInput: 1
-  processingTime: 15
+  processingTime: 60
   maxConcurrentBatches: 2

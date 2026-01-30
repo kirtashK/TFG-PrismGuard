@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronIngotPallet Structure Data
   m_EditorClassIdentifier: 
   structureName: Iron ingot pallet
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
   builtPrefab: {fileID: 7703942789902666600, guid: 85df75bc517570b4b9feffa53dd941ba, type: 3}
   blueprintPrefab: {fileID: 1847349980277206703, guid: 8c54c71f37c1cd2408f400bcb1df9f8a, type: 3}
@@ -24,6 +24,4 @@ MonoBehaviour:
   allowRotation: 1
   requirements:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 7
-  - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
-    quantity: 4
+    quantity: 5

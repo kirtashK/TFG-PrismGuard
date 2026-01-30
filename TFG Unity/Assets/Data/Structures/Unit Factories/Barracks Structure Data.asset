@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Barracks Structure Data
   m_EditorClassIdentifier: 
   structureName: Barracks
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bb055d4ecf1af5a42a0d302ae5d449ff, type: 3}
   category: 3
   builtPrefab: {fileID: 3947097100652634618, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
   blueprintPrefab: {fileID: 3947097100652634618, guid: 487afa24683c74f4d8aa7f49c4f9498d, type: 3}

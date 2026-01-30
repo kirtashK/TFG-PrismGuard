@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StoneBlockPallet Structure Data
   m_EditorClassIdentifier: 
   structureName: Stone block pallet
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
   builtPrefab: {fileID: 730867866534482630, guid: c40f862d1e153fc4d9f0cfa21083f18f, type: 3}
   blueprintPrefab: {fileID: 8271303382391458175, guid: 28dfa18ff9ab2f644bf82e443fc323f8, type: 3}
@@ -23,5 +23,5 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   requirements:
-  - itemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
-    quantity: 3
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 5

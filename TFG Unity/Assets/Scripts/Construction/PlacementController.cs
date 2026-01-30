@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class PlacementController : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class PlacementController : MonoBehaviour
     public Material ghostMaterialInvalid;
 
     [Tooltip("Vertical offset of ghost")]
-    public float ghostYOffset = 0.02f;
+    public float ghostYOffset = 0.06f;
 
     [Header("Raycast / validation")]
 
@@ -242,6 +243,7 @@ public class PlacementController : MonoBehaviour
         GameObject blueprintPrefab = currentStructure.blueprintPrefab;
         if (instantiateBlueprintOnConfirm && blueprintPrefab != null)
         {
+            ghostInstance.transform.position -= Vector3.up * ghostYOffset;
             Instantiate(blueprintPrefab, ghostInstance.transform.position, ghostInstance.transform.rotation);
         }
         else

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
   m_Name: Basic Smeltery Structure Data
   m_EditorClassIdentifier: 
-  structureName: Basic Smeltery
-  icon: {fileID: 0}
+  structureName: Basic Smelter
+  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   category: 1
   builtPrefab: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
   blueprintPrefab: {fileID: 8071667175264754736, guid: d73cc7d9baeb282469e0c88a246a44e7, type: 3}
