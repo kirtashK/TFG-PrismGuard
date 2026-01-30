@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8291335788179838948}
   - component: {fileID: 8283879569981146493}
+  - component: {fileID: 1361340933498048409}
   m_Layer: 11
   m_Name: Log WH Blueprint
   m_TagString: Untagged
@@ -133,6 +134,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 298b4fe93bfe1fb41bbac6263bc7e86c, type: 2}
   dropSpot: {fileID: 2510851946089878208}
+--- !u!114 &1361340933498048409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7069512501854804613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 298b4fe93bfe1fb41bbac6263bc7e86c, type: 2}
 --- !u!1001 &2357041126785519367
 PrefabInstance:
   m_ObjectHideFlags: 0

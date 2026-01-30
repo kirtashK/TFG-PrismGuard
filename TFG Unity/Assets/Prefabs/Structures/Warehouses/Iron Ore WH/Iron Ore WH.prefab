@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4832128081497003063}
   - component: {fileID: 4330269837001868658}
+  - component: {fileID: 2620668790709269157}
   - component: {fileID: 3835306820276940410}
   m_Layer: 11
   m_Name: Iron Ore WH
@@ -105,6 +106,19 @@ MonoBehaviour:
   maxCapacity: 12
   currentCapacity: 0
   storedItem: {fileID: 0}
+--- !u!114 &2620668790709269157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5143866289489264262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 7199aed67ca6fee4581b4901d9cc8c8d, type: 2}
 --- !u!114 &3835306820276940410
 MonoBehaviour:
   m_ObjectHideFlags: 0

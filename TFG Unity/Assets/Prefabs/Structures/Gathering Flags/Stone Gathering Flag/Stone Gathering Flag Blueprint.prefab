@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6998465568871257550}
   - component: {fileID: 7114794411113920905}
+  - component: {fileID: 1580273703928394950}
   m_Layer: 11
   m_Name: Stone Gathering Flag Blueprint
   m_TagString: Untagged
@@ -79,6 +80,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: b74abda0516bb2a4886c00c877900f61, type: 2}
   dropSpot: {fileID: 1530263199604954038}
+--- !u!114 &1580273703928394950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4491273083942106609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: b74abda0516bb2a4886c00c877900f61, type: 2}
 --- !u!1 &8745636316697567645
 GameObject:
   m_ObjectHideFlags: 0

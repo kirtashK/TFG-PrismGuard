@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7963810988927641105}
   - component: {fileID: 4799268046179552163}
+  - component: {fileID: 4501721426511079852}
   - component: {fileID: 5674226201627531383}
   - component: {fileID: 8760213830577007675}
   - component: {fileID: 8655464014571620172}
@@ -105,6 +106,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowedCategories: 00000000
   detectionRadius: 10
+--- !u!114 &4501721426511079852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959668300810766323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 7d3d4c76d9d48644fa289e09e18f5d4b, type: 2}
 --- !u!114 &5674226201627531383
 MonoBehaviour:
   m_ObjectHideFlags: 0

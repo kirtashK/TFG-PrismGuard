@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1478311680380463458}
   - component: {fileID: 3350806450987677160}
+  - component: {fileID: 3591773049519760105}
   m_Layer: 11
   m_Name: Stone Blocks WH Blueprint
   m_TagString: Untagged
@@ -133,6 +134,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 29fb4695e298b734cab163fc9802a021, type: 2}
   dropSpot: {fileID: 1708439095530186349}
+--- !u!114 &3591773049519760105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271303382391458175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 29fb4695e298b734cab163fc9802a021, type: 2}
 --- !u!1001 &6878141313753432099
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8804429355315451904}
   - component: {fileID: 3972923283334394188}
+  - component: {fileID: 3254688799597231241}
   - component: {fileID: 3839334282225054200}
   m_Layer: 11
   m_Name: Rock WH
@@ -105,6 +106,19 @@ MonoBehaviour:
   maxCapacity: 12
   currentCapacity: 0
   storedItem: {fileID: 0}
+--- !u!114 &3254688799597231241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9079424207317062502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 4f802731b5636f942bf29bcfbedcb1ad, type: 2}
 --- !u!114 &3839334282225054200
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95cf5a2e0b8884d4eb5d3c463d8d01e2, type: 3}
-  m_Name: IronIngotPallet
+  m_Name: CopperOre WH Type
   m_EditorClassIdentifier: 
-  typeName: 
+  typeName: CopperOreBin

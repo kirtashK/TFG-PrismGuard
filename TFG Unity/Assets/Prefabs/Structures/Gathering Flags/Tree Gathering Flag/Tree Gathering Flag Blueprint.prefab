@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4283818777504059002}
   - component: {fileID: 8905374561545218687}
+  - component: {fileID: 3202416580493064236}
   m_Layer: 11
   m_Name: Tree Gathering Flag Blueprint
   m_TagString: Untagged
@@ -133,6 +134,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 7d3d4c76d9d48644fa289e09e18f5d4b, type: 2}
   dropSpot: {fileID: 8173212856798650682}
+--- !u!114 &3202416580493064236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062265799856888151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 7d3d4c76d9d48644fa289e09e18f5d4b, type: 2}
 --- !u!1001 &2141500091176684473
 PrefabInstance:
   m_ObjectHideFlags: 0

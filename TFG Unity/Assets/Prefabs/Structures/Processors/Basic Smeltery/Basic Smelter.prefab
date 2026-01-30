@@ -97,8 +97,9 @@ GameObject:
   - component: {fileID: 846214276085383937}
   - component: {fileID: 8498928330062369427}
   - component: {fileID: 216417968583139314}
+  - component: {fileID: 3309558972003691439}
   m_Layer: 11
-  m_Name: Basic Smeltery
+  m_Name: Basic Smelter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,10 +149,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Basic Smeltery
+  displayName: Basic Smelter
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   selectionVisual: {fileID: 7173095316473437843}
   InformationVisual: {fileID: 0}
+--- !u!114 &3309558972003691439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245718380385456774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 787c9524fc9965c4793f181092d93588, type: 2}
 --- !u!1001 &4739502340649600615
 PrefabInstance:
   m_ObjectHideFlags: 0

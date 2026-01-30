@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3801169483612444951}
   - component: {fileID: 7491540007333779504}
+  - component: {fileID: 6295705558594138243}
   m_Layer: 11
   m_Name: Iron Gathering Flag Blueprint
   m_TagString: Untagged
@@ -79,6 +80,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 2e0ba87fa1577e947a1f75ada4ff194a, type: 2}
   dropSpot: {fileID: 8457829441682817304}
+--- !u!114 &6295705558594138243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484192747599782844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 2e0ba87fa1577e947a1f75ada4ff194a, type: 2}
 --- !u!1 &4827704181594809063
 GameObject:
   m_ObjectHideFlags: 0

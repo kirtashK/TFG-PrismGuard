@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: LogPallet Structure Data
+  m_Name: IronIngot WH Structure Data
   m_EditorClassIdentifier: 
-  structureName: Log Pallet
+  structureName: Iron ingot pallet
   icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
-  builtPrefab: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
-  blueprintPrefab: {fileID: 7069512501854804613, guid: 500de2e763ac0be44a8eb3234a9b9ff6, type: 3}
-  previewPrefab: {fileID: 4997700568044319798, guid: fa6a4366ab271504e9ade125ddc3bbda, type: 3}
+  builtPrefab: {fileID: 7703942789902666600, guid: 85df75bc517570b4b9feffa53dd941ba, type: 3}
+  blueprintPrefab: {fileID: 1847349980277206703, guid: 8c54c71f37c1cd2408f400bcb1df9f8a, type: 3}
+  previewPrefab: {fileID: 7703942789902666600, guid: e2d91e9b03471b6409f7a34b30759c4f, type: 3}
   snapToGrid: 1
   gridSize: 1
   placementRadius: 1

@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7093079860986441796}
   - component: {fileID: 4501050898641242703}
+  - component: {fileID: 7462252480980657797}
   m_Layer: 11
   m_Name: Advanced Smeltery Blueprint
   m_TagString: Untagged
@@ -133,6 +134,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 85c45b70d83593d418a1ad4e9aca7c80, type: 2}
   dropSpot: {fileID: 7870019747200498601}
+--- !u!114 &7462252480980657797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8640585560416490299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 85c45b70d83593d418a1ad4e9aca7c80, type: 2}
 --- !u!1001 &2689181707161790144
 PrefabInstance:
   m_ObjectHideFlags: 0

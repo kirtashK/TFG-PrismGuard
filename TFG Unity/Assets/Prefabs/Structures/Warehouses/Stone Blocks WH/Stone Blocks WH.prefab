@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6657895980437870977}
   - component: {fileID: 3425452381009387231}
+  - component: {fileID: 149704836938534364}
   - component: {fileID: 6446103134197601182}
   m_Layer: 11
   m_Name: Stone Blocks WH
@@ -50,6 +51,19 @@ MonoBehaviour:
   maxCapacity: 12
   currentCapacity: 0
   storedItem: {fileID: 0}
+--- !u!114 &149704836938534364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730867866534482630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 29fb4695e298b734cab163fc9802a021, type: 2}
 --- !u!114 &6446103134197601182
 MonoBehaviour:
   m_ObjectHideFlags: 0
