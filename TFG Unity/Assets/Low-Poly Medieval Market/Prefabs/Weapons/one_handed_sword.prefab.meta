@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 99c9720ab356a0642a771bea13969a05
-DefaultImporter:
+guid: a262d897f717f8f4f8c816f018cf988c
+PrefabImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 262473
   packageName: Low-Poly Medieval Market
-  packageVersion: 
-  assetPath: Assets/Scenes/SampleScene.unity
-  uploadId: 0
+  packageVersion: 1.1
+  assetPath: Assets/Low-Poly Medieval Market/Prefabs/Weapons/one_handed_sword.prefab
+  uploadId: 617661
