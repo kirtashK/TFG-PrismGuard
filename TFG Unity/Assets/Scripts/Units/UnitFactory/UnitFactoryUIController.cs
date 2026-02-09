@@ -22,7 +22,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
     private readonly List<GameObject> unitEntryObjects = new();
     private readonly Dictionary<Guid, GameObject> orderEntryObjects = new();
 
-    bool isRegistered = false;
+    private bool isRegistered = false;
 
     private void Awake()
     {
@@ -43,7 +43,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         {
             SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
         }
-        if (HideElementManager.Instance != null)
+        if (isRegistered && HideElementManager.Instance != null)
         {
             HideElementManager.Instance.Unregister(this);
         }

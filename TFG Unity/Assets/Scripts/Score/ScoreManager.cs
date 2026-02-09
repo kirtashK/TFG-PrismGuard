@@ -42,17 +42,25 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public void AddScore(int points)
     {
-        if (points <= 0)
-        {
-            return;
-        }
+        points = Mathf.Abs(points);
         currentScore += points;
         OnScoreChanged?.Invoke(GetAvailableScore());
     }
 
+    public bool CanSpendScore(int cost)
+    {
+        cost = Mathf.Abs(cost);
+        if (currentScore < cost)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public bool SpendScore(int cost)
     {
-        if (currentScore < cost)
+        cost = Mathf.Abs(cost);
+        if (!CanSpendScore(cost))
         {
             return false;
         }

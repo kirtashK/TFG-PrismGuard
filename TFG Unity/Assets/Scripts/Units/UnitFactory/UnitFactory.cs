@@ -276,7 +276,7 @@ public class UnitFactory : MonoBehaviour
         }
         else if (registry != null)
         {
-            return registry.allUnits;
+            return registry.loadedUnits;
         }
         else
         {
