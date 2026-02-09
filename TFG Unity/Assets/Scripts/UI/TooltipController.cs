@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -138,6 +141,15 @@ public class TooltipController : MonoBehaviour
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+        }
+    }
+
+    public IEnumerator HideTooltipAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (TooltipController.Instance != null)
+        {
+            TooltipController.Instance.Hide();
         }
     }
 }

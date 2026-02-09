@@ -10,7 +10,7 @@ public class UnitRegistryAddressables : MonoBehaviour
     [Tooltip("Label used in Addressables for UnitData")]
     public string unitsLabel = "Unit";
 
-    public List<UnitData> allUnits = new();
+    public List<UnitData> loadedUnits = new();
 
     private AsyncOperationHandle<IList<UnitData>> loadHandle;
     private bool isLoaded = false;
@@ -31,18 +31,18 @@ public class UnitRegistryAddressables : MonoBehaviour
 
         loadHandle = Addressables.LoadAssetsAsync<UnitData>(
             unitsLabel,
-            unitData => { /* per-item callback (currently null...) */ }
+            unitData => {  }
         );
 
         yield return loadHandle;
 
         if (loadHandle.Status == AsyncOperationStatus.Succeeded)
         {
-            allUnits = new List<UnitData>(loadHandle.Result);
+            loadedUnits = new List<UnitData>(loadHandle.Result);
             isLoaded = true;
 
             // Notify listeners
-            OnUnitsLoaded?.Invoke(allUnits);
+            OnUnitsLoaded?.Invoke(loadedUnits);
         }
         else
         {
@@ -55,7 +55,7 @@ public class UnitRegistryAddressables : MonoBehaviour
         if (isLoaded && loadHandle.IsValid())
         {
             Addressables.Release(loadHandle);
-            allUnits.Clear();
+            loadedUnits.Clear();
             isLoaded = false;
         }
     }

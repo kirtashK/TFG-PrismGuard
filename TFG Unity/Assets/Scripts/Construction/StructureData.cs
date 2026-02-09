@@ -36,6 +36,9 @@ public class StructureData : ScriptableObject
     [Tooltip("Allow rotation during placement")]
     public bool allowRotation = true;
 
+    [Tooltip("If true, only one instance of this structure can exist in the scene at a time")]
+    public bool isUnique = false;
+
     [System.Serializable]
     public struct ResourceRequirement
     {

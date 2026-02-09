@@ -96,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3160728754863848551}
   - component: {fileID: 2284186026734877851}
+  - component: {fileID: 4533883100969938562}
   - component: {fileID: 6436802545834418224}
   m_Layer: 11
   m_Name: Sawmill
@@ -136,6 +137,19 @@ MonoBehaviour:
   Storage: {fileID: 4009856531128985332}
   recipes:
   - {fileID: 11400000, guid: 7baa33530134fb647bbbb16b7ef0d643, type: 2}
+--- !u!114 &4533883100969938562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147099120324929794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: f4b7e9d99373f9649b3a183f61539743, type: 2}
 --- !u!114 &6436802545834418224
 MonoBehaviour:
   m_ObjectHideFlags: 0

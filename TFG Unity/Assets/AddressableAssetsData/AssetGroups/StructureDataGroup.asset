@@ -57,6 +57,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 696efa391f26a3249a92640eebbe17fb
+    m_Address: Assets/Data/Structures/Shop Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7199aed67ca6fee4581b4901d9cc8c8d
     m_Address: Assets/Data/Structures/Warehouses/IronOreBin Structure Data.asset
     m_ReadOnly: 0

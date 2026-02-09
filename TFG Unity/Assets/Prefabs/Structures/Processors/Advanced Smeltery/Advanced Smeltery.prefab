@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7616624027669038374}
   - component: {fileID: 5402141775306771135}
   - component: {fileID: 6647325322964759026}
+  - component: {fileID: 9102179876334525026}
   m_Layer: 11
   m_Name: Advanced Smeltery
   m_TagString: Untagged
@@ -66,6 +67,19 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   selectionVisual: {fileID: 968490775487190938}
   InformationVisual: {fileID: 0}
+--- !u!114 &9102179876334525026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4468715666146783442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 85c45b70d83593d418a1ad4e9aca7c80, type: 2}
 --- !u!1 &6038108138648192566
 GameObject:
   m_ObjectHideFlags: 0

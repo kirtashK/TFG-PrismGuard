@@ -44,6 +44,8 @@ public class PlacementController : MonoBehaviour
 
     private readonly List<Renderer> ghostRenderers = new();
 
+    private string placementErrorMessage;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -77,6 +79,21 @@ public class PlacementController : MonoBehaviour
                 bool valid = ValidatePlacement(ghostInstance);
                 UpdateGhostVisual(valid);
                 lastValidState = valid;
+
+                if (!valid && !string.IsNullOrEmpty(placementErrorMessage))
+                {
+                    if (TooltipController.Instance != null)
+                    {
+                        TooltipController.Instance.Show(placementErrorMessage);
+                    }
+                }
+                else
+                {
+                    if (TooltipController.Instance != null)
+                    {
+                        TooltipController.Instance.Hide();
+                    }
+                }
             }
         }
 
@@ -115,6 +132,7 @@ public class PlacementController : MonoBehaviour
         currentStructure = structureData;
         isPlacing = true;
         lastValidState = false;
+        placementErrorMessage = null;
 
         GameObject prefabForGhost;
 
@@ -166,6 +184,8 @@ public class PlacementController : MonoBehaviour
 
     private bool ValidatePlacement(GameObject ghost)
     {
+        placementErrorMessage = null;
+
         if (ghost == null)
         {
             return false;
@@ -199,6 +219,24 @@ public class PlacementController : MonoBehaviour
 
         if (hitCount == 0)
         {
+            if (currentStructure != null && currentStructure.isUnique)
+            {
+                Structure[] existing = FindObjectsByType<Structure>(FindObjectsSortMode.None);
+                foreach (Structure structure in existing)
+                {
+                    if (structure == null || structure.structureData == null)
+                    {
+                        continue;
+                    }
+                    if (structure.structureData == currentStructure)
+                    {
+                        placementErrorMessage = $"Only one {currentStructure.structureName} can exist";
+                        return false;
+                    }
+                }
+            }
+
+            placementErrorMessage = null;
             return true;
         }
 
@@ -212,9 +250,11 @@ public class PlacementController : MonoBehaviour
                 continue;
             }
 
+            placementErrorMessage = "Area obstructed";
             return false;
         }
 
+        placementErrorMessage = null;
         return true;
     }
 
@@ -277,6 +317,11 @@ public class PlacementController : MonoBehaviour
         currentStructure = null;
         isPlacing = false;
         ghostRenderers.Clear();
+
+        if (TooltipController.Instance != null)
+        {
+            TooltipController.Instance.Hide();
+        }
     }
 
     private void OnDisable()

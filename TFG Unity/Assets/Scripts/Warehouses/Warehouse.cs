@@ -2,6 +2,7 @@ using NUnit.Framework.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
@@ -64,10 +65,19 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             return null;
         }
+        return storedItemsQueue.Peek();
+    }
 
+    public void ConfirmRetrieval()
+    {
+        if (storedItemsQueue.Count == 0)
+        {
+            return;
+        }
+
+        storedItemsQueue.Dequeue();
+        currentCapacity = Mathf.Max(0, currentCapacity - 1);
         OnItemRetrieved?.Invoke(storedItem);
-
-        return storedItemsQueue.Dequeue();
     }
 
     public bool CanReceive(ItemData data)
@@ -121,11 +131,5 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
 
         OnItemStored?.Invoke(data);
-    }
-
-    public void ConfirmRetrieval()
-    {
-        currentCapacity = Mathf.Max(0, currentCapacity - 1);
-        RetrieveItem();
     }
 }

@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5657814526536909996}
   - component: {fileID: 6398239038192246425}
+  - component: {fileID: 2594454382195880179}
   - component: {fileID: 1154527889825325018}
   m_Layer: 11
   m_Name: Copper Ingot WH
@@ -105,6 +106,19 @@ MonoBehaviour:
   maxCapacity: 12
   currentCapacity: 0
   storedItem: {fileID: 0}
+--- !u!114 &2594454382195880179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8910376219246138804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 7d04bb9f8c2cd8e4bb5667b1e49b3cd6, type: 2}
 --- !u!114 &1154527889825325018
 MonoBehaviour:
   m_ObjectHideFlags: 0

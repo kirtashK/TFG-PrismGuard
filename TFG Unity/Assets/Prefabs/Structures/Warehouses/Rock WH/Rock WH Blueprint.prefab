@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9019633041300948238}
   - component: {fileID: 2169271794644190987}
+  - component: {fileID: 3461217758140409130}
   m_Layer: 11
   m_Name: Rock WH Blueprint
   m_TagString: Untagged
@@ -79,6 +80,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: 4f802731b5636f942bf29bcfbedcb1ad, type: 2}
   dropSpot: {fileID: 5990841990166095019}
+--- !u!114 &3461217758140409130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3509752288190071438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 4f802731b5636f942bf29bcfbedcb1ad, type: 2}
 --- !u!1 &6399911611895156439
 GameObject:
   m_ObjectHideFlags: 0

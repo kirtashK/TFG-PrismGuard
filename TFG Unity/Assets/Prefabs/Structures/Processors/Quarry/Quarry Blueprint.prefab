@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6404190124556687482}
   - component: {fileID: 3230390979264353709}
+  - component: {fileID: 4192269297795580981}
   m_Layer: 11
   m_Name: Quarry Blueprint
   m_TagString: Untagged
@@ -192,6 +193,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData: {fileID: 11400000, guid: c92f5e571cbb5b74c9dccc440bfe2e48, type: 2}
   dropSpot: {fileID: 3352268568422569064}
+--- !u!114 &4192269297795580981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5829490094004985419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: c92f5e571cbb5b74c9dccc440bfe2e48, type: 2}
 --- !u!1 &8206322108295071384
 GameObject:
   m_ObjectHideFlags: 0
