@@ -221,7 +221,7 @@ public class PlacementController : MonoBehaviour
         {
             if (currentStructure != null && currentStructure.isUnique)
             {
-                Structure[] existing = FindObjectsOfType<Structure>();
+                Structure[] existing = FindObjectsByType<Structure>(FindObjectsSortMode.None);
                 foreach (Structure structure in existing)
                 {
                     if (structure == null || structure.structureData == null)
