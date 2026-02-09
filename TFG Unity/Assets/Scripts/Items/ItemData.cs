@@ -7,6 +7,8 @@ public class ItemData : ScriptableObject
     public string itemName;
     public Sprite icon;
 
+    public GameObject itemPrefab;
+
     [Range(0f, 100f)]
     public float weight;
 
@@ -17,10 +19,13 @@ public class ItemData : ScriptableObject
     [Tooltip("Warehouse type where this item can be stored")]
     public List<WarehouseType> storedIn = new();
 
-    void OnValidate()
-    {
-        // Fix negative values
-        weight = Mathf.Max(0f, weight);
-        interactionRange = Mathf.Max(0f, interactionRange);
-    }
+    [Header("Trading")]
+    public bool canBeBought = true;
+    [Min(0)]
+    public int buyPrice = 10;
+
+    public bool canBeSold = true;
+    [Range(0f, 1f)]
+    [Tooltip("Sell price is buy price * sellFraction")]
+    public float sellFraction = 0.25f;
 }
