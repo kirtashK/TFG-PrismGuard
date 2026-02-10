@@ -8275,7 +8275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1828706112946386693, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 850
+      value: 1014
       objectReference: {fileID: 0}
     - target: {fileID: 1828706112946386693, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
       propertyPath: m_SizeDelta.y
@@ -8329,6 +8329,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2337840591445415251, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2337840591445415251, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3867791633577150844, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -8351,7 +8359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4557059416959136599, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: -11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
