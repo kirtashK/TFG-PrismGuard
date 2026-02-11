@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class GatherResourceTask : MonoBehaviour, ITask
 {
@@ -9,6 +10,8 @@ public class GatherResourceTask : MonoBehaviour, ITask
     [Tooltip("List of possible positions where resource will be spawned. Within range of minResourcesToSpawn & maxResourcesToSpawn from data")]
     [SerializeField]
     private List<Transform> resourceSpawnPoints = new();
+
+    private int currentResourceAmount;
 
     public Vector3 TaskPosition
     {
@@ -31,6 +34,18 @@ public class GatherResourceTask : MonoBehaviour, ITask
         get
         {
             return gatherResourceRecipe.interactionRange;
+        }
+    }
+
+    private void Awake()
+    {
+        if (gatherResourceRecipe.resourceAmount > 0)
+        {
+            int minRange = Mathf.Max(1, gatherResourceRecipe.resourceAmount - gatherResourceRecipe.resourceMaxDeviation);
+            int maxRange = gatherResourceRecipe.resourceAmount + gatherResourceRecipe.resourceMaxDeviation;
+            currentResourceAmount = Random.Range(minRange, maxRange + 1);
+
+            Debug.Log($"{name} initial resources: {currentResourceAmount}. Deviation: {currentResourceAmount - gatherResourceRecipe.resourceAmount}");
         }
     }
 
@@ -78,7 +93,7 @@ public class GatherResourceTask : MonoBehaviour, ITask
         {
             Vector3 spawnPos = resourceSpawnPoints[i].position;
 
-            GameObject spawnedItem = ItemManager.Instance.CreateItem(spawnPos, gatherResourceRecipe.resourceItemPrefab);
+            GameObject spawnedItem = ItemManager.Instance.CreateItem(spawnPos, gatherResourceRecipe.resourceItemData.itemPrefab);
             
             MoveItemTask moveTask;
             if (spawnedItem.TryGetComponent<MoveItemTask>(out MoveItemTask existingMoveItemTask))
@@ -95,8 +110,30 @@ public class GatherResourceTask : MonoBehaviour, ITask
 
         onComplete?.Invoke();
 
-        ResourceManager.Instance.NotifyResourceCollected(gameObject.GetComponent<ResourceInstance>());
+        // Node isnt limited, it can respawn:
+        if (gatherResourceRecipe.resourceAmount == 0)
+        {
+            ResourceManager.Instance.NotifyResourceCollected(gameObject.GetComponent<ResourceInstance>());
+            enabled = false;
+        }
+        // Node has a limited amount of resources and doesnt respawn:
+        else
+        {
+            currentResourceAmount = Mathf.Max(0, currentResourceAmount - resourcesToSpawn);
 
-        enabled = false;
+            Debug.Log($"{name} has [{currentResourceAmount}/{gatherResourceRecipe.resourceAmount}] resources remaining ({resourcesToSpawn} consumed)");
+
+            // Resource is depleted:
+            if (currentResourceAmount == 0)
+            {
+                Debug.Log($"{name} has been depleted");
+                Destroy(gameObject);
+            }
+            else 
+            {
+                TaskManager.Instance.UnregisterTask(this);
+                TaskManager.Instance.RegisterTask(this);
+            }
+        }
     }
 }

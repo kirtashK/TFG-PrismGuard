@@ -7066,7 +7066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7083,7 +7083,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5259599971225851069, guid: 393053e22bc462c4bb5085e069e56767, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -4.02
       objectReference: {fileID: 0}
     - target: {fileID: 5259599971225851069, guid: 393053e22bc462c4bb5085e069e56767, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7091,7 +7091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5259599971225851069, guid: 393053e22bc462c4bb5085e069e56767, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19
+      value: 21.52
       objectReference: {fileID: 0}
     - target: {fileID: 5259599971225851069, guid: 393053e22bc462c4bb5085e069e56767, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7127,7 +7127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8090197791835289027, guid: 393053e22bc462c4bb5085e069e56767, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8026,7 +8026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8226,7 +8226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8028998076868244391, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
       propertyPath: displayName
@@ -8577,6 +8577,10 @@ PrefabInstance:
     - target: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
       propertyPath: m_Name
       value: Sawmill
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -7,9 +7,6 @@ public class GatherResourceRecipe : ScriptableObject
 
     [Header("Resource spawned")]
 
-    [Tooltip("Prefab of the resource generated once node is gathered")]
-    public GameObject resourceItemPrefab;
-
     [Tooltip("Data of the resource generated once node is gathered")]
     public ItemData resourceItemData;
 
@@ -32,22 +29,27 @@ public class GatherResourceRecipe : ScriptableObject
     [Range(0f, 50f)]
     public int maxResourcesToSpawn = 2;
 
+    [Tooltip("Amount of the resource this node holds. 0 = infinite & respawns")]
+    [Min(0)]
+    public int resourceAmount = 0;
+
+    [Tooltip("If resourceAmount > 0, a random deviation is applied and the actual amount is within the rango of the max deviation (50 resource, 10 deviation -> range of 40-60)")]
+    [Min(0)]
+    public int resourceMaxDeviation = 0;
+
     void OnValidate()
     {
-        // Fix negative values
-        workDuration = Mathf.Max(0f, workDuration);
-        interactionRange = Mathf.Max(0f, interactionRange);
-        priority = Mathf.Max(0, priority);
-        minResourcesToSpawn = Mathf.Max(0, minResourcesToSpawn);
-        maxResourcesToSpawn = Mathf.Max(0, maxResourcesToSpawn);
-
-        if (resourceItemPrefab == null)
-        {
-            Debug.LogWarning($"{name} missing resourceItemPrefab");
-        }
         if (resourceItemData == null)
         {
             Debug.LogWarning($"{name} missing resourceItemData");
+        }
+
+        if (resourceAmount > 0)
+        {
+            if (resourceAmount - resourceMaxDeviation < 1)
+            {
+                Debug.LogWarning($"{name} has a deviation bigger than the amount of resources it can hold. It will be clamped to 1");
+            }
         }
     }
 }
