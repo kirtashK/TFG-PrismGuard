@@ -107,7 +107,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             {
                 while (state.reservedFuel > 0)
                 {
-                    Release(state.recipe.fuelItem);
+                    Release(state.recipe.fuelItemData);
                 }
             }
 
@@ -207,7 +207,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 Transform recipeParent = GetRecipeStorage(recipeState.recipe);
 
                 ItemData itemData = recipeState.recipe.outputItemData;
-                GameObject itemPrefab = recipeState.recipe.outputPrefab;
+                GameObject itemPrefab = recipeState.recipe.outputItemData.itemPrefab;
 
                 int currentChildren = recipeParent.childCount;
                 int maxCapacity = Mathf.Max(0, recipeState.recipe.outputMaxCapacity);
@@ -263,7 +263,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                     return true;
                 }
             }
-            if (recipe.requiresFuel && data == recipe.fuelItem)
+            if (recipe.requiresFuel && data == recipe.fuelItemData)
             {
                 if (state.storedFuel + state.reservedFuel < recipe.fuelPerBatch)
                 {
@@ -284,7 +284,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 state.reservedInput++;
                 return true;
             }
-            if (recipe.requiresFuel && data == recipe.fuelItem)
+            if (recipe.requiresFuel && data == recipe.fuelItemData)
             {
                 state.reservedFuel++;
                 return true;
@@ -303,7 +303,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 state.reservedInput = Mathf.Max(0, state.reservedInput - 1);
                 return;
             }
-            if (recipe.requiresFuel && data == recipe.fuelItem)
+            if (recipe.requiresFuel && data == recipe.fuelItemData)
             {
                 state.reservedFuel = Mathf.Max(0, state.reservedFuel - 1);
                 return;
@@ -329,7 +329,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
                 return;
             }
-            if (recipe.requiresFuel && data == recipe.fuelItem)
+            if (recipe.requiresFuel && data == recipe.fuelItemData)
             {
                 state.storedFuel++;
                 Release(data);

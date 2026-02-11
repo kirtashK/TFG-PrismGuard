@@ -7,6 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Unity.AppUI.Core;
 
 /// <summary>
 /// Controls the shop UI panel
@@ -274,7 +275,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
 
         Structure structure = transform.GetComponentInParent<Structure>();
-        if (structure != null)
+        if (structure != null && structure.structureData.structureName.ToLower().Contains("shop"))
         {
             ShowShopUI(structure);
         }
