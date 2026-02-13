@@ -4,6 +4,9 @@ using UnityEngine;
 public class ResourceData : ScriptableObject
 {
     public string resourceName;
+
+    public ResourceCategory category;
+
     [Range(0f, 3600f)]
     public float respawnTime;
 }

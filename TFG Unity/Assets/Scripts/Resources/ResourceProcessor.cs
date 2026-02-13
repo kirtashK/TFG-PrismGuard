@@ -11,6 +11,10 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     [Tooltip("List of recipes this building has availible")]
     public List<ProcessResourceRecipe> recipes;
 
+    [Tooltip("Seconds between checks for processing batches")]
+    public float processingCheckInterval = 1f;
+    private float processingCheckTimer = 0f;
+
     // Internal state of each recipe
     private class RecipeState
     {
@@ -61,6 +65,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         StartCoroutine(RegisterWhenReady());
 
         ResetInternalStateAndReleaseReservations();
+
+        processingCheckTimer = 0f;
     }
 
     private IEnumerator RegisterWhenReady()
@@ -121,46 +127,48 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private void Update()
     {
-        StartProcessingBatches();
-        
+        processingCheckTimer -= Time.deltaTime;
+        if (processingCheckTimer <= 0f)
+        {
+            StartProcessingBatches();
+            processingCheckTimer = processingCheckInterval;
+        }
     }
 
     private void StartProcessingBatches()
     {
         foreach (RecipeState recipeState in recipeStates)
         {
-            ProcessResourceRecipe recipe = recipeState.recipe;
-
             // Check if there is enough input & storage & fuel if needed:
             bool readyForBatch =
-                recipeState.storedInput >= recipe.inputPerBatch
+                recipeState.storedInput >= recipeState.recipe.inputPerBatch
                 && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                     <= recipeState.recipe.outputMaxCapacity
-                && (!recipe.requiresFuel
-                    || recipeState.storedFuel >= recipe.fuelPerBatch);
+                && (!recipeState.recipe.requiresFuel
+                    || recipeState.storedFuel >= recipeState.recipe.fuelPerBatch);
 
             while (readyForBatch
-                   && recipeState.processingCount < recipe.maxConcurrentBatches)
+                   && recipeState.processingCount < recipeState.recipe.maxConcurrentBatches)
             {
                 // Consume input & fuel
-                recipeState.storedInput -= recipe.inputPerBatch;
-                if (recipe.requiresFuel)
+                recipeState.storedInput -= recipeState.recipe.inputPerBatch;
+                if (recipeState.recipe.requiresFuel)
                 {
-                    recipeState.storedFuel -= recipe.fuelPerBatch;
+                    recipeState.storedFuel -= recipeState.recipe.fuelPerBatch;
                 }
 
-                recipeState.reservedOutput += recipe.outputPerInput;
+                recipeState.reservedOutput += recipeState.recipe.outputPerInput;
 
                 recipeState.processingCount++;
                 StartCoroutine(ProcessBatch(recipeState));
 
                 // Check if another batch is possible
                 readyForBatch =
-                    recipeState.storedInput >= recipe.inputPerBatch
+                    recipeState.storedInput >= recipeState.recipe.inputPerBatch
                     && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                         <= recipeState.recipe.outputMaxCapacity
-                    && (!recipe.requiresFuel
-                        || recipeState.storedFuel >= recipe.fuelPerBatch);
+                    && (!recipeState.recipe.requiresFuel
+                        || recipeState.storedFuel >= recipeState.recipe.fuelPerBatch);
             }
         }
     }
@@ -171,6 +179,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         {
             yield break;
         }
+
+        Debug.Log($"{name} started processing a batch of {recipeState.recipe.name}. Will finish in {recipeState.recipe.processingTime} seconds");
 
         yield return new WaitForSeconds(recipeState.recipe.processingTime);
 
@@ -207,7 +217,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 Transform recipeParent = GetRecipeStorage(recipeState.recipe);
 
                 ItemData itemData = recipeState.recipe.outputItemData;
-                GameObject itemPrefab = recipeState.recipe.outputItemData.itemPrefab;
 
                 int currentChildren = recipeParent.childCount;
                 int maxCapacity = Mathf.Max(0, recipeState.recipe.outputMaxCapacity);
@@ -218,7 +227,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 {
                     GameObject output = ItemManager.Instance.
                         CreateItem(recipeParent.position,
-                                    itemPrefab);
+                                    itemData.itemPrefab);
 
                     output.transform.SetParent(recipeParent, worldPositionStays: false);
                     output.transform.localPosition = Vector3.zero;
@@ -253,20 +262,20 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     public bool CanReceive(ItemData data)
     {
-        foreach (RecipeState state in recipeStates)
+        foreach (RecipeState recipeState in recipeStates)
         {
-            ProcessResourceRecipe recipe = state.recipe;
-            if (data == recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData)
             {
-                if (state.storedInput + state.reservedInput < recipe.inputMaxCapacity)
+                if (recipeState.storedInput + recipeState.reservedInput < recipeState.recipe.inputMaxCapacity)
                 {
                     return true;
                 }
             }
-            if (recipe.requiresFuel && data == recipe.fuelItemData)
+            if (recipeState.recipe.requiresFuel && data == recipeState.recipe.fuelItemData)
             {
-                if (state.storedFuel + state.reservedFuel < recipe.fuelPerBatch)
+                if (recipeState.storedFuel + recipeState.reservedFuel < recipeState.recipe.fuelMaxCapacity)
                 {
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Can receive {data.itemName}. Stored {recipeState.storedFuel} + Reserved {recipeState.reservedFuel} < Max {recipeState.recipe.fuelMaxCapacity}");
                     return true;
                 }
             }
@@ -276,18 +285,27 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     public bool Reserve(ItemData data)
     {
-        foreach (RecipeState state in recipeStates)
+        foreach (RecipeState recipeState in recipeStates)
         {
-            ProcessResourceRecipe recipe = state.recipe;
-            if (data == recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData)
             {
-                state.reservedInput++;
-                return true;
+                if (recipeState.storedInput + recipeState.reservedInput < recipeState.recipe.inputMaxCapacity)
+                {
+                    recipeState.reservedInput++;
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Reserved {data.itemName} [{recipeState.reservedInput}]");
+
+                    return true;
+                }
             }
-            if (recipe.requiresFuel && data == recipe.fuelItemData)
+            if (recipeState.recipe.requiresFuel && data == recipeState.recipe.fuelItemData)
             {
-                state.reservedFuel++;
-                return true;
+                if (recipeState.storedFuel + recipeState.reservedFuel < recipeState.recipe.fuelMaxCapacity)
+                {
+                    recipeState.reservedFuel++;
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Reserved {data.itemName} [{recipeState.reservedFuel}]");
+
+                    return true;
+                }
             }
         }
         return false;
@@ -295,18 +313,27 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     public void Release(ItemData data)
     {
-        foreach (RecipeState state in recipeStates)
+        foreach (RecipeState recipeState in recipeStates)
         {
-            ProcessResourceRecipe recipe = state.recipe;
-            if (data == recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData)
             {
-                state.reservedInput = Mathf.Max(0, state.reservedInput - 1);
-                return;
+                if (recipeState.reservedInput > 0)
+                {
+                    recipeState.reservedInput--;
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Released {data.itemName} [{recipeState.reservedInput}]");
+
+                    return;
+                }
             }
-            if (recipe.requiresFuel && data == recipe.fuelItemData)
+            if (recipeState.recipe.requiresFuel && data == recipeState.recipe.fuelItemData)
             {
-                state.reservedFuel = Mathf.Max(0, state.reservedFuel - 1);
-                return;
+                if (recipeState.reservedFuel > 0)
+                {
+                    recipeState.reservedFuel--;
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Released {data.itemName} [{recipeState.reservedFuel}]");
+
+                    return;
+                }
             }
         }
     }
@@ -316,24 +343,29 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     {
         Destroy(item);
 
-        foreach (RecipeState state in recipeStates)
+        foreach (RecipeState recipeState in recipeStates)
         {
-            ProcessResourceRecipe recipe = state.recipe;
-            if (data == recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData)
             {
-                state.storedInput++;
-                Release(data);
-
-                Debug.Log($"{name} stored amount = {state.storedInput}" +
-                    $"\nMax amount = {state.recipe.inputMaxCapacity}");
-
-                return;
+                if (recipeState.storedInput < recipeState.recipe.inputMaxCapacity)
+                {
+                    recipeState.storedInput++;
+                    Release(data);
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Input {data.itemName} stored amount = {recipeState.storedInput}/{recipeState.recipe.inputMaxCapacity}");
+                    
+                    return;
+                }
             }
-            if (recipe.requiresFuel && data == recipe.fuelItemData)
+            if (recipeState.recipe.requiresFuel && data == recipeState.recipe.fuelItemData)
             {
-                state.storedFuel++;
-                Release(data);
-                return;
+                if (recipeState.storedFuel < recipeState.recipe.fuelMaxCapacity)
+                {
+                    recipeState.storedFuel++;
+                    Release(data);
+                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Fuel {data.itemName} stored amount = {recipeState.storedFuel}/{recipeState.recipe.fuelMaxCapacity}");
+                    
+                    return;
+                }
             }
         }
     }

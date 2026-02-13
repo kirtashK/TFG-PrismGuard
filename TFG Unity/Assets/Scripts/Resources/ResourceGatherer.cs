@@ -84,7 +84,7 @@ public class ResourceGatherer : MonoBehaviour
             return;
         }
 
-        if (!allowedCategories.Contains(instance.category))
+        if (!allowedCategories.Contains(instance.data.category))
         {
             return;
         }

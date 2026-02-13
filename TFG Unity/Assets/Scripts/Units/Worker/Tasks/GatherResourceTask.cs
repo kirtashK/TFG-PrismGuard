@@ -45,7 +45,7 @@ public class GatherResourceTask : MonoBehaviour, ITask
             int maxRange = gatherResourceRecipe.resourceAmount + gatherResourceRecipe.resourceMaxDeviation;
             currentResourceAmount = Random.Range(minRange, maxRange + 1);
 
-            Debug.Log($"{name} initial resources: {currentResourceAmount}. Deviation: {currentResourceAmount - gatherResourceRecipe.resourceAmount}");
+            //Debug.Log($"{name} initial resources: {currentResourceAmount}. Deviation: {currentResourceAmount - gatherResourceRecipe.resourceAmount}");
         }
     }
 
