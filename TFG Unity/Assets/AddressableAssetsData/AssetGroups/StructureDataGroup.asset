@@ -63,6 +63,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fd50cd5177832541af4e9241640fd78
+    m_Address: Assets/Data/Structures/Warehouses/GoldOre WH Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7199aed67ca6fee4581b4901d9cc8c8d
     m_Address: Assets/Data/Structures/Warehouses/IronOreBin Structure Data.asset
     m_ReadOnly: 0
@@ -89,6 +95,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 85c45b70d83593d418a1ad4e9aca7c80
     m_Address: Assets/Data/Structures/Processors/Advanced Smeltery Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ff4dcdd1cedc6e489e5d19d727ff071
+    m_Address: Assets/Data/Structures/Flags/GoldGatheringFlag Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abaf23713f12c924199aea078d6dc19c
+    m_Address: Assets/Data/Structures/Warehouses/GoldIngot WH Structure Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure

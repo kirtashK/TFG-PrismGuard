@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
-  m_Name: CopperOreToCopperIngot
-  m_EditorClassIdentifier: 
-  recipeName: Process copper ore into copper ingot
-  inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
-  inputMaxCapacity: 2
+  m_Name: GoldOreToGoldIngot
+  m_EditorClassIdentifier: Assembly-CSharp::ProcessResourceRecipe
+  recipeName: Smelt gold ore
+  inputItemData: {fileID: 11400000, guid: 24dc255145ef14f4fb4333bfaa95427f, type: 2}
+  inputMaxCapacity: 6
   inputPerBatch: 1
   requiresFuel: 1
   fuelItemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-  fuelPerBatch: 1
-  fuelMaxCapacity: 2
-  outputItemData: {fileID: 11400000, guid: 482e4eaac704afb4f8f7254fab8742fc, type: 2}
-  outputMaxCapacity: 5
+  fuelPerBatch: 3
+  fuelMaxCapacity: 4
+  outputItemData: {fileID: 11400000, guid: c0260bccdc69acb448045a40a9a04671, type: 2}
+  outputMaxCapacity: 2
   outputPerInput: 1
-  processingTime: 60
-  maxConcurrentBatches: 2
+  processingTime: 120
+  maxConcurrentBatches: 1

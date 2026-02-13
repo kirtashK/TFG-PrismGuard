@@ -4,4 +4,5 @@ public enum ResourceCategory
     Stone,
     Copper,
     Iron,
+    Gold,
 }
