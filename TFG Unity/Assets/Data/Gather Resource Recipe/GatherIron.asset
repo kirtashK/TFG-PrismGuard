@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 071fda8c4ba09c04abe1ea37ace56983, type: 3}
   m_Name: GatherIron
   m_EditorClassIdentifier: 
-  recipeName: Mine iron
-  resourceItemPrefab: {fileID: 1592414852830515788, guid: 849e94c628aecef4e8160ec3b16ed887, type: 3}
+  recipeName: Mine iron vein
   resourceItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
   workDuration: 15
   interactionRange: 1.5
   priority: 1
   minResourcesToSpawn: 1
   maxResourcesToSpawn: 2
+  resourceAmount: 20
+  resourceMaxDeviation: 5

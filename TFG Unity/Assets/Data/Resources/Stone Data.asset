@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Stone Data
   m_EditorClassIdentifier: 
   resourceName: Stone
+  category: 1
   respawnTime: 10

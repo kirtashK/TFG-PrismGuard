@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Iron Vein Data
   m_EditorClassIdentifier: 
   resourceName: Iron vein
+  category: 3
   respawnTime: 30

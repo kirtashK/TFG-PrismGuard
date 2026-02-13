@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Copper Vein Data
   m_EditorClassIdentifier: 
   resourceName: Copper vein
+  category: 2
   respawnTime: 20

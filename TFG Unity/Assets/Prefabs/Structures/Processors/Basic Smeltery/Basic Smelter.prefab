@@ -137,6 +137,7 @@ MonoBehaviour:
   Storage: {fileID: 3496389811995932038}
   recipes:
   - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}
+  processingCheckInterval: 1
 --- !u!114 &216417968583139314
 MonoBehaviour:
   m_ObjectHideFlags: 0

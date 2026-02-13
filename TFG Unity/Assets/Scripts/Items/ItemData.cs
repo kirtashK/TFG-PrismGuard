@@ -10,10 +10,10 @@ public class ItemData : ScriptableObject
     public GameObject itemPrefab;
 
     [Range(0f, 100f)]
-    public float weight;
+    public float weight = 1;
 
     [Range(0f, 100f)]
-    public float interactionRange;
+    public float interactionRange = 1;
     //public int priority;
 
     [Tooltip("Warehouse type where this item can be stored")]

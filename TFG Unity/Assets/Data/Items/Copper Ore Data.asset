@@ -20,6 +20,6 @@ MonoBehaviour:
   storedIn:
   - {fileID: 11400000, guid: a165f0b3f8c335740a59babefcd9296d, type: 2}
   canBeBought: 0
-  buyPrice: 16
+  buyPrice: 4
   canBeSold: 1
-  sellFraction: 0.25
+  sellFraction: 1
