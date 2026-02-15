@@ -179,7 +179,7 @@ public class UnitProductionOrder : IItemConsumer
         }
     }
 
-    public void ConfirmRetrieval()
+    public void ConfirmRetrieval(ItemData item)
     {
 
     }

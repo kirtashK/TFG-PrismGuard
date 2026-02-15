@@ -394,21 +394,31 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
                     foreach (Warehouse warehouse in WarehouseManager.Instance.AllWarehouses)
                     {
-                        if (remaining <= 0) break;
-
-                        if (warehouse == null) continue;
-                        if (warehouse.storedItem != itemToSell) continue;
-                        if (warehouse.AvailableForRetrieve <= 0) continue;
-
-                        while (remaining > 0 && warehouse.AvailableForRetrieve > 0)
+                        if (remaining <= 0)
                         {
-                            GameObject grabbed = warehouse.RetrieveItem();
-                            if (grabbed == null)
+                            break;
+                        }
+
+                        if (warehouse == null)
+                        {
+                            continue;
+                        }
+
+                        while (remaining > 0 && warehouse.CanRetrieve(itemToSell))
+                        {
+                            if (!warehouse.ReserveForRetrieve(itemToSell))
                             {
                                 break;
                             }
 
-                            warehouse.ConfirmRetrieval();
+                            GameObject grabbed = warehouse.RetrieveItem(itemToSell);
+                            if (grabbed == null)
+                            {
+                                Debug.LogWarning($"{name} retrieved null item: {itemToSell.name}");
+                                break;
+                            }
+
+                            warehouse.ConfirmRetrieval(itemToSell);
                             Destroy(grabbed);
                             remaining--;
                         }

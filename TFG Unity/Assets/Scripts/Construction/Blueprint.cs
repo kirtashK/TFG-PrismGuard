@@ -155,7 +155,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         TryConstruct();
     }
 
-    public void ConfirmRetrieval()
+    public void ConfirmRetrieval(ItemData item)
     {
         // Does nothing as Blueprint doesnt
         // store items to be picked up

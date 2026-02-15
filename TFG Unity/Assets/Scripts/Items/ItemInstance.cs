@@ -28,8 +28,8 @@ public class ItemInstance : MonoBehaviour
     /// Sets model and colliders of the object 
     /// and its children to true/false depending on parameter visible
     /// </summary>
-    /// /// <param name="visible">True to enable, False to disable</param>
-    public void SetVisible(bool visible)
+    /// /// <param name="isVisible">True to enable, False to disable</param>
+    public void SetVisible(bool isVisible)
     {
         if (renderers != null)
         {
@@ -37,7 +37,7 @@ public class ItemInstance : MonoBehaviour
             {
                 if (renderers[i] != null)
                 {
-                    renderers[i].enabled = visible;
+                    renderers[i].enabled = isVisible;
                 }
             }
         }
@@ -48,7 +48,7 @@ public class ItemInstance : MonoBehaviour
             {
                 if (colliders[i] != null)
                 {
-                    colliders[i].enabled = visible;
+                    colliders[i].enabled = isVisible;
                 }
             }
         }
