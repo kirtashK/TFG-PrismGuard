@@ -15,20 +15,8 @@ MonoBehaviour:
   m_GroupName: StructureDataGroup
   m_GUID: cad54df29cc2be749b4ea0109ec89610
   m_SerializeEntries:
-  - m_GUID: 1ebf43e5e144f314ea70ac5d84f2a657
-    m_Address: Assets/Data/Structures/Warehouses/CopperOreBin Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 298b4fe93bfe1fb41bbac6263bc7e86c
     m_Address: Assets/Data/Structures/Warehouses/LogPallet Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 29fb4695e298b734cab163fc9802a021
-    m_Address: Assets/Data/Structures/Warehouses/StoneBlockPallet Structure Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
@@ -41,12 +29,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f802731b5636f942bf29bcfbedcb1ad
     m_Address: Assets/Data/Structures/Warehouses/RockBin Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 55b5770c2f82287438636c7bd8dca451
-    m_Address: Assets/Data/Structures/Warehouses/IronIngotPallet Structure Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
@@ -81,12 +63,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7d04bb9f8c2cd8e4bb5667b1e49b3cd6
-    m_Address: Assets/Data/Structures/Warehouses/CopperIngotPallet Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d3d4c76d9d48644fa289e09e18f5d4b
     m_Address: Assets/Data/Structures/Flags/TreeGatheringFlag Structure Data.asset
     m_ReadOnly: 0
@@ -101,12 +77,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9ff4dcdd1cedc6e489e5d19d727ff071
     m_Address: Assets/Data/Structures/Flags/GoldGatheringFlag Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: abaf23713f12c924199aea078d6dc19c
-    m_Address: Assets/Data/Structures/Warehouses/GoldIngot WH Structure Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
