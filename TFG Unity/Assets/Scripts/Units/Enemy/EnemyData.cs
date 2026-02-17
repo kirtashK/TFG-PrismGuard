@@ -32,13 +32,5 @@ public class EnemyData : UnitData
     {
         faction = Faction.Enemy;
         isPlayerControllable = false;
-
-        // Fix negative values
-        attackRange = Mathf.Max(0f, attackRange);
-        attackDamage = Mathf.Max(0f, attackDamage);
-        attackCooldown = Mathf.Max(0f, attackCooldown);
-        spawnCost = Mathf.Max(0, spawnCost);
-        rewardExperience = Mathf.Max(0, rewardExperience);
-        AggroRadius = Mathf.Max(0f, AggroRadius);
     }
 }

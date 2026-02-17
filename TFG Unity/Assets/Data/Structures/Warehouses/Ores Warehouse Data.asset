@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: Ores WH Structure Data
-  m_EditorClassIdentifier: 
-  structureName: Ores Crate
+  m_Script: {fileID: 11500000, guid: 6afb97a030e3bfa419d4a39ee8d12796, type: 3}
+  m_Name: Ores Warehouse Data
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseData
+  structureName: Ores crate
   icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
   category: 0
   builtPrefab: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
@@ -26,3 +26,6 @@ MonoBehaviour:
   requirements:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 8
+  acceptedCategories:
+  - {fileID: 11400000, guid: a07ef24556ffb8342a8ad373ae63d616, type: 2}
+  maxCapacity: 12

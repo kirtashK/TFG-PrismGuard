@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure")]
+[CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure/Structure")]
 public class StructureData : ScriptableObject
 {
     public string structureName;
@@ -47,14 +47,10 @@ public class StructureData : ScriptableObject
         public int quantity;
     }
 
-    public List<ResourceRequirement> requirements = new();
+    public List<ResourceRequirement> buildRequirements = new();
 
     void OnValidate()
     {
-        // Fix negative values
-        gridSize = Mathf.Max(0f, gridSize);
-        placementRadius = Mathf.Max(0f, placementRadius);
-
         if (builtPrefab == null)
         {
             Debug.LogWarning($"{name} missing builtPrefab");
@@ -66,6 +62,10 @@ public class StructureData : ScriptableObject
         if (previewPrefab == null)
         {
             Debug.LogWarning($"{name} missing previewPrefab");
+        }
+        if (buildRequirements == null || buildRequirements.Count == 0)
+        {
+            Debug.LogWarning($"{name}: buildRequirements not configured");
         }
     }
 }

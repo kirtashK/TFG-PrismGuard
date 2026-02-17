@@ -6,6 +6,7 @@ public class ProcessResourceRecipe : ScriptableObject
     public string recipeName;
 
     [Header("Input")]
+
     [Tooltip("Input's data")]
     public ItemData inputItemData;
     [Tooltip("Max capacity of input")]
@@ -16,6 +17,7 @@ public class ProcessResourceRecipe : ScriptableObject
     public int inputPerBatch = 1;
 
     [Header("Fuel (Optional")]
+
     [Tooltip("true if it consumes fuel")]
     public bool requiresFuel = false;
     [Tooltip("Item to consume as fuel")]
@@ -28,6 +30,7 @@ public class ProcessResourceRecipe : ScriptableObject
     public int fuelMaxCapacity = 5;
 
     [Header("Output")]
+
     [Tooltip("Output's data")]
     public ItemData outputItemData;
     [Tooltip("Max capacity of output")]
@@ -38,6 +41,7 @@ public class ProcessResourceRecipe : ScriptableObject
     public int outputPerInput = 1;
 
     [Header("Processing")]
+
     [Tooltip("Time in seconds")]
     [Range(0f, 1000f)]
     public float processingTime = 10f;

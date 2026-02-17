@@ -102,9 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cb4e351e97e674aaaf2b1ef63c67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceptedCategories:
-  - {fileID: 11400000, guid: e01d75e305d1b4143b830e182d94342f, type: 2}
-  maxCapacity: 12
   currentCapacity: 0
 --- !u!114 &944223365692875425
 MonoBehaviour:
@@ -118,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
-  structureData: {fileID: 11400000, guid: 298b4fe93bfe1fb41bbac6263bc7e86c, type: 2}
+  structureData: {fileID: 11400000, guid: ca52777bac90b3142bf03e1743da78d2, type: 2}
 --- !u!114 &1265566357224765728
 MonoBehaviour:
   m_ObjectHideFlags: 0

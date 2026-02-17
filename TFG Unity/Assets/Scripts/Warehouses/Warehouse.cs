@@ -1,20 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
 {
     [Header("Configuration")]
-    [Tooltip("Categories this warehouse accepts. If a category is an ancestor of an item's category it will match")]
-    public List<ItemCategory> acceptedCategories = new();
 
-    [Tooltip("Maximum total number of items that can be stored")]
-    public int maxCapacity = 12;
+    private WarehouseData warehouseData;
 
-    public int currentCapacity = 0;
+    [SerializeField, Tooltip("Updated from Data at runtime")]
+    private int maxCapacity;
+    [SerializeField, Tooltip("Updated from Data at runtime")]
+    private int currentCapacity = 0;
 
     // Each ItemData has a queue of items stored in the warehouse
     private readonly Dictionary<ItemData, Queue<GameObject>> storedItems = new();
@@ -29,6 +27,24 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public event Action<ItemData> OnItemStored;
     public event Action<ItemData> OnItemRetrieved;
+
+    private void Awake()
+    {
+        if (!TryGetComponent<Structure>(out Structure structure))
+        {
+            Debug.LogError($"{name} missing Structure component");
+        }
+        if (structure.structureData is WarehouseData warehouseData)
+        {
+            this.warehouseData = warehouseData;
+            maxCapacity = warehouseData.maxCapacity;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldnt get WarehouseData from Structure");
+        }
+
+    }
 
     private void OnEnable()
     {
@@ -67,13 +83,8 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             Debug.LogError($"{name}: CategoryAllows: null ItemData or category");
             return false;
         }
-        if (acceptedCategories == null || acceptedCategories.Count == 0)
-        {
-            Debug.LogError($"{name}: CategoryAllows: Category not configured");
-            return false;
-        }
 
-        foreach (ItemCategory accepted in acceptedCategories)
+        foreach (ItemCategory accepted in warehouseData.acceptedCategories)
         {
             if (accepted != null && accepted.Matches(itemData.category))
             {
@@ -97,16 +108,12 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             return -1;
         }
-        if (acceptedCategories == null || acceptedCategories.Count == 0)
-        {
-            return -1;
-        }
 
         int depth = 0;
         ItemCategory current = itemCategory;
         while (current != null)
         {
-            if (acceptedCategories.Contains(current))
+            if (warehouseData.acceptedCategories.Contains(current))
             {
                 return depth;
             }

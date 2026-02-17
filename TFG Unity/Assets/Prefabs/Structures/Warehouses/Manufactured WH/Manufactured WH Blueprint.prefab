@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: d574617e639fb2547b055a9605fb784b, type: 2}
+  structureData: {fileID: 11400000, guid: 0f0f4228f680b254f825b26428183bc9, type: 2}
   dropSpot: {fileID: 8795106225984051394}
 --- !u!114 &1917168870682512741
 MonoBehaviour:
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
-  structureData: {fileID: 11400000, guid: d574617e639fb2547b055a9605fb784b, type: 2}
+  structureData: {fileID: 11400000, guid: 0f0f4228f680b254f825b26428183bc9, type: 2}
 --- !u!1 &5939027615505895205
 GameObject:
   m_ObjectHideFlags: 0
