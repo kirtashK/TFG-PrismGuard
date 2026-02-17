@@ -37,9 +37,15 @@ public class InventoryManager : MonoBehaviour
 
         foreach (Warehouse warehouse in WarehouseManager.Instance.AllWarehouses)
         {
-            if (warehouse.storedItem != null && warehouse.currentCapacity > 0)
+            if (warehouse == null)
             {
-                AddInternal(warehouse.storedItem, warehouse.currentCapacity);
+                continue;
+            }
+
+            IReadOnlyDictionary<ItemData, int> snapshot = warehouse.GetStoredCountsSnapshot();
+            foreach (KeyValuePair<ItemData, int> pair in snapshot)
+            {
+                AddInternal(pair.Key, pair.Value);
             }
         }
 
@@ -62,17 +68,31 @@ public class InventoryManager : MonoBehaviour
 
     private void HandleWarehouseRegistered(Warehouse warehouse)
     {
-        if (warehouse.storedItem != null && warehouse.currentCapacity > 0)
+        if (warehouse == null)
         {
-            OnInventoryChanged?.Invoke(warehouse.storedItem, AddInternal(warehouse.storedItem, warehouse.currentCapacity));
+            return;
+        }
+
+        IReadOnlyDictionary<ItemData, int> snapshot = warehouse.GetStoredCountsSnapshot();
+        foreach (KeyValuePair<ItemData, int> pair in snapshot)
+        {
+            int newCount = AddInternal(pair.Key, pair.Value);
+            OnInventoryChanged?.Invoke(pair.Key, newCount);
         }
     }
 
     private void HandleWarehouseUnregistered(Warehouse warehouse)
     {
-        if (warehouse.storedItem != null && warehouse.currentCapacity > 0)
+        if (warehouse == null)
         {
-            OnInventoryChanged?.Invoke(warehouse.storedItem, AddInternal(warehouse.storedItem, -warehouse.currentCapacity));
+            return;
+        }
+
+        IReadOnlyDictionary<ItemData, int> snapshot = warehouse.GetStoredCountsSnapshot();
+        foreach (KeyValuePair<ItemData, int> pair in snapshot)
+        {
+            int newCount = AddInternal(pair.Key, -pair.Value);
+            OnInventoryChanged?.Invoke(pair.Key, newCount);
         }
     }
 
@@ -102,5 +122,5 @@ public class InventoryManager : MonoBehaviour
     }
 
     public int GetTotal(ItemData itemData)
-        => totals.TryGetValue(itemData, out int v) ? v : 0;
+        => totals.TryGetValue(itemData, out int value) ? value : 0;
 }

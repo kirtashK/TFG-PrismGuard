@@ -1,29 +1,50 @@
-using NUnit.Framework.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
 {
-    public WarehouseType warehouseType;
+    [Header("Configuration")]
 
-    public int maxCapacity = 12;
-    public int currentCapacity = 0;
+    private WarehouseData warehouseData;
 
-    private int reservedForStore = 0;
-    private int reservedForRetrieve = 0;
+    [SerializeField, Tooltip("Updated from Data at runtime")]
+    private int maxCapacity;
+    [SerializeField, Tooltip("Updated from Data at runtime")]
+    private int currentCapacity = 0;
 
-    public int FreeSlots => maxCapacity - (currentCapacity + reservedForStore);
-    public int AvailableForRetrieve => currentCapacity - reservedForRetrieve;
+    // Each ItemData has a queue of items stored in the warehouse
+    private readonly Dictionary<ItemData, Queue<GameObject>> storedItems = new();
 
-    public ItemData storedItem;
+    private readonly Dictionary<ItemData, int> reservedForStoreByItem = new();
+    private int reservedForStoreTotal = 0;
 
-    private readonly Queue<GameObject> storedItemsQueue = new();
+    private readonly Dictionary<ItemData, int> reservedForRetrieveByItem = new();
+
+    public int FreeSlots => Mathf.Max(0, maxCapacity - (currentCapacity + reservedForStoreTotal));
+    public Vector3 GetReceivePosition() => transform.position;
 
     public event Action<ItemData> OnItemStored;
     public event Action<ItemData> OnItemRetrieved;
+
+    private void Awake()
+    {
+        if (!TryGetComponent<Structure>(out Structure structure))
+        {
+            Debug.LogError($"{name} missing Structure component");
+        }
+        if (structure.structureData is WarehouseData warehouseData)
+        {
+            this.warehouseData = warehouseData;
+            maxCapacity = warehouseData.maxCapacity;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldnt get WarehouseData from Structure");
+        }
+
+    }
 
     private void OnEnable()
     {
@@ -54,82 +75,240 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
     }
 
-    public bool CanRetrieve(ItemData item)
+    // Checks whether this warehouse allows the category of the item
+    private bool CategoryAllows(ItemData itemData)
     {
-        return storedItem == item && AvailableForRetrieve > 0;
-    }
-
-    public GameObject RetrieveItem()
-    {
-        if (storedItemsQueue.Count == 0)
+        if (itemData == null || itemData.category == null)
         {
-            return null;
-        }
-        return storedItemsQueue.Peek();
-    }
-
-    public void ConfirmRetrieval()
-    {
-        if (storedItemsQueue.Count == 0)
-        {
-            return;
+            Debug.LogError($"{name}: CategoryAllows: null ItemData or category");
+            return false;
         }
 
-        storedItemsQueue.Dequeue();
-        currentCapacity = Mathf.Max(0, currentCapacity - 1);
-        OnItemRetrieved?.Invoke(storedItem);
+        foreach (ItemCategory accepted in warehouseData.acceptedCategories)
+        {
+            if (accepted != null && accepted.Matches(itemData.category))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public bool CanReceive(ItemData data)
+    public int CategoryMatchDepth(ItemCategory itemCategory)
     {
-        bool accepts = (currentCapacity == 0
-                        ? data.storedIn.Contains(warehouseType)
-                        : storedItem == data);
-        return accepts && FreeSlots > 0;
+        // Returns:
+        //  0  => exact match 
+        //  1  => parent match
+        //  2  => grandparent match
+        // ...
+        //  n => grand grand... n match
+        // -1  => not accepted
+
+        if (itemCategory == null)
+        {
+            return -1;
+        }
+
+        int depth = 0;
+        ItemCategory current = itemCategory;
+        while (current != null)
+        {
+            if (warehouseData.acceptedCategories.Contains(current))
+            {
+                return depth;
+            }
+            current = current.parentCategory;
+            depth++;
+        }
+
+        return -1;
     }
 
-    public bool Reserve(ItemData data)
+    public bool CanRetrieve(ItemData itemData)
     {
-        if (!CanReceive(data))
+        if (itemData == null)
+        {
+            Debug.LogError($"{name}: CanRetrieve: null ItemData: [{itemData}]");
+            return false;
+        }
+        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
         {
             return false;
         }
-        reservedForStore = Mathf.Min(reservedForStore + 1, maxCapacity);
 
+        int reserved = reservedForRetrieveByItem.TryGetValue(itemData, out int storedReserved) ? storedReserved : 0;
+        return (queue.Count - reserved) > 0;
+    }
+
+    public bool ReserveForRetrieve(ItemData itemData)
+    {
+        if (!CanRetrieve(itemData))
+        {
+            return false;
+        }
+        if (reservedForRetrieveByItem.TryGetValue(itemData, out int reserved))
+        {
+            reservedForRetrieveByItem[itemData] = reserved + 1;
+        }
+        else
+        {
+            reservedForRetrieveByItem[itemData] = 1;
+        }
         return true;
     }
 
-    public void Release(ItemData data)
+    public GameObject RetrieveItem(ItemData itemData)
     {
-        reservedForStore = Mathf.Max(reservedForStore - 1, 0);
+        if (itemData == null)
+        {
+            Debug.LogError($"{name}: RetrieveItem: null ItemData [{itemData}]");
+            return null;
+        }
+
+        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        {
+            Debug.LogError($"{name}: RetrieveItem: Failed to get queue from storedItems for [{itemData}]");
+            return null;
+        }
+
+        if (queue.Count == 0)
+        {
+            Debug.LogError($"{name}: RetrieveItem: Queue empty [{itemData}]");
+            return null;
+        }
+
+        return queue.Peek();
+}
+
+    public void ConfirmRetrieval(ItemData itemData)
+    {
+        if (itemData == null)
+        {
+            Debug.LogError($"{name}: ConfirmRetrieval: null ItemData: [{itemData}]");
+            return;
+        }
+        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        {
+            Debug.LogError($"{name}: ConfirmRetrieval: Failed to get queue from storedItems for [{itemData}]");
+            return;
+        }
+        if (queue.Count == 0)
+        {
+            Debug.LogError($"{name}: ConfirmRetrieval: Queue empty [{itemData}]");
+            return;
+        }
+
+        GameObject front = queue.Peek();
+        if (front != null)
+        {
+            if (front.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+            {
+                moveItemTask.ClearStored();
+            }
+        }
+
+        GameObject gameObject = queue.Dequeue();
+        currentCapacity = Mathf.Max(0, currentCapacity - 1);
+
+        if (reservedForRetrieveByItem.TryGetValue(itemData, out int reserved) && reserved > 0)
+        {
+            reservedForRetrieveByItem[itemData] = reserved - 1;
+        }
+
+        if (queue.Count == 0)
+        {
+            storedItems.Remove(itemData);
+        }
+
+        OnItemRetrieved?.Invoke(itemData);
     }
 
-    public Vector3 GetReceivePosition() => transform.position;
-
-    public void OnReceived(GameObject item, ItemData data)
+    public bool CanReceive(ItemData itemData)
     {
+        if (!CategoryAllows(itemData))
+        {
+            return false;
+        }
+        return FreeSlots > 0;
+    }
+
+    public bool Reserve(ItemData itemData)
+    {
+        if (!CanReceive(itemData))
+        {
+            return false;
+        }
+
+        if (reservedForStoreByItem.TryGetValue(itemData, out int current))
+        {
+            reservedForStoreByItem[itemData] = current + 1;
+        }
+        else
+        {
+            reservedForStoreByItem[itemData] = 1;
+        }
+
+        reservedForStoreTotal++;
+        return true;
+    }
+
+    public void Release(ItemData itemData)
+    {
+        if (itemData == null)
+        {
+            Debug.LogError($"{name}: Release: null ItemData: [{itemData}]");
+            return;
+        }
+        if (reservedForStoreByItem.TryGetValue(itemData, out int current) && current > 0)
+        {
+            reservedForStoreByItem[itemData] = current - 1;
+            reservedForStoreTotal = Mathf.Max(0, reservedForStoreTotal - 1);
+        }
+    }
+
+
+    public void OnReceived(GameObject item, ItemData itemData)
+    {
+        if (item == null || itemData == null)
+        {
+            Debug.LogError($"{name}: OnReceived: null item or ItemData");
+            return;
+        }
+
         if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
         {
             itemInstance.SetVisible(true);
         }
 
-        Release(data);
-
-        if (currentCapacity == 0)
-        {
-            storedItem = data;
-        }
-
-        currentCapacity++;
-        storedItemsQueue.Enqueue(item);
         item.transform.SetParent(transform, worldPositionStays: true);
         item.transform.position = GetReceivePosition();
 
+        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        {
+            queue = new Queue<GameObject>();
+            storedItems[itemData] = queue;
+        }
+        queue.Enqueue(item);
+        currentCapacity = Mathf.Max(0, currentCapacity + 1);
+
+        Release(itemData);
+
         if (item.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
         {
-            moveItemTask.Reset();
+            moveItemTask.MarkStored();
         }
 
-        OnItemStored?.Invoke(data);
+        OnItemStored?.Invoke(itemData);
+    }
+
+    // Returns a readonly snapshot of stored counts by item
+    public IReadOnlyDictionary<ItemData, int> GetStoredCountsSnapshot()
+    {
+        Dictionary<ItemData, int> snapshot = new();
+        foreach (KeyValuePair<ItemData, Queue<GameObject>> pair in storedItems)
+        {
+            snapshot[pair.Key] = pair.Value.Count;
+        }
+        return snapshot;
     }
 }

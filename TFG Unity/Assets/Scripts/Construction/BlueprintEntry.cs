@@ -40,13 +40,13 @@ public class BlueprintEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private string BuildCostString(StructureData data)
     {
-        if (data.requirements == null || data.requirements.Count == 0)
+        if (data.buildRequirements == null || data.buildRequirements.Count == 0)
         {
             return "Free";
         }
 
         StringBuilder cost = new();
-        foreach (StructureData.ResourceRequirement requirement in data.requirements)
+        foreach (StructureData.ResourceRequirement requirement in data.buildRequirements)
         {
             if (requirement.itemData != null)
             {

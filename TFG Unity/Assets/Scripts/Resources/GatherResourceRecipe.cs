@@ -43,7 +43,6 @@ public class GatherResourceRecipe : ScriptableObject
         {
             Debug.LogWarning($"{name} missing resourceItemData");
         }
-
         if (resourceAmount > 0)
         {
             if (resourceAmount - resourceMaxDeviation < 1)

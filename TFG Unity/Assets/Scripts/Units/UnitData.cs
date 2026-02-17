@@ -43,15 +43,13 @@ public class UnitData : ScriptableObject
 
     void OnValidate()
     {
-        // Fix negative values
-        buildTime = Mathf.Max(0f, buildTime);
-        scoreCost = Mathf.Max(0, scoreCost);
-        maxHealth = Mathf.Max(0f, maxHealth);
-        moveSpeed = Mathf.Max(0f, moveSpeed);
-
         if (PrefabReference == null)
         {
             Debug.LogWarning($"UnitData '{name}' missing PrefabReference");
+        }
+        if (createCosts == null || createCosts.Count == 0)
+        {
+            Debug.LogWarning($"{name}: createCosts not configured");
         }
     }
 }

@@ -81,4 +81,50 @@ public class WarehouseManager : MonoBehaviour
             OnWarehouseUnregistered?.Invoke(warehouse);
         }
     }
+
+    /// <summary>
+    /// Finds items matching ItemData in all warehouses and returns a list with the items found.
+    /// These items are retrieved from warehouses, meaning they have been reserved and released.
+    /// Their MoveItemTasks are not reset nor they are unparented from the warehouse
+    /// </summary>
+    /// <param name="itemData">ItemData to find</param>
+    /// <param name="quantity">Amount of items to find</param>
+    /// <returns> List of items matching itemData found in all warehouses</returns>
+    public List<GameObject> FindItemsInWarehouses(ItemData itemData, int quantity = 1)
+    {
+        List<GameObject> itemsFound = new();
+
+        foreach (Warehouse warehouse in AllWarehouses)
+        {
+            if (quantity <= 0)
+            {
+                break;
+            }
+            if (warehouse == null)
+            {
+                continue;
+            }
+
+            while (quantity > 0 && warehouse.CanRetrieve(itemData))
+            {
+                if (!warehouse.ReserveForRetrieve(itemData))
+                {
+                    break;
+                }
+
+                GameObject grabbed = warehouse.RetrieveItem(itemData);
+                if (grabbed == null)
+                {
+                    Debug.LogWarning($"{name} retrieved null item: {itemData.name}");
+                    break;
+                }
+
+                itemsFound.Add(grabbed);
+                warehouse.ConfirmRetrieval(itemData);
+                quantity--;
+            }
+        }
+
+        return itemsFound;
+    }
 }

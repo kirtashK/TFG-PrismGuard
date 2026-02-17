@@ -22,7 +22,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         pending.Clear();
         storedObjects.Clear();
 
-        foreach (StructureData.ResourceRequirement requirement in structureData.requirements)
+        foreach (StructureData.ResourceRequirement requirement in structureData.buildRequirements)
         {
             delivered[requirement.itemData] = 0;
             pending[requirement.itemData] = 0;
@@ -62,7 +62,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private void TryConstruct()
     {
-        foreach (StructureData.ResourceRequirement requirement in structureData.requirements)
+        foreach (StructureData.ResourceRequirement requirement in structureData.buildRequirements)
         {
             if (DeliveredCount(requirement.itemData) < requirement.quantity)
             {
@@ -94,7 +94,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         int have = delivered[item];
         int inFlight = pending[item];
-        int needed = structureData.requirements
+        int needed = structureData.buildRequirements
                           .Find(required => required.itemData == item).quantity;
 
         return (have + inFlight) < needed;
@@ -109,7 +109,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         int have = delivered[item];
         int inFlight = pending[item];
-        int needed = structureData.requirements
+        int needed = structureData.buildRequirements
                           .Find(required => required.itemData == item).quantity;
 
         if ((have + inFlight) >= needed)
@@ -155,7 +155,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         TryConstruct();
     }
 
-    public void ConfirmRetrieval()
+    public void ConfirmRetrieval(ItemData item)
     {
         // Does nothing as Blueprint doesnt
         // store items to be picked up

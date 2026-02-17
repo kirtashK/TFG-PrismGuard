@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveItemTask : MonoBehaviour, ITask
@@ -22,8 +23,6 @@ public class MoveItemTask : MonoBehaviour, ITask
     ItemInstance itemInstance;
 
     private IItemConsumer target;
-    // Some items will come from intermediaries such as warehouses
-    // for those items, once picked up we reduce capacity of source
     public IItemConsumer source = null;
     private bool isRegisteredToTaskManager;
     private bool isSubscribedToConsumerEvents;
@@ -31,6 +30,7 @@ public class MoveItemTask : MonoBehaviour, ITask
     public IItemConsumer TargetConsumer => target;
 
     private IItemConsumer lastConsumer;
+    private bool isStored = false;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         if (itemInstance == null)
         {
-            Debug.LogError(name + ": no ItemInstance in this GameObject");
+            Debug.LogError($"{name}: null ItemInstance");
         }
     }
 
@@ -114,51 +114,33 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         while (target == null)
         {
-            foreach (IItemConsumer consumer in ItemConsumerManager.Instance.ActiveConsumers)
-            {
-                if (consumer == lastConsumer)
-                {
-                    continue;
-                }
-                if (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled)
-                {
-                    continue;
-                }
-                if (consumer is not Warehouse
-                    && consumer.CanReceive(TaskData)
-                    && consumer.Reserve(TaskData))
-                {
-                    source = GetComponentInParent<IItemConsumer>();
-                    target = consumer;
-                    TaskManager.Instance.RegisterTask(this);
-                    isRegisteredToTaskManager = true;
-                    yield break;
-                }
-            }
+            IEnumerable<IItemConsumer> candidates = ItemConsumerManager.Instance.FindCandidatesFor(TaskData, transform.position, lastConsumer);
 
-            if (lastConsumer is not Warehouse)
+            foreach (IItemConsumer candidate in candidates)
             {
-                foreach (IItemConsumer consumer in ItemConsumerManager.Instance.ActiveConsumers)
+                if (candidate == null)
                 {
-                    if (consumer == lastConsumer)
-                    {
-                        continue;
-                    }
-                    if (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled)
-                    {
-                        continue;
-                    }
-                    if (consumer is Warehouse
-                        && consumer.CanReceive(TaskData)
-                        && consumer.Reserve(TaskData))
-                    {
-                        source = GetComponentInParent<IItemConsumer>();
-                        target = consumer;
-                        TaskManager.Instance.RegisterTask(this);
-                        isRegisteredToTaskManager = true;
-                        yield break;
-                    }
+                    continue;
                 }
+                // Skip warehouses if item is already in a warehouse
+                if (isStored && candidate is Warehouse)
+                {
+                    continue;
+                }
+                if (candidate is MonoBehaviour mb && !mb.isActiveAndEnabled)
+                {
+                    continue;
+                }
+                if (!candidate.Reserve(TaskData))
+                {
+                    continue;
+                }
+
+                source = GetComponentInParent<IItemConsumer>();
+                target = candidate;
+                TaskManager.Instance.RegisterTask(this);
+                isRegisteredToTaskManager = true;
+                yield break;
             }
 
             yield return wait;
@@ -288,5 +270,36 @@ public class MoveItemTask : MonoBehaviour, ITask
     public void Cancel(Worker requester)
     {
         HandleCancelTask(target);
+    }
+
+    /// <summary>
+    /// Mark this task as stored in a Warehouse. 
+    /// Stored tasks will not consider
+    /// other warehouses when polling for consumers
+    /// </summary>
+    public void MarkStored()
+    {
+        isStored = true;
+
+        if (target != null)
+        {
+            lastConsumer = target;
+            target = null;
+        }
+        source = null;
+
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
+        {
+            TaskManager.Instance.UnregisterTask(this);
+            isRegisteredToTaskManager = false;
+        }
+
+        StopAllCoroutines();
+        StartCoroutine(PollForConsumer());
+    }
+
+    public void ClearStored()
+    {
+        isStored = false;
     }
 }

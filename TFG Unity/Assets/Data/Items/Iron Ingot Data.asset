@@ -17,8 +17,7 @@ MonoBehaviour:
   itemPrefab: {fileID: 5842503896629669116, guid: d94c3f53b3e86114f914fd70cf570d20, type: 3}
   weight: 2
   interactionRange: 1
-  storedIn:
-  - {fileID: 11400000, guid: 7fc599063e2a89d4eac0c3f704f0e9c1, type: 2}
+  category: {fileID: 11400000, guid: 72029dbe55697c742b46e0eab939f50a, type: 2}
   canBeBought: 1
   buyPrice: 40
   canBeSold: 1

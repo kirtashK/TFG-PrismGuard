@@ -94,8 +94,9 @@ public class MultiTransportState : IWorkerState
         TaskManager.Instance.CompleteTask(task);
 
         // If there is a source (such as warehouse),
-        // confirm retrieval (pickup) of the item
-        task.source?.ConfirmRetrieval();
+        // confirm retrieval of the item
+        task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance);
+        task.source?.ConfirmRetrieval(instance.itemData);
 
         collectedTasks.Add(task);
 

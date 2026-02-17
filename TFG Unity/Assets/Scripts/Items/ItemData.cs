@@ -16,8 +16,8 @@ public class ItemData : ScriptableObject
     public float interactionRange = 1;
     //public int priority;
 
-    [Tooltip("Warehouse type where this item can be stored")]
-    public List<WarehouseType> storedIn = new();
+    [Tooltip("Category (leaf) of the item")]
+    public ItemCategory category;
 
     [Header("Trading")]
     public bool canBeBought = true;
@@ -28,4 +28,24 @@ public class ItemData : ScriptableObject
     [Range(0f, 1f)]
     [Tooltip("Sell price is buy price * sellFraction")]
     public float sellFraction = 0.25f;
+
+    void OnValidate()
+    {
+        if (string.IsNullOrEmpty(itemName))
+        {
+            Debug.LogWarning($"{name} missing itemName");
+        }
+        if (icon == null)
+        {
+            Debug.LogWarning($"{name} missing icon");
+        }
+        if (itemPrefab == null)
+        {
+            Debug.LogWarning($"{name} missing itemPrefab");
+        }
+        if (category == null)
+        {
+            Debug.LogWarning($"{name} missing category");
+        }
+    }
 }

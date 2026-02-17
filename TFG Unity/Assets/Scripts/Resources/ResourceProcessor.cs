@@ -370,7 +370,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
-    public void ConfirmRetrieval()
+    public void ConfirmRetrieval(ItemData item)
     {
 
     }
