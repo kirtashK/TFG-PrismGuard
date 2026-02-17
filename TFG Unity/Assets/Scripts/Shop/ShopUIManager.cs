@@ -368,7 +368,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
         if (totalSell > 0)
         {
-            // Destroy items sold from warehouses
+            // Check if there is stock of the items to sell:
             foreach (KeyValuePair<ItemData, int> sellPair in pendingSells)
             {
                 ItemData itemToSell = sellPair.Key;
@@ -385,43 +385,23 @@ public class ShopUIManager : MonoBehaviour, IHideElement
                 }
             }
 
+            // Destroy sold items from warehouses:
             if (pendingSells.Count > 0)
             {
                 foreach (KeyValuePair<ItemData, int> sellPair in pendingSells)
                 {
                     ItemData itemToSell = sellPair.Key;
-                    int remaining = sellPair.Value;
+                    int quantity = sellPair.Value;
 
-                    foreach (Warehouse warehouse in WarehouseManager.Instance.AllWarehouses)
+                    List<GameObject> itemsFound = WarehouseManager.Instance.FindItemsInWarehouses(itemToSell, quantity);
+                    if (itemsFound.Count <= 0 || itemsFound == null)
                     {
-                        if (remaining <= 0)
-                        {
-                            break;
-                        }
+                        continue;
+                    }
 
-                        if (warehouse == null)
-                        {
-                            continue;
-                        }
-
-                        while (remaining > 0 && warehouse.CanRetrieve(itemToSell))
-                        {
-                            if (!warehouse.ReserveForRetrieve(itemToSell))
-                            {
-                                break;
-                            }
-
-                            GameObject grabbed = warehouse.RetrieveItem(itemToSell);
-                            if (grabbed == null)
-                            {
-                                Debug.LogWarning($"{name} retrieved null item: {itemToSell.name}");
-                                break;
-                            }
-
-                            warehouse.ConfirmRetrieval(itemToSell);
-                            Destroy(grabbed);
-                            remaining--;
-                        }
+                    foreach (GameObject item in itemsFound)
+                    {
+                        Destroy(item);
                     }
                 }
             }
