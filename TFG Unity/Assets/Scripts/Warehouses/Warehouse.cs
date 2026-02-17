@@ -83,6 +83,40 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         return false;
     }
 
+    public int CategoryMatchDepth(ItemCategory itemCategory)
+    {
+        // Returns:
+        //  0  => exact match 
+        //  1  => parent match
+        //  2  => grandparent match
+        // ...
+        //  n => grand grand... n match
+        // -1  => not accepted
+
+        if (itemCategory == null)
+        {
+            return -1;
+        }
+        if (acceptedCategories == null || acceptedCategories.Count == 0)
+        {
+            return -1;
+        }
+
+        int depth = 0;
+        ItemCategory current = itemCategory;
+        while (current != null)
+        {
+            if (acceptedCategories.Contains(current))
+            {
+                return depth;
+            }
+            current = current.parentCategory;
+            depth++;
+        }
+
+        return -1;
+    }
+
     public bool CanRetrieve(ItemData itemData)
     {
         if (itemData == null)
@@ -155,6 +189,15 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             Debug.LogError($"{name}: ConfirmRetrieval: Queue empty [{itemData}]");
             return;
+        }
+
+        GameObject front = queue.Peek();
+        if (front != null)
+        {
+            if (front.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+            {
+                moveItemTask.ClearStored();
+            }
         }
 
         GameObject gameObject = queue.Dequeue();
@@ -245,7 +288,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
         if (item.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
         {
-            moveItemTask.Reset();
+            moveItemTask.MarkStored();
         }
 
         OnItemStored?.Invoke(itemData);
