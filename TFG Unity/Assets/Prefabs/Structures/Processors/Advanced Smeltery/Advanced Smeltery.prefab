@@ -49,9 +49,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Storage: {fileID: 1927618727268396039}
-  recipes:
-  - {fileID: 11400000, guid: f593e59cb096c8e49bdbf4a302b4fd98, type: 2}
-  - {fileID: 11400000, guid: 9e946a5595a89a24cbaf4d4e05d6ff85, type: 2}
   processingCheckInterval: 1
 --- !u!114 &6647325322964759026
 MonoBehaviour:
@@ -81,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
-  structureData: {fileID: 11400000, guid: 85c45b70d83593d418a1ad4e9aca7c80, type: 2}
+  structureData: {fileID: 11400000, guid: b1f8ae87863bd8041848b115ca805adc, type: 2}
 --- !u!1 &6038108138648192566
 GameObject:
   m_ObjectHideFlags: 0

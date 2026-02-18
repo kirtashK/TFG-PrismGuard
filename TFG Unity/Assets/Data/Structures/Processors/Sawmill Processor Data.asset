@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: Sawmill Structure Data
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
+  m_Name: Sawmill Processor Data
+  m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
   structureName: Sawmill
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   category: 1
@@ -24,7 +24,7 @@ MonoBehaviour:
   allowRotation: 1
   isUnique: 0
   buildRequirements:
-  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 3
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
     quantity: 5
+  recipes:
+  - {fileID: 11400000, guid: 7baa33530134fb647bbbb16b7ef0d643, type: 2}

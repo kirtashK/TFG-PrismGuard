@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: Quarry Structure Data
-  m_EditorClassIdentifier: 
-  structureName: Rock Processor
+  m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
+  m_Name: Quarry Processor Data
+  m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
+  structureName: Quarry
   icon: {fileID: 21300000, guid: 06924a880ddbe1847aaa37e19550b66e, type: 3}
   category: 1
   builtPrefab: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
@@ -27,4 +27,6 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 15
   - itemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
-    quantity: 3
+    quantity: 5
+  recipes:
+  - {fileID: 11400000, guid: 3675196ec306c5741b556b7ca6af1b96, type: 2}

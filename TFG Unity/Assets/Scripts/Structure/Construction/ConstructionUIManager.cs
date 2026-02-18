@@ -62,7 +62,10 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
     private void OnDisable()
     {
-        HideElementManager.Instance.Unregister(this);
+        if (HideElementManager.Instance != null)
+        {
+            HideElementManager.Instance.Unregister(this);
+        }
     }
 
     private void OnDestroy()
