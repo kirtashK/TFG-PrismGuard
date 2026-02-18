@@ -39,12 +39,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5c91eb4717684d942b3d89f7c24442d1
-    m_Address: Assets/Data/Structures/Unit Factories/Barracks Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 696efa391f26a3249a92640eebbe17fb
     m_Address: Assets/Data/Structures/Shop Structure Data.asset
     m_ReadOnly: 0
@@ -71,6 +65,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 85c45b70d83593d418a1ad4e9aca7c80
     m_Address: Assets/Data/Structures/Processors/Advanced Smeltery Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 902bcb767f824c34ca0b4d3091b175af
+    m_Address: Assets/Data/Structures/Unit Factories/Barracks UnitFactory Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure

@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 7952553735873283216}
   - component: {fileID: 6429627737112061258}
   - component: {fileID: 7725204610998575317}
+  - component: {fileID: 2002133685601864138}
   m_Layer: 11
   m_Name: Crystal
   m_TagString: Crystal
@@ -379,14 +380,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3084fd88b046b41b5296050fc11534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitFactory
-  producibleUnits:
-  - {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
-  - {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
-  concurrentSlots: 1
-  maxQueueLength: 5
   spawnPoints:
   - {fileID: 1672006028333933476}
   storageParent: {fileID: 901033673475486075}
+--- !u!114 &2002133685601864138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4318969222942069268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Structure
+  structureData: {fileID: 11400000, guid: 3e972d6cafe6be145b7360c7607d4690, type: 2}
 --- !u!1 &4903643534114283627
 GameObject:
   m_ObjectHideFlags: 0

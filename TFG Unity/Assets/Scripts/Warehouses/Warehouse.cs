@@ -37,13 +37,13 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         if (structure.structureData is WarehouseData warehouseData)
         {
             this.warehouseData = warehouseData;
+
             maxCapacity = warehouseData.maxCapacity;
         }
         else
         {
             Debug.LogWarning($"{name} couldnt get WarehouseData from Structure");
         }
-
     }
 
     private void OnEnable()

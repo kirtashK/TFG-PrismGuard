@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: Barracks Structure Data
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 00e3f69d911988f4e92ed0de6979002c, type: 3}
+  m_Name: Barracks UnitFactory Data
+  m_EditorClassIdentifier: Assembly-CSharp::UnitFactoryData
   structureName: Barracks
   icon: {fileID: 21300000, guid: bb055d4ecf1af5a42a0d302ae5d449ff, type: 3}
   category: 3
@@ -30,3 +30,8 @@ MonoBehaviour:
     quantity: 10
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 25
+  producibleUnits:
+  - {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
+  - {fileID: 11400000, guid: 74485857ba9c0224e97c0f4ae5fdca31, type: 2}
+  concurrentSlots: 1
+  maxQueueLength: 5

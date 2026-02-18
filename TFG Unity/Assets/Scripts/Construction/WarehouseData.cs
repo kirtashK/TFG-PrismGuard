@@ -9,7 +9,7 @@ public class WarehouseData : StructureData
     public List<ItemCategory> acceptedCategories = new();
 
     [Tooltip("Maximum total number of items that can be stored")]
-    [Range(0, 100)]
+    [Range(1, 100)]
     public int maxCapacity = 12;
 
     void OnValidate()

@@ -8,13 +8,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [DisallowMultipleComponent]
 public class UnitFactory : MonoBehaviour
 {
-    [Header("Production settings")]
-    [Tooltip("Units (data) this factory can produce. Empty = all units")]
-    public List<UnitData> producibleUnits = new();
-    [Tooltip("Max concurrent creation of units")]
-    public int concurrentSlots = 1;
-    [Tooltip("Max queue length (-1 = unlimited)")]
-    public int maxQueueLength = 5;
+    private UnitFactoryData unitFactoryData;
+
+    private int concurrentSlots = 1;
+    private int maxQueueLength = 5;
 
     public Transform[] spawnPoints;
     private int spawnRoundRobin = 0;
@@ -38,6 +35,22 @@ public class UnitFactory : MonoBehaviour
         if (storageParent == null)
         {
             Debug.LogWarning($"{name} missing storage");
+        }
+
+        if (!TryGetComponent<Structure>(out Structure structure))
+        {
+            Debug.LogError($"{name} missing Structure component");
+        }
+        if (structure.structureData is UnitFactoryData unitFactoryData)
+        {
+            this.unitFactoryData = unitFactoryData;
+
+            concurrentSlots = unitFactoryData.concurrentSlots;
+            maxQueueLength = unitFactoryData.maxQueueLength;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldnt get UnitFactoryData from Structure");
         }
     }
 
@@ -270,9 +283,9 @@ public class UnitFactory : MonoBehaviour
 
     public IEnumerable<UnitData> GetProducibleUnits(UnitRegistryAddressables registry)
     {
-        if (producibleUnits != null && producibleUnits.Count > 0)
+        if (unitFactoryData.producibleUnits != null && unitFactoryData.producibleUnits.Count > 0)
         {
-            return producibleUnits;
+            return unitFactoryData.producibleUnits;
         }
         else if (registry != null)
         {

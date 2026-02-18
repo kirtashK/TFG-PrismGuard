@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e3f69d911988f4e92ed0de6979002c, type: 3}
+  m_Name: Crystal UnitFactory Data
+  m_EditorClassIdentifier: Assembly-CSharp::UnitFactoryData
+  structureName: Crystal
+  icon: {fileID: 0}
+  category: 4
+  builtPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}
+  blueprintPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}
+  previewPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+    quantity: 0
+  producibleUnits:
+  - {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
+  concurrentSlots: 1
+  maxQueueLength: 5
