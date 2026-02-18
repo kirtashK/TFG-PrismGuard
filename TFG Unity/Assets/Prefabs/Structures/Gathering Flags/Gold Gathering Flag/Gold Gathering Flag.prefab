@@ -49,8 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedCategories: 04000000
-  detectionRadius: 10
 --- !u!114 &8637009301420071870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
-  structureData: {fileID: 11400000, guid: 9ff4dcdd1cedc6e489e5d19d727ff071, type: 2}
+  structureData: {fileID: 11400000, guid: 96a5b81a6726ac546a34ce0f72974388, type: 2}
 --- !u!114 &8548758030102401255
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,11 +5,10 @@ using UnityEngine;
 public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
     [Header("Configuration")]
+    private ProcessorData processorData;
+
     [Tooltip("Gameobject where outputs will be stored")]
     public Transform Storage;
-
-    [Tooltip("List of recipes this building has availible")]
-    public List<ProcessResourceRecipe> recipes;
 
     [Tooltip("Seconds between checks for processing batches")]
     public float processingCheckInterval = 1f;
@@ -36,13 +35,26 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private void Awake()
     {
+        if (!TryGetComponent<Structure>(out Structure structure))
+        {
+            Debug.LogError($"{name} missing Structure component");
+        }
+        if (structure.structureData is ProcessorData processorData)
+        {
+            this.processorData = processorData;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldnt get ProcessorData from Structure");
+        }
+
         InitializeRecipeStates();
     }
 
     private void InitializeRecipeStates()
     {
-        recipeStates = new List<RecipeState>(recipes.Count);
-        foreach (ProcessResourceRecipe recipe in recipes)
+        recipeStates = new List<RecipeState>(processorData.recipes.Count);
+        foreach (ProcessResourceRecipe recipe in processorData.recipes)
         {
             recipeStates.Add(new RecipeState
             {

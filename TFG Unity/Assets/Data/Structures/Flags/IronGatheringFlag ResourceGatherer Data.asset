@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
+  m_Name: IronGatheringFlag ResourceGatherer Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
+  structureName: Iron mining flag
+  icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
+  category: 2
+  builtPrefab: {fileID: 3923448407394807079, guid: be91ff141696c29488dc17fc39a52ff7, type: 3}
+  blueprintPrefab: {fileID: 4484192747599782844, guid: ed32beff4080fd540931c91405ac8dda, type: 3}
+  previewPrefab: {fileID: 3923448407394807079, guid: 782ab73cc474c454382644db2c0d6adf, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+    quantity: 0
+  allowedCategories: 03000000
+  gatheringRadius: 10
