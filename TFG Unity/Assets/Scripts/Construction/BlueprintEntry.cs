@@ -40,7 +40,8 @@ public class BlueprintEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private string BuildCostString(StructureData data)
     {
-        if (data.buildRequirements == null || data.buildRequirements.Count == 0)
+        if (data.buildRequirements == null || data.buildRequirements.Count == 0
+            || (data.buildRequirements.Count == 1 && data.buildRequirements[0].quantity == 0))
         {
             return "Free";
         }
