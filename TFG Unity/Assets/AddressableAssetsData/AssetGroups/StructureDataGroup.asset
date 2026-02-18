@@ -21,8 +21,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2e0ba87fa1577e947a1f75ada4ff194a
-    m_Address: Assets/Data/Structures/Flags/IronGatheringFlag Structure Data.asset
+  - m_GUID: 215497a59705e384e93cbb1906f0cb07
+    m_Address: Assets/Data/Structures/Flags/CopperGatheringFlag ResourceGatherer
+      Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3660304d644e65a47a4620da796a9ff5
+    m_Address: Assets/Data/Structures/Flags/IronGatheringFlag ResourceGatherer Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58d32af04d0ffde49a33022614a70bb3
+    m_Address: Assets/Data/Structures/Flags/StoneGatheringFlag ResourceGatherer Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
@@ -51,14 +64,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7d3d4c76d9d48644fa289e09e18f5d4b
-    m_Address: Assets/Data/Structures/Flags/TreeGatheringFlag Structure Data.asset
+  - m_GUID: 902bcb767f824c34ca0b4d3091b175af
+    m_Address: Assets/Data/Structures/Unit Factories/Barracks UnitFactory Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 902bcb767f824c34ca0b4d3091b175af
-    m_Address: Assets/Data/Structures/Unit Factories/Barracks UnitFactory Data.asset
+  - m_GUID: 96a5b81a6726ac546a34ce0f72974388
+    m_Address: Assets/Data/Structures/Flags/GoldGatheringFlag ResourceGatherer Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
@@ -69,20 +82,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ff4dcdd1cedc6e489e5d19d727ff071
-    m_Address: Assets/Data/Structures/Flags/GoldGatheringFlag Structure Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b1f8ae87863bd8041848b115ca805adc
     m_Address: Assets/Data/Structures/Processors/AdvancedSmelter Processor Data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Structure
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b74abda0516bb2a4886c00c877900f61
-    m_Address: Assets/Data/Structures/Flags/StoneGatheringFlag Structure Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure
@@ -105,8 +106,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f892234f26677674d93cec6b64cf47fc
-    m_Address: Assets/Data/Structures/Flags/CopperGatheringFlag Structure Data.asset
+  - m_GUID: fb95fba4ad7ad32408677ec8ced9752b
+    m_Address: Assets/Data/Structures/Flags/WoodGatheringFlag ResourceGatherer Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Structure

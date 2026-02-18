@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 7d3d4c76d9d48644fa289e09e18f5d4b, type: 2}
+  structureData: {fileID: 11400000, guid: fb95fba4ad7ad32408677ec8ced9752b, type: 2}
   dropSpot: {fileID: 8173212856798650682}
 --- !u!114 &3202416580493064236
 MonoBehaviour:
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd9fa3587364fa4f9308aeec21ba672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
-  structureData: {fileID: 11400000, guid: 7d3d4c76d9d48644fa289e09e18f5d4b, type: 2}
+  structureData: {fileID: 11400000, guid: fb95fba4ad7ad32408677ec8ced9752b, type: 2}
 --- !u!1001 &2141500091176684473
 PrefabInstance:
   m_ObjectHideFlags: 0

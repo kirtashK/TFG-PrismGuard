@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
-  m_Name: CopperGatheringFlag Structure Data
-  m_EditorClassIdentifier: 
-  structureName: Copper gathering flag
+  m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
+  m_Name: CopperGatheringFlag ResourceGatherer Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
+  structureName: Copper mining flag
   icon: {fileID: 21300000, guid: ae11735a4ba371d4b976ee3acae23dfb, type: 3}
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 9f6fd567cf2df504d821e7a5e2dd7bc6, type: 3}
@@ -26,3 +26,5 @@ MonoBehaviour:
   buildRequirements:
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
     quantity: 0
+  allowedCategories: 02000000
+  gatheringRadius: 10

@@ -7,45 +7,58 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ResourceGatherer : MonoBehaviour
 {
-    [Tooltip("This gatherer will mark only the choosen categories")]
-    public List<ResourceCategory> allowedCategories;
+    private ResourceGathererData resourceGathererData;
 
-    [Tooltip("Detection radius")]
-    public float detectionRadius = 10f;
+    private float gatheringRadius;
 
     private readonly HashSet<ResourceInstance> trackedNodes = new();
     private readonly Collider[] scanResults = new Collider[5];
     private int nodeLayerMask;
 
-    private SphereCollider sphereCollider;
-    private Rigidbody rb;
+    private SphereCollider detectionArea;
+    private Rigidbody rigidBody;
 
     private void Awake()
     {
+        if (!TryGetComponent<Structure>(out Structure structure))
+        {
+            Debug.LogError($"{name} missing Structure component");
+        }
+        if (structure.structureData is ResourceGathererData resourceGathererData)
+        {
+            this.resourceGathererData = resourceGathererData;
+
+            gatheringRadius = resourceGathererData.gatheringRadius;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldnt get ResourceGathererData from Structure");
+        }
+
         nodeLayerMask = 1 << LayerMask.NameToLayer("ResourceNode");
 
-        sphereCollider = GetComponent<SphereCollider>();
-        if (sphereCollider == null)
+        detectionArea = GetComponent<SphereCollider>();
+        if (detectionArea == null)
         {
-            sphereCollider = gameObject.AddComponent<SphereCollider>();
+            detectionArea = gameObject.AddComponent<SphereCollider>();
         }
-        sphereCollider.isTrigger = true;
-        sphereCollider.radius = detectionRadius;
+        detectionArea.isTrigger = true;
+        detectionArea.radius = gatheringRadius;
 
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
+        rigidBody = GetComponent<Rigidbody>();
+        if (rigidBody == null)
         {
-            rb = gameObject.AddComponent<Rigidbody>();
+            rigidBody = gameObject.AddComponent<Rigidbody>();
         }
-        rb.isKinematic = true;
-        rb.useGravity = false;
+        rigidBody.isKinematic = true;
+        rigidBody.useGravity = false;
     }
 
     private void Start()
     {
         int numColliders = Physics.OverlapSphereNonAlloc(
             transform.position, 
-            detectionRadius, 
+            gatheringRadius, 
             scanResults, 
             nodeLayerMask);
 
@@ -84,7 +97,7 @@ public class ResourceGatherer : MonoBehaviour
             return;
         }
 
-        if (!allowedCategories.Contains(instance.data.category))
+        if (!resourceGathererData.allowedCategories.Contains(instance.data.category))
         {
             return;
         }
@@ -120,6 +133,16 @@ public class ResourceGatherer : MonoBehaviour
 
     private void OnDisable()
     {
+        ResetResourceGatherer();
+    }
+
+    private void OnDestroy()
+    {
+        ResetResourceGatherer();
+    }
+
+    private void ResetResourceGatherer()
+    {
         foreach (ResourceInstance resourceNode in trackedNodes)
         {
             if (resourceNode != null)
@@ -134,6 +157,6 @@ public class ResourceGatherer : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        Gizmos.DrawWireSphere(transform.position, gatheringRadius);
     }
 }
