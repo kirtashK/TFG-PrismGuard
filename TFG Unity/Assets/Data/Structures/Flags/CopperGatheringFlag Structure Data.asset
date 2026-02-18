@@ -22,4 +22,7 @@ MonoBehaviour:
   gridSize: 1
   placementRadius: 1
   allowRotation: 1
-  requirements: []
+  isUnique: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+    quantity: 0

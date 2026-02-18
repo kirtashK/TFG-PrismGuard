@@ -23,8 +23,10 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
-  requirements:
-  - itemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
-    quantity: 2
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+    quantity: 5
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-    quantity: 6
+    quantity: 10
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 25

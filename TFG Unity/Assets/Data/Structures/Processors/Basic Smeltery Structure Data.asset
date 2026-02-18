@@ -22,8 +22,9 @@ MonoBehaviour:
   gridSize: 1
   placementRadius: 1
   allowRotation: 1
-  requirements:
+  isUnique: 0
+  buildRequirements:
   - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
-    quantity: 6
+    quantity: 15
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 6
+    quantity: 5
