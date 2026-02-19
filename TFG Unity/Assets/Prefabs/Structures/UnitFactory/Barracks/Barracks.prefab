@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9091951440356832418}
   - component: {fileID: 5335612158474111579}
+  - component: {fileID: 8792035542860803975}
   - component: {fileID: 554532882235054087}
   - component: {fileID: 5122522788388491219}
   m_Layer: 11
@@ -50,6 +51,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 902bcb767f824c34ca0b4d3091b175af, type: 2}
+--- !u!114 &8792035542860803975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947097100652634618}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Blueprint
+  structureData: {fileID: 11400000, guid: 902bcb767f824c34ca0b4d3091b175af, type: 2}
+  dropSpot: {fileID: 7191026175863920374}
 --- !u!114 &554532882235054087
 MonoBehaviour:
   m_ObjectHideFlags: 0

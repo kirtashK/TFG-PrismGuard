@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2058269989452010015, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2546845067247819169, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3947097100652634618, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
       propertyPath: m_Name
       value: Barracks Preview
@@ -80,6 +88,7 @@ PrefabInstance:
     - {fileID: 5335612158474111579, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
     - {fileID: 554532882235054087, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
     - {fileID: 5122522788388491219, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
+    - {fileID: 8792035542860803975, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6994114695348730636, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
     - {fileID: 6094546624650498043, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
