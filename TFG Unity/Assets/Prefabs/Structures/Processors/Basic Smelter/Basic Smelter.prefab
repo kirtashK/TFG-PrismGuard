@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 8498928330062369427}
   - component: {fileID: 216417968583139314}
   - component: {fileID: 3309558972003691439}
+  - component: {fileID: 2975000824401172141}
   m_Layer: 11
   m_Name: Basic Smelter
   m_TagString: Untagged
@@ -165,6 +166,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 9dd51a9921b3c3240ba2c6cb5cf0e173, type: 2}
+--- !u!114 &2975000824401172141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245718380385456774}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structureData: {fileID: 11400000, guid: 9dd51a9921b3c3240ba2c6cb5cf0e173, type: 2}
+  dropSpot: {fileID: 3496389811995932038}
 --- !u!1001 &4739502340649600615
 PrefabInstance:
   m_ObjectHideFlags: 0

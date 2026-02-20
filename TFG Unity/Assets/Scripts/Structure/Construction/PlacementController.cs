@@ -184,6 +184,7 @@ public class PlacementController : MonoBehaviour
         }
         foreach(NavMeshObstacle obstacle in this.previewPrefab.GetComponentsInChildren<NavMeshObstacle>())
         {
+            obstacle.carving = false;
             obstacle.enabled = false;
         }
     }
@@ -290,7 +291,12 @@ public class PlacementController : MonoBehaviour
         if (instantiateBlueprintOnConfirm && blueprintPrefab != null)
         {
             previewPrefab.transform.position -= Vector3.up * previewYOffset;
-            Instantiate(blueprintPrefab, previewPrefab.transform.position, previewPrefab.transform.rotation);
+            GameObject blueprintObject = Instantiate(blueprintPrefab, previewPrefab.transform.position, previewPrefab.transform.rotation);
+
+            if (blueprintObject.TryGetComponent<Blueprint>(out Blueprint blueprint))
+            {
+                blueprint.enabled = true;
+            }
         }
         else
         {
