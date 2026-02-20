@@ -21,8 +21,7 @@ public class PlacementController : MonoBehaviour
 
     [Header("Visuals")]
 
-    [Tooltip("Vertical offset of preview")]
-    public float previewYOffset = 0.06f;
+    private float previewYOffset;
 
     [Tooltip("Material for valid preview")]
     public Material previewMaterialValid;
@@ -30,12 +29,14 @@ public class PlacementController : MonoBehaviour
     [Tooltip("Material for invalid preview")]
     public Material previewMaterialInvalid;
 
+    [Tooltip("Extra distance between preview's base and the ground")]
+    public float previewVerticalPadding = 0.01f;
+
     [Tooltip("Material for blueprint, duh")]
     public Material blueprintMaterial;
 
     [Header("Raycast / validation")]
 
-    public float boundsPaddingMultiplier = 1.05f;
     public bool instantiateBlueprintOnConfirm = true;
 
     private GameObject previewPrefab;
@@ -84,10 +85,10 @@ public class PlacementController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayerMask))
         {
-            Vector3 position = hit.point;
+            Vector3 ground = hit.point;
             if (previewPrefab != null)
             {
-                previewPrefab.transform.position = position + Vector3.up * previewYOffset;
+                previewYOffset = AdjustVerticalPositionToGround(previewPrefab, ground);
 
                 bool valid = ValidatePlacement(previewPrefab);
                 UpdatePreviewVisual(valid);
@@ -191,7 +192,7 @@ public class PlacementController : MonoBehaviour
         }
 
         Vector3 center = combined.center;
-        Vector3 halfExtents = combined.extents * boundsPaddingMultiplier;
+        Vector3 halfExtents = combined.extents;
         Quaternion rotation = preview.transform.rotation;
 
         // Check if there are obstacles
@@ -341,6 +342,19 @@ public class PlacementController : MonoBehaviour
             }
             renderer.materials = materials;
         }
+    }
+
+    private float AdjustVerticalPositionToGround(GameObject preview, Vector3 groundPoint)
+    {
+        preview.transform.position = groundPoint;
+        Bounds combined = CalculateCombinedBounds(preview);
+
+        float minY = combined.min.y;
+        float desiredBaseY = groundPoint.y + previewVerticalPadding;
+        float deltaY = desiredBaseY - minY;
+        preview.transform.position = preview.transform.position + Vector3.up * deltaY;
+
+        return deltaY;
     }
 
     // Draw a gizmo in the editor to check the bounds:

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68abfe54b46738b4b8298dfbefe47cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Storage: {fileID: 1927618727268396039}
+  storage: {fileID: 1927618727268396039}
   processingCheckInterval: 1
 --- !u!114 &6647325322964759026
 MonoBehaviour:
