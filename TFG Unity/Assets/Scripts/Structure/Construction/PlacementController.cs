@@ -12,16 +12,17 @@ public class PlacementController : MonoBehaviour
     public static PlacementController Instance { get; private set; }
 
     [Header("Layers & masks")]
+
     [Tooltip("Layers that are considered floor for position raycast")]
     public LayerMask groundLayerMask = 1 << 0;
 
     [Tooltip("Layers that avoid placement")]
     public LayerMask placementObstacleMask = ~0;
 
-    [Header("Preview visuals")]
+    [Header("Visuals")]
 
-    [Tooltip("If there is no previewPrefab, use builtPrefab for preview (true) or blueprintPrefab (false)")]
-    public bool useBuiltPrefabForPreview = true;
+    [Tooltip("Vertical offset of preview")]
+    public float previewYOffset = 0.06f;
 
     [Tooltip("Material for valid preview")]
     public Material previewMaterialValid;
@@ -29,13 +30,12 @@ public class PlacementController : MonoBehaviour
     [Tooltip("Material for invalid preview")]
     public Material previewMaterialInvalid;
 
-    [Tooltip("Vertical offset of preview")]
-    public float previewYOffset = 0.06f;
+    [Tooltip("Material for blueprint, duh")]
+    public Material blueprintMaterial;
 
     [Header("Raycast / validation")]
 
     public float boundsPaddingMultiplier = 1.05f;
-
     public bool instantiateBlueprintOnConfirm = true;
 
     private GameObject previewPrefab;
@@ -43,8 +43,6 @@ public class PlacementController : MonoBehaviour
     private bool isPlacing;
     private bool lastValidState;
     private static readonly Collider[] overlapBuffer = new Collider[32];
-
-    private readonly List<Renderer> previewRenderers = new();
 
     private string placementErrorMessage;
 
@@ -56,6 +54,19 @@ public class PlacementController : MonoBehaviour
             return;
         }
         Instance = this;
+
+        if (previewMaterialValid == null)
+        {
+            Debug.LogWarning($"{name} missing {previewMaterialValid.name}");
+        }
+        if (previewMaterialInvalid == null)
+        {
+            Debug.LogWarning($"{name} missing {previewMaterialInvalid.name}");
+        }
+        if (blueprintMaterial == null)
+        {
+            Debug.LogWarning($"{name} missing {blueprintMaterial.name}");
+        }
     }
 
     private void Update()
@@ -136,53 +147,15 @@ public class PlacementController : MonoBehaviour
         lastValidState = false;
         placementErrorMessage = null;
 
-        GameObject previewPrefab;
-
-        // Use the preview if it exists, otherwise use the fallback but it will cause problems with scripts being active...
-        if (structureData.previewPrefab != null)
-        {
-            previewPrefab = structureData.previewPrefab;
-        }
-        else
-        {
-            // Fallback
-            previewPrefab = useBuiltPrefabForPreview
-                ? (structureData.builtPrefab != null ? structureData.builtPrefab : structureData.blueprintPrefab)
-                : (structureData.blueprintPrefab != null ? structureData.blueprintPrefab : structureData.builtPrefab);
-        }
-
-        if (previewPrefab == null)
-        {
-            Debug.LogError($"PlacementController: no prefab available for preview in {structureData.structureName}");
-            CancelPlacement();
-            return;
-        }
-
-        this.previewPrefab = Instantiate(previewPrefab, Vector3.zero, Quaternion.identity);
-
-        previewRenderers.Clear();
-        foreach (Renderer renderer in this.previewPrefab.GetComponentsInChildren<Renderer>())
-        {
-            previewRenderers.Add(renderer);
-            Material[] materials = renderer.materials;
-            for (int i = 0; i < materials.Length; i++)
-            {
-                materials[i] = new Material(materials[i]);
-                Color color = materials[i].color;
-                color.a = 0.65f;
-                materials[i].color = color;
-            }
-            renderer.materials = materials;
-        }
+        previewPrefab = Instantiate(structureData.previewPrefab, Vector3.zero, Quaternion.identity);
 
         UpdatePreviewVisual(false);
 
-        // Deactivate preview colliders
-        foreach (Collider collider in this.previewPrefab.GetComponentsInChildren<Collider>())
+        foreach (Collider collider in previewPrefab.GetComponentsInChildren<Collider>())
         {
             collider.enabled = false;
         }
-        foreach(NavMeshObstacle obstacle in this.previewPrefab.GetComponentsInChildren<NavMeshObstacle>())
+        foreach(NavMeshObstacle obstacle in previewPrefab.GetComponentsInChildren<NavMeshObstacle>())
         {
             obstacle.carving = false;
             obstacle.enabled = false;
@@ -268,16 +241,7 @@ public class PlacementController : MonoBehaviour
     private void UpdatePreviewVisual(bool valid)
     {
         Material targetMaterial = valid ? previewMaterialValid : previewMaterialInvalid;
-
-        foreach (Renderer renderer in previewRenderers)
-        {
-            Material[] newMats = new Material[renderer.materials.Length];
-            for (int i = 0; i < newMats.Length; i++)
-            {
-                newMats[i] = new Material(targetMaterial);
-            }
-            renderer.materials = newMats;
-        }
+        ApplyMaterialToObject(previewPrefab, targetMaterial);
     }
 
     private void ConfirmPlacement()
@@ -292,6 +256,11 @@ public class PlacementController : MonoBehaviour
         {
             previewPrefab.transform.position -= Vector3.up * previewYOffset;
             GameObject blueprintObject = Instantiate(blueprintPrefab, previewPrefab.transform.position, previewPrefab.transform.rotation);
+
+            if (blueprintMaterial != null)
+            {
+                ApplyMaterialToObject(blueprintObject, blueprintMaterial);
+            }
 
             if (blueprintObject.TryGetComponent<Blueprint>(out Blueprint blueprint))
             {
@@ -328,7 +297,6 @@ public class PlacementController : MonoBehaviour
 
         currentStructure = null;
         isPlacing = false;
-        previewRenderers.Clear();
 
         if (TooltipController.Instance != null)
         {
@@ -339,6 +307,40 @@ public class PlacementController : MonoBehaviour
     private void OnDisable()
     {
         EndPlacement();
+    }
+
+    /// <summary>
+    /// Applies targetMaterial to all materials of root with an optional alpha
+    /// </summary>
+    /// <param name="root">GameObject to modify, including children</param>
+    /// <param name="targetMaterial">Material to apply</param>
+    /// <param name="alpha"></param>
+    private void ApplyMaterialToObject(GameObject root, Material targetMaterial, float alpha = 1f)
+    {
+        if (root == null || targetMaterial == null)
+        {
+            return;
+        }
+
+        Renderer[] renderers = root.GetComponentsInChildren<Renderer>(includeInactive: true);
+        foreach (Renderer renderer in renderers)
+        {
+            if (renderer == null)
+            {
+                continue;
+            }
+
+            Material[] materials = new Material[renderer.materials.Length];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                Material material = new(targetMaterial);
+                Color color = material.color;
+                color.a = alpha;
+                material.color = color;
+                materials[i] = material;
+            }
+            renderer.materials = materials;
+        }
     }
 
     // Draw a gizmo in the editor to check the bounds:
