@@ -67,6 +67,7 @@ GameObject:
   - component: {fileID: 9004909576600917873}
   - component: {fileID: 5795343399375247824}
   - component: {fileID: 8028998076868244391}
+  - component: {fileID: 2911304465679811428}
   m_Layer: 11
   m_Name: Manufactured WH
   m_TagString: Untagged
@@ -87,6 +88,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2491825746086073757}
   - {fileID: 4939769454021502426}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -102,6 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cb4e351e97e674aaaf2b1ef63c67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storage: {fileID: 8017301961298225194}
+  maxCapacity: 0
+  currentCapacity: 0
 --- !u!114 &5795343399375247824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,9 +133,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Manufactured Products Pallet
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   selectionVisual: {fileID: 3350089257968006643}
   InformationVisual: {fileID: 0}
+--- !u!114 &2911304465679811428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567947584304241201}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structureData: {fileID: 11400000, guid: 0f0f4228f680b254f825b26428183bc9, type: 2}
+  dropSpot: {fileID: 2491825746086073757}
+--- !u!1 &8017301961298225194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2491825746086073757}
+  m_Layer: 11
+  m_Name: Storage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2491825746086073757
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017301961298225194}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4631047606837347540}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1493505283747287677
 PrefabInstance:
   m_ObjectHideFlags: 0

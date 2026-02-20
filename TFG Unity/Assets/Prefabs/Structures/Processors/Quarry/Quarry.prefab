@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2168727113389277981}
   - component: {fileID: 7934089972654560959}
   - component: {fileID: 2821753614850926637}
+  - component: {fileID: 6706144686255301404}
   m_Layer: 11
   m_Name: Quarry
   m_TagString: Untagged
@@ -79,6 +80,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: e8aca2e85f6130047bd069adff575d36, type: 2}
+--- !u!114 &6706144686255301404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843428391497259055}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structureData: {fileID: 11400000, guid: e8aca2e85f6130047bd069adff575d36, type: 2}
+  dropSpot: {fileID: 7540079466792039747}
 --- !u!1 &2792152459042318720
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,9 +15,9 @@ MonoBehaviour:
   structureName: Rocks crate
   icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
   category: 0
-  builtPrefab: {fileID: 0}
-  blueprintPrefab: {fileID: 0}
-  previewPrefab: {fileID: 0}
+  builtPrefab: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
+  blueprintPrefab: {fileID: 9109459509763702572, guid: 24cc1224a487dde4bbd53453065eaa05, type: 3}
+  previewPrefab: {fileID: 9109459509763702572, guid: 24cc1224a487dde4bbd53453065eaa05, type: 3}
   snapToGrid: 1
   gridSize: 1
   placementRadius: 1

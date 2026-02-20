@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4748347007712856880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3817250393377877827}
+  m_Layer: 11
+  m_Name: Storage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3817250393377877827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748347007712856880}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8804429355315451904}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6634531028861279490
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,6 +98,7 @@ GameObject:
   - component: {fileID: 3972923283334394188}
   - component: {fileID: 3254688799597231241}
   - component: {fileID: 3839334282225054200}
+  - component: {fileID: 5087209743038859761}
   m_Layer: 11
   m_Name: Rocks WH
   m_TagString: Untagged
@@ -87,6 +119,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3817250393377877827}
   - {fileID: 469701467131908198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -102,6 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cb4e351e97e674aaaf2b1ef63c67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storage: {fileID: 4748347007712856880}
+  maxCapacity: 0
   currentCapacity: 0
 --- !u!114 &3254688799597231241
 MonoBehaviour:
@@ -129,9 +164,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Rocks Crate
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
   selectionVisual: {fileID: 6184472397325735009}
   InformationVisual: {fileID: 0}
+--- !u!114 &5087209743038859761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9079424207317062502}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structureData: {fileID: 11400000, guid: 59f2c968ffb9b5647a9a56f40f8f7c30, type: 2}
+  dropSpot: {fileID: 3817250393377877827}
 --- !u!1001 &6587876279423927042
 PrefabInstance:
   m_ObjectHideFlags: 0

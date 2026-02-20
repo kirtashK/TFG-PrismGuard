@@ -16,8 +16,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 10caf1bb2a1e16442b6cd9df5f5c01cf, type: 3}
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
-  blueprintPrefab: {fileID: 8121368905061479684, guid: 7ec9d89b4f6bf9f42bcf352d2f3097fb, type: 3}
-  previewPrefab: {fileID: 3132084410443466483, guid: 5f4214b1ef0f4194da44c11c8abd6125, type: 3}
+  blueprintPrefab: {fileID: 9064850209583715879, guid: 7ec9d89b4f6bf9f42bcf352d2f3097fb, type: 3}
+  previewPrefab: {fileID: 2411167958785837199, guid: 5f4214b1ef0f4194da44c11c8abd6125, type: 3}
   snapToGrid: 1
   gridSize: 1
   placementRadius: 1

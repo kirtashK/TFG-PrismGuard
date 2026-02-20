@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 2284186026734877851}
   - component: {fileID: 4533883100969938562}
   - component: {fileID: 6436802545834418224}
+  - component: {fileID: 6541478737453798836}
   m_Layer: 11
   m_Name: Sawmill
   m_TagString: Untagged
@@ -165,6 +166,20 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   selectionVisual: {fileID: 5022868771263850863}
   InformationVisual: {fileID: 0}
+--- !u!114 &6541478737453798836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147099120324929794}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  structureData: {fileID: 11400000, guid: c0e1cb6c5747f8c40afb2d696a509028, type: 2}
+  dropSpot: {fileID: 4009856531128985332}
 --- !u!1001 &2515407807644131158
 PrefabInstance:
   m_ObjectHideFlags: 0

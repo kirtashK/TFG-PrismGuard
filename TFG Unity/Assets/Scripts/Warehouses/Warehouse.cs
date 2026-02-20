@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
 {
-    [Header("Configuration")]
-
     private WarehouseData warehouseData;
+
+    public GameObject storage;
+
+    [Header("Runtime")]
 
     [SerializeField, Tooltip("Updated from Data at runtime")]
     private int maxCapacity;
@@ -23,7 +25,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     private readonly Dictionary<ItemData, int> reservedForRetrieveByItem = new();
 
     public int FreeSlots => Mathf.Max(0, maxCapacity - (currentCapacity + reservedForStoreTotal));
-    public Vector3 GetReceivePosition() => transform.position;
+    public Vector3 GetReceivePosition() => storage.transform.position;
 
     public event Action<ItemData> OnItemStored;
     public event Action<ItemData> OnItemRetrieved;
@@ -43,6 +45,11 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         else
         {
             Debug.LogWarning($"{name} couldnt get WarehouseData from Structure");
+        }
+
+        if (storage == null)
+        {
+            Debug.LogWarning($"{name} missing {storage.name}");
         }
     }
 
@@ -280,7 +287,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             itemInstance.SetVisible(true);
         }
 
-        item.transform.SetParent(transform, worldPositionStays: true);
+        item.transform.SetParent(storage.transform, worldPositionStays: true);
         item.transform.position = GetReceivePosition();
 
         if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))

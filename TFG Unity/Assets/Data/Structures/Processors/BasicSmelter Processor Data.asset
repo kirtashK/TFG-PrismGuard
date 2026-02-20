@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
-  m_Name: BasicSmeltery Processor Data
+  m_Name: BasicSmelter Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
   structureName: Basic smelter
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   category: 1
   builtPrefab: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
-  blueprintPrefab: {fileID: 8071667175264754736, guid: d73cc7d9baeb282469e0c88a246a44e7, type: 3}
-  previewPrefab: {fileID: 4245718380385456774, guid: f85fce5bda34b914080898b2e4369010, type: 3}
+  blueprintPrefab: {fileID: 6592928600490302708, guid: d73cc7d9baeb282469e0c88a246a44e7, type: 3}
+  previewPrefab: {fileID: 7543972056476123707, guid: f85fce5bda34b914080898b2e4369010, type: 3}
   snapToGrid: 1
   gridSize: 1
   placementRadius: 1

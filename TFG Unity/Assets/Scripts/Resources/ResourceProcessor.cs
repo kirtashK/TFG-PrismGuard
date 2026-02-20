@@ -8,11 +8,13 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private ProcessorData processorData;
 
     [Tooltip("Gameobject where outputs will be stored")]
-    public Transform Storage;
+    public Transform storage;
 
     [Tooltip("Seconds between checks for processing batches")]
     public float processingCheckInterval = 1f;
     private float processingCheckTimer = 0f;
+
+    public Vector3 GetReceivePosition() => transform.position;
 
     // Internal state of each recipe
     private class RecipeState
@@ -46,6 +48,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         else
         {
             Debug.LogWarning($"{name} couldnt get ProcessorData from Structure");
+        }
+
+        if (storage == null)
+        {
+            Debug.LogWarning($"{name} missing {storage.name}");
         }
 
         InitializeRecipeStates();
@@ -259,7 +266,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     Transform GetRecipeStorage(ProcessResourceRecipe recipe)
     {
         string name = $"Storage_{recipe.outputItemData.itemName}";
-        Transform transform = Storage.Find(name);
+        Transform transform = storage.Find(name);
         if (transform != null)
         {
             return transform;
@@ -267,7 +274,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         // This storage recipe doesnt exist yet, create it
         GameObject gameObject = new(name);
-        gameObject.transform.SetParent(Storage, worldPositionStays: false);
+        gameObject.transform.SetParent(storage, worldPositionStays: false);
         gameObject.transform.localPosition = Vector3.zero;
         return gameObject.transform;
     }
@@ -349,7 +356,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             }
         }
     }
-    public Vector3 GetReceivePosition() => transform.position;
 
     public void OnReceived(GameObject item, ItemData data)
     {

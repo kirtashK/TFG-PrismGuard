@@ -184,6 +184,7 @@ public class PlacementController : MonoBehaviour
         }
         foreach(NavMeshObstacle obstacle in this.previewPrefab.GetComponentsInChildren<NavMeshObstacle>())
         {
+            obstacle.carving = false;
             obstacle.enabled = false;
         }
     }

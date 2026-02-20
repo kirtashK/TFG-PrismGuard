@@ -14,6 +14,16 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private readonly List<GameObject> storedObjects = new();
 
+    public Vector3 GetReceivePosition() => dropSpot.transform.position;
+
+    private void Awake()
+    {
+        if (dropSpot == null)
+        {
+            Debug.LogWarning($"{name} missing {dropSpot.name}");
+        }
+    }
+
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
@@ -129,13 +139,6 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         }
     }
 
-    public Vector3 GetReceivePosition()
-    {
-        return dropSpot != null
-            ? dropSpot.position
-            : transform.position;
-    }
-
     public void OnReceived(GameObject itemObj, ItemData itemData)
     {
         Release(itemData);
@@ -147,7 +150,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
             itemInstance.SetVisible(true);
         }
 
-        itemObj.transform.SetParent(transform, worldPositionStays: true);
+        itemObj.transform.SetParent(dropSpot.transform, worldPositionStays: true);
         itemObj.transform.position = GetReceivePosition();
 
         storedObjects.Add(itemObj);
