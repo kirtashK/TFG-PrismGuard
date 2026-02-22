@@ -16,18 +16,11 @@ public class ProcessResourceRecipe : ScriptableObject
     [Range(0f, 100f)]
     public int inputPerBatch = 1;
 
-    [Header("Fuel (Optional")]
+    [Header("Fuel")]
 
-    [Tooltip("true if it consumes fuel")]
-    public bool requiresFuel = false;
-    [Tooltip("Item to consume as fuel")]
-    public ItemData fuelItemData;
-    [Tooltip("Fuel consumed per batch")]
+    [Tooltip("Fuel consumed per batch (0 = disabled)")]
     [Range(0f, 100f)]
-    public int fuelPerBatch = 1;
-    [Tooltip("Max capacity of fuel")]
-    [Range(0f, 100f)]
-    public int fuelMaxCapacity = 5;
+    public int fuelPerBatch = 0;
 
     [Header("Output")]
 
@@ -53,15 +46,11 @@ public class ProcessResourceRecipe : ScriptableObject
     {
         if (inputItemData == null)
         {
-            Debug.LogWarning($"{name} missing inputItemData");
-        }
-        if (requiresFuel && fuelItemData == null)
-        {
-            Debug.LogWarning($"{name} missing fuelItem");
+            Debug.LogWarning($"{name} missing {nameof(inputItemData)}");
         }
         if (outputItemData == null)
         {
-            Debug.LogWarning($"{name} missing outputItemData");
+            Debug.LogWarning($"{name} missing {nameof(outputItemData)}");
         }
     }
 }

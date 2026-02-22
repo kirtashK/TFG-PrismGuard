@@ -1872,6 +1872,63 @@ Transform:
   - {fileID: 1436655097}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &582206009
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.258758
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00000068038935
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15.915757
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
 --- !u!1001 &595936510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8177,7 +8234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8893,3 +8950,4 @@ SceneRoots:
   - {fileID: 1979678363}
   - {fileID: 1801775200}
   - {fileID: 680670399}
+  - {fileID: 582206009}

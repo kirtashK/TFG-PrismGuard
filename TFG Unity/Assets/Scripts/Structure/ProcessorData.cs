@@ -8,11 +8,25 @@ public class ProcessorData : StructureData
     [Tooltip("List of recipes this building has availible")]
     public List<ProcessResourceRecipe> recipes;
 
+    [Header("Fuel")]
+
+    [Tooltip("true if it consumes fuel")]
+    public bool requiresFuel = false;
+    [Tooltip("Max capacity of fuel")]
+    [Range(0f, 100f)]
+    public int fuelMaxCapacity = 5;
+    [Tooltip("ItemData to consume as fuel")]
+    public ItemData fuelItemData;
+
     void OnValidate()
     {
         if (recipes == null || recipes.Count == 0)
         {
-            Debug.LogWarning($"{name}: Recipes not configured");
+            Debug.LogWarning($"{name}: {nameof(recipes)} not configured");
+        }
+        if (requiresFuel && fuelItemData == null)
+        {
+            Debug.LogWarning($"{name} missing {nameof(fuelItemData)}");
         }
     }
 }

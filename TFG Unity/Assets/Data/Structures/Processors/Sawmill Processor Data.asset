@@ -28,3 +28,6 @@ MonoBehaviour:
     quantity: 5
   recipes:
   - {fileID: 11400000, guid: 7baa33530134fb647bbbb16b7ef0d643, type: 2}
+  requiresFuel: 0
+  fuelMaxCapacity: 5
+  fuelItemData: {fileID: 0}
