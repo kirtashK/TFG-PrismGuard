@@ -14,7 +14,7 @@ public class ProcessorData : StructureData
     public bool requiresFuel = false;
     [Tooltip("Max capacity of fuel")]
     [Range(0f, 100f)]
-    public int fuelMaxCapacity = 5;
+    public float fuelMaxCapacity = 5;
     [Tooltip("ItemData to consume as fuel")]
     public ItemData fuelItemData;
 
@@ -27,6 +27,10 @@ public class ProcessorData : StructureData
         if (requiresFuel && fuelItemData == null)
         {
             Debug.LogWarning($"{name} missing {nameof(fuelItemData)}");
+        }
+        if (requiresFuel && fuelMaxCapacity <= 0)
+        {
+            Debug.LogWarning($"{name} requires fuel but has no capacity for fuel");
         }
     }
 }

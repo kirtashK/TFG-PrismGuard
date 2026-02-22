@@ -19,8 +19,8 @@ public class ProcessResourceRecipe : ScriptableObject
     [Header("Fuel")]
 
     [Tooltip("Fuel consumed per batch (0 = disabled)")]
-    [Range(0f, 100f)]
-    public int fuelPerBatch = 0;
+    [Range(0f, 10f)]
+    public float fuelPerBatch = 0;
 
     [Header("Output")]
 
