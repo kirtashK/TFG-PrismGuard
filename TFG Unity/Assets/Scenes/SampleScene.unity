@@ -1924,6 +1924,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Copper Ore
       objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

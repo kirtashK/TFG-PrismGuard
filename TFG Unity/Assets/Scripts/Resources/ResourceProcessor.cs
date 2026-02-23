@@ -7,11 +7,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private ProcessorData processorData;
 
     private float fuelMaxCapacity;
-    private ItemData fuelItemData;
+    //private ItemData fuelItemData;
     private bool requiresFuel;
-
-    private float storedFuel = 0;
-    private float reservedFuel = 0;
 
     [Tooltip("Gameobject where outputs will be stored")]
     public Transform storage;
@@ -19,6 +16,13 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     [Tooltip("Seconds between checks for processing batches")]
     public float processingCheckInterval = 1f;
     private float processingCheckTimer = 0f;
+
+    [Header("Debug")]
+
+    [SerializeField]
+    private float storedFuel = 0;
+    [SerializeField]
+    private float reservedFuel = 0;
 
     public Vector3 GetReceivePosition() => transform.position;
 
@@ -48,7 +52,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         {
             this.processorData = processorData;
             fuelMaxCapacity = processorData.fuelMaxCapacity;
-            fuelItemData = processorData.fuelItemData;
             requiresFuel = processorData.requiresFuel;
         }
         else
@@ -127,13 +130,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             return;
         }
 
-        if (requiresFuel)
-        {
-            while (reservedFuel > 0)
-            {
-                Release(fuelItemData);
-            }
-        }
+        reservedFuel = 0;
         storedFuel = 0;
 
         foreach (RecipeState state in recipeStates)
@@ -307,11 +304,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             }
         }
 
-        if (requiresFuel && data == fuelItemData && fuelItemData.isFuel)
+        if (requiresFuel && data.isFuel)
         {
-            if (storedFuel + reservedFuel < fuelMaxCapacity)
+            if (storedFuel + reservedFuel + data.fuelValue <= fuelMaxCapacity)
             {
-                //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Can receive {data.itemName}. Stored {recipeState.storedFuel} + Reserved {recipeState.reservedFuel} < Max {recipeState.recipe.fuelMaxCapacity}");
+                //Debug.Log($"{name}: Can receive fuel{data.itemName}. Stored {storedFuel} + Reserved {reservedFuel} + fuelValue {data.fuelValue} <= Max {fuelMaxCapacity}");
                 return true;
             }
         }
@@ -337,11 +334,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             }
         }
 
-        if (requiresFuel && data == fuelItemData && fuelItemData.isFuel)
+        if (requiresFuel && data.isFuel)
         {
             if (storedFuel < fuelMaxCapacity)
             {
-                storedFuel = Mathf.Min(storedFuel + fuelItemData.fuelValue, fuelMaxCapacity);
+                storedFuel = Mathf.Min(storedFuel + data.fuelValue, fuelMaxCapacity);
                 Release(data);
                 //Debug.Log($"{name}: Fuel {data.itemName} stored amount = {storedFuel}/{fuelMaxCapacity}");
 
@@ -366,12 +363,12 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             }
         }
 
-        if (requiresFuel && data == fuelItemData && fuelItemData.isFuel)
+        if (requiresFuel && data.isFuel)
         {
-            if (storedFuel + reservedFuel < fuelMaxCapacity)
+            if (storedFuel + reservedFuel + data.fuelValue <= fuelMaxCapacity)
             {
-                reservedFuel = Mathf.Min(fuelMaxCapacity, reservedFuel + fuelItemData.fuelValue);
-                //Debug.Log($"{name}: Reserved {data.itemName} [{reservedFuel}]");
+                reservedFuel = Mathf.Min(fuelMaxCapacity, reservedFuel + data.fuelValue);
+                //Debug.Log($"{name}: Reserved fuel {data.itemName} [{reservedFuel}]");
 
                 return true;
             }
@@ -395,12 +392,12 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             }
         }
 
-        if (requiresFuel && data == fuelItemData && fuelItemData.isFuel)
+        if (requiresFuel && data.isFuel)
         {
             if (reservedFuel > 0)
             {
-                reservedFuel = Mathf.Max(0, reservedFuel - fuelItemData.fuelValue);
-                //Debug.Log($"{name}: Released {data.itemName}, still reserved: [{reservedFuel}]");
+                reservedFuel = Mathf.Max(0, reservedFuel - data.fuelValue);
+                //Debug.Log($"{name}: Released fuel {data.itemName}, still reserved: [{reservedFuel}]");
 
                 return;
             }

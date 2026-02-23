@@ -18,6 +18,8 @@ MonoBehaviour:
   weight: 2
   interactionRange: 1
   category: {fileID: 11400000, guid: 72029dbe55697c742b46e0eab939f50a, type: 2}
+  isFuel: 0
+  fuelValue: 0
   canBeBought: 1
   buyPrice: 8
   canBeSold: 1

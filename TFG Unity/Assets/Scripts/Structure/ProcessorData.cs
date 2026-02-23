@@ -15,18 +15,12 @@ public class ProcessorData : StructureData
     [Tooltip("Max capacity of fuel")]
     [Range(0f, 100f)]
     public float fuelMaxCapacity = 5;
-    [Tooltip("ItemData to consume as fuel")]
-    public ItemData fuelItemData;
 
     void OnValidate()
     {
         if (recipes == null || recipes.Count == 0)
         {
             Debug.LogWarning($"{name}: {nameof(recipes)} not configured");
-        }
-        if (requiresFuel && fuelItemData == null)
-        {
-            Debug.LogWarning($"{name} missing {nameof(fuelItemData)}");
         }
         if (requiresFuel && fuelMaxCapacity <= 0)
         {
