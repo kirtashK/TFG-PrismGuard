@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
     private ProcessorData processorData;
 
     private float fuelMaxCapacity;
-    //private ItemData fuelItemData;
     private bool requiresFuel;
 
     [Tooltip("Gameobject where outputs will be stored")]
@@ -16,6 +16,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     [Tooltip("Seconds between checks for processing batches")]
     public float processingCheckInterval = 1f;
     private float processingCheckTimer = 0f;
+
+    private readonly Dictionary<ItemData, InputState> inputState = new();
 
     [Header("Debug")]
 
@@ -26,13 +28,24 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     public Vector3 GetReceivePosition() => transform.position;
 
-    // Internal state of each recipe
+    private class InputState
+    {
+        public int Stored;
+        public int Reserved;
+        public int MaxCapacity;
+
+        public InputState(int capacity)
+        {
+            MaxCapacity = Mathf.Max(0, capacity);
+            Stored = 0;
+            Reserved = 0;
+        }
+    }
+
+        // Internal state of each recipe
     private class RecipeState
     {
         public ProcessResourceRecipe recipe;
-
-        public int storedInput;
-        public int reservedInput;
 
         public int storedOutput;
         public int reservedOutput;
@@ -69,18 +82,29 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private void InitializeRecipeStates()
     {
+        inputState.Clear();
+
         recipeStates = new List<RecipeState>(processorData.recipes.Count);
         foreach (ProcessResourceRecipe recipe in processorData.recipes)
         {
             recipeStates.Add(new RecipeState
             {
                 recipe = recipe,
-                storedInput = 0,
-                reservedInput = 0,
                 storedOutput = 0,
                 reservedOutput = 0,
                 processingCount = 0
             });
+
+            ItemData key = recipe.inputItemData;
+            if (!inputState.ContainsKey(key))
+            {
+                inputState[key] = new InputState(recipe.inputPerBatch);
+            }
+            // If ItemData already exists, keep MaxCapacity as the maximun input needed 
+            else
+            {
+                inputState[key].MaxCapacity = Mathf.Max(inputState[key].MaxCapacity, recipe.inputPerBatch);
+            }
         }
     }
 
@@ -133,15 +157,19 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         reservedFuel = 0;
         storedFuel = 0;
 
+        foreach(KeyValuePair<ItemData, InputState> input in inputState)
+        {
+            while (input.Value.Reserved > 0)
+            {
+                Release(input.Key);
+            }
+            input.Value.Stored = 0;
+        }
+
         foreach (RecipeState state in recipeStates)
         {
-            while (state.reservedInput > 0)
-            {
-                Release(state.recipe.inputItemData);
-            }
 
             state.reservedOutput = 0;
-            state.storedInput = 0;
             state.storedOutput = 0;
             state.processingCount = 0;
         }
@@ -163,9 +191,15 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         foreach (RecipeState recipeState in recipeStates)
         {
+            if (!inputState.TryGetValue(recipeState.recipe.inputItemData, out InputState state))
+            {
+                Debug.LogError($"{name} couldnt get value of {nameof(InputState)} with key {recipeState.recipe.inputItemData}");
+                return;
+            }
+
             // Check if there is enough input & storage & fuel if needed:
             bool readyForBatch =
-                recipeState.storedInput >= recipeState.recipe.inputPerBatch
+                state.Stored >= recipeState.recipe.inputPerBatch
                 && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                     <= recipeState.recipe.outputMaxCapacity
                 && (!requiresFuel || storedFuel >= recipeState.recipe.fuelPerBatch);
@@ -173,7 +207,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             while (readyForBatch && recipeState.processingCount < recipeState.recipe.maxConcurrentBatches)
             {
                 // Consume input & fuel
-                recipeState.storedInput -= recipeState.recipe.inputPerBatch;
+                state.Stored -= recipeState.recipe.inputPerBatch;
                 if (requiresFuel)
                 {
                     storedFuel -= recipeState.recipe.fuelPerBatch;
@@ -186,7 +220,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
                 // Check if another batch is possible
                 readyForBatch =
-                    recipeState.storedInput >= recipeState.recipe.inputPerBatch
+                    state.Stored >= recipeState.recipe.inputPerBatch
                     && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
                         <= recipeState.recipe.outputMaxCapacity
                     && (!requiresFuel || storedFuel >= recipeState.recipe.fuelPerBatch);
@@ -249,9 +283,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
                 while (outputToCreate > 0)
                 {
-                    GameObject output = ItemManager.Instance.
-                        CreateItem(recipeParent.position,
-                                    itemData.itemPrefab);
+                    GameObject output = ItemManager.Instance.CreateItem(recipeParent.position, itemData.itemPrefab);
 
                     output.transform.SetParent(recipeParent, worldPositionStays: false);
                     output.transform.localPosition = Vector3.zero;
@@ -295,10 +327,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     {
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
             {
-                if (recipeState.storedInput + recipeState.reservedInput < recipeState.recipe.inputMaxCapacity)
+                if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
+                    Debug.Log($"{name}: Can receive input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
                     return true;
                 }
             }
@@ -308,55 +341,23 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         {
             if (storedFuel + reservedFuel + data.fuelValue <= fuelMaxCapacity)
             {
-                //Debug.Log($"{name}: Can receive fuel{data.itemName}. Stored {storedFuel} + Reserved {reservedFuel} + fuelValue {data.fuelValue} <= Max {fuelMaxCapacity}");
+                //Debug.Log($"{name}: Can receive fuel {data.itemName}. Stored {storedFuel} + Reserved {reservedFuel} + fuelValue {data.fuelValue} <= Max {fuelMaxCapacity}");
                 return true;
             }
         }
         return false;
     }
 
-    public void OnReceived(GameObject item, ItemData data)
-    {
-        Destroy(item);
-
-        foreach (RecipeState recipeState in recipeStates)
-        {
-            if (data == recipeState.recipe.inputItemData)
-            {
-                if (recipeState.storedInput < recipeState.recipe.inputMaxCapacity)
-                {
-                    recipeState.storedInput++;
-                    Release(data);
-                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Input {data.itemName} stored amount = {recipeState.storedInput}/{recipeState.recipe.inputMaxCapacity}");
-
-                    return;
-                }
-            }
-        }
-
-        if (requiresFuel && data.isFuel)
-        {
-            if (storedFuel < fuelMaxCapacity)
-            {
-                storedFuel = Mathf.Min(storedFuel + data.fuelValue, fuelMaxCapacity);
-                Release(data);
-                //Debug.Log($"{name}: Fuel {data.itemName} stored amount = {storedFuel}/{fuelMaxCapacity}");
-
-                return;
-            }
-        }
-    }
-
     public bool Reserve(ItemData data)
     {
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
             {
-                if (recipeState.storedInput + recipeState.reservedInput < recipeState.recipe.inputMaxCapacity)
+                if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
-                    recipeState.reservedInput++;
-                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Reserved {data.itemName} [{recipeState.reservedInput}]");
+                    state.Reserved++;
+                    Debug.Log($"{name}: Reserved input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
 
                     return true;
                 }
@@ -376,16 +377,48 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         return false;
     }
 
+    public void OnReceived(GameObject item, ItemData data)
+    {
+        Destroy(item);
+
+        foreach (RecipeState recipeState in recipeStates)
+        {
+            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
+            {
+                if (state.Stored < state.MaxCapacity)
+                {
+                    state.Stored++;
+                    Release(data);
+                    Debug.Log($"{name}: Received input {data.itemName}. Stored = {state.Stored}. Max = {state.MaxCapacity}");
+
+                    return;
+                }
+            }
+        }
+
+        if (requiresFuel && data.isFuel)
+        {
+            if (storedFuel < fuelMaxCapacity)
+            {
+                storedFuel = Mathf.Min(storedFuel + data.fuelValue, fuelMaxCapacity);
+                Release(data);
+                //Debug.Log($"{name}: Received fuel {data.itemName}. Stored = {storedFuel}. Max = {fuelMaxCapacity}");
+
+                return;
+            }
+        }
+    }
+
     public void Release(ItemData data)
     {
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData)
+            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
             {
-                if (recipeState.reservedInput > 0)
+                if (state.Reserved > 0)
                 {
-                    recipeState.reservedInput--;
-                    //Debug.Log($"{name}: Recipe {recipeState.recipe.recipeName}: Released {data.itemName} [{recipeState.reservedInput}]");
+                    state.Reserved--;
+                    Debug.Log($"{name}: Released input {data.itemName}. Still reserved: {state.Reserved}");
 
                     return;
                 }

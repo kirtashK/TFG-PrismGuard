@@ -9,9 +9,6 @@ public class ProcessResourceRecipe : ScriptableObject
 
     [Tooltip("Input's data")]
     public ItemData inputItemData;
-    [Tooltip("Max capacity of input")]
-    [Range(0f, 100f)]
-    public int inputMaxCapacity = 6;
     [Tooltip("Input consumed per batch")]
     [Range(0f, 100f)]
     public int inputPerBatch = 1;

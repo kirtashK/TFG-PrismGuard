@@ -76,7 +76,7 @@ public class ItemConsumerManager : MonoBehaviour
     {
         if (itemData == null)
         {
-            Debug.LogWarning($"{name}: FindCandidatesFor: null ItemData: [{itemData}]");
+            Debug.LogWarning($"{name}: FindCandidatesFor: null ItemData {nameof(itemData)}");
             yield break;
         }
 

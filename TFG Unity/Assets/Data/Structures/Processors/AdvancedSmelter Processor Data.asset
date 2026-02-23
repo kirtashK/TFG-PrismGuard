@@ -31,6 +31,7 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: 482e4eaac704afb4f8f7254fab8742fc, type: 2}
     quantity: 5
   recipes:
+  - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}
   - {fileID: 11400000, guid: f593e59cb096c8e49bdbf4a302b4fd98, type: 2}
   - {fileID: 11400000, guid: 9e946a5595a89a24cbaf4d4e05d6ff85, type: 2}
   requiresFuel: 1
