@@ -1,0 +1,348 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2135670985034259335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6826462030535480967}
+  m_Layer: 0
+  m_Name: Bundle of copper ore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6826462030535480967
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135670985034259335}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1192842596110563235}
+  - {fileID: 7643119424033249283}
+  - {fileID: 874994309190830708}
+  - {fileID: 2354224115361679750}
+  - {fileID: 5370528756471824689}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &567725827787745261
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6826462030535480967}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore (4)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+--- !u!4 &874994309190830708 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  m_PrefabInstance: {fileID: 567725827787745261}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1966306211008305722
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6826462030535480967}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+--- !u!4 &1192842596110563235 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  m_PrefabInstance: {fileID: 1966306211008305722}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3129877830161015839
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6826462030535480967}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+--- !u!4 &2354224115361679750 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  m_PrefabInstance: {fileID: 3129877830161015839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4702776583764749480
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6826462030535480967}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+--- !u!4 &5370528756471824689 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  m_PrefabInstance: {fileID: 4702776583764749480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7049749212819846554
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6826462030535480967}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+      propertyPath: m_Name
+      value: Copper Ore (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+--- !u!4 &7643119424033249283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
+  m_PrefabInstance: {fileID: 7049749212819846554}
+  m_PrefabAsset: {fileID: 0}
