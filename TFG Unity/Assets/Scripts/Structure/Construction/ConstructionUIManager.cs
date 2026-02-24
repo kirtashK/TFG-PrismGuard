@@ -129,7 +129,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         }
         else
         {
-            Debug.LogWarning($"{name} failed to load StructureData addressables");
+            Debug.LogWarning($"{name} failed to load {nameof(StructureData)} addressables");
         }
     }
 
@@ -137,7 +137,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
     {
         if (categoryBar == null || categoryButtonPrefab == null)
         {
-            Debug.LogError($"{name}: categoryBar or categoryButtonPrefab not assigned.");
+            Debug.LogError($"{name}: {nameof(categoryBar)} or {nameof(categoryButtonPrefab)} not assigned.");
             return;
         }
 
@@ -152,7 +152,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             GameObject gameobject = Instantiate(categoryButtonPrefab, categoryBar);
             if (!gameobject.TryGetComponent<CategoryButton>(out CategoryButton categoryButton))
             {
-                Debug.LogError("categoryButtonPrefab missing CategoryButton script.");
+                Debug.LogError($"{name}: {nameof(categoryButtonPrefab)} missing {nameof(CategoryButton)} script");
                 continue;
             }
 
@@ -175,7 +175,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
     {
         if (blueprintGrid == null || blueprintEntryPrefab == null)
         {
-            Debug.LogError($"{name}: blueprintGrid or blueprintEntryPrefab not assigned.");
+            Debug.LogError($"{name}: {nameof(blueprintGrid)} or {nameof(blueprintEntryPrefab)} not assigned");
             return;
         }
 
@@ -190,7 +190,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             GameObject gameobject = Instantiate(blueprintEntryPrefab, blueprintGrid);
             if (!gameobject.TryGetComponent<BlueprintEntry>(out BlueprintEntry entry))
             {
-                Debug.LogError("blueprintEntryPrefab missing BlueprintEntry script.");
+                Debug.LogError($"{name}: {nameof(blueprintEntryPrefab)} missing {nameof(BlueprintEntry)} script");
                 continue;
             }
 

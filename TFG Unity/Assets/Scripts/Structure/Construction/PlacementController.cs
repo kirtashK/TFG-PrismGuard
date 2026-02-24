@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlacementController : MonoBehaviour
@@ -47,6 +48,10 @@ public class PlacementController : MonoBehaviour
 
     private string placementErrorMessage;
 
+    private InputAction pointerAction;
+    private InputAction confirmAction;
+    private InputAction cancelAction;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,16 +63,45 @@ public class PlacementController : MonoBehaviour
 
         if (previewMaterialValid == null)
         {
-            Debug.LogWarning($"{name} missing {previewMaterialValid.name}");
+            Debug.LogWarning($"{name}: missing {nameof(previewMaterialValid)}");
         }
         if (previewMaterialInvalid == null)
         {
-            Debug.LogWarning($"{name} missing {previewMaterialInvalid.name}");
+            Debug.LogWarning($"{name}: missing {nameof(previewMaterialInvalid)}");
         }
         if (blueprintMaterial == null)
         {
-            Debug.LogWarning($"{name} missing {blueprintMaterial.name}");
+            Debug.LogWarning($"{name}: missing {nameof(blueprintMaterial)}");
         }
+
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        confirmAction = new InputAction("Confirm", InputActionType.Button);
+        confirmAction.AddBinding("<Mouse>/leftButton");
+        cancelAction = new InputAction("Cancel", InputActionType.Button);
+        cancelAction.AddBinding("<Mouse>/rightButton");
+        cancelAction.AddBinding("<Keyboard>/escape");
+    }
+    private void OnEnable()
+    {
+        pointerAction?.Enable();
+        confirmAction?.Enable();
+        cancelAction?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pointerAction?.Disable();
+        confirmAction?.Disable();
+        cancelAction?.Disable();
+
+        EndPlacement();
+    }
+
+    private void OnDestroy()
+    {
+        pointerAction?.Dispose();
+        confirmAction?.Dispose();
+        cancelAction?.Dispose();
     }
 
     private void Update()
@@ -82,7 +116,10 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 mousePos = pointerAction != null ? pointerAction.ReadValue<Vector2>() : Pointer.current.position.ReadValue();
+        Vector3 screenPoint = new(mousePos.x, mousePos.y, 0f);
+
+        Ray ray = Camera.main.ScreenPointToRay(screenPoint);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayerMask))
         {
             Vector3 ground = hit.point;
@@ -112,7 +149,7 @@ public class PlacementController : MonoBehaviour
         }
 
         // Confirm (left click)
-        if (Input.GetMouseButtonDown(0))
+        if (confirmAction != null && confirmAction.triggered)
         {
             if (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject())
             {
@@ -122,8 +159,9 @@ public class PlacementController : MonoBehaviour
                 }
             }
         }
-        // Cancel (right click / Esc)
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+
+        // Cancel (right click or Escape)
+        if (cancelAction != null && cancelAction.triggered)
         {
             CancelPlacement();
         }
@@ -133,7 +171,7 @@ public class PlacementController : MonoBehaviour
     {
         if (structureData == null)
         {
-            Debug.LogError("PlacementController.EnterPlacement received null StructureData");
+            Debug.LogError($"{name}: null {nameof(StructureData)}");
             return;
         }
 
@@ -303,11 +341,6 @@ public class PlacementController : MonoBehaviour
         {
             TooltipController.Instance.Hide();
         }
-    }
-
-    private void OnDisable()
-    {
-        EndPlacement();
     }
 
     /// <summary>

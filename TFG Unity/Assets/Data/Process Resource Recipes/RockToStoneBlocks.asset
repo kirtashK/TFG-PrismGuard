@@ -16,12 +16,8 @@ MonoBehaviour:
   inputItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
   inputMaxCapacity: 2
   inputPerBatch: 1
-  requiresFuel: 0
-  fuelItem: {fileID: 0}
-  fuelPerBatch: 1
-  fuelMaxCapacity: 5
+  fuelPerBatch: 0
   outputItemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
-  outputPrefab: {fileID: 9190593886540071188, guid: 2404244e4ea86e64e8eb229c25d53fd8, type: 3}
   outputMaxCapacity: 15
   outputPerInput: 3
   processingTime: 45

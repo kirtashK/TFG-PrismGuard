@@ -19,6 +19,15 @@ public class ItemData : ScriptableObject
     [Tooltip("Category (leaf) of the item")]
     public ItemCategory category;
 
+    [Header("Fuel")]
+
+    [Tooltip("Can this item be used as fuel?")]
+    public bool isFuel = false;
+
+    [Tooltip("If its fuel, refills this much fuel")]
+    [Range(0f, 10f)]
+    public float fuelValue = 0f;
+
     [Header("Trading")]
     public bool canBeBought = true;
     [Min(0)]
@@ -33,19 +42,23 @@ public class ItemData : ScriptableObject
     {
         if (string.IsNullOrEmpty(itemName))
         {
-            Debug.LogWarning($"{name} missing itemName");
+            Debug.LogWarning($"{name} missing {nameof(itemName)}");
         }
         if (icon == null)
         {
-            Debug.LogWarning($"{name} missing icon");
+            Debug.LogWarning($"{name} missing {nameof(icon)}");
         }
         if (itemPrefab == null)
         {
-            Debug.LogWarning($"{name} missing itemPrefab");
+            Debug.LogWarning($"{name} missing {nameof(itemPrefab)}");
         }
         if (category == null)
         {
-            Debug.LogWarning($"{name} missing category");
+            Debug.LogWarning($"{name} missing {nameof(category)}");
+        }
+        if (isFuel && fuelValue == 0f)
+        {
+            Debug.LogWarning($"{name} is fuel but has no fuel value");
         }
     }
 }

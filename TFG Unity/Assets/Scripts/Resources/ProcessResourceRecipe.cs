@@ -9,25 +9,15 @@ public class ProcessResourceRecipe : ScriptableObject
 
     [Tooltip("Input's data")]
     public ItemData inputItemData;
-    [Tooltip("Max capacity of input")]
-    [Range(0f, 100f)]
-    public int inputMaxCapacity = 6;
     [Tooltip("Input consumed per batch")]
     [Range(0f, 100f)]
     public int inputPerBatch = 1;
 
-    [Header("Fuel (Optional")]
+    [Header("Fuel")]
 
-    [Tooltip("true if it consumes fuel")]
-    public bool requiresFuel = false;
-    [Tooltip("Item to consume as fuel")]
-    public ItemData fuelItemData;
-    [Tooltip("Fuel consumed per batch")]
-    [Range(0f, 100f)]
-    public int fuelPerBatch = 1;
-    [Tooltip("Max capacity of fuel")]
-    [Range(0f, 100f)]
-    public int fuelMaxCapacity = 5;
+    [Tooltip("Fuel consumed per batch (0 = disabled)")]
+    [Range(0f, 10f)]
+    public float fuelPerBatch = 0;
 
     [Header("Output")]
 
@@ -45,23 +35,16 @@ public class ProcessResourceRecipe : ScriptableObject
     [Tooltip("Time in seconds")]
     [Range(0f, 1000f)]
     public float processingTime = 10f;
-    [Tooltip("Max amount of concurrent processing")]
-    [Range(0f, 10f)]
-    public int maxConcurrentBatches = 2;
 
     void OnValidate()
     {
         if (inputItemData == null)
         {
-            Debug.LogWarning($"{name} missing inputItemData");
-        }
-        if (requiresFuel && fuelItemData == null)
-        {
-            Debug.LogWarning($"{name} missing fuelItem");
+            Debug.LogWarning($"{name} missing {nameof(inputItemData)}");
         }
         if (outputItemData == null)
         {
-            Debug.LogWarning($"{name} missing outputItemData");
+            Debug.LogWarning($"{name} missing {nameof(outputItemData)}");
         }
     }
 }

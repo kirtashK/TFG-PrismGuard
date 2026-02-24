@@ -127,7 +127,7 @@ public class MoveItemTask : MonoBehaviour, ITask
                 {
                     continue;
                 }
-                if (candidate is MonoBehaviour mb && !mb.isActiveAndEnabled)
+                if (candidate is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled)
                 {
                     continue;
                 }

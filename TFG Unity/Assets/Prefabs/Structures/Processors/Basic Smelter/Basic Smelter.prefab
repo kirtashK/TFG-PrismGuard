@@ -105,7 +105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &846214276085383937
 Transform:
   m_ObjectHideFlags: 0
@@ -137,6 +137,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storage: {fileID: 3496389811995932038}
   processingCheckInterval: 1
+  storedFuel: 0
+  reservedFuel: 0
+  maxConcurrentBatches: 1
+  processingCount: 0
 --- !u!114 &216417968583139314
 MonoBehaviour:
   m_ObjectHideFlags: 0
