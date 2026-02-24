@@ -137,6 +137,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storage: {fileID: 4009856531128985332}
   processingCheckInterval: 1
+  storedFuel: 0
+  reservedFuel: 0
+  maxConcurrentBatches: 1
+  processingCount: 0
 --- !u!114 &4533883100969938562
 MonoBehaviour:
   m_ObjectHideFlags: 0

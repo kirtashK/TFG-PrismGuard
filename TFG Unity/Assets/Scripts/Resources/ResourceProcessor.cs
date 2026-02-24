@@ -25,6 +25,10 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private float storedFuel = 0;
     [SerializeField]
     private float reservedFuel = 0;
+    [SerializeField]
+    private int maxConcurrentBatches = 1;
+    [SerializeField]
+    private int processingCount = 0;
 
     public Vector3 GetReceivePosition() => transform.position;
 
@@ -49,7 +53,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         public int storedOutput;
         public int reservedOutput;
-        public int processingCount;
     }
     private List<RecipeState> recipeStates;
 
@@ -66,10 +69,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             this.processorData = processorData;
             fuelMaxCapacity = processorData.fuelMaxCapacity;
             requiresFuel = processorData.requiresFuel;
+            maxConcurrentBatches = processorData.maxConcurrentBatches;
         }
         else
         {
-            Debug.LogWarning($"{name} couldnt get {nameof(ProcessorData)} from Structure");
+            Debug.LogWarning($"{name} couldnt get {nameof(ProcessorData)} from {nameof(Structure)}");
         }
 
         if (storage == null)
@@ -91,8 +95,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             {
                 recipe = recipe,
                 storedOutput = 0,
-                reservedOutput = 0,
-                processingCount = 0
+                reservedOutput = 0
             });
 
             ItemData key = recipe.inputItemData;
@@ -157,7 +160,9 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         reservedFuel = 0;
         storedFuel = 0;
 
-        foreach(KeyValuePair<ItemData, InputState> input in inputState)
+        processingCount = 0;
+
+        foreach (KeyValuePair<ItemData, InputState> input in inputState)
         {
             while (input.Value.Reserved > 0)
             {
@@ -168,10 +173,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         foreach (RecipeState state in recipeStates)
         {
-
             state.reservedOutput = 0;
             state.storedOutput = 0;
-            state.processingCount = 0;
         }
     }
 
@@ -204,7 +207,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                     <= recipeState.recipe.outputMaxCapacity
                 && (!requiresFuel || storedFuel >= recipeState.recipe.fuelPerBatch);
 
-            while (readyForBatch && recipeState.processingCount < recipeState.recipe.maxConcurrentBatches)
+            while (readyForBatch && processingCount < maxConcurrentBatches)
             {
                 // Consume input & fuel
                 state.Stored -= recipeState.recipe.inputPerBatch;
@@ -215,7 +218,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
                 recipeState.reservedOutput += recipeState.recipe.outputPerInput;
 
-                recipeState.processingCount++;
+                processingCount++;
                 StartCoroutine(ProcessBatch(recipeState));
 
                 // Check if another batch is possible
@@ -244,7 +247,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
         recipeState.storedOutput += recipeState.recipe.outputPerInput;
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;
-        recipeState.processingCount--;
+        processingCount--;
 
         Debug.Log($"{name} has processed a batch of {recipeState.recipe.name}" +
             $"\nStored amount = {recipeState.storedOutput}" +
@@ -331,7 +334,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             {
                 if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
-                    Debug.Log($"{name}: Can receive input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
+                    //Debug.Log($"{name}: Can receive input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
                     return true;
                 }
             }
@@ -357,7 +360,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
                     state.Reserved++;
-                    Debug.Log($"{name}: Reserved input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
+                    //Debug.Log($"{name}: Reserved input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
 
                     return true;
                 }
@@ -389,7 +392,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 {
                     state.Stored++;
                     Release(data);
-                    Debug.Log($"{name}: Received input {data.itemName}. Stored = {state.Stored}. Max = {state.MaxCapacity}");
+                    //Debug.Log($"{name}: Received input {data.itemName}. Stored = {state.Stored}. Max = {state.MaxCapacity}");
 
                     return;
                 }
@@ -418,7 +421,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 if (state.Reserved > 0)
                 {
                     state.Reserved--;
-                    Debug.Log($"{name}: Released input {data.itemName}. Still reserved: {state.Reserved}");
+                    //Debug.Log($"{name}: Released input {data.itemName}. Still reserved: {state.Reserved}");
 
                     return;
                 }

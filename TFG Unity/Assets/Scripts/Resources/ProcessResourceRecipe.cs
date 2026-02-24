@@ -35,9 +35,6 @@ public class ProcessResourceRecipe : ScriptableObject
     [Tooltip("Time in seconds")]
     [Range(0f, 1000f)]
     public float processingTime = 10f;
-    [Tooltip("Max amount of concurrent processing")]
-    [Range(0f, 10f)]
-    public int maxConcurrentBatches = 2;
 
     void OnValidate()
     {
