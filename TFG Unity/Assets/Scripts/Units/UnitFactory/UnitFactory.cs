@@ -299,7 +299,7 @@ public class UnitFactory : MonoBehaviour
 }
 
 // Small helper extension to remove from queue if present
-static class QueueExtensions
+internal static class QueueExtensions
 {
     public static void RemoveIfPresent<T>(this Queue<T> queue, T item)
     {

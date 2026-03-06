@@ -4,7 +4,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrderable, IGuardable, IAttackMovable
+public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, 
+                    IOrderable, IGuardable, IAttackMovable, IStatRefresher
 {
     public SoldierData data;
 
@@ -46,8 +47,19 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrde
 
     private void OnEnable()
     {
-        // Subscribe to wave completed event to regen hp
-        StartCoroutine(RegisterWhenUIManagerReady());
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (UIManager.Instance == null 
+            || StatModifierManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
     private void OnDisable()
@@ -56,16 +68,28 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, IOrde
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
         }
+        StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
     }
 
-    private IEnumerator RegisterWhenUIManagerReady()
+    void HandleModifiersChanged(string targetId, string statName)
     {
-        while (UIManager.Instance == null)
+        if (targetId == data.id)
         {
-            yield return null;
+            RefreshStats();
         }
+    }
 
-        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
+    // TODO change literal strings for enum or whatever we use
+    public void RefreshStats()
+    {
+        float baseMove = data.moveSpeed;
+        float effectiveMove = StatModifierManager.Instance.GetEffectiveFloat(data.id, "moveSpeed", baseMove);
+        agent.speed = effectiveMove;
+
+        float baseMaxHealth = data.maxHealth;
+        float effectiveMaxHealth = StatModifierManager.Instance.GetEffectiveFloat(data.id, "maxHealth", baseMaxHealth);
+        currentHealth = Mathf.Min(currentHealth, effectiveMaxHealth);
+        Debug.Log($"{name}: {baseMaxHealth} upgraded to {effectiveMaxHealth}");
     }
 
     public void ChangeState(ISoldierState newState)

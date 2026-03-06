@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class WarehouseData : StructureData
 {
     [Header("Warehouse")]
+
     [Tooltip("Categories this warehouse accepts. If a category is an ancestor of an item's category it will match")]
     public List<ItemCategory> acceptedCategories = new();
 
@@ -12,8 +13,10 @@ public class WarehouseData : StructureData
     [Range(1, 100)]
     public int maxCapacity = 12;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (acceptedCategories == null || acceptedCategories.Count == 0)
         {
             Debug.LogWarning($"{name}: Category not configured");

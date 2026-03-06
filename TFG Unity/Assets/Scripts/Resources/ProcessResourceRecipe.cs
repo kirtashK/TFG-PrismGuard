@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/ProcessResourceRecipe", fileName = "NewProcessResourceRecipe")]
-public class ProcessResourceRecipe : ScriptableObject
+public class ProcessResourceRecipe : BaseData
 {
-    public string recipeName;
+    [Header("Process resource recipe")]
 
     [Header("Input")]
 
@@ -36,8 +36,10 @@ public class ProcessResourceRecipe : ScriptableObject
     [Range(0f, 1000f)]
     public float processingTime = 10f;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (inputItemData == null)
         {
             Debug.LogWarning($"{name} missing {nameof(inputItemData)}");

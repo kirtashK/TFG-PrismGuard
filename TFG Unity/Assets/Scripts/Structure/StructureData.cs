@@ -1,13 +1,11 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure/Structure")]
-public class StructureData : ScriptableObject
+public class StructureData : BaseData
 {
-    public string structureName;
-
-    [Tooltip("Icon shown on UI")]
-    public Sprite icon;
+    [Header("Structure")]
 
     [Tooltip("Category to show in construction UI")]
     public StructureCategory category = StructureCategory.Misc;
@@ -49,8 +47,10 @@ public class StructureData : ScriptableObject
 
     public List<ResourceRequirement> buildRequirements = new();
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (builtPrefab == null)
         {
             Debug.LogWarning($"{name} missing builtPrefab");

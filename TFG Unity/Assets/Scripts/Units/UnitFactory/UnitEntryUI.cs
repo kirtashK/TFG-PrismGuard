@@ -74,7 +74,7 @@ public class UnitEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             if (requirement.itemData != null)
             {
-                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.itemName).Append("\n");
+                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.Name).Append("\n");
             }
         }
 

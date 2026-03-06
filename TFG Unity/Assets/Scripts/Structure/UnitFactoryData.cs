@@ -17,8 +17,10 @@ public class UnitFactoryData : StructureData
     [Min(-1)]
     public int maxQueueLength = 5;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (producibleUnits == null)
         {
             Debug.LogWarning($"{name}: producible units not configured");

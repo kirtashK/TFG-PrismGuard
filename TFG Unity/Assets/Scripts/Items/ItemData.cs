@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Data/Item")]
-public class ItemData : ScriptableObject
+public class ItemData : BaseData
 {
-    public string itemName;
-    public Sprite icon;
+    [Header("Item")]
 
     public GameObject itemPrefab;
 
@@ -38,12 +37,10 @@ public class ItemData : ScriptableObject
     [Tooltip("Sell price is buy price * sellFraction")]
     public float sellFraction = 0.25f;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
-        if (string.IsNullOrEmpty(itemName))
-        {
-            Debug.LogWarning($"{name} missing {nameof(itemName)}");
-        }
+        base.OnValidate();
+
         if (icon == null)
         {
             Debug.LogWarning($"{name} missing {nameof(icon)}");
