@@ -203,7 +203,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             }
             else
             {
-                statusText.text = $"{item.itemName} cannot be bought";
+                statusText.text = $"{item.Name} cannot be bought";
             }
         }
         else
@@ -219,7 +219,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             }
             else
             {
-                statusText.text = $"{item.itemName} cannot be sold";
+                statusText.text = $"{item.Name} cannot be sold";
             }
         }
         else
@@ -275,7 +275,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
 
         Structure structure = transform.GetComponentInParent<Structure>();
-        if (structure != null && structure.structureData.structureName.ToLower().Contains("shop"))
+        if (structure != null && structure.structureData.Name.ToLower().Contains("shop"))
         {
             ShowShopUI(structure);
         }
@@ -291,9 +291,9 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
         if (shopNameText != null)
         {
-            if (currentStructure != null && currentStructure.structureData != null && !string.IsNullOrEmpty(currentStructure.structureData.structureName))
+            if (currentStructure != null && currentStructure.structureData != null && !string.IsNullOrEmpty(currentStructure.structureData.Name))
             {
-                shopNameText.text = currentStructure.structureData.structureName;
+                shopNameText.text = currentStructure.structureData.Name;
             }
             else
             {
@@ -379,7 +379,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
                 {
                     if (statusText != null)
                     {
-                        statusText.text = $"Not enough {itemToSell.itemName} in stock ({totalAvailable}/{quantityToSell})";
+                        statusText.text = $"Not enough {itemToSell.Name} in stock ({totalAvailable}/{quantityToSell})";
                     }
                     return;
                 }
