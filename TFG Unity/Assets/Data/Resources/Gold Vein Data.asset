@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422f3942f9e62294d8da8b35e08f4c07, type: 3}
   m_Name: Gold Vein Data
   m_EditorClassIdentifier: 
-  resourceName: Gold vein
+  Name: Gold vein
+  id: Gold vein
+  icon: {fileID: 21300000, guid: 032d9c62ddc3287408e3e9f94d537a16, type: 3}
   category: 4
   respawnTime: 60

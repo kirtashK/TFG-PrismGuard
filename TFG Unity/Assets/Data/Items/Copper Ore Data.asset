@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a51e223f5496545419a5317368af6adb, type: 3}
   m_Name: Copper Ore Data
   m_EditorClassIdentifier: 
-  itemName: Copper ore
+  Name: Copper ore
+  id: Copper ore
   icon: {fileID: 21300000, guid: bd7c2eb414f35fe479749cccd69191cb, type: 3}
   itemPrefab: {fileID: 4266297577157854077, guid: bd3e2d95a5c351447960298f29f9262d, type: 3}
   weight: 5
   interactionRange: 1
   category: {fileID: 11400000, guid: a07ef24556ffb8342a8ad373ae63d616, type: 2}
+  isFuel: 0
+  fuelValue: 0
   canBeBought: 0
   buyPrice: 4
   canBeSold: 1

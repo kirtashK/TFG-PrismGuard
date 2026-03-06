@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6afb97a030e3bfa419d4a39ee8d12796, type: 3}
   m_Name: Manufactured Warehouse Data
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseData
-  structureName: Manufactured products pallet
+  Name: Manufactured warehouse
+  id: Manufactured warehouse
   icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   category: 0
   builtPrefab: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}

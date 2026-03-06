@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Basic Worker Data
   m_EditorClassIdentifier: 
   Name: Worker
+  id: Worker
   icon: {fileID: 0}
   PrefabReference:
     m_AssetGUID: c9118ed2c42dd014ca49170d806b707d

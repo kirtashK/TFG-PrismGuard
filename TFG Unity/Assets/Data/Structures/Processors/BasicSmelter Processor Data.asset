@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
   m_Name: BasicSmelter Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
-  structureName: Basic smelter
+  Name: Crude smelter
+  id: Crude smelter
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   category: 1
   builtPrefab: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}

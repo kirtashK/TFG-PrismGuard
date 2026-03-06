@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422f3942f9e62294d8da8b35e08f4c07, type: 3}
   m_Name: Tree Data
   m_EditorClassIdentifier: 
-  resourceName: Tree
-  resourcePrefab: {fileID: 8761663372451284708, guid: 474f5c519a19da7478cbba706466d7b4, type: 3}
+  Name: Tree
+  id: Tree
+  icon: {fileID: 21300000, guid: c75b6b8b111f0544aabfbdbe8b785faa, type: 3}
+  category: 0
   respawnTime: 6.5

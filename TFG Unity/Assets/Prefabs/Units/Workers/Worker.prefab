@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3eefcfcaad8fe7498ce67d1c38eb065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workerData: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
+  data: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
   currentLoad: 0
   inventorySpot: {fileID: 5389797990047835591}
 --- !u!114 &628282687539908499
@@ -224,6 +224,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &8394988465804699716
 MeshFilter:

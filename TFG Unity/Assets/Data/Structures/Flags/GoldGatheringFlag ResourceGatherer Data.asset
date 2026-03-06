@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
   m_Name: GoldGatheringFlag ResourceGatherer Data
   m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
-  structureName: Gold mining flag
+  Name: Gold gathering flag
+  id: Gold gathering flag
   icon: {fileID: 21300000, guid: 10caf1bb2a1e16442b6cd9df5f5c01cf, type: 3}
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}

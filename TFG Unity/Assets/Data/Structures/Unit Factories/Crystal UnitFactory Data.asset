@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e3f69d911988f4e92ed0de6979002c, type: 3}
   m_Name: Crystal UnitFactory Data
   m_EditorClassIdentifier: Assembly-CSharp::UnitFactoryData
-  structureName: Crystal
+  Name: Crystal
+  id: Crystal
   icon: {fileID: 0}
   category: 4
   builtPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}

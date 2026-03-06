@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
   m_Name: CopperOreToCopperIngot Advanced
   m_EditorClassIdentifier: 
-  recipeName: Process copper ore into copper ingot
+  Name: Smelt copper ore Advanced
+  id: Smelt copper ore Advanced
+  icon: {fileID: 0}
   inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
   inputPerBatch: 1
   fuelPerBatch: 1
@@ -20,4 +22,3 @@ MonoBehaviour:
   outputMaxCapacity: 5
   outputPerInput: 1
   processingTime: 40
-  maxConcurrentBatches: 2

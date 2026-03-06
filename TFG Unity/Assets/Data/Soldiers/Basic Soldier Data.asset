@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Basic Soldier Data
   m_EditorClassIdentifier: 
   Name: Basic Soldier
+  id: Basic Soldier
   icon: {fileID: 0}
   PrefabReference:
     m_AssetGUID: 9f3d6e970a529b74fbece11ddaabb6fa

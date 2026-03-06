@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
   m_Name: Sawmill Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
-  structureName: Sawmill
+  Name: Sawmill
+  id: Sawmill
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   category: 1
   builtPrefab: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
@@ -28,5 +29,6 @@ MonoBehaviour:
     quantity: 5
   recipes:
   - {fileID: 11400000, guid: 7baa33530134fb647bbbb16b7ef0d643, type: 2}
+  maxConcurrentBatches: 1
   requiresFuel: 0
   fuelMaxCapacity: 5

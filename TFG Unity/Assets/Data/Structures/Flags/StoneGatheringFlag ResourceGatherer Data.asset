@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
   m_Name: StoneGatheringFlag ResourceGatherer Data
   m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
-  structureName: Stone mining flag
+  Name: Stone gathering flag
+  id: Stone gathering flag
   icon: {fileID: 21300000, guid: 3908cc06cd1c0bf4b80f9109b72d3f90, type: 3}
   category: 2
   builtPrefab: {fileID: 8090197791835289027, guid: 393053e22bc462c4bb5085e069e56767, type: 3}

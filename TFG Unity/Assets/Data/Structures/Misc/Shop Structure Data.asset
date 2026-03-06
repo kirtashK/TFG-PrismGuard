@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
   m_Name: Shop Structure Data
   m_EditorClassIdentifier: Assembly-CSharp::StructureData
-  structureName: Shop
+  Name: Shop
+  id: Shop
   icon: {fileID: 21300000, guid: e31b06e422cdd224c929a9ffc5e6019f, type: 3}
   category: 4
   builtPrefab: {fileID: 3947097100652634618, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
