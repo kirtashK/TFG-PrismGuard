@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
   m_Name: Quarry Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
-  structureName: Quarry
+  Name: Quarry
+  id: e8aca2e85f6130047bd069adff575d36
   icon: {fileID: 21300000, guid: 06924a880ddbe1847aaa37e19550b66e, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 1
   builtPrefab: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
   blueprintPrefab: {fileID: 5601518569988493041, guid: 0057070b1a904ce4f9feb844cf98b913, type: 3}
@@ -30,3 +33,6 @@ MonoBehaviour:
     quantity: 5
   recipes:
   - {fileID: 11400000, guid: 3675196ec306c5741b556b7ca6af1b96, type: 2}
+  maxConcurrentBatches: 1
+  requiresFuel: 0
+  fuelMaxCapacity: 5

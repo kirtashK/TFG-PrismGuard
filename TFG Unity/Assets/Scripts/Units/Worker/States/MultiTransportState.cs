@@ -102,7 +102,7 @@ public class MultiTransportState : IWorkerState
 
         MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
             worker.transform.position,
-            worker.workerData.maxCarryWeight - worker.currentLoad,
+            worker.maxCarryWeight - worker.currentLoad,
             consumer.GetReceivePosition(),
             maxPickupRadius
         );

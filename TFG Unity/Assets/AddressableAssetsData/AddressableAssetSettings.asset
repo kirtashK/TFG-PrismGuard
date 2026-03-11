@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 6565e2e97581e4c468245f9aa642d19a
   m_currentHash:
     serializedVersion: 2
-    Hash: 250dd0f2892ace4dfe831efa41d02f66
+    Hash: c72e80a6c8b3cff9f9bc09d0f51a89cb
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -63,6 +63,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 08c7c969f7fd6b447a88d83ba2364d0e, type: 2}
   - {fileID: 11400000, guid: 158f475c1a5abcc42bd8ca6bc26e0567, type: 2}
   - {fileID: 11400000, guid: af55705e24bbbf04aabe0b84e0050872, type: 2}
+  - {fileID: 11400000, guid: 9fb0a3bbac1093f4e88d2721f0c89a7d, type: 2}
   - {fileID: 11400000, guid: e2dc09af604926f47bdbc2e8f4552c47, type: 2}
   - {fileID: 11400000, guid: 4d0a73fec28540c4ca56971be4b218b6, type: 2}
   m_BuildSettings:
@@ -107,6 +108,7 @@ MonoBehaviour:
     - Unit
     - Structure
     - Item
+    - Research
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: ad97c6d85389dc34bbb15b6c79fd7154, type: 2}

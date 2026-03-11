@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
   m_Name: AdvancedSmelter Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
-  structureName: Advanced smelter
+  Name: Advanced smelter
+  id: b1f8ae87863bd8041848b115ca805adc
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  requiredResearch: {fileID: 11400000, guid: 6038f81b53d9b204d9c129a29311a237, type: 2}
+  statBases: []
   category: 1
   builtPrefab: {fileID: 4468715666146783442, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
   blueprintPrefab: {fileID: 3302705174211102603, guid: 9cbb7fdcf3a3fa04caa9eede7ef6f2b5, type: 3}
@@ -34,5 +37,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}
   - {fileID: 11400000, guid: f593e59cb096c8e49bdbf4a302b4fd98, type: 2}
   - {fileID: 11400000, guid: 9e946a5595a89a24cbaf4d4e05d6ff85, type: 2}
+  maxConcurrentBatches: 1
   requiresFuel: 1
   fuelMaxCapacity: 7.5

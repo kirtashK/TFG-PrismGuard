@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
+  m_Name: CrudeSmelter Processor Data
+  m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
+  Name: Crude smelter
+  id: 9dd51a9921b3c3240ba2c6cb5cf0e173
+  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  category: 1
+  builtPrefab: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
+  blueprintPrefab: {fileID: 6592928600490302708, guid: d73cc7d9baeb282469e0c88a246a44e7, type: 3}
+  previewPrefab: {fileID: 7543972056476123707, guid: f85fce5bda34b914080898b2e4369010, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 5
+  - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
+    quantity: 15
+  recipes:
+  - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}
+  maxConcurrentBatches: 1
+  requiresFuel: 1
+  fuelMaxCapacity: 5

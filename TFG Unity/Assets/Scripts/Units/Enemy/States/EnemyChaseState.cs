@@ -13,7 +13,7 @@ public class EnemyChaseState : IEnemyState
     public void EnterState(Enemy enemy)
     {
         enemy.agent.isStopped = false;
-        enemy.agent.stoppingDistance = enemy.data.attackRange;
+        enemy.agent.stoppingDistance = enemy.attackRange;
         enemy.agent.SetDestination(target.Position);
     }
 
@@ -35,7 +35,7 @@ public class EnemyChaseState : IEnemyState
         }
 
         if (!enemy.agent.pathPending
-            && enemy.agent.remainingDistance <= enemy.data.attackRange)
+            && enemy.agent.remainingDistance <= enemy.attackRange)
         {
             enemy.ChangeState(new EnemyAttackState(target));
         }

@@ -170,7 +170,6 @@ public class UnitFactory : MonoBehaviour
     private void TryStartBuilds()
     {
         //Debug.Log($"buildingOrders count = {buildingOrders.Count} & readyQueue count = {readyQueue.Count}");
-        // Start as many builds as allowed by concurrentSlots
         while (buildingOrders.Count < concurrentSlots && readyQueue.Count > 0)
         {
             UnitProductionOrder next = readyQueue.Dequeue();
@@ -218,7 +217,6 @@ public class UnitFactory : MonoBehaviour
 
         order.ConsumeStoredItems();
 
-        // Instantiate the unit
         Transform spawn = GetNextSpawnPoint();
         if (order.unitData.PrefabReference != null && order.unitData.PrefabReference.RuntimeKeyIsValid())
         {
@@ -278,7 +276,6 @@ public class UnitFactory : MonoBehaviour
         return true;
     }
 
-    // UI helpers
     public IReadOnlyList<UnitProductionOrder> GetAllOrders() => allOrders.AsReadOnly();
 
     public IEnumerable<UnitData> GetProducibleUnits(UnitRegistryAddressables registry)
@@ -298,8 +295,7 @@ public class UnitFactory : MonoBehaviour
     }
 }
 
-// Small helper extension to remove from queue if present
-static class QueueExtensions
+internal static class QueueExtensions
 {
     public static void RemoveIfPresent<T>(this Queue<T> queue, T item)
     {

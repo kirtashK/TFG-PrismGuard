@@ -54,7 +54,7 @@ public class ShopItemEntryUI : MonoBehaviour
         }
         if (nameLabel != null)
         {
-            nameLabel.text = item != null ? item.itemName : "Unknown";
+            nameLabel.text = item != null ? item.Name : "Unknown";
         }
         if (buyPriceLabel != null)
         {

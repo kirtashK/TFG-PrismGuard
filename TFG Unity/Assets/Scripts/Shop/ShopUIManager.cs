@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.AppUI.Core;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-using TMPro;
-using System.Linq;
-using Unity.AppUI.Core;
 
 /// <summary>
 /// Controls the shop UI panel
@@ -45,6 +46,10 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
     private Structure currentStructure;
 
+    private InputAction pointerAction;
+    private InputAction clickAction;
+    private InputAction cancelAction;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,6 +63,16 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
+
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
+        cancelAction = new InputAction("CancelUI", InputActionType.Button);
+        cancelAction.AddBinding("<Keyboard>/escape");
+        cancelAction.AddBinding("<Mouse>/rightButton");
+
+        pointerAction.Enable();
+        clickAction.Enable();
+        cancelAction.Enable();
     }
 
     private void OnEnable()
@@ -120,6 +135,49 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             Addressables.Release(loadHandle);
             loadedItems.Clear();
             isLoaded = false;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        pointerAction?.Dispose();
+        clickAction?.Dispose();
+        cancelAction?.Dispose();
+    }
+
+    private void Update()
+    {
+        if (panelRoot == null || !panelRoot.activeSelf)
+        {
+            return;
+        }
+
+        if (cancelAction != null && cancelAction.triggered)
+        {
+            HidePanel();
+            return;
+        }
+
+        // Close when click outside research UI:
+        if (clickAction != null && clickAction.triggered)
+        {
+            RectTransform rect = panelRoot.GetComponent<RectTransform>();
+            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+
+            bool clickedInside;
+            Camera uiCamera = null;
+            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                uiCamera = canvas.worldCamera;
+            }
+
+            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
+
+            if (!clickedInside)
+            {
+                HidePanel();
+            }
         }
     }
 
@@ -203,7 +261,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             }
             else
             {
-                statusText.text = $"{item.itemName} cannot be bought";
+                statusText.text = $"{item.Name} cannot be bought";
             }
         }
         else
@@ -219,7 +277,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             }
             else
             {
-                statusText.text = $"{item.itemName} cannot be sold";
+                statusText.text = $"{item.Name} cannot be sold";
             }
         }
         else
@@ -275,7 +333,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
 
         Structure structure = transform.GetComponentInParent<Structure>();
-        if (structure != null && structure.structureData.structureName.ToLower().Contains("shop"))
+        if (structure != null && structure.structureData.Name.ToLower().Contains("shop"))
         {
             ShowShopUI(structure);
         }
@@ -291,9 +349,9 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
         if (shopNameText != null)
         {
-            if (currentStructure != null && currentStructure.structureData != null && !string.IsNullOrEmpty(currentStructure.structureData.structureName))
+            if (currentStructure != null && currentStructure.structureData != null && !string.IsNullOrEmpty(currentStructure.structureData.Name))
             {
-                shopNameText.text = currentStructure.structureData.structureName;
+                shopNameText.text = currentStructure.structureData.Name;
             }
             else
             {
@@ -379,7 +437,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
                 {
                     if (statusText != null)
                     {
-                        statusText.text = $"Not enough {itemToSell.itemName} in stock ({totalAvailable}/{quantityToSell})";
+                        statusText.text = $"Not enough {itemToSell.Name} in stock ({totalAvailable}/{quantityToSell})";
                     }
                     return;
                 }

@@ -9,10 +9,10 @@ public enum Faction
     Neutral
 }
 
-public class UnitData : ScriptableObject
+public class UnitData : BaseData
 {
-    public string Name;
-    public Sprite icon;
+    [Header("Unit")]
+
     public AssetReferenceGameObject PrefabReference;
 
     [Range(0f, 1000f)]
@@ -26,13 +26,6 @@ public class UnitData : ScriptableObject
     public Faction faction = Faction.Player;
     public bool isPlayerControllable = true;
 
-    [Header("Stats")]
-
-    [Range(0f, 1000f)]
-    public float maxHealth = 20f;
-    [Range(0f, 100f)]
-    public float moveSpeed = 3.5f;
-
     [System.Serializable]
     public struct ResourceRequirement
     {
@@ -41,15 +34,17 @@ public class UnitData : ScriptableObject
         public int quantity;
     }
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (PrefabReference == null)
         {
-            Debug.LogWarning($"UnitData '{name}' missing PrefabReference");
+            Debug.LogWarning($"{name}: missing {nameof(PrefabReference)}");
         }
-        if (createCosts == null || createCosts.Count == 0)
+        if (faction == Faction.Player && (createCosts == null || createCosts.Count == 0))
         {
-            Debug.LogWarning($"{name}: createCosts not configured");
+            Debug.LogWarning($"{name}: {nameof(createCosts)} not configured");
         }
     }
 }

@@ -61,12 +61,12 @@ public class InventoryUIController : MonoBehaviour
         yield return new WaitForSeconds(debounceTime);
 
         List<ItemData> batch = new(dirtyItems);
-        batch.Sort((a, b) => a.itemName.CompareTo(b.itemName));
+        batch.Sort((a, b) => a.Name.CompareTo(b.Name));
 
         foreach (ItemData item in batch)
         {
             int count = InventoryManager.Instance.GetTotal(item);
-            string key = item.itemName;
+            string key = item.Name;
 
             if (count <= 0)
             {

@@ -13,8 +13,10 @@ public class ResourceGathererData : StructureData
     [Min(0)]
     public float gatheringRadius = 10f;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (allowedCategories == null || allowedCategories.Count == 0)
         {
             Debug.LogWarning($"{name}: Allowed categories not configured");

@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6afb97a030e3bfa419d4a39ee8d12796, type: 3}
   m_Name: Plants Warehouse Data
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseData
-  structureName: Plants Pallet
+  Name: Plants warehouse
+  id: ca52777bac90b3142bf03e1743da78d2
   icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 0
   builtPrefab: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
   blueprintPrefab: {fileID: 6937355439090504695, guid: 500de2e763ac0be44a8eb3234a9b9ff6, type: 3}

@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
   m_Name: WoodGatheringFlag ResourceGatherer Data
   m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
-  structureName: Woodcutting flag
+  Name: Wood gathering flag
+  id: fb95fba4ad7ad32408677ec8ced9752b
   icon: {fileID: 21300000, guid: 79f31b92ab0372745ac7dbfeb1b594f4, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 2
   builtPrefab: {fileID: 2959668300810766323, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
   blueprintPrefab: {fileID: 9140260009033065384, guid: cb9e57d7244bc8048a057c2e604919d8, type: 3}

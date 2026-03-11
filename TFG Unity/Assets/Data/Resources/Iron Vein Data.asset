@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422f3942f9e62294d8da8b35e08f4c07, type: 3}
   m_Name: Iron Vein Data
   m_EditorClassIdentifier: 
-  resourceName: Iron vein
+  Name: Iron vein
+  id: 8cba4f50e3dfdd5469791fda7e206e67
+  icon: {fileID: 21300000, guid: b9514f672b46ee54d80b419d50131865, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 3
   respawnTime: 30

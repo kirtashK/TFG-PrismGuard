@@ -20,8 +20,10 @@ public class ProcessorData : StructureData
     [Range(0f, 100f)]
     public float fuelMaxCapacity = 5;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (recipes == null || recipes.Count == 0)
         {
             Debug.LogWarning($"{name}: {nameof(recipes)} not configured");

@@ -1,11 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/GatherResourceRecipe", fileName = "NewGatherResourceRecipe")]
-public class GatherResourceRecipe : ScriptableObject
+public class GatherResourceRecipe : BaseData
 {
-    public string recipeName;
-
-    [Header("Resource spawned")]
+    [Header("Gather resource recipe")]
 
     [Tooltip("Data of the resource generated once node is gathered")]
     public ItemData resourceItemData;
@@ -37,8 +35,10 @@ public class GatherResourceRecipe : ScriptableObject
     [Min(0)]
     public int resourceMaxDeviation = 0;
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
+
         if (resourceItemData == null)
         {
             Debug.LogWarning($"{name} missing resourceItemData");

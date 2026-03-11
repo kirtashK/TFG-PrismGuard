@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewResourceData", menuName = "Data/Resource")]
-public class ResourceData : ScriptableObject
+public class ResourceData : BaseData
 {
-    public string resourceName;
+    [Header("Resource")]
 
     public ResourceCategory category;
 

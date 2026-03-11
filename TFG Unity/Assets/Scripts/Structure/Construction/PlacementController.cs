@@ -249,7 +249,7 @@ public class PlacementController : MonoBehaviour
                     }
                     if (structure.structureData == currentStructure)
                     {
-                        placementErrorMessage = $"Only one {currentStructure.structureName} can exist";
+                        placementErrorMessage = $"Only one {currentStructure.Name} can exist";
                         return false;
                     }
                 }

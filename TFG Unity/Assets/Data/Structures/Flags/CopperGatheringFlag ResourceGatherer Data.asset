@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
   m_Name: CopperGatheringFlag ResourceGatherer Data
   m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
-  structureName: Copper mining flag
+  Name: Copper gathering flag
+  id: 215497a59705e384e93cbb1906f0cb07
   icon: {fileID: 21300000, guid: ae11735a4ba371d4b976ee3acae23dfb, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 9f6fd567cf2df504d821e7a5e2dd7bc6, type: 3}
   blueprintPrefab: {fileID: 4671612379375326001, guid: b592ad29959604d419a6fa9cbdfa89c3, type: 3}

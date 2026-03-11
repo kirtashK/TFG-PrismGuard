@@ -20,7 +20,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     public ItemData TaskData { get; set; }
 
-    ItemInstance itemInstance;
+    private ItemInstance itemInstance;
 
     private IItemConsumer target;
     public IItemConsumer source = null;

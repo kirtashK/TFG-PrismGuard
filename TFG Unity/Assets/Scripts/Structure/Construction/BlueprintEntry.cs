@@ -1,41 +1,48 @@
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BlueprintEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [HideInInspector]
+    public StructureData structureData;
+
+    [HideInInspector]
     public Image iconImage;
+
+    [HideInInspector]
     public TMP_Text nameText;
+
     public Button button;
 
-    private StructureData boundData;
+    public GameObject lockOverlay;
 
     public void Setup(StructureData data, System.Action<StructureData> onSelected)
     {
-        boundData = data;
+        structureData = data;
 
         if (iconImage != null)
         {
             iconImage.sprite = data.icon;
         }
-
         if (nameText != null)
         {
-            nameText.text = data.structureName;
+            nameText.text = data.Name;
         }
-
         if (button == null)
         {
             button = GetComponent<Button>();
         }
-
         if (button != null)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => onSelected?.Invoke(boundData));
+            button.onClick.AddListener(() => onSelected?.Invoke(structureData));
         }
+
+        RefreshLockVisual();
     }
 
     private string BuildCostString(StructureData data)
@@ -51,25 +58,46 @@ public class BlueprintEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             if (requirement.itemData != null)
             {
-                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.itemName).Append("\n");
+                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.Name).Append("\n");
             }
         }
 
         return cost.ToString().TrimEnd('\n');
     }
 
+    public void RefreshLockVisual()
+    {
+        bool unlocked = structureData.requiredResearch == null 
+            || (ResearchManager.Instance != null 
+            && ResearchManager.Instance.HasCompleted(structureData.requiredResearch.id));
+
+        lockOverlay.SetActive(!unlocked);
+        button.interactable = unlocked;
+    }
+
     // Show a tooltip showing cost to build
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (boundData == null)
+        if (structureData == null)
         {
             return;
         }
 
-        string tooltip = BuildCostString(boundData);
+        if (structureData.requiredResearch != null 
+            && ResearchManager.Instance != null && !ResearchManager.Instance.HasCompleted(structureData.requiredResearch.id))
+        {
+            string lockedTooltip = $"Missing research";
+            if (TooltipController.Instance != null)
+            {
+                TooltipController.Instance.Show(lockedTooltip);
+            }
+            return;
+        }
+
+        string validTooltip = BuildCostString(structureData);
         if (TooltipController.Instance != null)
         {
-            TooltipController.Instance.Show(tooltip);
+            TooltipController.Instance.Show(validTooltip);
         }
     }
 

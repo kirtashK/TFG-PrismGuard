@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7436ea0d9f880344b9045fc539a3ec02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveMarkerPrefab: {fileID: 4234535159332202382, guid: 1c1558c7ddf4ac54782bf8e6b71c5936, type: 3}
+  markerDuration: 5

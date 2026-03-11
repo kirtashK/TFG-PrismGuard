@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17931b1c1401a9c4ea7b1be262618370
+    m_Address: Assets/Data/Structures/Misc/ResearchBench Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 215497a59705e384e93cbb1906f0cb07
     m_Address: Assets/Data/Structures/Flags/CopperGatheringFlag ResourceGatherer
       Data.asset

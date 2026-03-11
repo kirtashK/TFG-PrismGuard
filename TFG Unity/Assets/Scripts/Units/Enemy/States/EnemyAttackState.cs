@@ -31,7 +31,7 @@ public class EnemyAttackState : IEnemyState
             (enemy.transform.position,
             target.Position);
 
-        if (distance > enemy.data.attackRange + 0.1f)
+        if (distance > enemy.attackRange + 0.1f)
         {
             enemy.agent.isStopped = false;
             enemy.ChangeState(new EnemyChaseState(target));
@@ -41,7 +41,7 @@ public class EnemyAttackState : IEnemyState
         if (!onCooldown)
         {
             target.TakeDamage
-                (enemy.data.attackDamage, 
+                (enemy.attackDamage, 
                 enemy.Position);
 
             enemy.StartCoroutine(AttackCooldown(enemy));
@@ -56,7 +56,7 @@ public class EnemyAttackState : IEnemyState
     private IEnumerator AttackCooldown(Enemy enemy)
     {
         onCooldown = true;
-        yield return new WaitForSeconds(enemy.data.attackCooldown);
+        yield return new WaitForSeconds(enemy.attackCooldown);
         onCooldown = false;
     }
 }

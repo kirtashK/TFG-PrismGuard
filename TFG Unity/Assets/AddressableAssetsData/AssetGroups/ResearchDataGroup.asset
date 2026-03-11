@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ResearchDataGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: ResearchDataGroup
+  m_GUID: afbe8f7465acdca4bb124c84efd72fbb
+  m_SerializeEntries:
+  - m_GUID: 11173b780a764d940bbf6ca4362cff6c
+    m_Address: Assets/Data/Research/Worker MaxCarry Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23a80442c966ab04aab0dcfbc20148be
+    m_Address: Assets/Data/Research/Unlock Basic Smelter Research Data 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6038f81b53d9b204d9c129a29311a237
+    m_Address: Assets/Data/Research/NewResearchData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6359a434c7ffbf14d935f0ea71883ed9
+    m_Address: Assets/Data/Research/Research MediumSoldier Test.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 784cb060219fac54b881df2804c74737
+    m_Address: Assets/Data/Research/Unlock Advanced Smelter Research Data 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf8c625e16de8094e98f8431922d5494
+    m_Address: Assets/Data/Research/Improve Soldier Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas: []

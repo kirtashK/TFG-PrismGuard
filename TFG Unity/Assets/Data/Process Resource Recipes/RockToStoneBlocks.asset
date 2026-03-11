@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d67b1d526b32ff43a5f5770cd794a8a, type: 3}
   m_Name: RockToStoneBlocks
   m_EditorClassIdentifier: 
-  recipeName: Process rock into stone blocks
+  Name: Mason stone blocks
+  id: 3675196ec306c5741b556b7ca6af1b96
+  icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   inputItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
-  inputMaxCapacity: 2
   inputPerBatch: 1
   fuelPerBatch: 0
   outputItemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
   outputMaxCapacity: 15
   outputPerInput: 3
   processingTime: 45
-  maxConcurrentBatches: 2

@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class ConstructionUIManager : MonoBehaviour, IHideElement
 {
-    [Header("Data source")]
 
     [Tooltip("Label used in Addressables for StructureData")]
     public string structureLabel = "Structure";
@@ -36,8 +37,24 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
     private Dictionary<StructureCategory, List<StructureData>> grouped = new();
     private StructureCategory currentCategory = StructureCategory.Storage;
 
-    // Public event
     public Action<StructureData> OnStructureSelected;
+
+    private InputAction pointerAction;
+    private InputAction clickAction;
+    private InputAction cancelAction;
+
+    private void Awake()
+    {
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
+        cancelAction = new InputAction("CancelUI", InputActionType.Button);
+        cancelAction.AddBinding("<Keyboard>/escape");
+        cancelAction.AddBinding("<Mouse>/rightButton");
+
+        pointerAction.Enable();
+        clickAction.Enable();
+        cancelAction.Enable();
+    }
 
     private void Start()
     {
@@ -53,11 +70,13 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null)
+        while (HideElementManager.Instance == null
+            || ResearchManager.Instance == null)
         {
             yield return null;
         }
         HideElementManager.Instance.Register(this);
+        ResearchManager.Instance.OnEffectApplied += HandleStructureUnlocked;
     }
 
     private void OnDisable()
@@ -66,6 +85,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         {
             HideElementManager.Instance.Unregister(this);
         }
+        ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
     }
 
     private void OnDestroy()
@@ -76,6 +96,10 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             allStructures.Clear();
             isLoaded = false;
         }
+
+        pointerAction?.Dispose();
+        clickAction?.Dispose();
+        cancelAction?.Dispose();
     }
 
     private IEnumerator LoadStructures()
@@ -87,7 +111,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
         loadHandle = Addressables.LoadAssetsAsync<StructureData>(
             structureLabel,
-            structureData => { /* per-item callback (currently null...) */ }
+            structureData => { }
         );
 
         yield return loadHandle;
@@ -96,7 +120,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         {
             allStructures = new List<StructureData>(loadHandle.Result);
             isLoaded = true;
-
+            
             grouped = new Dictionary<StructureCategory, List<StructureData>>();
             foreach (StructureCategory category in Enum.GetValues(typeof(StructureCategory)))
             {
@@ -119,7 +143,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             // Sort by name
             foreach (StructureCategory category in grouped.Keys.ToList())
             {
-                grouped[category] = grouped[category].OrderBy(structure => structure.structureName).ToList();
+                grouped[category] = grouped[category].OrderBy(structure => structure.Name).ToList();
             }
 
             // Notify listeners
@@ -130,6 +154,63 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         else
         {
             Debug.LogWarning($"{name} failed to load {nameof(StructureData)} addressables");
+        }
+    }
+
+    public void HandleStructureUnlocked(ResearchManager.ResearchEffectEvent researchEffect)
+    {
+        if (researchEffect.effectType != ResearchManager.ResearchEffectEvent.EffectType.UnlockStructure)
+        {
+            return;
+        }
+
+        // Find the corresponding entry in the grid and update its visuals
+        foreach (Transform child in blueprintGrid)
+        {
+            if (child.TryGetComponent<BlueprintEntry>(out BlueprintEntry entry))
+            {
+                if (entry.structureData != null && entry.structureData.id == researchEffect.targetId)
+                {
+                    entry.RefreshLockVisual();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (panelRoot == null || !panelRoot.activeSelf)
+        {
+            return;
+        }
+
+        if (cancelAction != null && cancelAction.triggered)
+        {
+            HidePanel();
+            return;
+        }
+
+        // Close when click outside research UI:
+        if (clickAction != null && clickAction.triggered)
+        {
+            RectTransform rect = panelRoot.GetComponent<RectTransform>();
+            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+
+            bool clickedInside;
+            Camera uiCamera = null;
+            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                uiCamera = canvas.worldCamera;
+            }
+
+            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
+
+            if (!clickedInside)
+            {
+                HidePanel();
+            }
         }
     }
 
@@ -190,7 +271,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             GameObject gameobject = Instantiate(blueprintEntryPrefab, blueprintGrid);
             if (!gameobject.TryGetComponent<BlueprintEntry>(out BlueprintEntry entry))
             {
-                Debug.LogError($"{name}: {nameof(blueprintEntryPrefab)} missing {nameof(BlueprintEntry)} script");
+                Debug.LogError($"{name}: {nameof(blueprintEntryPrefab)} missing {nameof(BlueprintEntry)}");
                 continue;
             }
 
@@ -199,9 +280,10 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             {
                 if (PlacementController.Instance == null)
                 {
-                    Debug.LogError("No PlacementController in scene.");
+                    Debug.LogError($"{name}: missing {nameof(PlacementController)}");
                     return;
                 }
+
                 PlacementController.Instance.EnterPlacement(selected);
             });
         }

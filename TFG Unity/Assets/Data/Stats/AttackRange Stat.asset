@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4801df7adcb98624baf2c9e364c7eeec, type: 3}
+  m_Name: AttackRange Stat
+  m_EditorClassIdentifier: Assembly-CSharp::StatKey
+  Name: range
+  id: f003bf0e95e143a4fb8fc9a9caa5f862
+  icon: {fileID: 21300000, guid: dd4710dbef717f644ad6a8549d8d1f8f, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  fieldName: attackRange
+  valueKind: 0
+  defaultBaseValue: 1.5

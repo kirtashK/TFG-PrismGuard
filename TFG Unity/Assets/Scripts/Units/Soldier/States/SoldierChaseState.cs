@@ -12,7 +12,7 @@ public class SoldierChaseState : ISoldierState
     public void EnterState(Soldier soldier)
     {
         soldier.agent.isStopped = false;
-        soldier.agent.stoppingDistance = soldier.data.attackRange;
+        soldier.agent.stoppingDistance = soldier.attackRange;
     }
 
     public void UpdateState(Soldier soldier)
@@ -26,7 +26,7 @@ public class SoldierChaseState : ISoldierState
         soldier.agent.SetDestination(target.Position);
 
         float distance = Vector3.Distance(soldier.transform.position, target.Position);
-        if (distance <= soldier.data.attackRange)
+        if (distance <= soldier.attackRange)
         {
             soldier.ChangeState(new SoldierAttackState(target));
         }

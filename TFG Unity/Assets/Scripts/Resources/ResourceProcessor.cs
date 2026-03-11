@@ -312,7 +312,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     /// <returns>Transform of the storage</returns>
     private Transform GetRecipeStorage(ProcessResourceRecipe recipe)
     {
-        string name = $"Storage_{recipe.outputItemData.itemName}";
+        string name = $"Storage_{recipe.outputItemData.Name}";
         Transform transform = storage.Find(name);
         if (transform != null)
         {

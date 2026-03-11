@@ -14,6 +14,8 @@ public class UnitEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private UnitData data;
     private Action onCreate;
 
+    public GameObject lockOverlay;
+
     public void Setup(UnitData unitData, Action onCreateCallback)
     {
         data = unitData;
@@ -42,8 +44,14 @@ public class UnitEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             return;
         }
-        int available = ScoreManager.Instance.GetAvailableScore();
-        createButton.interactable = (available >= data.scoreCost);
+
+        bool availibleScore = ScoreManager.Instance.GetAvailableScore() >= data.scoreCost;
+        bool unlocked = data.requiredResearch == null
+            || (ResearchManager.Instance != null
+            && ResearchManager.Instance.HasCompleted(data.requiredResearch.id));
+
+        createButton.interactable = availibleScore && unlocked;
+        lockOverlay.SetActive(!unlocked);
     }
 
     private string CreateUnitCostString(UnitData data)
@@ -74,7 +82,7 @@ public class UnitEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             if (requirement.itemData != null)
             {
-                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.itemName).Append("\n");
+                cost.Append(requirement.quantity).Append("x ").Append(requirement.itemData.Name).Append("\n");
             }
         }
 
@@ -89,10 +97,21 @@ public class UnitEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             return;
         }
 
-        string tooltip = CreateUnitCostString(data);
+        if (data.requiredResearch != null
+            && ResearchManager.Instance != null && !ResearchManager.Instance.HasCompleted(data.requiredResearch.id))
+        {
+            string tooltipMissingResearch = $"Missing research";
+            if (TooltipController.Instance != null)
+            {
+                TooltipController.Instance.Show(tooltipMissingResearch);
+            }
+            return;
+        }
+
+        string tooltipValid = CreateUnitCostString(data);
         if (TooltipController.Instance != null)
         {
-            TooltipController.Instance.Show(tooltip);
+            TooltipController.Instance.Show(tooltipValid);
         }
     }
 

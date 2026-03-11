@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a51e223f5496545419a5317368af6adb, type: 3}
   m_Name: Rock Data
   m_EditorClassIdentifier: 
-  itemName: Rock
+  Name: Rock
+  id: ac5d1cd69b573f24dbdb9e15c7f5fd11
   icon: {fileID: 21300000, guid: 8470c1d8d8547cd409d271eb337862bc, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   itemPrefab: {fileID: 833925854968732159, guid: 3cff17def3b087a45b52fe2ae71b67b9, type: 3}
   weight: 5
   interactionRange: 1
   category: {fileID: 11400000, guid: 265b9f6907bde50438782ec3cefdac54, type: 2}
+  isFuel: 0
+  fuelValue: 0
   canBeBought: 1
   buyPrice: 8
   canBeSold: 1
