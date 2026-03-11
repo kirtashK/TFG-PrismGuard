@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d131a76e2cd1bc48ba4131773866464, type: 3}
+  m_Name: Unlock Crude Smelter Effect
+  m_EditorClassIdentifier: Assembly-CSharp::UnlockStructureEffect
+  Name: Unlock basic smelter
+  id: 01a13174e21396c40bde642146f623eb
+  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: 'Unlocks structure: Crude smelter'
+  structureData: {fileID: 11400000, guid: 9dd51a9921b3c3240ba2c6cb5cf0e173, type: 2}

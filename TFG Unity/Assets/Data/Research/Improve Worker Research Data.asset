@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
+  m_Name: Improve Worker Research Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResearchData
+  Name: Upgrade worker's equipment
+  id: 11173b780a764d940bbf6ca4362cff6c
+  icon: {fileID: 21300000, guid: b195a7f36fe036b40974e684b71fc57e, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: Upgrade the equipment of your workers
+  requiredResearchPoints: 100
+  basePointsPerCycle: 10
+  prerequisiteResearchDatas: []
+  effects:
+  - {fileID: 11400000, guid: 0c34b7e18dd94714ab34911044faf9d7, type: 2}
+  - {fileID: 11400000, guid: 22cd00896a311e240ba4369c20d64cb4, type: 2}
+  - {fileID: 11400000, guid: 9c19380cb5c12b840af148c19b2bddb4, type: 2}
