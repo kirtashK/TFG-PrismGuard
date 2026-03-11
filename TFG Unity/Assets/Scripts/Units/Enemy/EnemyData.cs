@@ -5,13 +5,6 @@ public class EnemyData : UnitData
 {
     [Header("Enemy")]
 
-    [Range(0f, 100f)]
-    public float attackRange = 1.5f;
-    [Range(0f, 1000f)]
-    public float attackDamage = 10f;
-    [Range(0f, 100f)]
-    public float attackCooldown = 1f;
-
     [Header("Wave")]
 
     [Tooltip("Cost to spawn this enemy, its also the score added once defeated")]

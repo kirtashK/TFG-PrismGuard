@@ -22,19 +22,6 @@ public class UnitRegistryAddressables : MonoBehaviour
         StartCoroutine(LoadUnitsCoroutine());
     }
 
-    private void OnEnable()
-    {
-        StartCoroutine(RegisterWhenReady());
-    }
-
-    private IEnumerator RegisterWhenReady()
-    {
-        while (DataRegistry.Instance == null)
-        {
-            yield return null;
-        }
-    }
-
     private IEnumerator LoadUnitsCoroutine()
     {
         if (isLoaded)
@@ -53,8 +40,6 @@ public class UnitRegistryAddressables : MonoBehaviour
         {
             loadedUnits = new List<UnitData>(loadHandle.Result);
             isLoaded = true;
-
-            DataRegistry.Instance.RegisterRange(loadedUnits);
 
             // Notify listeners
             OnUnitsLoaded?.Invoke(loadedUnits);

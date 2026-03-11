@@ -1,3 +1,4 @@
+using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,7 +7,8 @@ public class AgentMovementController : MonoBehaviour
 {
     private SoldierData data;
 
-    public NavMeshAgent agent;
+    private AgentSoldier agent;
+    public NavMeshAgent navMeshAgent;
 
     [Tooltip("Distance considered reached")]
     public float stopDistance = 0.6f;
@@ -15,55 +17,56 @@ public class AgentMovementController : MonoBehaviour
     {
         data = GetComponent<AgentSoldier>().data;
 
-        if (agent == null)
+        if (navMeshAgent == null)
         {
-            agent = GetComponent<NavMeshAgent>();
+            navMeshAgent = GetComponent<NavMeshAgent>();
         }
+        agent = GetComponent<AgentSoldier>();
 
-        agent.speed = data.moveSpeed;
-        agent.stoppingDistance = data.attackRange;
+        navMeshAgent.speed = agent.moveSpeed;
+        navMeshAgent.stoppingDistance = agent.attackRange;
     }
 
     public void SetDestination(Vector3 worldPosition)
     {
-        if (agent == null)
+        if (navMeshAgent == null)
         {
             return;
         }
 
-        agent.isStopped = false;
-        agent.SetDestination(worldPosition);
+        navMeshAgent.isStopped = false;
+        navMeshAgent.SetDestination(worldPosition);
     }
 
     public void Stop()
     {
-        if (agent == null)
+        if (navMeshAgent == null)
         {
             return;
         }
 
-        agent.isStopped = true;
-        agent.ResetPath();
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
     }
 
     public bool HasReachedDestination()
     {
-        if (agent == null)
+        if (navMeshAgent == null)
         {
             return true;
         }
 
-        if (!agent.hasPath)
+        if (!navMeshAgent.hasPath)
         {
             return true;
         }
 
-        if (agent.pathPending)
+        if (navMeshAgent.pathPending)
         {
             return false;
         }
 
-        if (agent.remainingDistance <= Mathf.Max(agent.stoppingDistance, stopDistance))
+        if (navMeshAgent.remainingDistance <= Mathf.Max(navMeshAgent.stoppingDistance, stopDistance))
         {
             return true;
         }

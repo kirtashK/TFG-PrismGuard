@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UnitFactoryUIController : MonoBehaviour, IHideElement
@@ -24,12 +25,26 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
 
     private bool isRegistered = false;
 
+    private InputAction pointerAction;
+    private InputAction clickAction;
+    private InputAction cancelAction;
+
     private void Awake()
     {
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
         }
+
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
+        cancelAction = new InputAction("CancelUI", InputActionType.Button);
+        cancelAction.AddBinding("<Keyboard>/escape");
+        cancelAction.AddBinding("<Mouse>/rightButton");
+
+        pointerAction.Enable();
+        clickAction.Enable();
+        cancelAction.Enable();
     }
 
     private void OnEnable()
@@ -47,17 +62,67 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         {
             HideElementManager.Instance.Unregister(this);
         }
+        if (isRegistered && ResearchManager.Instance != null)
+        {
+            ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
+        }
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null || HideElementManager.Instance == null)
+        while (SelectionManager.Instance == null 
+            || HideElementManager.Instance == null
+            || ResearchManager.Instance == null)
         {
             yield return null;
         }
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
+        ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
         HideElementManager.Instance.Register(this);
         isRegistered = true;
+    }
+
+    private void OnDestroy()
+    {
+        pointerAction?.Dispose();
+        clickAction?.Dispose();
+        cancelAction?.Dispose();
+    }
+
+    private void Update()
+    {
+        if (panelRoot == null || !panelRoot.activeSelf)
+        {
+            return;
+        }
+
+        if (cancelAction != null && cancelAction.triggered)
+        {
+            HidePanel();
+            return;
+        }
+
+        // Close when click outside research UI:
+        if (clickAction != null && clickAction.triggered)
+        {
+            RectTransform rect = panelRoot.GetComponent<RectTransform>();
+            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+
+            bool clickedInside;
+            Camera uiCamera = null;
+            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
+            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                uiCamera = canvas.worldCamera;
+            }
+
+            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
+
+            if (!clickedInside)
+            {
+                HidePanel();
+            }
+        }
     }
 
     private void HandleSelectionChanged(IReadOnlyList<ISelectable> selection)
@@ -160,13 +225,13 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             if (gameObject.TryGetComponent<UnitEntryUI>(out UnitEntryUI unitEntry))
             {
                 unitEntry.Setup(unit, () =>
+                {
+                    Guid orderId = currentFactory.EnqueueProduction(unit);
+                    if (orderId == Guid.Empty)
                     {
-                        Guid orderId = currentFactory.EnqueueProduction(unit);
-                        if (orderId == Guid.Empty)
-                        {
-                            // TODO show feedback "not enough score" or "queue full"
-                        }
-                    });
+                        // TODO show feedback "not enough score" or "queue full"
+                    }
+                });
             }
         }
     }
@@ -269,5 +334,15 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
                 unitEntry.RefreshInteractivity();
             }
         }
+    }
+
+    public void HandleUnitUnlocked(ResearchManager.ResearchEffectEvent researchEffect)
+    {
+        if (researchEffect.effectType != ResearchManager.ResearchEffectEvent.EffectType.UnlockUnit)
+        {
+            return;
+        }
+
+        OnScoreChanged(0);
     }
 }

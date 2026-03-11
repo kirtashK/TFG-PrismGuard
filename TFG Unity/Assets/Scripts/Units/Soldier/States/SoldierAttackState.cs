@@ -26,15 +26,15 @@ public class SoldierAttackState : ISoldierState
         }
 
         float distance = Vector3.Distance(soldier.transform.position, target.Position);
-        if (distance > soldier.data.attackRange + 0.1f)
+        if (distance > soldier.attackRange + 0.1f)
         {
             soldier.ChangeState(new SoldierChaseState(target));
             return;
         }
 
-        if (Time.time - lastAttackTime >= soldier.data.attackCooldown)
+        if (Time.time - lastAttackTime >= soldier.attackCooldown)
         {
-            target.TakeDamage(soldier.data.attackDamage, soldier.Position);
+            target.TakeDamage(soldier.attackDamage, soldier.Position);
             lastAttackTime = Time.time;
         }
     }

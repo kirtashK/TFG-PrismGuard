@@ -26,13 +26,6 @@ public class UnitData : BaseData
     public Faction faction = Faction.Player;
     public bool isPlayerControllable = true;
 
-    [Header("Stats")]
-
-    [Range(0f, 1000f)]
-    public float maxHealth = 20f;
-    [Range(0f, 100f)]
-    public float moveSpeed = 3.5f;
-
     [System.Serializable]
     public struct ResourceRequirement
     {

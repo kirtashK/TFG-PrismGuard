@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.MLAgents;
@@ -11,6 +12,21 @@ public class AgentSoldier : Agent
 {
     [Header("Data")]
     public SoldierData data;
+
+    [Header("Stats")]
+
+    [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey moveSpeedStat;
+    [SerializeField] private StatKey attackRangeStat;
+    [SerializeField] private StatKey attackDamageStat;
+    [SerializeField] private StatKey attackCooldownStat;
+
+    public float currentHealth;
+    [HideInInspector] public float maxHealth;
+    [HideInInspector] public float moveSpeed;
+    [HideInInspector] public float attackRange;
+    [HideInInspector] public float attackDamage;
+    [HideInInspector] public float attackCooldown;
 
     [Header("Movement")]
     public AgentMovementController movement;
@@ -36,11 +52,19 @@ public class AgentSoldier : Agent
         {
             movement = GetComponent<AgentMovementController>();
         }
-
         if (combat == null)
         {
             combat = GetComponent<AgentCombat>();
         }
+
+        CheckNullStats();
+    }
+
+    private void Start()
+    {
+        RefreshStats();
+
+        currentHealth = maxHealth;
     }
 
     public override void Initialize()
@@ -48,9 +72,92 @@ public class AgentSoldier : Agent
         
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (StatModifierManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+    }
+
+    protected override void OnDisable()
+    {
+        StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+    }
+
+    void HandleModifiersChanged(string targetId, string statKeyId)
+    {
+        if (targetId == data.id)
+        {
+            RefreshStats();
+        }
+        // Global modifier:
+        else if (string.IsNullOrEmpty(targetId))
+        {
+            RefreshStats();
+        }
+    }
+
+    public void RefreshStats()
+    {
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
+        {
+            moveSpeed = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
+        {
+            maxHealth = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackRangeStat, out finalValue))
+        {
+            attackRange = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackDamageStat, out finalValue))
+        {
+            attackDamage = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
+        {
+            attackCooldown = finalValue;
+        }
+    }
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (moveSpeedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(moveSpeedStat)}");
+        }
+        if (attackRangeStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackRangeStat)}");
+        }
+        if (attackDamageStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackDamageStat)}");
+        }
+        if (attackCooldownStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
+        }
+    }
+
     public override void CollectObservations(VectorSensor sensor)
     {
-        float healthNorm = Mathf.Clamp01(combat.currentHealth / Mathf.Max(0.0001f, data.maxHealth));
+        float healthNorm = Mathf.Clamp01(currentHealth / Mathf.Max(0.0001f, maxHealth));
         sensor.AddObservation(healthNorm);
 
         float cooldownNorm = combat.GetAttackCooldownNormalized();
@@ -126,7 +233,7 @@ public class AgentSoldier : Agent
         {
             discreteOut[0] = 0;
             float dist = Vector3.Distance(transform.position, enemies[0].Position);
-            discreteOut[1] = (combat != null && dist <= data.attackRange) ? 1 : 0;
+            discreteOut[1] = (combat != null && dist <= attackRange) ? 1 : 0;
         }
         else
         {
@@ -197,6 +304,6 @@ public class AgentSoldier : Agent
         Gizmos.DrawWireSphere(transform.position, data.AggroRadius);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, data.attackRange);        
+        Gizmos.DrawWireSphere(transform.position, attackRange);        
     }
 }

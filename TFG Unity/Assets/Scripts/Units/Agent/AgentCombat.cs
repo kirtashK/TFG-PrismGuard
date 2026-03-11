@@ -7,11 +7,10 @@ using Unity.MLAgents;
 public class AgentCombat : MonoBehaviour, ICombatTarget
 {
     private SoldierData data;
-
-    public float currentHealth;
+    private AgentSoldier agent;
 
     public Vector3 Position => transform.position;
-    public bool isAlive => currentHealth > 0f;
+    public bool isAlive => agent.currentHealth > 0f;
 
     private float lastAttackTime = -Mathf.Infinity;
 
@@ -40,9 +39,8 @@ public class AgentCombat : MonoBehaviour, ICombatTarget
     private void Awake()
     {
         mlAgent = GetComponent<Agent>();
+        agent = GetComponent<AgentSoldier>();
         data = GetComponent<AgentSoldier>().data;
-
-        currentHealth = data.maxHealth;
     }
 
     /// <summary>
@@ -57,24 +55,24 @@ public class AgentCombat : MonoBehaviour, ICombatTarget
         }
 
         // Cooldown
-        if (Time.time < lastAttackTime + data.attackCooldown)
+        if (Time.time < lastAttackTime + agent.attackCooldown)
         {
             return false;
         }
 
         // Range
         float distSqr = (target.Position - Position).sqrMagnitude;
-        if (distSqr > data.attackRange * data.attackRange)
+        if (distSqr > agent.attackRange * agent.attackRange)
         {
             return false;
         }
 
-        target.TakeDamage(data.attackDamage, Position);
+        target.TakeDamage(agent.attackDamage, Position);
 
         float reward = 0;
         reward += rewardPerSuccessfulAttack;
 
-        reward += data.attackDamage * rewardPerDamage;
+        reward += agent.attackDamage * rewardPerDamage;
 
         if (!target.isAlive)
         {
@@ -94,14 +92,14 @@ public class AgentCombat : MonoBehaviour, ICombatTarget
             return;
         }
 
-        currentHealth = Mathf.Max(currentHealth - amount, 0f);
+        agent.currentHealth = Mathf.Max(agent.currentHealth - amount, 0f);
 
         Debug.Log($"{name} took {amount} damage" +
-            $"\nHealth of {name}: {currentHealth}/{data.maxHealth}");
+            $"\nHealth of {name}: {agent.currentHealth}/{agent.maxHealth}");
 
         mlAgent.AddReward(-amount * penaltyPerDamageTaken);
 
-        if (currentHealth <= 0f)
+        if (agent.currentHealth <= 0f)
         {
             mlAgent.AddReward(-penaltyOnDeath);
 
@@ -125,13 +123,13 @@ public class AgentCombat : MonoBehaviour, ICombatTarget
     {
         if (!isAlive) { return; }
 
-        float before = currentHealth;
-        currentHealth = Mathf.Min(data.maxHealth, currentHealth + Mathf.Max(0f, amount));
-        float healed = currentHealth - before;
+        float before = agent.currentHealth;
+        agent.currentHealth = Mathf.Min(agent.maxHealth, agent.currentHealth + Mathf.Max(0f, amount));
+        float healed = agent.currentHealth - before;
 
         mlAgent.AddReward(healed * rewardPerHealHP);
 
-        if (before / data.maxHealth > 0.9f)
+        if (before / agent.maxHealth > 0.9f)
         {
             mlAgent.AddReward(-penaltyWastedHeal);
         }
@@ -142,13 +140,13 @@ public class AgentCombat : MonoBehaviour, ICombatTarget
     /// </summary>
     public float GetAttackCooldownNormalized()
     {
-        if (data.attackCooldown <= 0f) 
+        if (agent.attackCooldown <= 0f) 
         { 
             return 0f; 
         }
 
         float elapsed = Time.time - lastAttackTime;
-        float remaining = Mathf.Clamp01(1f - (elapsed / data.attackCooldown));
+        float remaining = Mathf.Clamp01(1f - (elapsed / agent.attackCooldown));
 
         return remaining;
     }
