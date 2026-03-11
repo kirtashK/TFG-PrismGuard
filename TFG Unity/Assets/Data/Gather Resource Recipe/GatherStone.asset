@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: GatherStone
   m_EditorClassIdentifier: 
   Name: Mine rock
-  id: Mine rock
+  id: 14fa92af27e935e4b9540353a28258c8
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   resourceItemData: {fileID: 11400000, guid: ac5d1cd69b573f24dbdb9e15c7f5fd11, type: 2}
   workDuration: 5
   interactionRange: 1.5

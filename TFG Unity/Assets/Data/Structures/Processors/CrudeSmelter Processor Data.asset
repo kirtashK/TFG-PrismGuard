@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc92951bc90a2b6469319667f5d8f7d9, type: 3}
-  m_Name: BasicSmelter Processor Data
+  m_Name: CrudeSmelter Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
   Name: Crude smelter
-  id: Crude smelter
+  id: 9dd51a9921b3c3240ba2c6cb5cf0e173
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 1
   builtPrefab: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
   blueprintPrefab: {fileID: 6592928600490302708, guid: d73cc7d9baeb282469e0c88a246a44e7, type: 3}

@@ -13,8 +13,20 @@ MonoBehaviour:
   m_Name: Basic Enemy Data
   m_EditorClassIdentifier: 
   Name: Basic Enemy
+  id: 90f6b53b391572542b6f136330ee140a
   icon: {fileID: 0}
-  Prefab: {fileID: 3313289928608923168, guid: a70e0d193fd04154b8bbce7950c85ca0, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 10
+  - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
+    value: 3
+  - statKey: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
+    value: 1.5
+  - statKey: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
+    value: 10
+  - statKey: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
+    value: 1
   PrefabReference:
     m_AssetGUID: a70e0d193fd04154b8bbce7950c85ca0
     m_SubObjectName: 
@@ -26,11 +38,6 @@ MonoBehaviour:
   createCosts: []
   faction: 1
   isPlayerControllable: 0
-  maxHealth: 35
-  moveSpeed: 3.5
-  attackRange: 1.5
-  attackDamage: 10
-  attackCooldown: 1
   spawnCost: 5
   rewardExperience: 2
   AggroRadius: 5

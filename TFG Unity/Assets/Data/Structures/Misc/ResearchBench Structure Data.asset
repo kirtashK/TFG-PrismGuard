@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
+  m_Name: ResearchBench Structure Data
+  m_EditorClassIdentifier: Assembly-CSharp::StructureData
+  Name: Research bench
+  id: 17931b1c1401a9c4ea7b1be262618370
+  icon: {fileID: 21300000, guid: 86f0cddc9cc3a87459e681f297801c0f, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  category: 1
+  builtPrefab: {fileID: 4338104768442495854, guid: 90ad8d02ced767e44b387e2557dab245, type: 3}
+  blueprintPrefab: {fileID: 5203715740343738196, guid: fa9a882e8b76bd1429b87751d70fba2a, type: 3}
+  previewPrefab: {fileID: 1850570255779312905, guid: 42fe8bce1944de04ebbfde49e6b57f01, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 10

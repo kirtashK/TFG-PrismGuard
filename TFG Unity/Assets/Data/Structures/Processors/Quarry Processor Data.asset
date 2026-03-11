@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Quarry Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
   Name: Quarry
-  id: Quarry
+  id: e8aca2e85f6130047bd069adff575d36
   icon: {fileID: 21300000, guid: 06924a880ddbe1847aaa37e19550b66e, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 1
   builtPrefab: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
   blueprintPrefab: {fileID: 5601518569988493041, guid: 0057070b1a904ce4f9feb844cf98b913, type: 3}

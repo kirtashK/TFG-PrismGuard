@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: GatherGold
   m_EditorClassIdentifier: Assembly-CSharp::GatherResourceRecipe
   Name: Mine gold vein
-  id: Mine gold vein
+  id: 5ac26b31d74515545819bb50b9ab1250
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   resourceItemData: {fileID: 11400000, guid: 24dc255145ef14f4fb4333bfaa95427f, type: 2}
   workDuration: 60
   interactionRange: 1.5

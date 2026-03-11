@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Copper Vein Data
   m_EditorClassIdentifier: 
   Name: Copper vein
-  id: Copper vein
+  id: ee4127f18f2047e4b82809f83a655c1e
   icon: {fileID: 21300000, guid: bd7c2eb414f35fe479749cccd69191cb, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 2
   respawnTime: 20

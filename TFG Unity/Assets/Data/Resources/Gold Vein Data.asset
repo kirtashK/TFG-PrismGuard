@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Gold Vein Data
   m_EditorClassIdentifier: 
   Name: Gold vein
-  id: Gold vein
+  id: 7b67a0e8b0c5b6c44915cc6d6575b5c7
   icon: {fileID: 21300000, guid: 032d9c62ddc3287408e3e9f94d537a16, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 4
   respawnTime: 60

@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Sawmill Processor Data
   m_EditorClassIdentifier: Assembly-CSharp::ProcessorData
   Name: Sawmill
-  id: Sawmill
+  id: c0e1cb6c5747f8c40afb2d696a509028
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 1
   builtPrefab: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
   blueprintPrefab: {fileID: 5350640031482795739, guid: 49831ea4037e603419f39db35d279194, type: 3}

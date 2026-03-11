@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Gold Ore Data
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   Name: Gold ore
-  id: Gold ore
+  id: 24dc255145ef14f4fb4333bfaa95427f
   icon: {fileID: 21300000, guid: 032d9c62ddc3287408e3e9f94d537a16, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   itemPrefab: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
   weight: 5
   interactionRange: 1

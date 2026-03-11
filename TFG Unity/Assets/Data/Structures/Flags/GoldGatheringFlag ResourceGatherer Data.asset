@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: GoldGatheringFlag ResourceGatherer Data
   m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
   Name: Gold gathering flag
-  id: Gold gathering flag
+  id: 96a5b81a6726ac546a34ce0f72974388
   icon: {fileID: 21300000, guid: 10caf1bb2a1e16442b6cd9df5f5c01cf, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
   blueprintPrefab: {fileID: 9064850209583715879, guid: 7ec9d89b4f6bf9f42bcf352d2f3097fb, type: 3}

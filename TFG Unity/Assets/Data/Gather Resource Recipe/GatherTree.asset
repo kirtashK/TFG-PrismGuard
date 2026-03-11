@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: GatherTree
   m_EditorClassIdentifier: 
   Name: Chop tree
-  id: Chop tree
+  id: d04f45e20aeda9f4eb2c004bf33207a3
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   resourceItemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
   workDuration: 3
   interactionRange: 1.5

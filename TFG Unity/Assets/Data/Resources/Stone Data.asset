@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Stone Data
   m_EditorClassIdentifier: 
   Name: Stone
-  id: Stone
+  id: 2c65f5d958b1a8245aef7a5b9637c6a0
   icon: {fileID: 21300000, guid: 8470c1d8d8547cd409d271eb337862bc, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 1
   respawnTime: 10

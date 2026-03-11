@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: IronOreToIronIngot
   m_EditorClassIdentifier: 
   Name: Smelt iron ore
-  id: Smelt iron ore
+  id: f593e59cb096c8e49bdbf4a302b4fd98
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   inputItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
   inputPerBatch: 2
   fuelPerBatch: 2

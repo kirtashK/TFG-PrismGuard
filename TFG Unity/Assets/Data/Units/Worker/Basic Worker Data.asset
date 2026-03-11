@@ -13,8 +13,16 @@ MonoBehaviour:
   m_Name: Basic Worker Data
   m_EditorClassIdentifier: 
   Name: Worker
-  id: Worker
-  icon: {fileID: 0}
+  id: 60cf33504c2725b4ca6e00deaaa4655f
+  icon: {fileID: 21300000, guid: b195a7f36fe036b40974e684b71fc57e, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 20
+  - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
+    value: 3.5
+  - statKey: {fileID: 11400000, guid: 04a38b7df2506484a995b7d23df93e33, type: 2}
+    value: 10
   PrefabReference:
     m_AssetGUID: c9118ed2c42dd014ca49170d806b707d
     m_SubObjectName: 
@@ -28,6 +36,3 @@ MonoBehaviour:
     quantity: 1
   faction: 0
   isPlayerControllable: 1
-  maxHealth: 20
-  moveSpeed: 3.5
-  maxCarryWeight: 10

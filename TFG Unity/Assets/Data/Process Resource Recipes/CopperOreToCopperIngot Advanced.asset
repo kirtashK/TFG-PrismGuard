@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: CopperOreToCopperIngot Advanced
   m_EditorClassIdentifier: 
   Name: Smelt copper ore Advanced
-  id: Smelt copper ore Advanced
+  id: cc56f8ea44c6f8442806926dbb6f2cfc
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
   inputPerBatch: 1
   fuelPerBatch: 1

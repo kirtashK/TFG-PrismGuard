@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Rocks Warehouse Data
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseData
   Name: Rocks warehouse
-  id: Rocks warehouse
+  id: 59f2c968ffb9b5647a9a56f40f8f7c30
   icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 0
   builtPrefab: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
   blueprintPrefab: {fileID: 9109459509763702572, guid: 24cc1224a487dde4bbd53453065eaa05, type: 3}

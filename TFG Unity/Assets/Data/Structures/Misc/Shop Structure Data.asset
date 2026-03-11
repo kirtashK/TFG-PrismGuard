@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Shop Structure Data
   m_EditorClassIdentifier: Assembly-CSharp::StructureData
   Name: Shop
-  id: Shop
+  id: 696efa391f26a3249a92640eebbe17fb
   icon: {fileID: 21300000, guid: e31b06e422cdd224c929a9ffc5e6019f, type: 3}
+  requiredResearch: {fileID: 11400000, guid: 6038f81b53d9b204d9c129a29311a237, type: 2}
+  statBases: []
   category: 4
   builtPrefab: {fileID: 3947097100652634618, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
   blueprintPrefab: {fileID: 5443161930235713137, guid: bf7a85da77caa834bb1d5ec97e094e25, type: 3}

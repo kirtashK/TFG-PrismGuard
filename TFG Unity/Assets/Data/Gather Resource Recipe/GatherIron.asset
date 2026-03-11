@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: GatherIron
   m_EditorClassIdentifier: 
   Name: Mine iron vein
-  id: Mine iron vein
+  id: f1b6a6be5b655964b998651f702f675c
   icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   resourceItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
   workDuration: 15
   interactionRange: 1.5

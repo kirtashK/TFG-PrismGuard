@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Resources Warehouse Data
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseData
   Name: Resources warehouse
-  id: Resources warehouse
+  id: 5c44bb4cf550b004d8d4d80324f0c8bf
   icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 0
   builtPrefab: {fileID: 5143866289489264262, guid: 63d2adee99858e148965697c99064d19, type: 3}
   blueprintPrefab: {fileID: 5991966786314908113, guid: 7759db6ccf1a05b4488a962c34856766, type: 3}

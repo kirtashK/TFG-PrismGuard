@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Tree Data
   m_EditorClassIdentifier: 
   Name: Tree
-  id: Tree
+  id: c5126d6f9a2b9564b98891072f0ee9ec
   icon: {fileID: 21300000, guid: c75b6b8b111f0544aabfbdbe8b785faa, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 0
   respawnTime: 6.5

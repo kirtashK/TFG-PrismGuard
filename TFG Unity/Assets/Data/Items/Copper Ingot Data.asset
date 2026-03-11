@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Copper Ingot Data
   m_EditorClassIdentifier: 
   Name: Copper ingot
-  id: Copper ingot
+  id: 482e4eaac704afb4f8f7254fab8742fc
   icon: {fileID: 21300000, guid: 592cf5adaca6ca141b284ae23652e70d, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   itemPrefab: {fileID: 7800770291256045938, guid: 658d8a7b75c2ff746bbd67093b538e93, type: 3}
   weight: 2
   interactionRange: 1

@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Barracks UnitFactory Data
   m_EditorClassIdentifier: Assembly-CSharp::UnitFactoryData
   Name: Barracks
-  id: Barracks
+  id: 902bcb767f824c34ca0b4d3091b175af
   icon: {fileID: 21300000, guid: bb055d4ecf1af5a42a0d302ae5d449ff, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
   category: 3
   builtPrefab: {fileID: 3947097100652634618, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
   blueprintPrefab: {fileID: 3668352691874339027, guid: e010365fdfa198647b1730e56adeb8bb, type: 3}
