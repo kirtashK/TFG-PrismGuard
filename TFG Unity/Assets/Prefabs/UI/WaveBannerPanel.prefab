@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1402642706342043636}
   - component: {fileID: 901940817379581946}
+  - component: {fileID: 6839720126538724824}
   - component: {fileID: 2776743758243344998}
   - component: {fileID: 5798935040330128203}
-  - component: {fileID: 6839720126538724824}
   m_Layer: 5
   m_Name: WaveBannerPanel
   m_TagString: Untagged
@@ -48,6 +48,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983025177792866646}
   m_CullTransparentMesh: 1
+--- !u!114 &6839720126538724824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983025177792866646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1a453a562e279438d91b166d9c7c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 5798935040330128203}
+  bannerText: {fileID: 3945506946196597067}
+  fadeDuration: 0.5
+  displayTime: 1.5
 --- !u!114 &2776743758243344998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,22 +106,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &6839720126538724824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983025177792866646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1a453a562e279438d91b166d9c7c89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 5798935040330128203}
-  bannerText: {fileID: 3945506946196597067}
-  fadeDuration: 0.5
-  displayTime: 1.5
 --- !u!1 &1393047838633327150
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

@@ -11,19 +11,19 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField]
     [Tooltip("If false, waves wont be generated (for testing)")]
-    private bool isEnabled = true;
+    private bool isEnabled_TESTING = true;
 
     [SerializeField]
     [Tooltip("If true, first wave will happen instantly")]
-    private bool InstantFirstWave = true;
+    private bool InstantFirstWave_TESTING = false;
 
     [SerializeField]
     [Tooltip("True to enable a limit on the budget")]
-    private bool enableLimitBudget = false;
+    private bool enableLimitBudget_TESTING = false;
 
     [SerializeField]
     [Tooltip("If enableLimitBudget is enabled, the budget wont pass limitBudget amount")]
-    private int limitBudget = 0;
+    private int limitBudget_TESTING = 0;
 
     [Header("Data source")]
 
@@ -84,7 +84,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        if (isEnabled)
+        if (isEnabled_TESTING)
         {
             StartCoroutine(LoadEnemies());
         }
@@ -92,13 +92,11 @@ public class WaveManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Subscribe to wave completed event
         StartCoroutine(RegisterWhenUIManagerReady());
     }
 
     private void OnDisable()
     {
-        // Clean state
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
@@ -124,7 +122,7 @@ public class WaveManager : MonoBehaviour
 
         loadHandle = Addressables.LoadAssetsAsync<EnemyData>(
             enemyLabel,
-            enemyData => { /* per-item callback (currently null...) */ }
+            enemyData => { }
         );
 
         yield return loadHandle;
@@ -134,7 +132,6 @@ public class WaveManager : MonoBehaviour
             enemyPool = new List<EnemyData>(loadHandle.Result);
             isLoaded = true;
 
-            // Notify listeners
             OnEnemyLoaded?.Invoke(enemyPool);
 
             CategorizePool();
@@ -142,7 +139,7 @@ public class WaveManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"{name} failed to load EnemyData addressables");
+            Debug.LogWarning($"{name}: failed to load {nameof(EnemyData)}");
         }
     }
 
@@ -158,7 +155,7 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator RunWaves()
     {
-        if (InstantFirstWave)
+        if (InstantFirstWave_TESTING)
         {
             yield return SpawnWave();
             waitingForNextWave = true;
@@ -170,9 +167,7 @@ public class WaveManager : MonoBehaviour
 
         while (true)
         {
-            // If there is an ongoing wave,
-            // the timer for next wave wont start
-            //waitingForNextWave = true;
+            // If there is an ongoing wave the timer for next wave wont start
             yield return new WaitUntil(() => waitingForNextWave == false);
 
             float waveIntervalFirstWarning = waveInterval * 0.35f;
@@ -191,23 +186,20 @@ public class WaveManager : MonoBehaviour
             yield return SpawnWave();
         }
     }
+
     private void OnWaveCompleted(int waveNumber)
     {
-        // Once the wave is completed (notified by event),
-        // timer will start
+        // Once the wave is completed (notified by event), timer will start
         waitingForNextWave = false;
 
-        // Scored obtained in this wave
         int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
 
         // Give extra score proportional to the completed wave number
         int waveScoreReward = CalculateRewardForCompletingWave(waveNumber);
-        // Maximun 1000 extra score:
         waveScoreReward = Mathf.Min(waveScoreReward, 1000);
 
         ScoreManager.Instance.AddScore(waveScoreReward);
 
-        // Show banner in UI
         UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave, waveScoreReward);
     }
 
@@ -249,7 +241,7 @@ public class WaveManager : MonoBehaviour
 
     /// <summary>
     /// Spawns a wave, first the budget is increased, then as many 
-    /// enemies as possible are spawned (limited by budget).
+    /// enemies as possible are spawned, limited by budget.
     /// 3 categories of enemies: cheap, medium, expensive
     /// Each category takes a % of the wave
     /// </summary>
@@ -261,17 +253,15 @@ public class WaveManager : MonoBehaviour
 
         scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
 
-        // Show next wave text in UI
         UIManager.Instance.ShowWaveStartedBanner(waveIndex);
 
         // Obtain budget: (initial + delta*n) * r^n
         float budget = (initialBudget + linearDelta * waveIndex)
                        * Mathf.Pow(exponentialRate, waveIndex);
 
-        // Use a limit if set, to allow easy testing
-        if (enableLimitBudget)
+        if (enableLimitBudget_TESTING)
         {
-            budget = Mathf.Min(budget, limitBudget);
+            budget = Mathf.Min(budget, limitBudget_TESTING);
         }
 
         Debug.Log($"[WaveManager] Wave {waveIndex}: Budget = {budget:F1}");
@@ -299,7 +289,7 @@ public class WaveManager : MonoBehaviour
 
             if (candidates.Count == 0)
             {
-                // if it doesnt fit, try another
+                // If it doesnt fit, try another
                 candidates = new List<EnemyData>();
                 foreach (List<EnemyData> alt in new[] { cheapList, mediumList, expensiveList })
                 {
@@ -336,12 +326,14 @@ public class WaveManager : MonoBehaviour
             }
 
             Enemy enemy = gameObject.GetComponent<Enemy>();
-
-            if (enemy.crystalTransform == null)
+            if (enemy == null)
             {
-                enemy.crystalTransform = GameObject.FindWithTag("Crystal").transform;
+                Debug.LogWarning($"{name}: failed to get {nameof(Enemy)} component from {enemy}");
+                continue;
             }
-            enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
+
+            Transform crystal = GameObject.FindWithTag("Crystal").transform;
+            enemy.Initialize(crystal, Enemy.Behaviour.Aggressive, spawnPoint.position);
 
             budget -= chosen.spawnCost;
 

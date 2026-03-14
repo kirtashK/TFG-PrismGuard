@@ -22,6 +22,8 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
     [HideInInspector] public float attackDamage;
     [HideInInspector] public float attackCooldown;
 
+    [HideInInspector] public float aggroRadius;
+
     public SoldierData data;
 
     [HideInInspector]
@@ -50,6 +52,8 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
         RefreshStats();
 
         currentHealth = maxHealth;
+
+        aggroRadius = data.AggroRadius;
 
         ChangeState(new SoldierIdleState());
     }
@@ -173,6 +177,21 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
         }
     }
 
+    private void Die()
+    {
+        Debug.Log($"{name} has died");
+
+        // Release addressable handle
+        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
+        {
+            Addressables.ReleaseInstance(addressableInstanceHandle);
+            hasAddressableHandle = false;
+            return;
+        }
+
+        Destroy(gameObject);
+    }
+
     private void OnWaveCompleted(int waveNumber)
     {
         RegenerateHealth(0.25f);
@@ -198,21 +217,6 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
     {
         addressableInstanceHandle = handle;
         hasAddressableHandle = handle.IsValid();
-    }
-
-    private void Die()
-    {
-        Debug.Log($"{name} has died");
-
-        // Release addressable handle
-        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
-        {
-            Addressables.ReleaseInstance(addressableInstanceHandle);
-            hasAddressableHandle = false;
-            return;
-        }
-
-        Destroy(gameObject);
     }
 
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
@@ -263,6 +267,18 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
         {
             // No guard, just go idle
             ChangeState(new SoldierIdleState());
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, aggroRadius);
+
+        if (hasGuardPoint)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(guardPoint, 0.15f);
         }
     }
 }

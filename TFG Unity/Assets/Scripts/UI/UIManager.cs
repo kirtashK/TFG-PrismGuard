@@ -143,7 +143,7 @@ public class UIManager : MonoBehaviour
 
         if (currentEnemiesAlive > 0)
         {
-            enemyCountText.text = $"Alive enemies: {currentEnemiesAlive}";
+            enemyCountText.text = $"Enemies active: {currentEnemiesAlive}";
             enemyCountGroup.alpha = 1f;
             enemyCountGroup.blocksRaycasts = true;
         }

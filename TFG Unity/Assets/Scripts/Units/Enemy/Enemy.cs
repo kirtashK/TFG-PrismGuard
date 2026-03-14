@@ -22,6 +22,13 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
     [HideInInspector] public float attackDamage;
     [HideInInspector] public float attackCooldown;
 
+    [HideInInspector] public float aggroRadius;
+
+    [HideInInspector] public float guardRadius;
+    [HideInInspector] public float guardChaseBuffer;
+    [HideInInspector] public float patrolDelayMin;
+    [HideInInspector] public float patrolDelayMax;
+
     public EnemyData data;
     public Transform crystalTransform;
 
@@ -37,27 +44,59 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
     private AsyncOperationHandle<GameObject> addressableInstanceHandle;
     private bool hasAddressableHandle = false;
 
+    public enum Behaviour
+    {
+        Aggressive,
+        Guard
+    }
+
+    public Behaviour behaviour = Behaviour.Aggressive;
+
+    public Vector3 homePosition;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
 
-        MainTarget = crystalTransform != null
-            ? crystalTransform.GetComponent<ICombatTarget>()
-            : GameObject.FindWithTag("Crystal")
-                .GetComponent<ICombatTarget>();
+        if (crystalTransform != null)
+        {
+            MainTarget = crystalTransform.GetComponent<ICombatTarget>();
+        }
+        else
+        {
+            GameObject crystalObject = GameObject.FindWithTag("Crystal");
+            if (crystalObject != null)
+            {
+                MainTarget = crystalObject.GetComponent<ICombatTarget>();
+            }
+            else
+            {
+                MainTarget = null;
+            }
+        }
 
         CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
     }
 
     private void Start()
     {
-        UIManager.Instance.ChangeEnemyCount(1);
-
         RefreshStats();
 
         currentHealth = maxHealth;
 
-        ChangeState(new EnemyChaseState(MainTarget));
+        aggroRadius = data.AggroRadius;
+
+        guardRadius = data.guardRadius;
+        guardChaseBuffer = data.guardChaseBuffer;
+        patrolDelayMin = data.patrolDelayMin;
+        patrolDelayMax = data.patrolDelayMax;
+
+        Initialize(crystalTransform, Behaviour.Guard);
     }
 
     private void Update()
@@ -153,6 +192,44 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
         }
     }
 
+    public void Initialize(Transform crystal, Behaviour behaviour, Vector3? homeOverride = null)
+    {
+        if (crystal != null)
+        {
+            crystalTransform = crystal;
+            MainTarget = crystalTransform.GetComponent<ICombatTarget>();
+        }
+
+        this.behaviour = behaviour;
+
+        if (homeOverride.HasValue)
+        {
+            homePosition = homeOverride.Value;
+        }
+        else
+        {
+            homePosition = transform.position;
+        }
+
+        if (this.behaviour == Behaviour.Guard)
+        {
+            ChangeState(new EnemyGuardState(homePosition, guardRadius, guardChaseBuffer));
+        }
+        else
+        {
+            if (MainTarget != null)
+            {
+                UIManager.Instance.ChangeEnemyCount(1);
+                ChangeState(new EnemyChaseState(MainTarget));
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: Failed to initialize as {nameof(Behaviour.Aggressive)}");
+                ChangeState(new EnemyIdleState());
+            }
+        }
+    }
+
     public Vector3 Position => transform.position;
 
     public bool isAlive => currentHealth > 0f;
@@ -164,25 +241,28 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
         Debug.Log($"{name} took {amount} damage" +
             $"\nHealth of {name}: {currentHealth}/{maxHealth}");
 
+        if (behaviour == Behaviour.Guard)
+        {
+            behaviour = Behaviour.Aggressive;
+            UIManager.Instance.ChangeEnemyCount(1);
+            ChangeState(new EnemyChaseState(MainTarget));
+        }
+
         if (currentHealth <= 0f)
         {
             Die();
         }
     }
 
-    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
-    {
-        addressableInstanceHandle = handle;
-        hasAddressableHandle = handle.IsValid();
-    }
-
     private void Die()
     {
         //Debug.Log($"{name} has died");
 
-        ScoreManager.Instance.AddScore(data.spawnCost);
-
-        UIManager.Instance.ChangeEnemyCount(-1);
+        if (behaviour == Behaviour.Aggressive)
+        {
+            ScoreManager.Instance.AddScore(data.spawnCost);
+            UIManager.Instance.ChangeEnemyCount(-1);
+        }
 
         // TODO Sonido, animaciones, efectos
 
@@ -197,14 +277,20 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
         Destroy(gameObject);
     }
 
+    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    {
+        addressableInstanceHandle = handle;
+        hasAddressableHandle = handle.IsValid();
+    }
+
     /// <summary>
-    /// Finds the closests player unit inside data.AggroRadius
+    /// Finds the closests player unit inside aggroRadius
     /// </summary>
     public ICombatTarget FindNearestPlayerUnit()
     {
         int hitCount = Physics.OverlapSphereNonAlloc
             (transform.position,
-            data.AggroRadius,
+            aggroRadius,
             aggroBuffer,
             LayerMask.GetMask("PlayerUnit"));
 
@@ -227,5 +313,23 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
             }
         }
         return best;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, aggroRadius);
+
+        if (behaviour == Behaviour.Guard)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(homePosition, guardRadius);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(homePosition, guardRadius + guardChaseBuffer);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(homePosition, 0.15f);
+        }
     }
 }

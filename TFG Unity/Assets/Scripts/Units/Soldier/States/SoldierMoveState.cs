@@ -29,7 +29,7 @@ public class SoldierMoveState : ISoldierState
         {
             int hitCount = Physics.OverlapSphereNonAlloc
                 (soldier.transform.position,
-                soldier.data.AggroRadius,
+                soldier.aggroRadius,
                 aggroBuffer,
                 LayerMask.GetMask("EnemyUnit"));
 
