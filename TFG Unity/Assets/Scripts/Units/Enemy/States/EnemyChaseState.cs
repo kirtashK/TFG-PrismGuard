@@ -25,6 +25,17 @@ public class EnemyChaseState : IEnemyState
             return;
         }
 
+        if (enemy.behaviour == Enemy.Behaviour.Guard)
+        {
+            float guardChaseRadius = enemy.guardRadius + enemy.guardChaseBuffer;
+            float distanceFromHome = Vector3.Distance(enemy.Position, enemy.homePosition);
+            if (distanceFromHome > guardChaseRadius)
+            {
+                enemy.ChangeState(new EnemyGuardState(enemy.homePosition, enemy.guardRadius, enemy.guardChaseBuffer));
+                return;
+            }
+        }
+
         ICombatTarget soldier = enemy.FindNearestPlayerUnit();
         if (soldier != null 
             && soldier.isAlive

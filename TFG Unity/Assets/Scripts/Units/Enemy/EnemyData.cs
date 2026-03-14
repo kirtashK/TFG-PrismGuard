@@ -23,6 +23,24 @@ public class EnemyData : UnitData
     [Range(0f, 100f)]
     public float AggroRadius = 5f;
 
+    [Header("Guard")]
+
+    [Tooltip("Radius to guard")]
+    [Range(0f, 50f)]
+    public float guardRadius = 8f;
+
+    [Tooltip("Extra buffer allowed beyond guardRadius while chasing")]
+    [Range(0f, 50f)]
+    public float guardChaseBuffer = 3f;
+
+    [Tooltip("Minimum wait time between patrol in seconds")]
+    [Range(0f, 50f)]
+    public float patrolDelayMin = 1f;
+
+    [Tooltip("Maximum wait time between patrol in seconds")]
+    [Range(0f, 50f)]
+    public float patrolDelayMax = 3f;
+
     protected override void OnValidate()
     {
         base.OnValidate();
