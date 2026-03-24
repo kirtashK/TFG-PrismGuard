@@ -84,6 +84,7 @@ MonoBehaviour:
   resourceSpawnPoints:
   - {fileID: 5286319333388274172}
   - {fileID: 6488847234586122810}
+  selectedWorkType: 2
 --- !u!114 &2956068396660108723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,7 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 7b67a0e8b0c5b6c44915cc6d6575b5c7, type: 2}
-  category: 4
 --- !u!1 &2977666487873296973
 GameObject:
   m_ObjectHideFlags: 0
