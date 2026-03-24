@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1e63c8ab53e3064197bd3c7e09e67db, type: 3}
   m_Name: Medium Enemy Data
   m_EditorClassIdentifier: 
-  Name: Medium Enemy
+  Name: Fast zombie
   id: 0575f3ef668f3eb43b6296060b5aeb0b
   icon: {fileID: 0}
   requiredResearch: {fileID: 0}
@@ -20,15 +20,20 @@ MonoBehaviour:
   - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
     value: 50
   - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
-    value: 2.5
+    value: 3
   - statKey: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
-    value: 1.5
+    value: 2
   - statKey: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
-    value: 28
+    value: 20
   - statKey: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
     value: 1.3
-  PrefabReference:
-    m_AssetGUID: f1816d2047e50fe428105a3dd684a121
+  PrefabVariants:
+  - m_AssetGUID: f1816d2047e50fe428105a3dd684a121
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 0b1407893e8eb0949bd6061828ea8231
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
@@ -41,3 +46,7 @@ MonoBehaviour:
   spawnCost: 12
   rewardExperience: 5
   AggroRadius: 5
+  guardRadius: 8
+  guardChaseBuffer: 3
+  patrolDelayMin: 1
+  patrolDelayMax: 3

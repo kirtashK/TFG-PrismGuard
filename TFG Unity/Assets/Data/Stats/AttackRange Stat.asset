@@ -19,4 +19,4 @@ MonoBehaviour:
   statBases: []
   fieldName: attackRange
   valueKind: 0
-  defaultBaseValue: 1.5
+  defaultBaseValue: 2

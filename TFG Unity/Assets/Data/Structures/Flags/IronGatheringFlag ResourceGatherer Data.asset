@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Iron gathering flag
   id: 3660304d644e65a47a4620da796a9ff5
   icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
-  requiredResearch: {fileID: 0}
+  requiredResearch: {fileID: 11400000, guid: 23a80442c966ab04aab0dcfbc20148be, type: 2}
   statBases: []
   category: 2
   builtPrefab: {fileID: 3923448407394807079, guid: be91ff141696c29488dc17fc39a52ff7, type: 3}
