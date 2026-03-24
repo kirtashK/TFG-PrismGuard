@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -23,42 +22,6 @@ public class OrderManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    // Fallback Overcharged in case it receives a list of objects instead of
-    // list of IOrderables, this method tries to make a list of IOrderables 
-    // from that list of objects, this method then call the actual IssueMoveOrder
-    // which does the actual logic
-    public void IssueMoveOrder(IEnumerable<object> selection, Vector3 target, MoveOrderOptions options)
-    {
-        if (selection == null)
-        {
-            return;
-        }
-
-        Debug.Log("IssueMoveOrder fallback, no IOrderables recived, trying to obtain...");
-
-        List<IOrderable> units = new();
-        // Obtain selected units that can be ordered
-        foreach (object obj in selection)
-        {
-            if (obj is IOrderable orderable)
-            {
-                units.Add(orderable);
-            }
-            else if (obj is UnityEngine.Object unityObject)
-            {
-                if (unityObject is GameObject gameObject)
-                {
-                    if (gameObject.TryGetComponent<IOrderable>(out IOrderable component))
-                    {
-                        units.Add(component);
-                    }
-                }
-            }
-        }
-
-        IssueMoveOrder(units, target, options);
     }
 
     public void IssueMoveOrder(IEnumerable<IOrderable> units, Vector3 target, MoveOrderOptions options)

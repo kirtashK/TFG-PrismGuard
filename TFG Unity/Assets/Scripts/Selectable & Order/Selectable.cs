@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using TMPro;
 
 [DisallowMultipleComponent]
 public class Selectable : MonoBehaviour, ISelectable
