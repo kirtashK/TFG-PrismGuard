@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d131a76e2cd1bc48ba4131773866464, type: 3}
-  m_Name: Unlock Advanced Smelter Effect
+  m_Name: Unlock Copper Gathering Flag Effect
   m_EditorClassIdentifier: Assembly-CSharp::UnlockStructureEffect
-  Name: Unlock advanced smelter
-  id: 07268c04d56179d43848a4933cd5f3f7
-  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  Name: 'Unlock copper gathering flag '
+  id: 99ad9e76c39ec8940918e98868736e5a
+  icon: {fileID: 21300000, guid: ae11735a4ba371d4b976ee3acae23dfb, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
-  description: 'Unlocks structure: Advanced smelter'
-  structureData: {fileID: 11400000, guid: b1f8ae87863bd8041848b115ca805adc, type: 2}
+  description: 'Unlocks structure: Copper gathering flag'
+  structureData: {fileID: 11400000, guid: 215497a59705e384e93cbb1906f0cb07, type: 2}

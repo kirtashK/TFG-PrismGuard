@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d131a76e2cd1bc48ba4131773866464, type: 3}
-  m_Name: Unlock Advanced Smelter Effect
+  m_Name: Unlock Iron Gathering Flag Effect
   m_EditorClassIdentifier: Assembly-CSharp::UnlockStructureEffect
-  Name: Unlock advanced smelter
-  id: 07268c04d56179d43848a4933cd5f3f7
-  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  Name: 'Unlock iron gathering flag '
+  id: 296e36ca4661ca845a6d03672f50e406
+  icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
-  description: 'Unlocks structure: Advanced smelter'
-  structureData: {fileID: 11400000, guid: b1f8ae87863bd8041848b115ca805adc, type: 2}
+  description: 'Unlocks structure: Iron gathering flag'
+  structureData: {fileID: 11400000, guid: 3660304d644e65a47a4620da796a9ff5, type: 2}

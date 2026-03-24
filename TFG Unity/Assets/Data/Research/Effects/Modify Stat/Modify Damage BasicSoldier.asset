@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ec6925d80205242a8202825a119a8a, type: 3}
   m_Name: Modify Damage BasicSoldier
   m_EditorClassIdentifier: Assembly-CSharp::ModifyStatEffect
-  Name: 'Modify Basic Soldier : AttackDamage Stat'
+  Name: 'Modify Militia : AttackDamage Stat'
   id: d1737ee3a7d34e74493441a8ee7b8a39
   icon: {fileID: 21300000, guid: ff51877e21441554c872cfc822264db8, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
-  description: Modifies damage of Basic Soldier (Multiplicative 20)
+  description: Modifies damage of Militia (Multiplicative 20)
   targetData: {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   statKey: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
   modifierType: 1
