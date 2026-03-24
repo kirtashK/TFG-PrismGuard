@@ -23,32 +23,27 @@ public abstract class BaseData : ScriptableObject
             Debug.LogWarning($"{name} missing {nameof(Name)}");
         }
 
-        //id = Name;
-
         // Assign ID a GUID to make it unique
-        if (string.IsNullOrWhiteSpace(id))
+        string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
+        if (!string.IsNullOrEmpty(assetPath))
         {
-            string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
-            if (!string.IsNullOrEmpty(assetPath))
+            string guid = UnityEditor.AssetDatabase.AssetPathToGUID(assetPath);
+            if (!string.IsNullOrEmpty(guid))
             {
-                string guid = UnityEditor.AssetDatabase.AssetPathToGUID(assetPath);
-                if (!string.IsNullOrEmpty(guid))
-                {
-                    id = guid;
-                }
-                else
-                {
-                    id = System.Guid.NewGuid().ToString("N");
-                }
+                id = guid;
             }
-            // Created at runtime:
             else
             {
                 id = System.Guid.NewGuid().ToString("N");
             }
-
-            UnityEditor.EditorUtility.SetDirty(this);
         }
+        // Created at runtime:
+        else
+        {
+            id = System.Guid.NewGuid().ToString("N");
+        }
+
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
     /// <summary>

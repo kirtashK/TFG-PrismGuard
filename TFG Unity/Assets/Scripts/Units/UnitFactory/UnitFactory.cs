@@ -218,9 +218,10 @@ public class UnitFactory : MonoBehaviour
         order.ConsumeStoredItems();
 
         Transform spawn = GetNextSpawnPoint();
-        if (order.unitData.PrefabReference != null && order.unitData.PrefabReference.RuntimeKeyIsValid())
+        AssetReferenceGameObject prefabReference = order.unitData.GetRandomPrefabReference();
+        if (prefabReference != null)
         {
-            AsyncOperationHandle<GameObject> handle = order.unitData.PrefabReference.InstantiateAsync(spawn.position, spawn.rotation);
+            AsyncOperationHandle<GameObject> handle = prefabReference.InstantiateAsync(spawn.position, spawn.rotation);
             yield return handle;
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
@@ -233,7 +234,7 @@ public class UnitFactory : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"UnitFactory: failed to instantiate unit prefab for {order.unitData.Name}");
+                Debug.LogError($"{nameof(UnitFactory)}: failed to instantiate unit prefab for {order.unitData.Name}");
             }
         }
         else
