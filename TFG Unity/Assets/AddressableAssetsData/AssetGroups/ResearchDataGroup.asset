@@ -16,31 +16,43 @@ MonoBehaviour:
   m_GUID: afbe8f7465acdca4bb124c84efd72fbb
   m_SerializeEntries:
   - m_GUID: 11173b780a764d940bbf6ca4362cff6c
-    m_Address: Assets/Data/Research/Worker MaxCarry Research Data.asset
+    m_Address: Assets/Data/Research/2 Improve Worker Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16c5c14ecc40f6e449f5b03614d64604
+    m_Address: Assets/Data/Research/Unlock Crude Smelter Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23a80442c966ab04aab0dcfbc20148be
-    m_Address: Assets/Data/Research/Unlock Basic Smelter Research Data 1.asset
+    m_Address: Assets/Data/Research/Unlock Ore Mining Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6038f81b53d9b204d9c129a29311a237
-    m_Address: Assets/Data/Research/NewResearchData.asset
+    m_Address: Assets/Data/Research/Unlock Shop Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6359a434c7ffbf14d935f0ea71883ed9
-    m_Address: Assets/Data/Research/Research MediumSoldier Test.asset
+    m_Address: Assets/Data/Research/Unlock MediumSoldier Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ac6235ccc3a17e4a88cd2182539bee1
+    m_Address: Assets/Data/Research/Unlock Gold Mining Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 784cb060219fac54b881df2804c74737
-    m_Address: Assets/Data/Research/Unlock Advanced Smelter Research Data 1.asset
+    m_Address: Assets/Data/Research/Unlock Advanced Smelter Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
