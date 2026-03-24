@@ -6,7 +6,7 @@ public class SoldierIdleState : ISoldierState
 
     public void EnterState(Soldier soldier)
     {
-        soldier.agent.isStopped = true;
+        soldier.unit.agent.isStopped = true;
     }
 
     public void UpdateState(Soldier soldier)

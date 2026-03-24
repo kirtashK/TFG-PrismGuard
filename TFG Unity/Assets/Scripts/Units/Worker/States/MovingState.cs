@@ -21,7 +21,7 @@ public class MovingState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        if (worker == null || worker.agent == null)
+        if (worker == null || worker.unit.agent == null)
         {
             return;
         }
@@ -39,13 +39,13 @@ public class MovingState : IWorkerState
             activeDestination = approachPosition;
 
             // Stop in task's interaction range
-            worker.agent.stoppingDistance = worker.currentTask.InteractionRange;
+            worker.unit.agent.stoppingDistance = worker.CurrentTask.InteractionRange;
         }
         else if (explicitDestination.HasValue)
         {
             usingTask = false;
             activeDestination = explicitDestination.Value;
-            worker.agent.stoppingDistance = arrivalThreshold;
+            worker.unit.agent.stoppingDistance = arrivalThreshold;
         }
         else
         {
@@ -54,13 +54,13 @@ public class MovingState : IWorkerState
             return;
         }
 
-        worker.agent.isStopped = false;
-        worker.agent.SetDestination(activeDestination);
+        worker.unit.agent.isStopped = false;
+        worker.unit.agent.SetDestination(activeDestination);
     }
 
     public void UpdateState(Worker worker)
     {
-        if (worker == null || worker.agent == null)
+        if (worker == null || worker.unit.agent == null)
         {
             return;
         }
@@ -73,13 +73,13 @@ public class MovingState : IWorkerState
         }
 
         // If still moving, break
-        if (worker.agent.pathPending)
+        if (worker.unit.agent.pathPending)
         {
             return;
         }
 
-        float remaining = worker.agent.remainingDistance;
-        bool arrived = remaining <= worker.agent.stoppingDistance + 0.1f;
+        float remaining = worker.unit.agent.remainingDistance;
+        bool arrived = remaining <= worker.unit.agent.stoppingDistance + 0.1f;
 
         // Check if we arrived to task or to order destination
         if (arrived)
@@ -97,9 +97,9 @@ public class MovingState : IWorkerState
     public void ExitState(Worker worker)
     {
         // Restore default stoppingDistance
-        if (worker != null && worker.agent != null)
+        if (worker != null && worker.unit.agent != null)
         {
-            worker.agent.stoppingDistance = 0.5f;
+            worker.unit.agent.stoppingDistance = 0.5f;
         }
     }
 }

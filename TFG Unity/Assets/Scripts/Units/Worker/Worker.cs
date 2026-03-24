@@ -1,58 +1,71 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using static Google.Protobuf.WireFormat;
 
-public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget, 
-                    IOrderable, IStatRefresher
+public class Worker : MonoBehaviour, IOrderable, IStatRefresher
 {
+    [HideInInspector] public Unit unit;
+
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey maxCarryWeightStat;
 
-    [HideInInspector] public float maxHealth;
-    private float currentHealth;
     [HideInInspector] public float maxCarryWeight;
     public float currentLoad = 0f;
 
     public WorkerData data;
     private IWorkerState currentState;
-
-    public NavMeshAgent agent { get; private set; }
-    public ITask currentTask { get; set; }
+    public ITask CurrentTask { get; set; }
 
     [SerializeField]
     private Transform inventorySpot;
 
     private readonly List<GameObject> inventory = new();
 
+    private static readonly int AnimatorIsWorking = Animator.StringToHash("IsWorking");
+    private static readonly int AnimatorWorkType = Animator.StringToHash("WorkType");
 
-    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
-    private bool hasAddressableHandle = false;
+    [Header("Tools")]
+    [SerializeField] private List<ToolEntry> tools;
+
+    [Serializable]
+    public class ToolEntry
+    {
+        public WorkType workType;
+        public GameObject tool;
+    }
+
+    private void Awake()
+    {
+        if (TryGetComponent<Unit>(out Unit unit))
+        {
+            this.unit = unit;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(unit)}");
+        }
+
+        CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
+    }
 
     private void Start()
     {
         RefreshStats();
 
-        currentHealth = maxHealth;
+        unit.currentHealth = unit.maxHealth;
 
         ChangeState(new IdleState());
-    }
-
-    private void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        if (agent == null)
-        {
-            Debug.LogError($"{name}: Missing {nameof(NavMeshAgent)}");
-        }
-
-        CheckNullStats();
     }
 
     private void OnEnable()
@@ -66,6 +79,11 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         {
             yield return null;
         }
+
+        unit.OnDeathStartedEvent += OnDeathStarted;
+        unit.OnDeathCleanupEvent += OnDeathCleanup;
+        unit.OnDamageTakenEvent += OnDamageTaken;
+
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
@@ -75,6 +93,10 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
+
+        unit.OnDeathStartedEvent -= OnDeathStarted;
+        unit.OnDeathCleanupEvent -= OnDeathCleanup;
+        unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     private void CheckNullStats()
@@ -108,7 +130,10 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
 
     private void Update()
     {
-        currentState?.UpdateState(this);
+        if (unit.isAlive)
+        {
+            currentState?.UpdateState(this);
+        }
     }
 
     public void ChangeState(IWorkerState newState)
@@ -118,19 +143,15 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         currentState?.EnterState(this);
     }
 
-    public Vector3 Position => transform.position;
-
-    public bool isAlive => currentHealth > 0f;
-
     public void RefreshStats()
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
         {
-            agent.speed = finalValue;
+            unit.agent.speed = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
-            maxHealth = finalValue;
+            unit.maxHealth = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxCarryWeightStat, out finalValue))
         {
@@ -138,48 +159,23 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         }
     }
 
-    /// <summary>
-    /// Damages worker, if its still alive, it runs away
-    /// </summary>
-    /// <param name="amount">Damage to receive</param>
-    /// <param name="attackerOrigin">Attacker's position</param>
-    public void TakeDamage(float amount, Vector3 attackOrigin)
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        currentHealth = Mathf.Max(currentHealth - amount, 0f);
-
-        //Debug.Log($"Health of {name}: {currentHealth}/{workerData.maxHealth}");
-
-        DropAll(inventorySpot.position);
-
-        if (currentHealth > 0f)
+        if (unit.isAlive)
         {
+            DropAll(inventorySpot.position);
             Retreat(attackOrigin);
         }
-        else
-        {
-            Die();
-        }
     }
 
-    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    private void OnDeathStarted()
     {
-        addressableInstanceHandle = handle;
-        hasAddressableHandle = handle.IsValid();
+        ClearWorkAnimation();
     }
 
-    private void Die()
+    private void OnDeathCleanup()
     {
-        Debug.Log($"{name} has died");
-
-        // Release addressable handle
-        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
-        {
-            Addressables.ReleaseInstance(addressableInstanceHandle);
-            hasAddressableHandle = false;
-            return;
-        }
-
-        Destroy(gameObject);
+        
     }
 
     /// <summary>
@@ -190,15 +186,11 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
     public void Retreat(Vector3 threatPosition, float retreatDistance = 5f)
     {
         Vector3 fleeDir = (transform.position - threatPosition).normalized;
-
         Vector3 rawTarget = transform.position + fleeDir * retreatDistance;
 
-        if (NavMesh.SamplePosition(rawTarget,
-                                   out NavMeshHit hit,
-                                   retreatDistance,
-                                   NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(rawTarget, out NavMeshHit hit,  retreatDistance,  NavMesh.AllAreas))
         {
-            agent.SetDestination(hit.position);
+            unit.agent.SetDestination(hit.position);
         }
         else
         {
@@ -206,9 +198,7 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         }
     }
 
-    // #############
-    // # Inventory #
-    // #############
+    #region Inventory
 
     public bool CanCarry(ItemData itemData)
         => currentLoad + itemData.weight <= maxCarryWeight;
@@ -274,23 +264,74 @@ public class Worker : MonoBehaviour, IAddressableInstance, ICombatTarget,
         carriedItem.transform.position = dropPosition;
     }
 
+    #endregion
+
     public void CancelCurrentTask()
     {
-        if (currentTask == null)
+        if (CurrentTask == null)
         {
             return;
         }
 
-        currentTask.Cancel(this);
-        currentTask = null;
+        ClearWorkAnimation();
+
+        CurrentTask.Cancel(this);
+        CurrentTask = null;
     }
 
-    // IOrderable
+    #region Work Animation
+
+    public void SetWorkAnimation(WorkType workType)
+    {
+        if (unit.animator == null)
+        {
+            return;
+        }
+
+        unit.animator.SetBool(AnimatorIsWorking, workType != WorkType.None);
+        unit.animator.SetInteger(AnimatorWorkType, (int)workType);
+
+        foreach (ToolEntry tool in tools)
+        {
+            if (tool.workType == workType)
+            {
+                tool.tool.SetActive(true);
+                return;
+            }
+        }
+    }
+
+    public void ClearWorkAnimation()
+    {
+        if (unit.animator == null)
+        {
+            return;
+        }
+
+        unit.animator.SetBool(AnimatorIsWorking, false);
+        unit.animator.SetInteger(AnimatorWorkType, (int)WorkType.None);
+
+        foreach (ToolEntry tool in tools)
+        {
+            tool.tool.SetActive(false);
+        }
+    }
+
+    #endregion
+
+    #region Orderable
+
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
+        if (!unit.isAlive)
+        {
+            return;
+        }
+
         CancelCurrentTask();
 
-        // Move to destination
         ChangeState(new MovingState(destination, arrivalThreshold: 0.5f));
     }
+
+    #endregion
 }

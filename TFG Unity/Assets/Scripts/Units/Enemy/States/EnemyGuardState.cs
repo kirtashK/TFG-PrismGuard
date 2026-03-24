@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 /// <summary>
 /// Enemy stays around homePosition, 
@@ -32,8 +31,8 @@ public class EnemyGuardState : IEnemyState
 
     public void EnterState(Enemy enemy)
     {
-        enemy.agent.isStopped = false;
-        enemy.agent.stoppingDistance = 0;
+        enemy.unit.agent.isStopped = false;
+        enemy.unit.agent.stoppingDistance = 0;
 
         hasWanderTarget = false;
         detectionTimer = 0f;
@@ -49,6 +48,7 @@ public class EnemyGuardState : IEnemyState
             detectionTimer = detectionInterval;
 
             ICombatTarget intruder = enemy.FindNearestPlayerUnit();
+
             if (intruder != null && intruder.isAlive)
             {
                 enemy.ChangeState(new EnemyChaseState(intruder));
@@ -71,9 +71,9 @@ public class EnemyGuardState : IEnemyState
         }
 
         // Keep wandering within guardRadius
-        if (!hasWanderTarget || Vector3.Distance(enemy.Position, currentWanderTarget) <= wanderPointTolerance)
+        if (!hasWanderTarget || Vector3.Distance(enemy.unit.Position, currentWanderTarget) <= wanderPointTolerance)
         {
-            if (hasWanderTarget && Vector3.Distance(enemy.Position, currentWanderTarget) <= wanderPointTolerance)
+            if (hasWanderTarget && Vector3.Distance(enemy.unit.Position, currentWanderTarget) <= wanderPointTolerance)
             {
                 float minDelay = Mathf.Min(enemy.patrolDelayMin, enemy.patrolDelayMax);
                 float maxDelay = Mathf.Max(enemy.patrolDelayMin, enemy.patrolDelayMax);
@@ -89,29 +89,29 @@ public class EnemyGuardState : IEnemyState
             {
                 currentWanderTarget = hit.position;
                 hasWanderTarget = true;
-                enemy.agent.SetDestination(currentWanderTarget);
+                enemy.unit.agent.SetDestination(currentWanderTarget);
             }
             else
             {
                 // Fallback to home
                 currentWanderTarget = homePosition;
                 hasWanderTarget = true;
-                enemy.agent.SetDestination(currentWanderTarget);
+                enemy.unit.agent.SetDestination(currentWanderTarget);
             }
         }
 
         // Dont wander far from home
-        float distanceFromHome = Vector3.Distance(enemy.Position, homePosition);
+        float distanceFromHome = Vector3.Distance(enemy.unit.Position, homePosition);
         if (distanceFromHome > guardRadius + leashBuffer)
         {
             hasWanderTarget = false;
-            enemy.agent.SetDestination(homePosition);
+            enemy.unit.agent.SetDestination(homePosition);
         }
     }
 
     public void ExitState(Enemy enemy)
     {
         hasWanderTarget = false;
-        enemy.agent.stoppingDistance = enemy.attackRange;
+        enemy.unit.agent.stoppingDistance = enemy.unit.attackRange;
     }
 }

@@ -43,7 +43,7 @@ public class MultiTransportState : IWorkerState
         }
 
         phase = Phase.Pickup;
-        worker.agent.SetDestination(task.TaskPosition);
+        worker.unit.agent.SetDestination(task.TaskPosition);
         collectedTasks.Clear();
     }
 
@@ -69,8 +69,8 @@ public class MultiTransportState : IWorkerState
     private void HandlePickupPhase()
     {
         // If we havent arrived yet, exit
-        if (worker.agent.pathPending
-            || worker.agent.remainingDistance > arrivalRange)
+        if (worker.unit.agent.pathPending
+            || worker.unit.agent.remainingDistance > arrivalRange)
         {
             return;
         }

@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AppUI.Redux;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UIElements;
 
-[RequireComponent(typeof(AgentCombat))]
-[RequireComponent(typeof(AgentMovementController))]
 public class AgentSoldier : Agent
 {
+    [HideInInspector] public Unit unit;
+
     [Header("Data")]
     public SoldierData data;
 
@@ -21,18 +24,7 @@ public class AgentSoldier : Agent
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
 
-    public float currentHealth;
-    [HideInInspector] public float maxHealth;
-    [HideInInspector] public float moveSpeed;
-    [HideInInspector] public float attackRange;
-    [HideInInspector] public float attackDamage;
-    [HideInInspector] public float attackCooldown;
-
-    [Header("Movement")]
-    public AgentMovementController movement;
-
-    [Header("Combat")]
-    public AgentCombat combat;
+    [HideInInspector] public float aggroRadius;
 
     [Tooltip("Number of enemies to include in observations")]
     public int kNearest = 4;
@@ -41,6 +33,28 @@ public class AgentSoldier : Agent
 
     private static readonly Collider[] agroBuffer = new Collider[16];
 
+    private float lastAttackTime = -Mathf.Infinity;
+
+    [Header("Rewards")]
+
+    [Tooltip("Reward scale per 1 HP damage dealt")]
+    public float rewardPerDamage = 0.01f;
+    [Tooltip("Penalty scale per 1 HP received")]
+    public float penaltyPerDamageTaken = 0.02f;
+
+    [Tooltip("Bonus when an attack is successful")]
+    public float rewardPerSuccessfulAttack = 0.01f;
+
+    [Tooltip("Reward when slaying an enemy")]
+    public float rewardOnKill = 1.0f;
+    [Tooltip("Penalty when diying")]
+    public float penaltyOnDeath = 1.0f;
+
+    [Tooltip("Reward per HP healed")]
+    public float rewardPerHealHP = 0.01f;
+    [Tooltip("Penalty for wasting healing")]
+    public float penaltyWastedHeal = 0.05f;
+
     [Header("Debug")]
     public bool drawGizmos = true;
 
@@ -48,13 +62,13 @@ public class AgentSoldier : Agent
     {
         base.Awake();
 
-        if (movement == null)
+        if (TryGetComponent<Unit>(out Unit unit))
         {
-            movement = GetComponent<AgentMovementController>();
+            this.unit = unit;
         }
-        if (combat == null)
+        else
         {
-            combat = GetComponent<AgentCombat>();
+            Debug.LogError($"{name}: missing {nameof(unit)}");
         }
 
         CheckNullStats();
@@ -64,7 +78,11 @@ public class AgentSoldier : Agent
     {
         RefreshStats();
 
-        currentHealth = maxHealth;
+        unit.currentHealth = unit.maxHealth;
+
+        aggroRadius = data.AggroRadius;
+
+        unit.agent.stoppingDistance = unit.attackRange;
     }
 
     public override void Initialize()
@@ -86,13 +104,26 @@ public class AgentSoldier : Agent
             yield return null;
         }
 
+        unit.OnDeathStartedEvent += OnDeathStarted;
+        unit.OnDeathCleanupEvent += OnDeathCleanup;
+        unit.OnDamageTakenEvent += OnDamageTaken;
+
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
     protected override void OnDisable()
     {
-        StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        unit.OnDeathStartedEvent -= OnDeathStarted;
+        unit.OnDeathCleanupEvent -= OnDeathCleanup;
+        unit.OnDamageTakenEvent -= OnDamageTaken;
     }
+
+    #region Stats
 
     void HandleModifiersChanged(string targetId, string statKeyId)
     {
@@ -111,23 +142,23 @@ public class AgentSoldier : Agent
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
         {
-            moveSpeed = finalValue;
+            unit.moveSpeed = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
-            maxHealth = finalValue;
+            unit.maxHealth = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackRangeStat, out finalValue))
         {
-            attackRange = finalValue;
+            unit.attackRange = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackDamageStat, out finalValue))
         {
-            attackDamage = finalValue;
+            unit.attackDamage = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
         {
-            attackCooldown = finalValue;
+            unit.attackCooldown = finalValue;
         }
     }
 
@@ -155,15 +186,20 @@ public class AgentSoldier : Agent
         }
     }
 
+    #endregion
+
+    #region ML Agent
+
     public override void CollectObservations(VectorSensor sensor)
     {
-        float healthNorm = Mathf.Clamp01(currentHealth / Mathf.Max(0.0001f, maxHealth));
+
+        float healthNorm = Mathf.Clamp01(unit.currentHealth / Mathf.Max(0.0001f, unit.maxHealth));
         sensor.AddObservation(healthNorm);
 
-        float cooldownNorm = combat.GetAttackCooldownNormalized();
+        float cooldownNorm = GetAttackCooldownNormalized();
         sensor.AddObservation(cooldownNorm);
 
-        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, data.AggroRadius, kNearest, enemyLayer);
+        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
         float numNorm = Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest);
         sensor.AddObservation(numNorm);
 
@@ -174,13 +210,13 @@ public class AgentSoldier : Agent
             {
                 Vector3 worldPos = nearbyEnemies[i].Position;
                 Vector3 local = transform.InverseTransformPoint(worldPos);
-                float nx = Mathf.Clamp(local.x / data.AggroRadius, -1f, 1f);
-                float nz = Mathf.Clamp(local.z / data.AggroRadius, -1f, 1f);
+                float nx = Mathf.Clamp(local.x / aggroRadius, -1f, 1f);
+                float nz = Mathf.Clamp(local.z / aggroRadius, -1f, 1f);
 
                 sensor.AddObservation(nx);
                 sensor.AddObservation(nz);
 
-                float dist = Mathf.Clamp01(local.magnitude / data.AggroRadius);
+                float dist = Mathf.Clamp01(local.magnitude / aggroRadius);
                 sensor.AddObservation(dist);
             }
             else
@@ -198,25 +234,30 @@ public class AgentSoldier : Agent
         // Branch 0 = targetIndex [0..kNearest] kNearest means no target
         // Branch 1 = attackFlag [0..1]
 
+        if (!unit.isAlive)
+        {
+            return;
+        }
+
         ActionSegment<int> discreteActions = actionBuffers.DiscreteActions;
         int targetIndex = Mathf.Clamp(discreteActions[0], 0, kNearest);
         int attackFlag = Mathf.Clamp(discreteActions[1], 0, 1);
 
-        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, data.AggroRadius, kNearest, enemyLayer);
+        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
 
         if (targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
             Vector3 dest = nearbyEnemies[targetIndex].Position;
-            movement.SetDestination(dest);
+            SetDestination(dest);
         }
         else
         {
-            movement.Stop();
+            Stop();
         }
 
         if (attackFlag == 1 && targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
-            combat.TryAttack(nearbyEnemies[targetIndex]);
+            TryAttack(nearbyEnemies[targetIndex]);
         }
 
         // Encourage movement efficiency
@@ -226,14 +267,19 @@ public class AgentSoldier : Agent
     // Heuristic for testing
     public override void Heuristic(in ActionBuffers actionsOut)
     {
+        if (!unit.isAlive)
+        {
+            return;
+        }
+
         ActionSegment<int> discreteOut = actionsOut.DiscreteActions;
-        List<ICombatTarget> enemies = GetNearestEnemies(transform.position, data.AggroRadius, kNearest, enemyLayer);
+        List<ICombatTarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
 
         if (enemies.Count > 0)
         {
             discreteOut[0] = 0;
             float dist = Vector3.Distance(transform.position, enemies[0].Position);
-            discreteOut[1] = (combat != null && dist <= attackRange) ? 1 : 0;
+            discreteOut[1] = (dist <= unit.attackRange) ? 1 : 0;
         }
         else
         {
@@ -241,6 +287,10 @@ public class AgentSoldier : Agent
             discreteOut[1] = 0;
         }
     }
+
+    #endregion
+
+    #region Combat
 
     /// <summary>
     /// Returns up to maxCount nearest ICombatTarget on the given layer, ordered by distance ascending
@@ -293,6 +343,162 @@ public class AgentSoldier : Agent
         return results;
     }
 
+    /// <summary>
+    /// Try to perform an attack on the target
+    /// Returns true if an attack was performed
+    /// </summary>
+    public bool TryAttack(ICombatTarget target)
+    {
+        if (!target.isAlive || target == null || !unit.isAlive)
+        {
+            return false;
+        }
+
+        // Cooldown
+        if (Time.time < lastAttackTime + unit.attackCooldown)
+        {
+            return false;
+        }
+
+        // Range
+        float distSqr = (target.Position - unit.Position).sqrMagnitude;
+        if (distSqr > unit.attackRange * unit.attackRange)
+        {
+            return false;
+        }
+
+        unit.FaceTarget(target.Position, 720f);
+        unit.Attack(target);
+
+        //target.TakeDamage(unit.attackDamage, unit.Position);
+
+        float reward = 0;
+        reward += rewardPerSuccessfulAttack;
+
+        reward += unit.attackDamage * rewardPerDamage;
+
+        if (!target.isAlive)
+        {
+            reward += rewardOnKill;
+        }
+
+        AddReward(reward);
+
+        lastAttackTime = Time.time;
+        return true;
+    }
+
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+        AddReward(-amount * penaltyPerDamageTaken);
+
+        if (!unit.isAlive)
+        {
+            AddReward(-penaltyOnDeath);
+            EndEpisode();
+        }
+    }
+
+    private void OnDeathStarted()
+    {
+
+    }
+
+    private void OnDeathCleanup()
+    {
+
+    }
+
+    // TODO event onHealed on unit would be better
+    public void Heal(float amount)
+    {
+        if (!unit.isAlive) 
+        { 
+            return; 
+        }
+
+        float before = unit.currentHealth;
+        float healed = Mathf.Min(unit.currentHealth + amount, unit.maxHealth) - before;
+
+        AddReward(healed * rewardPerHealHP);
+
+        if (before / unit.maxHealth > 0.9f)
+        {
+            AddReward(-penaltyWastedHeal);
+        }
+
+        unit.Heal(amount);
+    }
+
+    /// <summary>
+    /// Returns normalized cooldown remaining in [0,1]
+    /// </summary>
+    public float GetAttackCooldownNormalized()
+    {
+        if (unit.attackCooldown <= 0f)
+        {
+            return 0f;
+        }
+
+        float elapsed = Time.time - lastAttackTime;
+        float remaining = Mathf.Clamp01(1f - (elapsed / unit.attackCooldown));
+
+        return remaining;
+    }
+
+    #endregion
+
+    #region Movement
+
+    public void SetDestination(Vector3 worldPosition)
+    {
+        if (unit.agent == null)
+        {
+            return;
+        }
+
+        unit.agent.isStopped = false;
+        unit.agent.SetDestination(worldPosition);
+    }
+
+    public void Stop()
+    {
+        if (unit.agent == null)
+        {
+            return;
+        }
+
+        unit.agent.isStopped = true;
+        unit.agent.ResetPath();
+    }
+
+    public bool HasReachedDestination()
+    {
+        if (unit.agent == null)
+        {
+            return true;
+        }
+
+        if (!unit.agent.hasPath)
+        {
+            return true;
+        }
+
+        if (unit.agent.pathPending)
+        {
+            return false;
+        }
+
+        if (unit.agent.remainingDistance <= Mathf.Max(unit.agent.stoppingDistance))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+
     private void OnDrawGizmosSelected()
     {
         if (!drawGizmos)
@@ -301,9 +507,6 @@ public class AgentSoldier : Agent
         }
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, data.AggroRadius);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);        
+        Gizmos.DrawWireSphere(transform.position, aggroRadius);
     }
 }

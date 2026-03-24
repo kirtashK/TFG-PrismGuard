@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyChaseState : IEnemyState
 {
@@ -12,9 +11,9 @@ public class EnemyChaseState : IEnemyState
 
     public void EnterState(Enemy enemy)
     {
-        enemy.agent.isStopped = false;
-        enemy.agent.stoppingDistance = enemy.attackRange;
-        enemy.agent.SetDestination(target.Position);
+        enemy.unit.agent.isStopped = false;
+        enemy.unit.agent.stoppingDistance = enemy.unit.attackRange;
+        enemy.unit.agent.SetDestination(target.Position);
     }
 
     public void UpdateState(Enemy enemy)
@@ -28,7 +27,7 @@ public class EnemyChaseState : IEnemyState
         if (enemy.behaviour == Enemy.Behaviour.Guard)
         {
             float guardChaseRadius = enemy.guardRadius + enemy.guardChaseBuffer;
-            float distanceFromHome = Vector3.Distance(enemy.Position, enemy.homePosition);
+            float distanceFromHome = Vector3.Distance(enemy.unit.Position, enemy.homePosition);
             if (distanceFromHome > guardChaseRadius)
             {
                 enemy.ChangeState(new EnemyGuardState(enemy.homePosition, enemy.guardRadius, enemy.guardChaseBuffer));
@@ -37,6 +36,7 @@ public class EnemyChaseState : IEnemyState
         }
 
         ICombatTarget soldier = enemy.FindNearestPlayerUnit();
+
         if (soldier != null 
             && soldier.isAlive
             && soldier != target)
@@ -45,14 +45,14 @@ public class EnemyChaseState : IEnemyState
             return;
         }
 
-        if (!enemy.agent.pathPending
-            && enemy.agent.remainingDistance <= enemy.attackRange)
+        if (!enemy.unit.agent.pathPending
+            && enemy.unit.agent.remainingDistance <= enemy.unit.attackRange)
         {
             enemy.ChangeState(new EnemyAttackState(target));
         }
         else
         {
-            enemy.agent.SetDestination(target.Position);
+            enemy.unit.agent.SetDestination(target.Position);
         }
     }
 

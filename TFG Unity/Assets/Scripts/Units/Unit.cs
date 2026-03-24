@@ -1,0 +1,377 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using static UnityEngine.UI.Image;
+
+public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
+{
+    [HideInInspector] public float maxHealth;
+    [HideInInspector] public float currentHealth;
+
+    [HideInInspector] public float moveSpeed;
+    [HideInInspector] public float attackDamage;
+    [HideInInspector] public float attackRange;
+    [HideInInspector] public float attackCooldown;
+    [HideInInspector] public float nextAttackTime = 0f;
+
+    [HideInInspector] public Animator animator;
+
+    [HideInInspector] public NavMeshAgent agent;
+
+    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
+    private bool hasAddressableHandle = false;
+
+    protected bool isDying = false;
+    protected float deathAnimationTimeout = 30f;
+    protected float deathAnimationDelay = 10f;
+
+    private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
+    private static readonly int AnimatorDie = Animator.StringToHash("Die");
+    private static readonly int AnimatorIsDead = Animator.StringToHash("IsDead");
+
+    ICombatTarget target;
+
+    [SerializeField] private float dissolveDuration = 10.0f;
+    private static readonly int DissolveAmountId = Shader.PropertyToID("_DissolveAmount");
+    private readonly List<Renderer> cachedRenderers = new();
+    private MaterialPropertyBlock propertyBlock;
+
+    public event Action OnDeathStartedEvent;
+    public event Action OnDeathCleanupEvent;
+    public event Action<float, Vector3> OnDamageTakenEvent;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogError($"{name}: Missing {nameof(NavMeshAgent)}");
+        }
+
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+            {
+                Debug.LogWarning($"{name}: missing {nameof(Animator)}");
+            }
+        }
+
+        CacheRenderers();
+    }
+
+    private void Update()
+    {
+        if (animator != null && agent != null)
+        {
+            float speed = agent.velocity.magnitude;
+            animator.SetFloat(AnimatorSpeed, speed, 0.1f, Time.deltaTime);
+        }
+    }
+
+    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    {
+        addressableInstanceHandle = handle;
+        hasAddressableHandle = handle.IsValid();
+    }
+
+    #region ICombatTarget
+
+    public Vector3 Position => transform.position;
+
+    public bool isAlive => currentHealth > 0f;
+
+    /// <summary>
+    /// Damages unit, if health falls to 0 the unit dies, otherwise calls OnDamageTaken
+    /// </summary>
+    /// <param name="amount">Damage received</param>
+    /// <param name="attackOrigin"></param>
+    public void TakeDamage(float amount, Vector3 attackOrigin)
+    {
+        if (isDying || amount <= 0f)
+        {
+            return;
+        }
+
+        currentHealth = Mathf.Max(currentHealth - amount, 0f);
+
+        Debug.Log($"{name} took {amount} damage" +
+            $"\nHealth of {name}: {currentHealth}/{maxHealth}");
+
+        OnDamageTaken(amount, attackOrigin);
+
+        if (!isAlive)
+        {
+            Die();
+        }
+    }
+
+    /// <summary>
+    /// Called when an unit takes damage
+    /// </summary>
+    /// <param name="amount">Damage received</param>
+    /// <param name="attackOrigin"></param>
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+        OnDamageTakenEvent?.Invoke(amount, attackOrigin);
+    }
+
+    public void Heal(float healAmount)
+    {
+        if (!isAlive || healAmount <= 0f || currentHealth == maxHealth)
+        {
+            return;
+        }
+
+        currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+
+        Debug.Log($"{name} healed by {healAmount}. Health: {currentHealth}/{maxHealth}");
+    }
+
+    public void HealPercentage(float percent)
+    {
+        if (!isAlive || percent <= 0f)
+        {
+            return;
+        }
+
+        Heal(maxHealth * percent);
+    }
+
+    /// <summary>
+    /// Target will take damage once the animation "hits"
+    /// </summary>
+    /// <param name="combatTarget"></param>
+    public void Attack(ICombatTarget combatTarget)
+    {
+        if (!isAlive || combatTarget == null || !combatTarget.isAlive)
+        {
+            return;
+        }
+
+        target = combatTarget;
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+        else
+        {
+            target.TakeDamage(attackDamage, Position);
+            target = null;
+        }
+    }
+
+    public void OnAttackHit()
+    {
+        if (isAlive && target != null && target.isAlive)
+        {
+            target.TakeDamage(attackDamage, Position);
+        }
+        target = null;
+    }
+
+    #region Death
+
+    public void Die()
+    {
+        if (isDying)
+        {
+            return;
+        }
+        isDying = true;
+
+        Debug.Log($"{name} has died");
+
+        // Stop movement
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        OnDeathStarted();
+
+        if (animator != null)
+        {
+            animator.SetBool(AnimatorIsDead, true);
+            animator.SetTrigger(AnimatorDie);
+            StartCoroutine(DeathAnimationTimeout());
+        }
+        else
+        {
+            CompleteDeathCleanup();
+        }
+    }
+
+    /// <summary>
+    /// Called near the start of a unit diying
+    /// </summary>
+    private void OnDeathStarted()
+    {
+        // TODO notify player of unit death ?
+
+        OnDeathStartedEvent?.Invoke();
+    }
+
+    private IEnumerator DeathAnimationTimeout()
+    {
+        float timer = 0f;
+        while (timer < deathAnimationTimeout)
+        {
+            yield return null;
+            timer += Time.deltaTime;
+        }
+
+        Debug.LogWarning($"{name}: death animation took too long or missing event on death end");
+
+        CompleteDeathCleanup();
+    }
+
+    /// <summary>
+    /// Called by Animation Event at the end of death clip
+    /// </summary>
+    public void OnDeathAnimationComplete()
+    {
+        StartCoroutine(DeathCleanupDelay());
+    }
+
+    private IEnumerator DeathCleanupDelay()
+    {
+        yield return new WaitForSeconds(deathAnimationDelay);
+
+        yield return StartCoroutine(DissolveRoutine());
+
+        CompleteDeathCleanup();
+    }
+
+    private IEnumerator DissolveRoutine()
+    {
+        if (cachedRenderers.Count == 0)
+        {
+            yield break;
+        }
+
+        float elapsedTime = 0f;
+        float initialValue = 0f;
+        {
+            propertyBlock.Clear();
+            cachedRenderers[0].GetPropertyBlock(propertyBlock);
+            if (propertyBlock != null && propertyBlock.isEmpty == false)
+            {
+                initialValue = propertyBlock.GetFloat(DissolveAmountId);
+            }
+        }
+
+        while (elapsedTime < dissolveDuration)
+        {
+            float time = Mathf.Clamp01(elapsedTime / dissolveDuration);
+
+            float dissolveValue = Mathf.Lerp(initialValue, 1f, time);
+
+            for (int i = 0; i < cachedRenderers.Count; i++)
+            {
+                Renderer rend = cachedRenderers[i];
+
+                rend.GetPropertyBlock(propertyBlock);
+                propertyBlock.SetFloat(DissolveAmountId, dissolveValue);
+                rend.SetPropertyBlock(propertyBlock);
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure fully dissolved
+        for (int i = 0; i < cachedRenderers.Count; i++)
+        {
+            Renderer rend = cachedRenderers[i];
+            rend.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(DissolveAmountId, 1f);
+            rend.SetPropertyBlock(propertyBlock);
+        }
+    }
+
+    /// <summary>
+    /// Call OnDeathCleanups, releases addressable handle and destroys Unit
+    /// </summary>
+    protected void CompleteDeathCleanup()
+    {
+        OnDeathCleanup();
+
+        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
+        {
+            Addressables.ReleaseInstance(addressableInstanceHandle);
+            hasAddressableHandle = false;
+        }
+
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Called near the end of a unit diying
+    /// </summary>
+    private void OnDeathCleanup()
+    {
+        OnDeathCleanupEvent?.Invoke();
+    }
+
+    #endregion
+
+
+    #endregion
+
+    public void FaceTarget(Vector3 targetPosition, float rotationSpeed)
+    {
+        Vector3 direction = targetPosition - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    private void CacheRenderers()
+    {
+        cachedRenderers.Clear();
+        propertyBlock = new MaterialPropertyBlock();
+
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(includeInactive: true);
+
+        foreach (Renderer renderer in renderers)
+        {
+            bool hasDissolve = false;
+            Material[] materials = renderer.sharedMaterials;
+            if (materials != null)
+            {
+                foreach (Material material in materials)
+                {
+                    if (material != null && material.HasProperty(DissolveAmountId))
+                    {
+                        hasDissolve = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasDissolve)
+            {
+                cachedRenderers.Add(renderer);
+            }
+        }
+    }
+}

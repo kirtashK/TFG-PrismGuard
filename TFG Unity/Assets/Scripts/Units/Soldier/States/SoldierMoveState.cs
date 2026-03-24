@@ -17,9 +17,9 @@ public class SoldierMoveState : ISoldierState
 
     public void EnterState(Soldier soldier)
     {
-        soldier.agent.isStopped = false;
-        soldier.agent.stoppingDistance = 0.5f;
-        soldier.agent.SetDestination(destination);
+        soldier.unit.agent.isStopped = false;
+        soldier.unit.agent.stoppingDistance = 0.5f;
+        soldier.unit.agent.SetDestination(destination);
     }
 
     public void UpdateState(Soldier soldier)
@@ -45,7 +45,7 @@ public class SoldierMoveState : ISoldierState
         }
 
         // If reached destination, set it as guardPoint if enabled and go idle
-        if (!soldier.agent.pathPending && soldier.agent.remainingDistance <= soldier.agent.stoppingDistance + 0.1f)
+        if (!soldier.unit.agent.pathPending && soldier.unit.agent.remainingDistance <= soldier.unit.agent.stoppingDistance + 0.1f)
         {
             if (setAsGuard)
             {
