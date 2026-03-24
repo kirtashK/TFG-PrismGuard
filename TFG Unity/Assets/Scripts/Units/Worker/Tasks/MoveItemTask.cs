@@ -11,6 +11,7 @@ public class MoveItemTask : MonoBehaviour, ITask
     private float interactionRange = 1f;
 
     public Vector3 TaskPosition => transform.position;
+    public Vector3 TaskLookAt => transform.position;
 
     public int Priority => priority;
 
@@ -31,6 +32,9 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private IItemConsumer lastConsumer;
     private bool isStored = false;
+
+    public WorkType WorkType => WorkType.None;
+
 
     private void Awake()
     {

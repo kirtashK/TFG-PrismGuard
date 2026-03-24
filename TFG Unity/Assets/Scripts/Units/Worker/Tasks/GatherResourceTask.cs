@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class GatherResourceTask : MonoBehaviour, ITask
 {
@@ -13,29 +12,19 @@ public class GatherResourceTask : MonoBehaviour, ITask
 
     private int currentResourceAmount;
 
-    public Vector3 TaskPosition
-    {
-        get
-        {
-            return transform.position;
-        }
-    }
+    public WorkType WorkType => selectedWorkType;
 
-    public int Priority
-    {
-        get
-        {
-            return gatherResourceRecipe.priority;
-        }
-    }
+    [SerializeField]
+    private WorkType selectedWorkType = WorkType.None;
 
-    public float InteractionRange
-    {
-        get
-        {
-            return gatherResourceRecipe.interactionRange;
-        }
-    }
+    public Vector3 TaskPosition => transform.position;
+
+    public Vector3 TaskLookAt => transform.position;
+
+    public int Priority => gatherResourceRecipe.priority;
+
+    public float InteractionRange => gatherResourceRecipe.interactionRange;
+
 
     private void Awake()
     {

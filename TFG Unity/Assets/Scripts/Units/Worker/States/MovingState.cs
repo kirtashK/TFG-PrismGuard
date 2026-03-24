@@ -26,14 +26,14 @@ public class MovingState : IWorkerState
             return;
         }
 
-        if (worker.currentTask != null)
+        if (worker.CurrentTask != null)
         {
             usingTask = true;
 
-            Vector3 taskPos = worker.currentTask.TaskPosition;
+            Vector3 taskPos = worker.CurrentTask.TaskPosition;
             Vector3 direction = (worker.transform.position - taskPos).normalized;
             Vector3 approachPosition = (direction != Vector3.zero)
-                ? taskPos + direction * worker.currentTask.InteractionRange
+                ? taskPos + direction * worker.CurrentTask.InteractionRange
                 : taskPos;
 
             activeDestination = approachPosition;
@@ -66,7 +66,7 @@ public class MovingState : IWorkerState
         }
 
         // If task is cancelled while moving, go idle
-        if (usingTask && worker.currentTask == null)
+        if (usingTask && worker.CurrentTask == null)
         {
             worker.ChangeState(new IdleState());
             return;
@@ -84,8 +84,26 @@ public class MovingState : IWorkerState
         // Check if we arrived to task or to order destination
         if (arrived)
         {
-            if (usingTask && worker.currentTask != null)
+            if (usingTask && worker.CurrentTask != null)
             {
+                Vector3 lookAtPosition = worker.CurrentTask.TaskLookAt;
+                Vector3 direction = lookAtPosition - worker.transform.position;
+                direction.y = 0f;
+
+                if (direction.sqrMagnitude > 0.001f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+                    worker.transform.rotation = Quaternion.RotateTowards(worker.transform.rotation,
+                        targetRotation,
+                        360f * Time.deltaTime);
+
+                    float angle = Quaternion.Angle(worker.transform.rotation, targetRotation);
+                    if (angle > 2f)
+                    {
+                        return;
+                    }
+                }
+
                 worker.ChangeState(new WorkingState());
                 return;
             }

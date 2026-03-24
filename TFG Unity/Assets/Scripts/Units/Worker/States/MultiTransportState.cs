@@ -21,11 +21,11 @@ public class MultiTransportState : IWorkerState
     {
         this.worker = worker;
 
-        task = worker.currentTask as MoveItemTask;
+        task = worker.CurrentTask as MoveItemTask;
 
         if (task == null)
         {
-            Debug.LogWarning("[MultiTransportState] EnterState: null task");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(task)}");
             worker.ChangeState(new IdleState());
             return;
         }
@@ -35,9 +35,9 @@ public class MultiTransportState : IWorkerState
 
         if (consumer == null)
         {
-            Debug.LogWarning("[MultiTransportState] EnterState: null consumer");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
             task.Reset();
-            worker.currentTask = null;
+            worker.CurrentTask = null;
             worker.ChangeState(new IdleState());
             return;
         }
@@ -78,7 +78,7 @@ public class MultiTransportState : IWorkerState
         if (task == null)
         {
             Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null task");
-            worker.currentTask = null;
+            worker.CurrentTask = null;
             worker.ChangeState(new IdleState());
             return;
         }
@@ -93,8 +93,6 @@ public class MultiTransportState : IWorkerState
         worker.PickUp(task.gameObject);
         TaskManager.Instance.CompleteTask(task);
 
-        // If there is a source (such as warehouse),
-        // confirm retrieval of the item
         task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance);
         task.source?.ConfirmRetrieval(instance.itemData);
 
@@ -118,8 +116,8 @@ public class MultiTransportState : IWorkerState
         {
             task = next;
             arrivalRange = next.InteractionRange;
-            worker.currentTask = next;
-            worker.agent.SetDestination(next.TaskPosition);
+            worker.CurrentTask = next;
+            worker.unit.agent.SetDestination(next.TaskPosition);
             return;
         }
 
@@ -131,15 +129,15 @@ public class MultiTransportState : IWorkerState
         }
 
         phase = Phase.Delivery;
-        worker.agent.SetDestination(consumer.GetReceivePosition());
+        worker.unit.agent.SetDestination(consumer.GetReceivePosition());
     }
 
 
     private void HandleDeliveryPhase()
     {
         // If we havent arrived yet, exit
-        if (worker.agent.pathPending
-            || worker.agent.remainingDistance > arrivalRange)
+        if (worker.unit.agent.pathPending
+            || worker.unit.agent.remainingDistance > arrivalRange)
         {
             return;
         }
@@ -168,7 +166,7 @@ public class MultiTransportState : IWorkerState
         }
 
         collectedTasks.Clear();
-        worker.currentTask = null;
+        worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
     }
 
@@ -184,10 +182,10 @@ public class MultiTransportState : IWorkerState
             collected.Reset();
         }
 
-        worker.DropAll(worker.Position);
+        worker.DropAll(worker.unit.Position);
 
         collectedTasks.Clear();
-        worker.currentTask = null;
+        worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
     }
 }
