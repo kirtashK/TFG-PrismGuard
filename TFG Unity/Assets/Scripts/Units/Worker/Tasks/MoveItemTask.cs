@@ -11,6 +11,7 @@ public class MoveItemTask : MonoBehaviour, ITask
     private float interactionRange = 1f;
 
     public Vector3 TaskPosition => transform.position;
+    public Vector3 TaskLookAt => transform.position;
 
     public int Priority => priority;
 
@@ -31,6 +32,9 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private IItemConsumer lastConsumer;
     private bool isStored = false;
+
+    public WorkType WorkType => WorkType.None;
+
 
     private void Awake()
     {
@@ -173,12 +177,12 @@ public class MoveItemTask : MonoBehaviour, ITask
         {
             Worker carrier = itemInstance.carrier;
 
-            carrier.DropItem(gameObject, itemInstance.carrier.Position);
+            carrier.DropItem(gameObject, itemInstance.carrier.unit.Position);
             Debug.Log($"{name} has been dropped by {carrier}. Resetting...");
 
-            carrier.currentTask = null;
+            carrier.CurrentTask = null;
             carrier.ChangeState(new IdleState());
-            carrier.agent.SetDestination(carrier.transform.position);
+            carrier.unit.agent.SetDestination(carrier.transform.position);
 
             Reset();
 
@@ -197,11 +201,11 @@ public class MoveItemTask : MonoBehaviour, ITask
                     continue;
                 }
 
-                if (worker.currentTask is MoveItemTask moveItemTask && moveItemTask == this)
+                if (worker.CurrentTask is MoveItemTask moveItemTask && moveItemTask == this)
                 {
-                    worker.currentTask = null;
+                    worker.CurrentTask = null;
                     worker.ChangeState(new IdleState());
-                    worker.agent.SetDestination(worker.transform.position);
+                    worker.unit.agent.SetDestination(worker.transform.position);
 
                     Reset();
 
@@ -239,7 +243,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         {
             Debug.Log($"[MoveItemTask] Execute: target invalid at delivery time for {name} - resetting task.");
 
-            worker.DropItem(gameObject, worker.Position);
+            worker.DropItem(gameObject, worker.unit.Position);
 
             if (isRegisteredToTaskManager && TaskManager.Instance != null)
             {

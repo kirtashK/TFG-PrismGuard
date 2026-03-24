@@ -201,6 +201,7 @@ MonoBehaviour:
   resourceSpawnPoints:
   - {fileID: 1874324062822428854}
   - {fileID: 5172864120843572749}
+  selectedWorkType: 1
 --- !u!114 &951107866827702076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +215,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c5126d6f9a2b9564b98891072f0ee9ec, type: 2}
-  category: 0
 --- !u!208 &5288293327693355062
 NavMeshObstacle:
   m_ObjectHideFlags: 0

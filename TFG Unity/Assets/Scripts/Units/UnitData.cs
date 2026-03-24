@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 public enum Faction
 {
@@ -13,7 +14,8 @@ public class UnitData : BaseData
 {
     [Header("Unit")]
 
-    public AssetReferenceGameObject PrefabReference;
+    [Tooltip("List of prefabs this unit can spawn as")]
+    public List<AssetReferenceGameObject> PrefabVariants = new();
 
     [Range(0f, 1000f)]
     public float buildTime;
@@ -38,13 +40,51 @@ public class UnitData : BaseData
     {
         base.OnValidate();
 
-        if (PrefabReference == null)
+        if (PrefabVariants == null || PrefabVariants.Count == 0)
         {
-            Debug.LogWarning($"{name}: missing {nameof(PrefabReference)}");
+            Debug.LogWarning($"{name}: missing {nameof(PrefabVariants)}");
         }
         if (faction == Faction.Player && (createCosts == null || createCosts.Count == 0))
         {
             Debug.LogWarning($"{name}: {nameof(createCosts)} not configured");
         }
+    }
+
+    public AssetReferenceGameObject GetRandomPrefabReference()
+    {
+        int validVariantCount = 0;
+
+        if (PrefabVariants != null)
+        {
+            foreach (AssetReferenceGameObject prefabVariant in PrefabVariants)
+            {
+                if (prefabVariant != null && prefabVariant.RuntimeKeyIsValid())
+                {
+                    validVariantCount++;
+                }
+            }
+        }
+
+        if (validVariantCount > 0)
+        {
+            int selectedIndex = Random.Range(0, validVariantCount);
+
+            foreach (AssetReferenceGameObject prefabVariant in PrefabVariants)
+            {
+                if (prefabVariant == null || !prefabVariant.RuntimeKeyIsValid())
+                {
+                    continue;
+                }
+
+                if (selectedIndex == 0)
+                {
+                    return prefabVariant;
+                }
+
+                selectedIndex--;
+            }
+        }
+
+        return null;
     }
 }

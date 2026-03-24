@@ -21,31 +21,31 @@ public class MovingState : IWorkerState
 
     public void EnterState(Worker worker)
     {
-        if (worker == null || worker.agent == null)
+        if (worker == null || worker.unit.agent == null)
         {
             return;
         }
 
-        if (worker.currentTask != null)
+        if (worker.CurrentTask != null)
         {
             usingTask = true;
 
-            Vector3 taskPos = worker.currentTask.TaskPosition;
+            Vector3 taskPos = worker.CurrentTask.TaskPosition;
             Vector3 direction = (worker.transform.position - taskPos).normalized;
             Vector3 approachPosition = (direction != Vector3.zero)
-                ? taskPos + direction * worker.currentTask.InteractionRange
+                ? taskPos + direction * worker.CurrentTask.InteractionRange
                 : taskPos;
 
             activeDestination = approachPosition;
 
             // Stop in task's interaction range
-            worker.agent.stoppingDistance = worker.currentTask.InteractionRange;
+            worker.unit.agent.stoppingDistance = worker.CurrentTask.InteractionRange;
         }
         else if (explicitDestination.HasValue)
         {
             usingTask = false;
             activeDestination = explicitDestination.Value;
-            worker.agent.stoppingDistance = arrivalThreshold;
+            worker.unit.agent.stoppingDistance = arrivalThreshold;
         }
         else
         {
@@ -54,38 +54,56 @@ public class MovingState : IWorkerState
             return;
         }
 
-        worker.agent.isStopped = false;
-        worker.agent.SetDestination(activeDestination);
+        worker.unit.agent.isStopped = false;
+        worker.unit.agent.SetDestination(activeDestination);
     }
 
     public void UpdateState(Worker worker)
     {
-        if (worker == null || worker.agent == null)
+        if (worker == null || worker.unit.agent == null)
         {
             return;
         }
 
         // If task is cancelled while moving, go idle
-        if (usingTask && worker.currentTask == null)
+        if (usingTask && worker.CurrentTask == null)
         {
             worker.ChangeState(new IdleState());
             return;
         }
 
         // If still moving, break
-        if (worker.agent.pathPending)
+        if (worker.unit.agent.pathPending)
         {
             return;
         }
 
-        float remaining = worker.agent.remainingDistance;
-        bool arrived = remaining <= worker.agent.stoppingDistance + 0.1f;
+        float remaining = worker.unit.agent.remainingDistance;
+        bool arrived = remaining <= worker.unit.agent.stoppingDistance + 0.1f;
 
         // Check if we arrived to task or to order destination
         if (arrived)
         {
-            if (usingTask && worker.currentTask != null)
+            if (usingTask && worker.CurrentTask != null)
             {
+                Vector3 lookAtPosition = worker.CurrentTask.TaskLookAt;
+                Vector3 direction = lookAtPosition - worker.transform.position;
+                direction.y = 0f;
+
+                if (direction.sqrMagnitude > 0.001f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+                    worker.transform.rotation = Quaternion.RotateTowards(worker.transform.rotation,
+                        targetRotation,
+                        360f * Time.deltaTime);
+
+                    float angle = Quaternion.Angle(worker.transform.rotation, targetRotation);
+                    if (angle > 2f)
+                    {
+                        return;
+                    }
+                }
+
                 worker.ChangeState(new WorkingState());
                 return;
             }
@@ -97,9 +115,9 @@ public class MovingState : IWorkerState
     public void ExitState(Worker worker)
     {
         // Restore default stoppingDistance
-        if (worker != null && worker.agent != null)
+        if (worker != null && worker.unit.agent != null)
         {
-            worker.agent.stoppingDistance = 0.5f;
+            worker.unit.agent.stoppingDistance = 0.5f;
         }
     }
 }

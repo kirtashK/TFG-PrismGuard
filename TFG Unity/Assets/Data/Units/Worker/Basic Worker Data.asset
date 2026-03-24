@@ -18,13 +18,13 @@ MonoBehaviour:
   requiredResearch: {fileID: 0}
   statBases:
   - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
-    value: 20
+    value: 50
   - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
     value: 3.5
   - statKey: {fileID: 11400000, guid: 04a38b7df2506484a995b7d23df93e33, type: 2}
     value: 10
-  PrefabReference:
-    m_AssetGUID: c9118ed2c42dd014ca49170d806b707d
+  PrefabVariants:
+  - m_AssetGUID: c9118ed2c42dd014ca49170d806b707d
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

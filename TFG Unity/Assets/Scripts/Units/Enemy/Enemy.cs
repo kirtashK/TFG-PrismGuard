@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.AddressableAssets;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
+public class Enemy : MonoBehaviour, IStatRefresher
 {
+    [HideInInspector] public Unit unit;
+
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
@@ -14,13 +14,6 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
-
-    private float currentHealth;
-    [HideInInspector] public float maxHealth;
-    [HideInInspector] public float moveSpeed;
-    [HideInInspector] public float attackRange;
-    [HideInInspector] public float attackDamage;
-    [HideInInspector] public float attackCooldown;
 
     [HideInInspector] public float aggroRadius;
 
@@ -32,17 +25,11 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
     public EnemyData data;
     public Transform crystalTransform;
 
-    [HideInInspector] 
-    public NavMeshAgent agent;
-
     private IEnemyState currentState;
 
     public ICombatTarget MainTarget { get; private set; }
 
     private readonly Collider[] aggroBuffer = new Collider[16];
-
-    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
-    private bool hasAddressableHandle = false;
 
     public enum Behaviour
     {
@@ -56,8 +43,27 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        if (TryGetComponent<Unit>(out Unit unit))
+        {
+            this.unit = unit;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(unit)}");
+        }
 
+        SetMainTarget();
+
+        CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
+    }
+
+    private void SetMainTarget()
+    {
         if (crystalTransform != null)
         {
             MainTarget = crystalTransform.GetComponent<ICombatTarget>();
@@ -74,20 +80,13 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
                 MainTarget = null;
             }
         }
-
-        CheckNullStats();
-
-        if (data == null)
-        {
-            Debug.LogWarning($"{name}: missing {nameof(data)}");
-        }
     }
 
     private void Start()
     {
         RefreshStats();
 
-        currentHealth = maxHealth;
+        unit.currentHealth = unit.maxHealth;
 
         aggroRadius = data.AggroRadius;
 
@@ -101,7 +100,10 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     private void Update()
     {
-        currentState?.UpdateState(this);
+        if (unit.isAlive)
+        {
+            currentState?.UpdateState(this);
+        }
     }
 
     private void OnEnable()
@@ -116,12 +118,23 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
             yield return null;
         }
 
+        unit.OnDeathStartedEvent += OnDeathStarted;
+        unit.OnDeathCleanupEvent += OnDeathCleanup;
+        unit.OnDamageTakenEvent += OnDamageTaken;
+
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
     private void OnDisable()
     {
-        StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        unit.OnDeathStartedEvent -= OnDeathStarted;
+        unit.OnDeathCleanupEvent -= OnDeathCleanup;
+        unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     public void ChangeState(IEnemyState newState)
@@ -172,23 +185,23 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
         {
-            moveSpeed = agent.speed = finalValue;
+            unit.moveSpeed = unit.agent.speed = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
-            maxHealth = finalValue;
+            unit.maxHealth = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackRangeStat, out finalValue))
         {
-            attackRange = agent.stoppingDistance = finalValue;
+            unit.attackRange = unit.agent.stoppingDistance = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackDamageStat, out finalValue))
         {
-            attackDamage = finalValue;
+            unit.attackDamage = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
         {
-            attackCooldown = finalValue;
+            unit.attackCooldown = finalValue;
         }
     }
 
@@ -230,57 +243,26 @@ public class Enemy : MonoBehaviour, IAddressableInstance, ICombatTarget
         }
     }
 
-    public Vector3 Position => transform.position;
 
-    public bool isAlive => currentHealth > 0f;
-
-    public void TakeDamage(float amount, Vector3 attackOrigin)
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        currentHealth = Mathf.Max(currentHealth - amount, 0f);
-
-        Debug.Log($"{name} took {amount} damage" +
-            $"\nHealth of {name}: {currentHealth}/{maxHealth}");
-
-        if (behaviour == Behaviour.Guard)
+        if (unit.isAlive && behaviour == Behaviour.Guard)
         {
             behaviour = Behaviour.Aggressive;
             UIManager.Instance.ChangeEnemyCount(1);
             ChangeState(new EnemyChaseState(MainTarget));
         }
-
-        if (currentHealth <= 0f)
-        {
-            Die();
-        }
     }
 
-    private void Die()
+    private void OnDeathStarted()
     {
-        //Debug.Log($"{name} has died");
-
-        if (behaviour == Behaviour.Aggressive)
-        {
-            ScoreManager.Instance.AddScore(data.spawnCost);
-            UIManager.Instance.ChangeEnemyCount(-1);
-        }
-
-        // TODO Sonido, animaciones, efectos
-
-        // Release addressable handle
-        if (hasAddressableHandle  && addressableInstanceHandle.IsValid())
-        {
-            Addressables.ReleaseInstance(addressableInstanceHandle);
-            hasAddressableHandle = false;
-            return;
-        }
-
-        Destroy(gameObject);
+        ScoreManager.Instance.AddScore(data.spawnCost);
+        UIManager.Instance.ChangeEnemyCount(-1);
     }
 
-    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
+    private void OnDeathCleanup()
     {
-        addressableInstanceHandle = handle;
-        hasAddressableHandle = handle.IsValid();
+
     }
 
     /// <summary>

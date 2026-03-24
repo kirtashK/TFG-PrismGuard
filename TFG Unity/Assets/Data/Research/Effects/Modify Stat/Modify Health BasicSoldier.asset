@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ec6925d80205242a8202825a119a8a, type: 3}
   m_Name: Modify Health BasicSoldier
   m_EditorClassIdentifier: Assembly-CSharp::ModifyStatEffect
-  Name: 'Modify Basic Soldier : MaxHealth Stat'
+  Name: 'Modify Militia : MaxHealth Stat'
   id: 94e94ebbf80c1c641910c8e082ba8677
   icon: {fileID: 21300000, guid: 1b7d738317057814cb53fcb62c48b070, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
-  description: Modifies maximum health of Basic Soldier (Additive 15)
+  description: Modifies maximum health of Militia (Additive 15)
   targetData: {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
   modifierType: 0

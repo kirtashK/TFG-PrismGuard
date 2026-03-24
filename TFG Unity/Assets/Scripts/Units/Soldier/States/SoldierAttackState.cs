@@ -1,10 +1,8 @@
-using System.Collections;
 using UnityEngine;
 
 public class SoldierAttackState : ISoldierState
 {
     private readonly ICombatTarget target;
-    private float lastAttackTime;
 
     public SoldierAttackState(ICombatTarget target)
     {
@@ -13,8 +11,7 @@ public class SoldierAttackState : ISoldierState
 
     public void EnterState(Soldier soldier)
     {
-        soldier.agent.isStopped = true;
-        lastAttackTime = -Mathf.Infinity;
+        soldier.unit.agent.isStopped = true;
     }
 
     public void UpdateState(Soldier soldier)
@@ -26,21 +23,24 @@ public class SoldierAttackState : ISoldierState
         }
 
         float distance = Vector3.Distance(soldier.transform.position, target.Position);
-        if (distance > soldier.attackRange + 0.1f)
+        if (distance > soldier.unit.attackRange + 0.1f)
         {
             soldier.ChangeState(new SoldierChaseState(target));
             return;
         }
 
-        if (Time.time - lastAttackTime >= soldier.attackCooldown)
+        soldier.unit.FaceTarget(target.Position, 720f);
+
+        if (Time.time >= soldier.unit.nextAttackTime)
         {
-            target.TakeDamage(soldier.attackDamage, soldier.Position);
-            lastAttackTime = Time.time;
+            soldier.unit.Attack(target);
+
+            soldier.unit.nextAttackTime = Time.time + soldier.unit.attackCooldown;
         }
     }
 
     public void ExitState(Soldier soldier)
     {
-        soldier.agent.isStopped = false;
+        soldier.unit.agent.isStopped = false;
     }
 }

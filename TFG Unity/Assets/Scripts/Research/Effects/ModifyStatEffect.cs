@@ -1,6 +1,4 @@
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "Modify Stat Effect", menuName = "Data/Research/Effects/ModifyStat")]
 public class ModifyStatEffect : ResearchEffect

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyIdleState : IEnemyState
 {
     public void EnterState(Enemy enemy)

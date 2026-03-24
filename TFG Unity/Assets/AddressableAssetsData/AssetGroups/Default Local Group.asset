@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: 6565e2e97581e4c468245f9aa642d19a
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 0b1407893e8eb0949bd6061828ea8231
+    m_Address: Assets/Prefabs/Units/Enemies/Fast zombie Female.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
   m_SchemaSet:

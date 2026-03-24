@@ -68,7 +68,7 @@ public class WaveManager : MonoBehaviour
     [Tooltip("Seconds between waves")]
     public float waveInterval = 100f;
 
-    private bool waitingForNextWave;
+    private bool waitingForNextWaveToComplete;
 
     private int waveIndex = 0;
 
@@ -158,17 +158,17 @@ public class WaveManager : MonoBehaviour
         if (InstantFirstWave_TESTING)
         {
             yield return SpawnWave();
-            waitingForNextWave = true;
+            waitingForNextWaveToComplete = true;
         }
         else
         {
-            waitingForNextWave = false;
+            waitingForNextWaveToComplete = false;
         }
 
         while (true)
         {
             // If there is an ongoing wave the timer for next wave wont start
-            yield return new WaitUntil(() => waitingForNextWave == false);
+            yield return new WaitUntil(() => waitingForNextWaveToComplete == false);
 
             float waveIntervalFirstWarning = waveInterval * 0.35f;
             float waveIntervalSecondWarning = waveInterval * 0.15f;
@@ -190,7 +190,7 @@ public class WaveManager : MonoBehaviour
     private void OnWaveCompleted(int waveNumber)
     {
         // Once the wave is completed (notified by event), timer will start
-        waitingForNextWave = false;
+        waitingForNextWaveToComplete = false;
 
         int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
 
@@ -249,6 +249,8 @@ public class WaveManager : MonoBehaviour
     {
         //TODO Animaciones, efectos, sonidos
 
+        waitingForNextWaveToComplete = true;
+
         waveIndex++;
 
         scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
@@ -306,7 +308,7 @@ public class WaveManager : MonoBehaviour
 
             // Spawn the candidate
             GameObject gameObject = null;
-            AsyncOperationHandle<GameObject> handle = chosen.PrefabReference.InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
+            AsyncOperationHandle<GameObject> handle = chosen.GetRandomPrefabReference().InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
             
             yield return handle;
             if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -325,8 +327,7 @@ public class WaveManager : MonoBehaviour
                 addressable.SetAddressableInstanceHandle(handle);
             }
 
-            Enemy enemy = gameObject.GetComponent<Enemy>();
-            if (enemy == null)
+            if (!gameObject.TryGetComponent<Enemy>(out Enemy enemy))
             {
                 Debug.LogWarning($"{name}: failed to get {nameof(Enemy)} component from {enemy}");
                 continue;

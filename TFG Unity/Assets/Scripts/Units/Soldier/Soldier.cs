@@ -1,12 +1,10 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.AI;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget, 
-                    IOrderable, IGuardable, IAttackMovable, IStatRefresher
+public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IStatRefresher
 {
+    [HideInInspector] public Unit unit;
+
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
@@ -15,19 +13,9 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
 
-    private float currentHealth;
-    [HideInInspector] public float maxHealth;
-    [HideInInspector] public float moveSpeed;
-    [HideInInspector] public float attackRange;
-    [HideInInspector] public float attackDamage;
-    [HideInInspector] public float attackCooldown;
-
     [HideInInspector] public float aggroRadius;
 
     public SoldierData data;
-
-    [HideInInspector]
-    public NavMeshAgent agent;
 
     private ISoldierState currentState;
 
@@ -37,21 +25,30 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
     private bool returnToGuardOnFinish = false;
     private bool attackMove = false;
 
-    private AsyncOperationHandle<GameObject> addressableInstanceHandle;
-    private bool hasAddressableHandle = false;
-
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        if (TryGetComponent<Unit>(out Unit unit))
+        {
+            this.unit = unit;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(unit)}");
+        }
 
         CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
     }
 
     private void Start()
     {
         RefreshStats();
 
-        currentHealth = maxHealth;
+        unit.currentHealth = unit.maxHealth;
 
         aggroRadius = data.AggroRadius;
 
@@ -60,7 +57,10 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
 
     private void Update()
     {
-        currentState?.UpdateState(this);
+        if (unit.isAlive)
+        {
+            currentState?.UpdateState(this);
+        }
     }
 
     private void OnEnable()
@@ -76,6 +76,10 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
             yield return null;
         }
 
+        unit.OnDeathStartedEvent += OnDeathStarted;
+        unit.OnDeathCleanupEvent += OnDeathCleanup;
+        unit.OnDamageTakenEvent += OnDamageTaken;
+
         UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
@@ -86,7 +90,14 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
         }
-        StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        unit.OnDeathStartedEvent -= OnDeathStarted;
+        unit.OnDeathCleanupEvent -= OnDeathCleanup;
+        unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     private void CheckNullStats()
@@ -130,23 +141,23 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
         {
-            moveSpeed = agent.speed = finalValue;
+            unit.moveSpeed = unit.agent.speed = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
-            maxHealth = finalValue;
+            unit.maxHealth = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackRangeStat, out finalValue))
         {
-            attackRange = agent.stoppingDistance = finalValue;
+            unit.attackRange = unit.agent.stoppingDistance = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackDamageStat, out finalValue))
         {
-            attackDamage = finalValue;
+            unit.attackDamage = finalValue;
         }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
         {
-            attackCooldown = finalValue;
+            unit.attackCooldown = finalValue;
         }
     }
 
@@ -157,70 +168,33 @@ public class Soldier : MonoBehaviour, IAddressableInstance, ICombatTarget,
         currentState.EnterState(this);
     }
 
-    public Vector3 Position => transform.position;
-
-    public bool isAlive => currentHealth > 0f;
-
-    /// <summary>
-    /// Soldier takes damage, if hp is 0 or lower, soldier dies
-    /// </summary>
-    public void TakeDamage(float amount, Vector3 attackOrigin)
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        currentHealth = Mathf.Max(currentHealth - amount, 0f);
-
-        Debug.Log($"{name} took {amount} damage" +
-            $"\nHealth of {name}: {currentHealth}/{maxHealth}");
-
-        if (currentHealth <= 0f)
-        {
-            Die();
-        }
+        
     }
 
-    private void Die()
+    private void OnDeathStarted()
     {
-        Debug.Log($"{name} has died");
+        
+    }
 
-        // Release addressable handle
-        if (hasAddressableHandle && addressableInstanceHandle.IsValid())
-        {
-            Addressables.ReleaseInstance(addressableInstanceHandle);
-            hasAddressableHandle = false;
-            return;
-        }
+    private void OnDeathCleanup()
+    {
 
-        Destroy(gameObject);
     }
 
     private void OnWaveCompleted(int waveNumber)
     {
-        RegenerateHealth(0.25f);
-    }
-
-    /// <summary>
-    /// Regenerates a percentage of the maximun health
-    /// </summary>
-    public void RegenerateHealth(float percent)
-    {
-        if (!isAlive || currentHealth >= maxHealth)
-        {
-            return;
-        }
-
-        float amountToRegenerate = maxHealth * percent;
-        currentHealth = Mathf.Min(currentHealth + amountToRegenerate, maxHealth);
-
-        Debug.Log($"{name} regenerated {amountToRegenerate} health (now {currentHealth}/{maxHealth})");
-    }
-
-    public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
-    {
-        addressableInstanceHandle = handle;
-        hasAddressableHandle = handle.IsValid();
+        unit.HealPercentage(0.25f);
     }
 
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
+        if (!unit.isAlive)
+        {
+            return;
+        }
+
         attackMove = options.attackMove;
 
         // Set guard point if required, otherwise clear it

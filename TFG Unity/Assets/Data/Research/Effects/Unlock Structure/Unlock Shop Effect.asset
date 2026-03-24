@@ -19,4 +19,3 @@ MonoBehaviour:
   statBases: []
   description: 'Unlocks structure: Shop'
   structureData: {fileID: 11400000, guid: 696efa391f26a3249a92640eebbe17fb, type: 2}
-  structureId: Shop

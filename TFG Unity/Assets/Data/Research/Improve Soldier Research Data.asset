@@ -21,7 +21,7 @@ MonoBehaviour:
   requiredResearchPoints: 100
   basePointsPerCycle: 10
   prerequisiteResearchDatas:
-  - {fileID: 11400000, guid: 23a80442c966ab04aab0dcfbc20148be, type: 2}
+  - {fileID: 11400000, guid: 11173b780a764d940bbf6ca4362cff6c, type: 2}
   effects:
   - {fileID: 11400000, guid: 94e94ebbf80c1c641910c8e082ba8677, type: 2}
   - {fileID: 11400000, guid: d1737ee3a7d34e74493441a8ee7b8a39, type: 2}

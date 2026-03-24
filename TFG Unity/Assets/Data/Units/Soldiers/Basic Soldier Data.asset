@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90ac0853e869d54e9f98e639aeb9aa3, type: 3}
   m_Name: Basic Soldier Data
   m_EditorClassIdentifier: 
-  Name: Basic Soldier
+  Name: Militia
   id: 92a96283cf9bf2549b416e3cbc4d2254
   icon: {fileID: 21300000, guid: ff51877e21441554c872cfc822264db8, type: 3}
   requiredResearch: {fileID: 0}
@@ -22,13 +22,13 @@ MonoBehaviour:
   - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
     value: 3.5
   - statKey: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
-    value: 1.5
+    value: 2
   - statKey: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
     value: 20
   - statKey: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
     value: 1
-  PrefabReference:
-    m_AssetGUID: 9f3d6e970a529b74fbece11ddaabb6fa
+  PrefabVariants:
+  - m_AssetGUID: 9f3d6e970a529b74fbece11ddaabb6fa
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

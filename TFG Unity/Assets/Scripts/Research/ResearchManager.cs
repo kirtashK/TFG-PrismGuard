@@ -327,7 +327,7 @@ public class ResearchManager : MonoBehaviour
 
                     if (researchById.ContainsKey(asset.id))
                     {
-                        Debug.LogWarning($"{name}: duplicate research ID {asset.id} found in addressables");
+                        Debug.LogWarning($"{name}: duplicate research: {asset.Name} with ID: {asset.id} found in addressables");
                         continue;
                     }
 
