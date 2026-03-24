@@ -27,12 +27,18 @@ public class ResearchBench : MonoBehaviour, ITask
     private ResearchSessionToken currentSession = null;
     private Worker currentWorker = null;
 
-    public Vector3 TaskPosition => transform.position;
+    public Vector3 TaskPosition => SitSpot.transform.position;
+    public Vector3 TaskLookAt => transform.position;
     public bool IsOccupied => isOccupied;
 
-    Vector3 ITask.TaskPosition => TaskPosition;
+    Vector3 ITask.TaskPosition => SitSpot.transform.position;
     int ITask.Priority => priority;
     float ITask.InteractionRange => interactionRange;
+
+    [SerializeField]
+    private Transform SitSpot;
+
+    public WorkType WorkType => WorkType.None;
 
     private void OnEnable()
     {
@@ -54,7 +60,7 @@ public class ResearchBench : MonoBehaviour, ITask
 
     private IEnumerator RegisterWhenReady()
     {
-        while (TaskManager.Instance == null || !ResearchManager.Instance.IsLoaded)
+        while (TaskManager.Instance == null || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded)
         {
             yield return null;
         }
