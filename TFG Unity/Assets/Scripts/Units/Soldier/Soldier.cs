@@ -15,7 +15,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     [HideInInspector] public float aggroRadius;
 
-    public SoldierData data;
+    private SoldierData data;
 
     private ISoldierState currentState;
 
@@ -30,6 +30,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (SoldierData)unit.unitData;
         }
         else
         {
@@ -57,7 +58,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     private void Update()
     {
-        if (unit.isAlive)
+        if (unit.IsAlive)
         {
             currentState?.UpdateState(this);
         }
@@ -190,7 +191,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }

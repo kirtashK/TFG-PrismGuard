@@ -91,7 +91,6 @@ MonoBehaviour:
   guardChaseBuffer: 0
   patrolDelayMin: 0
   patrolDelayMax: 0
-  data: {fileID: 11400000, guid: 90f6b53b391572542b6f136330ee140a, type: 2}
   crystalTransform: {fileID: 0}
   behaviour: 0
   homePosition: {x: 0, y: 0, z: 0}
@@ -107,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6241497b9d84f2040854e0e98dffd20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitData: {fileID: 11400000, guid: 90f6b53b391572542b6f136330ee140a, type: 2}
   maxHealth: 0
   currentHealth: 0
   moveSpeed: 0

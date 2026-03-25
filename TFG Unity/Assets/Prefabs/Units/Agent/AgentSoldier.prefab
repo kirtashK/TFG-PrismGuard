@@ -162,7 +162,6 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   unit: {fileID: 0}
-  data: {fileID: 11400000, guid: a4c501a8425c12d4497955cecc1fa3e8, type: 2}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
   moveSpeedStat: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
   attackRangeStat: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
@@ -191,6 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6241497b9d84f2040854e0e98dffd20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitData: {fileID: 11400000, guid: a4c501a8425c12d4497955cecc1fa3e8, type: 2}
   maxHealth: 0
   currentHealth: 0
   moveSpeed: 0

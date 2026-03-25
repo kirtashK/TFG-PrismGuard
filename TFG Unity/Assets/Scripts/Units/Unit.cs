@@ -5,10 +5,11 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static UnityEngine.UI.Image;
 
 public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 {
+    public UnitData unitData;
+
     [HideInInspector] public float maxHealth;
     [HideInInspector] public float currentHealth;
 
@@ -19,15 +20,14 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
     [HideInInspector] public float nextAttackTime = 0f;
 
     [HideInInspector] public Animator animator;
-
     [HideInInspector] public NavMeshAgent agent;
 
     private AsyncOperationHandle<GameObject> addressableInstanceHandle;
     private bool hasAddressableHandle = false;
 
-    protected bool isDying = false;
-    protected float deathAnimationTimeout = 30f;
-    protected float deathAnimationDelay = 10f;
+    private bool isDying = false;
+    private readonly float deathAnimationTimeout = 30f;
+    private readonly float deathAnimationDelay = 10f;
 
     private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
     private static readonly int AnimatorDie = Animator.StringToHash("Die");
@@ -46,6 +46,11 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     private void Awake()
     {
+        if (TryGetComponent<Selectable>(out Selectable selectable))
+        {
+            selectable.data = unitData;
+        }
+
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
@@ -83,7 +88,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public Vector3 Position => transform.position;
 
-    public bool isAlive => currentHealth > 0f;
+    public bool IsAlive => currentHealth > 0f;
 
     /// <summary>
     /// Damages unit, if health falls to 0 the unit dies, otherwise calls OnDamageTaken
@@ -104,7 +109,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
         OnDamageTaken(amount, attackOrigin);
 
-        if (!isAlive)
+        if (!IsAlive)
         {
             Die();
         }
@@ -122,7 +127,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public void Heal(float healAmount)
     {
-        if (!isAlive || healAmount <= 0f || currentHealth == maxHealth)
+        if (!IsAlive || healAmount <= 0f || currentHealth == maxHealth)
         {
             return;
         }
@@ -134,7 +139,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public void HealPercentage(float percent)
     {
-        if (!isAlive || percent <= 0f)
+        if (!IsAlive || percent <= 0f)
         {
             return;
         }
@@ -142,13 +147,16 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         Heal(maxHealth * percent);
     }
 
+    // TODO OnHealed ?
+    // TODO Heal on wave?
+
     /// <summary>
     /// Target will take damage once the animation "hits"
     /// </summary>
     /// <param name="combatTarget"></param>
     public void Attack(ICombatTarget combatTarget)
     {
-        if (!isAlive || combatTarget == null || !combatTarget.isAlive)
+        if (!IsAlive || combatTarget == null || !combatTarget.IsAlive)
         {
             return;
         }
@@ -168,7 +176,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public void OnAttackHit()
     {
-        if (isAlive && target != null && target.isAlive)
+        if (IsAlive && target != null && target.IsAlive)
         {
             target.TakeDamage(attackDamage, Position);
         }

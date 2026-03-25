@@ -142,7 +142,6 @@ MonoBehaviour:
   maxCarryWeightStat: {fileID: 11400000, guid: 04a38b7df2506484a995b7d23df93e33, type: 2}
   maxCarryWeight: 0
   currentLoad: 0
-  data: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
   inventorySpot: {fileID: 5389797990047835591}
   tools:
   - workType: 2
@@ -163,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6241497b9d84f2040854e0e98dffd20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitData: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
   maxHealth: 0
   currentHealth: 0
   moveSpeed: 0
@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Worker
   icon: {fileID: 0}
   selectionVisual: {fileID: 976517382723907658}

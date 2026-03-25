@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static Google.Protobuf.WireFormat;
 
 public class Worker : MonoBehaviour, IOrderable, IStatRefresher
 {
@@ -18,7 +17,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
     [HideInInspector] public float maxCarryWeight;
     public float currentLoad = 0f;
 
-    public WorkerData data;
+    private WorkerData data;
     private IWorkerState currentState;
     public ITask CurrentTask { get; set; }
 
@@ -45,6 +44,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (WorkerData)unit.unitData;
         }
         else
         {
@@ -97,7 +97,24 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         unit.OnDeathStartedEvent -= OnDeathStarted;
         unit.OnDeathCleanupEvent -= OnDeathCleanup;
         unit.OnDamageTakenEvent -= OnDamageTaken;
+    }    
+
+    private void Update()
+    {
+        if (unit.IsAlive)
+        {
+            currentState?.UpdateState(this);
+        }
     }
+
+    public void ChangeState(IWorkerState newState)
+    {
+        currentState?.ExitState(this);
+        currentState = newState;
+        currentState?.EnterState(this);
+    }
+
+    #region Stats
 
     private void CheckNullStats()
     {
@@ -128,21 +145,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
     }
 
-    private void Update()
-    {
-        if (unit.isAlive)
-        {
-            currentState?.UpdateState(this);
-        }
-    }
-
-    public void ChangeState(IWorkerState newState)
-    {
-        currentState?.ExitState(this);
-        currentState = newState;
-        currentState?.EnterState(this);
-    }
-
     public void RefreshStats()
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
@@ -159,9 +161,11 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
     }
 
+    #endregion
+
     private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        if (unit.isAlive)
+        if (unit.IsAlive)
         {
             DropAll(inventorySpot.position);
             Retreat(attackOrigin);
@@ -323,7 +327,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
 
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }

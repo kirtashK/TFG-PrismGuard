@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
     [HideInInspector] public float patrolDelayMin;
     [HideInInspector] public float patrolDelayMax;
 
-    public EnemyData data;
+    private EnemyData data;
     public Transform crystalTransform;
 
     private IEnemyState currentState;
@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (EnemyData)unit.unitData;
         }
         else
         {
@@ -100,7 +101,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     private void Update()
     {
-        if (unit.isAlive)
+        if (unit.IsAlive)
         {
             currentState?.UpdateState(this);
         }
@@ -246,7 +247,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        if (unit.isAlive && behaviour == Behaviour.Guard)
+        if (unit.IsAlive && behaviour == Behaviour.Guard)
         {
             behaviour = Behaviour.Aggressive;
             UIManager.Instance.ChangeEnemyCount(1);
@@ -283,7 +284,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
         {
             ICombatTarget playerUnit = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
             if (playerUnit != null 
-                && playerUnit.isAlive 
+                && playerUnit.IsAlive 
                 && playerUnit is not Crystal)
             {
                 float dist = Vector3.Distance(transform.position, playerUnit.Position);

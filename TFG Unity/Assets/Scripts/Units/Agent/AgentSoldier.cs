@@ -1,20 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.AppUI.Redux;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class AgentSoldier : Agent
 {
     [HideInInspector] public Unit unit;
-
-    [Header("Data")]
-    public SoldierData data;
+    private SoldierData data;
 
     [Header("Stats")]
 
@@ -65,6 +60,7 @@ public class AgentSoldier : Agent
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (SoldierData)unit.unitData;
         }
         else
         {
@@ -234,7 +230,7 @@ public class AgentSoldier : Agent
         // Branch 0 = targetIndex [0..kNearest] kNearest means no target
         // Branch 1 = attackFlag [0..1]
 
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }
@@ -267,7 +263,7 @@ public class AgentSoldier : Agent
     // Heuristic for testing
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }
@@ -349,7 +345,7 @@ public class AgentSoldier : Agent
     /// </summary>
     public bool TryAttack(ICombatTarget target)
     {
-        if (!target.isAlive || target == null || !unit.isAlive)
+        if (!target.IsAlive || target == null || !unit.IsAlive)
         {
             return false;
         }
@@ -377,7 +373,7 @@ public class AgentSoldier : Agent
 
         reward += unit.attackDamage * rewardPerDamage;
 
-        if (!target.isAlive)
+        if (!target.IsAlive)
         {
             reward += rewardOnKill;
         }
@@ -392,7 +388,7 @@ public class AgentSoldier : Agent
     {
         AddReward(-amount * penaltyPerDamageTaken);
 
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             AddReward(-penaltyOnDeath);
             EndEpisode();
@@ -412,7 +408,7 @@ public class AgentSoldier : Agent
     // TODO event onHealed on unit would be better
     public void Heal(float amount)
     {
-        if (!unit.isAlive) 
+        if (!unit.IsAlive) 
         { 
             return; 
         }
