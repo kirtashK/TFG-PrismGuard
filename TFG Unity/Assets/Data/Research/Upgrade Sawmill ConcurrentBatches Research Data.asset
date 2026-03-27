@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
+  m_Name: Upgrade Sawmill ConcurrentBatches Research Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResearchData
+  Name: Extra saw blade
+  id: 82f858ea1825ae04abe6b05e996a4c22
+  icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: Supply sawmills with an extra saw, allowing one more batch of planks
+    to be processed at the same time
+  requiredResearchPoints: 150
+  basePointsPerCycle: 10
+  prerequisiteResearchDatas: []
+  effects:
+  - {fileID: 11400000, guid: 07cdb08400402404cbfff8cb039b7cdf, type: 2}
