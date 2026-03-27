@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static Google.Protobuf.WireFormat;
 
 public class Worker : MonoBehaviour, IOrderable, IStatRefresher
 {
@@ -12,13 +11,14 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey maxCarryWeightStat;
 
     [HideInInspector] public float maxCarryWeight;
     public float currentLoad = 0f;
 
-    public WorkerData data;
+    private WorkerData data;
     private IWorkerState currentState;
     public ITask CurrentTask { get; set; }
 
@@ -45,6 +45,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (WorkerData)unit.unitData;
         }
         else
         {
@@ -81,7 +82,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
 
         unit.OnDeathStartedEvent += OnDeathStarted;
-        unit.OnDeathCleanupEvent += OnDeathCleanup;
         unit.OnDamageTakenEvent += OnDamageTaken;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
@@ -95,15 +95,35 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
 
         unit.OnDeathStartedEvent -= OnDeathStarted;
-        unit.OnDeathCleanupEvent -= OnDeathCleanup;
         unit.OnDamageTakenEvent -= OnDamageTaken;
+    }    
+
+    private void Update()
+    {
+        if (unit.IsAlive)
+        {
+            currentState?.UpdateState(this);
+        }
     }
+
+    public void ChangeState(IWorkerState newState)
+    {
+        currentState?.ExitState(this);
+        currentState = newState;
+        currentState?.EnterState(this);
+    }
+
+    #region Stats
 
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (moveSpeedStat == null)
         {
@@ -128,21 +148,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
     }
 
-    private void Update()
-    {
-        if (unit.isAlive)
-        {
-            currentState?.UpdateState(this);
-        }
-    }
-
-    public void ChangeState(IWorkerState newState)
-    {
-        currentState?.ExitState(this);
-        currentState = newState;
-        currentState?.EnterState(this);
-    }
-
     public void RefreshStats()
     {
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, moveSpeedStat, out float finalValue))
@@ -153,15 +158,21 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         {
             unit.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            unit.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxCarryWeightStat, out finalValue))
         {
             maxCarryWeight = finalValue;
         }
     }
 
+    #endregion
+
     private void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
-        if (unit.isAlive)
+        if (unit.IsAlive)
         {
             DropAll(inventorySpot.position);
             Retreat(attackOrigin);
@@ -171,11 +182,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
     private void OnDeathStarted()
     {
         ClearWorkAnimation();
-    }
-
-    private void OnDeathCleanup()
-    {
-        
     }
 
     /// <summary>
@@ -323,7 +329,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
 
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }

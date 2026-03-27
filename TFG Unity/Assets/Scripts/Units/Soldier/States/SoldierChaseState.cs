@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class SoldierChaseState : ISoldierState
 {
-    private readonly ICombatTarget target;
+    private readonly ITarget target;
 
-    public SoldierChaseState(ICombatTarget target)
+    public SoldierChaseState(ITarget target)
     {
         this.target = target;
     }
@@ -17,7 +17,7 @@ public class SoldierChaseState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (target == null || !target.isAlive)
+        if (target == null || !target.IsAlive)
         {
             soldier.HandleCombatEnd();
             return;

@@ -136,12 +136,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68abfe54b46738b4b8298dfbefe47cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+  maxConcurrentBatchesStat: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
+  processingSpeedStat: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
   storage: {fileID: 4009856531128985332}
   processingCheckInterval: 1
   storedFuel: 0
   reservedFuel: 0
   maxConcurrentBatches: 1
   processingCount: 0
+  processingSpeed: 1
 --- !u!114 &4533883100969938562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +161,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: c0e1cb6c5747f8c40afb2d696a509028, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  healOnWaveCompleted: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &6436802545834418224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Sawmill
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   selectionVisual: {fileID: 5022868771263850863}
@@ -183,7 +198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: c0e1cb6c5747f8c40afb2d696a509028, type: 2}
   dropSpot: {fileID: 4009856531128985332}
 --- !u!1001 &2515407807644131158
 PrefabInstance:

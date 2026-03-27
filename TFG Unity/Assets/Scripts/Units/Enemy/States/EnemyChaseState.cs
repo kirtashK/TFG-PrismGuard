@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyChaseState : IEnemyState
 {
-    private readonly ICombatTarget target;
+    private readonly ITarget target;
 
-    public EnemyChaseState(ICombatTarget target)
+    public EnemyChaseState(ITarget target)
     {
         this.target = target;
     }
@@ -18,7 +18,7 @@ public class EnemyChaseState : IEnemyState
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.isAlive)
+        if (target == null || !target.IsAlive)
         {
             enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
             return;
@@ -35,10 +35,10 @@ public class EnemyChaseState : IEnemyState
             }
         }
 
-        ICombatTarget soldier = enemy.FindNearestPlayerUnit();
+        ITarget soldier = enemy.FindNearestPlayerTarget();
 
         if (soldier != null 
-            && soldier.isAlive
+            && soldier.IsAlive
             && soldier != target)
         {
             enemy.ChangeState(new EnemyChaseState(soldier));

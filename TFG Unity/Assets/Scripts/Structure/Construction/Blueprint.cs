@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Blueprint : MonoBehaviour, IItemConsumer
 {
-    public StructureData structureData;
+    private StructureData data;
 
     [Tooltip("Spot where delivered items will be put")]
     public Transform dropSpot;
@@ -18,6 +18,15 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private void Awake()
     {
+        if (TryGetComponent<Structure>(out Structure structure))
+        {
+            data = structure.structureData;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(structure)}");
+        }
+
         if (dropSpot == null)
         {
             Debug.LogWarning($"{name} missing {dropSpot.name}");
@@ -32,7 +41,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         pending.Clear();
         storedObjects.Clear();
 
-        foreach (StructureData.ResourceRequirement requirement in structureData.buildRequirements)
+        foreach (StructureData.ResourceRequirement requirement in data.buildRequirements)
         {
             delivered[requirement.itemData] = 0;
             pending[requirement.itemData] = 0;
@@ -72,7 +81,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private void TryConstruct()
     {
-        foreach (StructureData.ResourceRequirement requirement in structureData.buildRequirements)
+        foreach (StructureData.ResourceRequirement requirement in data.buildRequirements)
         {
             if (DeliveredCount(requirement.itemData) < requirement.quantity)
             {
@@ -90,7 +99,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
         }
         storedObjects.Clear();
 
-        Instantiate(structureData.builtPrefab, transform.position, transform.rotation);
+        Instantiate(data.builtPrefab, transform.position, transform.rotation);
 
         Destroy(gameObject);
     }
@@ -104,7 +113,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         int have = delivered[item];
         int inFlight = pending[item];
-        int needed = structureData.buildRequirements
+        int needed = data.buildRequirements
                           .Find(required => required.itemData == item).quantity;
 
         return (have + inFlight) < needed;
@@ -119,7 +128,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         int have = delivered[item];
         int inFlight = pending[item];
-        int needed = structureData.buildRequirements
+        int needed = data.buildRequirements
                           .Find(required => required.itemData == item).quantity;
 
         if ((have + inFlight) >= needed)

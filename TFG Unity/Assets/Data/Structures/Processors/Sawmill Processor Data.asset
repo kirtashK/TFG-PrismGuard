@@ -16,7 +16,15 @@ MonoBehaviour:
   id: c0e1cb6c5747f8c40afb2d696a509028
   icon: {fileID: 21300000, guid: 5434b66cca049eb44843cf7e669fff79, type: 3}
   requiredResearch: {fileID: 0}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 125
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
+    value: 1
+  - statKey: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
+    value: 1
   category: 1
   builtPrefab: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
   blueprintPrefab: {fileID: 5350640031482795739, guid: 49831ea4037e603419f39db35d279194, type: 3}
@@ -26,11 +34,11 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
     quantity: 5
   recipes:
   - {fileID: 11400000, guid: 7baa33530134fb647bbbb16b7ef0d643, type: 2}
-  maxConcurrentBatches: 1
   requiresFuel: 0
   fuelMaxCapacity: 5

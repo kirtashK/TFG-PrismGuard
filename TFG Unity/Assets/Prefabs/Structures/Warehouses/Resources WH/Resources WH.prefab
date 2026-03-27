@@ -135,7 +135,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cb4e351e97e674aaaf2b1ef63c67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
   storage: {fileID: 4152038197863684923}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+  maxCapacityStat: {fileID: 11400000, guid: 9c563d08f25be7a4ea927f50ffc3db76, type: 2}
   maxCapacity: 0
   currentCapacity: 0
 --- !u!114 &2620668790709269157
@@ -151,6 +155,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 5c44bb4cf550b004d8d4d80324f0c8bf, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  healOnWaveCompleted: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &3835306820276940410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Resources Crate
   icon: {fileID: 21300000, guid: 533ff72790fd40144bf779d2e7d7377c, type: 3}
   selectionVisual: {fileID: 3656273937983718538}
@@ -179,7 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 5c44bb4cf550b004d8d4d80324f0c8bf, type: 2}
   dropSpot: {fileID: 5559718281465362284}
 --- !u!1001 &610702348534948612
 PrefabInstance:

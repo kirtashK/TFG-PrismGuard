@@ -36,6 +36,8 @@ public class StructureData : BaseData
     [Tooltip("If true, only one instance of this structure can exist in the scene at a time")]
     public bool isUnique = false;
 
+    public Faction faction = Faction.Player;
+
     [System.Serializable]
     public struct ResourceRequirement
     {
@@ -52,19 +54,19 @@ public class StructureData : BaseData
 
         if (builtPrefab == null)
         {
-            Debug.LogWarning($"{name} missing builtPrefab");
+            Debug.LogWarning($"{name}: missing {nameof(builtPrefab)}");
         }
         if (blueprintPrefab == null)
         {
-            Debug.LogWarning($"{name} missing blueprintPrefab");
+            Debug.LogWarning($"{name}: missing {nameof(blueprintPrefab)}");
         }
         if (previewPrefab == null)
         {
-            Debug.LogWarning($"{name} missing previewPrefab");
+            Debug.LogWarning($"{name}: missing {nameof(previewPrefab)}");
         }
-        if (buildRequirements == null || buildRequirements.Count == 0)
+        if (faction == Faction.Player && (buildRequirements == null || buildRequirements.Count == 0))
         {
-            Debug.LogWarning($"{name}: buildRequirements not configured");
+            Debug.LogWarning($"{name}: {nameof(buildRequirements)} not configured");
         }
     }
 }

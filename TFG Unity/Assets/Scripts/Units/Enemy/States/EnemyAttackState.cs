@@ -2,9 +2,9 @@
 
 public class EnemyAttackState : IEnemyState
 {
-    private readonly ICombatTarget target;
+    private readonly ITarget target;
 
-    public EnemyAttackState(ICombatTarget target)
+    public EnemyAttackState(ITarget target)
     {
         this.target = target;
     }
@@ -16,7 +16,7 @@ public class EnemyAttackState : IEnemyState
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.isAlive)
+        if (target == null || !target.IsAlive)
         {
             enemy.unit.agent.isStopped = false;
             enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));

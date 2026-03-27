@@ -16,7 +16,15 @@ MonoBehaviour:
   id: b1f8ae87863bd8041848b115ca805adc
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
   requiredResearch: {fileID: 11400000, guid: 6038f81b53d9b204d9c129a29311a237, type: 2}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 125
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
+    value: 1
+  - statKey: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
+    value: 1
   category: 1
   builtPrefab: {fileID: 4468715666146783442, guid: 542fc6fcffda0724a9bd480b16bda669, type: 3}
   blueprintPrefab: {fileID: 3302705174211102603, guid: 9cbb7fdcf3a3fa04caa9eede7ef6f2b5, type: 3}
@@ -26,6 +34,7 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 10
@@ -37,6 +46,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36aa50ff6bd5bd74f9c8ee068799ac2e, type: 2}
   - {fileID: 11400000, guid: f593e59cb096c8e49bdbf4a302b4fd98, type: 2}
   - {fileID: 11400000, guid: 9e946a5595a89a24cbaf4d4e05d6ff85, type: 2}
-  maxConcurrentBatches: 1
   requiresFuel: 1
   fuelMaxCapacity: 7.5

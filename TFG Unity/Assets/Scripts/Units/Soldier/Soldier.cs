@@ -8,6 +8,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
@@ -15,7 +16,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     [HideInInspector] public float aggroRadius;
 
-    public SoldierData data;
+    private SoldierData data;
 
     private ISoldierState currentState;
 
@@ -30,6 +31,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         if (TryGetComponent<Unit>(out Unit unit))
         {
             this.unit = unit;
+            data = (SoldierData)unit.unitData;
         }
         else
         {
@@ -57,7 +59,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     private void Update()
     {
-        if (unit.isAlive)
+        if (unit.IsAlive)
         {
             currentState?.UpdateState(this);
         }
@@ -70,41 +72,32 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     private IEnumerator RegisterWhenReady()
     {
-        while (UIManager.Instance == null 
-            || StatModifierManager.Instance == null)
+        while (StatModifierManager.Instance == null)
         {
             yield return null;
         }
-
-        unit.OnDeathStartedEvent += OnDeathStarted;
-        unit.OnDeathCleanupEvent += OnDeathCleanup;
-        unit.OnDamageTakenEvent += OnDamageTaken;
-
-        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
     private void OnDisable()
     {
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
-        }
         if (StatModifierManager.Instance != null)
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        unit.OnDeathStartedEvent -= OnDeathStarted;
-        unit.OnDeathCleanupEvent -= OnDeathCleanup;
-        unit.OnDamageTakenEvent -= OnDamageTaken;
     }
+
+    #region Stats
 
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (moveSpeedStat == null)
         {
@@ -143,6 +136,10 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         {
             unit.moveSpeed = unit.agent.speed = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            unit.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
             unit.maxHealth = finalValue;
@@ -161,6 +158,8 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         }
     }
 
+    #endregion
+
     public void ChangeState(ISoldierState newState)
     {
         currentState?.ExitState(this);
@@ -168,29 +167,9 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         currentState.EnterState(this);
     }
 
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-        
-    }
-
-    private void OnDeathStarted()
-    {
-        
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
-
-    private void OnWaveCompleted(int waveNumber)
-    {
-        unit.HealPercentage(0.25f);
-    }
-
     public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
     {
-        if (!unit.isAlive)
+        if (!unit.IsAlive)
         {
             return;
         }
@@ -242,6 +221,16 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
             // No guard, just go idle
             ChangeState(new SoldierIdleState());
         }
+    }
+
+    /// <summary>
+    /// Finds the closest enemy unit/structure inside aggroRadius
+    /// </summary>
+    /// <returns></returns>
+    public ITarget FindNearestPlayerTarget()
+    {
+        return TargetSearchUtility.SearchTarget(transform.position, aggroRadius,
+            Faction.Player);
     }
 
     private void OnDrawGizmosSelected()

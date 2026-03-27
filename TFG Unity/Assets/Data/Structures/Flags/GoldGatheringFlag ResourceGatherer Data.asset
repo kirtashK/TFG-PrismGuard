@@ -16,7 +16,13 @@ MonoBehaviour:
   id: 96a5b81a6726ac546a34ce0f72974388
   icon: {fileID: 21300000, guid: 10caf1bb2a1e16442b6cd9df5f5c01cf, type: 3}
   requiredResearch: {fileID: 11400000, guid: 6ac6235ccc3a17e4a88cd2182539bee1, type: 2}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 0
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
+    value: 10
   category: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
   blueprintPrefab: {fileID: 9064850209583715879, guid: 7ec9d89b4f6bf9f42bcf352d2f3097fb, type: 3}
@@ -26,8 +32,8 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
     quantity: 0
   allowedCategories: 04000000
-  gatheringRadius: 10

@@ -5,12 +5,14 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static UnityEngine.UI.Image;
 
-public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
+public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 {
+    public UnitData unitData;
+
     [HideInInspector] public float maxHealth;
     [HideInInspector] public float currentHealth;
+    [HideInInspector] public float healOnWaveCompleted;
 
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public float attackDamage;
@@ -19,21 +21,20 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
     [HideInInspector] public float nextAttackTime = 0f;
 
     [HideInInspector] public Animator animator;
-
     [HideInInspector] public NavMeshAgent agent;
 
     private AsyncOperationHandle<GameObject> addressableInstanceHandle;
     private bool hasAddressableHandle = false;
 
-    protected bool isDying = false;
-    protected float deathAnimationTimeout = 30f;
-    protected float deathAnimationDelay = 10f;
+    private bool isDying = false;
+    private readonly float deathAnimationTimeout = 30f;
+    private readonly float deathAnimationDelay = 10f;
 
     private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
     private static readonly int AnimatorDie = Animator.StringToHash("Die");
     private static readonly int AnimatorIsDead = Animator.StringToHash("IsDead");
 
-    ICombatTarget target;
+    ITarget target;
 
     [SerializeField] private float dissolveDuration = 10.0f;
     private static readonly int DissolveAmountId = Shader.PropertyToID("_DissolveAmount");
@@ -46,6 +47,11 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     private void Awake()
     {
+        if (TryGetComponent<Selectable>(out Selectable selectable))
+        {
+            selectable.data = unitData;
+        }
+
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
@@ -73,6 +79,29 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         }
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (UIManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
+    }
+
+    private void OnDisable()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
+        }
+    }
+
     public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
     {
         addressableInstanceHandle = handle;
@@ -83,7 +112,11 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public Vector3 Position => transform.position;
 
-    public bool isAlive => currentHealth > 0f;
+    public bool IsAlive => currentHealth > 0f;
+
+    public Faction Faction => unitData.faction;
+
+    public Category Category => Category.Unit;
 
     /// <summary>
     /// Damages unit, if health falls to 0 the unit dies, otherwise calls OnDamageTaken
@@ -104,25 +137,20 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
         OnDamageTaken(amount, attackOrigin);
 
-        if (!isAlive)
+        if (!IsAlive)
         {
             Die();
         }
     }
 
-    /// <summary>
-    /// Called when an unit takes damage
-    /// </summary>
-    /// <param name="amount">Damage received</param>
-    /// <param name="attackOrigin"></param>
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    public void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
         OnDamageTakenEvent?.Invoke(amount, attackOrigin);
     }
 
     public void Heal(float healAmount)
     {
-        if (!isAlive || healAmount <= 0f || currentHealth == maxHealth)
+        if (!IsAlive || healAmount <= 0f || currentHealth == maxHealth)
         {
             return;
         }
@@ -134,7 +162,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public void HealPercentage(float percent)
     {
-        if (!isAlive || percent <= 0f)
+        if (!IsAlive || percent <= 0f)
         {
             return;
         }
@@ -142,13 +170,19 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         Heal(maxHealth * percent);
     }
 
-    /// <summary>
-    /// Target will take damage once the animation "hits"
-    /// </summary>
-    /// <param name="combatTarget"></param>
-    public void Attack(ICombatTarget combatTarget)
+    private void OnWaveCompleted(int waveNumber)
     {
-        if (!isAlive || combatTarget == null || !combatTarget.isAlive)
+        if (Faction != Faction.Player)
+        {
+            return;
+        }
+
+        HealPercentage(healOnWaveCompleted);
+    }
+
+    public void Attack(ITarget combatTarget)
+    {
+        if (!IsAlive || combatTarget == null || !combatTarget.IsAlive)
         {
             return;
         }
@@ -168,7 +202,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
 
     public void OnAttackHit()
     {
-        if (isAlive && target != null && target.isAlive)
+        if (IsAlive && target != null && target.IsAlive)
         {
             target.TakeDamage(attackDamage, Position);
         }
@@ -214,10 +248,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         }
     }
 
-    /// <summary>
-    /// Called near the start of a unit diying
-    /// </summary>
-    private void OnDeathStarted()
+    public void OnDeathStarted()
     {
         // TODO notify player of unit death ?
 
@@ -246,7 +277,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         StartCoroutine(DeathCleanupDelay());
     }
 
-    private IEnumerator DeathCleanupDelay()
+    public IEnumerator DeathCleanupDelay()
     {
         yield return new WaitForSeconds(deathAnimationDelay);
 
@@ -302,10 +333,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         }
     }
 
-    /// <summary>
-    /// Call OnDeathCleanups, releases addressable handle and destroys Unit
-    /// </summary>
-    protected void CompleteDeathCleanup()
+    public void CompleteDeathCleanup()
     {
         OnDeathCleanup();
 
@@ -318,10 +346,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ICombatTarget
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Called near the end of a unit diying
-    /// </summary>
-    private void OnDeathCleanup()
+    public void OnDeathCleanup()
     {
         OnDeathCleanupEvent?.Invoke();
     }

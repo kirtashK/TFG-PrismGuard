@@ -137,6 +137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+  gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
 --- !u!114 &4858144896549159361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +154,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 58d32af04d0ffde49a33022614a70bb3, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  healOnWaveCompleted: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &4377397683552300764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Stone Gathering Flag
   icon: {fileID: 21300000, guid: 3908cc06cd1c0bf4b80f9109b72d3f90, type: 3}
   selectionVisual: {fileID: 5733901536789630207}
@@ -178,7 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 58d32af04d0ffde49a33022614a70bb3, type: 2}
   dropSpot: {fileID: 6579149943934632890}
 --- !u!135 &2415228188209473821
 SphereCollider:

@@ -1,44 +1,55 @@
+using System.Collections;
 using UnityEngine;
 
-public class Crystal : MonoBehaviour, ICombatTarget
+public class Crystal : MonoBehaviour
 {
-    [Header("Stats")]
-    public float maxHealth = 200f;
-
-    private float currentHealth;
+    [HideInInspector] public Structure structure;
 
 
-    private void Start()
+    private void Awake()
     {
-        currentHealth = maxHealth;
-    }
-
-    public Vector3 Position => transform.position;
-    
-    public bool isAlive => currentHealth > 0f;
-
-    public void TakeDamage(float amount, Vector3 attackOrigin)
-    {
-        currentHealth = Mathf.Max(currentHealth - amount, 0f);
-
-        Debug.Log($"Health of {name}: {currentHealth}/{maxHealth}");
-
-        // TODO Efectos, sonido
-
-        if (currentHealth <= 0f)
+        if (TryGetComponent<Structure>(out Structure structure))
         {
-            OnDestroyed();
+            this.structure = structure;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(structure)}");
         }
     }
 
-    private void OnDestroyed()
+    private void OnEnable()
     {
-        Debug.Log("El cristal ha sido destruido!");
-        // Fire event
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (StatModifierManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        structure.OnDeathStartedEvent += OnDeathStarted;
+        structure.OnDeathCleanupEvent += OnDeathCleanup;
+    }
+
+    private void OnDisable()
+    {
+        structure.OnDeathStartedEvent -= OnDeathStarted;
+        structure.OnDeathCleanupEvent -= OnDeathCleanup;
+    }
+
+    private void OnDeathStarted()
+    {
+        Debug.Log($"{name} has been destroyed! Game over!");
+
+        // TODO Move camera near crystal
+        // TODO Change model to broken crystal
+    }
+
+    private void OnDeathCleanup()
+    {
         GameManager.Instance.OnCrystalDestroyed();
-
-        // TODO mover la camara al cristal, cambiar modelo de cristal a uno roto
-
-        gameObject.SetActive(false);
     }
 }

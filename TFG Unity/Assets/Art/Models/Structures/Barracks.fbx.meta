@@ -3,7 +3,47 @@ guid: 21e65151b1df74c4783d1e46d26579b6
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gold
+    second: {fileID: 2100000, guid: dcbc485444dd80042aa4228aea956ad1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main
+    second: {fileID: 2100000, guid: 5223083b15d4815499316ec9f681e608, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_Light
+    second: {fileID: 2100000, guid: 5dfb33c7b35c32b48956f3553d83a5ee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stone
+    second: {fileID: 2100000, guid: 21473002f2871a548ae4f5f891dcd40c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stone_Light
+    second: {fileID: 2100000, guid: 6c7ad2943b920fc468c6d9cd8c58fd06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White
+    second: {fileID: 2100000, guid: 2008870b05899a34ab75fb6e4440b20d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: b5fd0e18492811f4fbefb66f6fe8a52a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_Light
+    second: {fileID: 2100000, guid: 95285b5d2361c66438bb85d7edf2f482, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

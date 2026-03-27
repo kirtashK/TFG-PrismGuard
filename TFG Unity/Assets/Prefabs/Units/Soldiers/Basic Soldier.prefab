@@ -137,12 +137,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   moveSpeedStat: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
   attackRangeStat: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
   attackDamageStat: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
   attackCooldownStat: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
   aggroRadius: 0
-  data: {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
 --- !u!114 &2912062591575876270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,8 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6241497b9d84f2040854e0e98dffd20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitData: {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   moveSpeed: 0
   attackDamage: 0
   attackRange: 0
@@ -177,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Basic Soldier
   icon: {fileID: 0}
   selectionVisual: {fileID: 5125368725770398202}

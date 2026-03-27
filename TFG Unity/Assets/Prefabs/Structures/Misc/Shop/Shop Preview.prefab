@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shop Preview
       objectReference: {fileID: 0}
+    - target: {fileID: 4674626930119248569, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6994114695348730636, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -60,6 +64,7 @@ PrefabInstance:
     - {fileID: 5335612158474111579, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
     - {fileID: 554532882235054087, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
     - {fileID: 2491254940581040272, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
+    - {fileID: 4674626930119248569, guid: a8ee04eb65ba70f4088ac433770f31a1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

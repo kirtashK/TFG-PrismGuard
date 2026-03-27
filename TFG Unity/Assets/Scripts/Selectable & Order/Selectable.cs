@@ -4,6 +4,9 @@ using System.Collections;
 [DisallowMultipleComponent]
 public class Selectable : MonoBehaviour, ISelectable
 {
+    [HideInInspector]
+    public BaseData data;
+
     [Tooltip("Name shown in UI")]
     public string displayName;
 
@@ -17,6 +20,19 @@ public class Selectable : MonoBehaviour, ISelectable
     public GameObject InformationVisual;
 
     private GameObject instantiatedInformationVisual;
+
+    private void Start()
+    {
+        if (data != null)
+        {
+            displayName = data.name;
+            icon = data.icon;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(BaseData)}");
+        }
+    }
 
     private void OnEnable()
     {

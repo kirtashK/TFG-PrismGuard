@@ -51,6 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+  gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
 --- !u!114 &8637009301420071870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +68,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 215497a59705e384e93cbb1906f0cb07, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  healOnWaveCompleted: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &8548758030102401255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Copper Gathering Flag
   icon: {fileID: 21300000, guid: ae11735a4ba371d4b976ee3acae23dfb, type: 3}
   selectionVisual: {fileID: 8770836645820497390}
@@ -92,7 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 215497a59705e384e93cbb1906f0cb07, type: 2}
   dropSpot: {fileID: 9074328651961370620}
 --- !u!135 &5154415911146534877
 SphereCollider:

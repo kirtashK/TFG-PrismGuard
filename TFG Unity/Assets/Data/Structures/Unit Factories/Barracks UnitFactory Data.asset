@@ -16,7 +16,15 @@ MonoBehaviour:
   id: 902bcb767f824c34ca0b4d3091b175af
   icon: {fileID: 21300000, guid: bb055d4ecf1af5a42a0d302ae5d449ff, type: 3}
   requiredResearch: {fileID: 0}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 200
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
+    value: 1
+  - statKey: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
+    value: 1
   category: 3
   builtPrefab: {fileID: 3947097100652634618, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
   blueprintPrefab: {fileID: 3668352691874339027, guid: e010365fdfa198647b1730e56adeb8bb, type: 3}
@@ -26,6 +34,7 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
     quantity: 5
@@ -36,5 +45,4 @@ MonoBehaviour:
   producibleUnits:
   - {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   - {fileID: 11400000, guid: 74485857ba9c0224e97c0f4ae5fdca31, type: 2}
-  concurrentSlots: 1
   maxQueueLength: 5

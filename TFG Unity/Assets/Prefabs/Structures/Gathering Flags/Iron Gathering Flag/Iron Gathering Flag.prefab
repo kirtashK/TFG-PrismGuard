@@ -51,6 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+  gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
 --- !u!114 &5650089952842091171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +68,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 3660304d644e65a47a4620da796a9ff5, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  healOnWaveCompleted: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &54352965438895563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Iron Gathering Flag
   icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
   selectionVisual: {fileID: 5005971056842641630}
@@ -92,7 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 3660304d644e65a47a4620da796a9ff5, type: 2}
   dropSpot: {fileID: 6134519280893322513}
 --- !u!135 &5679067105508002075
 SphereCollider:

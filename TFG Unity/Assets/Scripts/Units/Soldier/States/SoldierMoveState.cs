@@ -6,8 +6,6 @@ public class SoldierMoveState : ISoldierState
     private readonly bool attackMove;
     private readonly bool setAsGuard;
 
-    private readonly Collider[] aggroBuffer = new Collider[16];
-
     public SoldierMoveState(Vector3 destination, bool attackMove, bool setAsGuard)
     {
         this.destination = destination;
@@ -27,20 +25,11 @@ public class SoldierMoveState : ISoldierState
         // If enemies and attackMove enabled, switch to chase/attack
         if (attackMove)
         {
-            int hitCount = Physics.OverlapSphereNonAlloc
-                (soldier.transform.position,
-                soldier.aggroRadius,
-                aggroBuffer,
-                LayerMask.GetMask("EnemyUnit"));
+            ITarget target = soldier.FindNearestPlayerTarget();
 
-            for (int i = 0; i < hitCount; i++)
+            if (target != null)
             {
-                ICombatTarget enemy = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
-                if (enemy != null && enemy.isAlive)
-                {
-                    soldier.ChangeState(new SoldierChaseState(enemy));
-                    break;
-                }
+                soldier.ChangeState(new SoldierChaseState(target));
             }
         }
 
