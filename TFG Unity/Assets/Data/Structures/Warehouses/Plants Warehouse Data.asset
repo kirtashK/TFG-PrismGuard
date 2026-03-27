@@ -16,7 +16,11 @@ MonoBehaviour:
   id: ca52777bac90b3142bf03e1743da78d2
   icon: {fileID: 21300000, guid: 8d44bb74fe900a3409abd437ea873992, type: 3}
   requiredResearch: {fileID: 0}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 25
+  - statKey: {fileID: 11400000, guid: 9c563d08f25be7a4ea927f50ffc3db76, type: 2}
+    value: 12
   category: 0
   builtPrefab: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
   blueprintPrefab: {fileID: 6937355439090504695, guid: 500de2e763ac0be44a8eb3234a9b9ff6, type: 3}
@@ -26,9 +30,9 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
     quantity: 5
   acceptedCategories:
   - {fileID: 11400000, guid: e01d75e305d1b4143b830e182d94342f, type: 2}
-  maxCapacity: 12

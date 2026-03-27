@@ -5,15 +5,21 @@ using UnityEngine;
 
 public class Warehouse : MonoBehaviour, IItemConsumer
 {
-    private WarehouseData warehouseData;
+    [HideInInspector] public Structure structure;
+    private WarehouseData data;
 
     public GameObject storage;
 
+    [Header("Stats")]
+
+    [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey maxCapacityStat;
+
     [Header("Runtime")]
 
-    [SerializeField, Tooltip("Updated from Data at runtime")]
+    [SerializeField]
     private int maxCapacity;
-    [SerializeField, Tooltip("Updated from Data at runtime")]
+    [SerializeField]
     private int currentCapacity = 0;
 
     // Each ItemData has a queue of items stored in the warehouse
@@ -32,25 +38,33 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     private void Awake()
     {
-        if (!TryGetComponent<Structure>(out Structure structure))
+        if (TryGetComponent<Structure>(out Structure structure))
         {
-            Debug.LogError($"{name} missing Structure component");
-        }
-        if (structure.structureData is WarehouseData warehouseData)
-        {
-            this.warehouseData = warehouseData;
-
-            maxCapacity = warehouseData.maxCapacity;
+            this.structure = structure;
+            data = (WarehouseData)structure.structureData;
         }
         else
         {
-            Debug.LogWarning($"{name} couldnt get WarehouseData from Structure");
+            Debug.LogError($"{name}: missing {nameof(structure)}");
         }
+
+        CheckNullStats();
 
         if (storage == null)
         {
-            Debug.LogWarning($"{name} missing {storage.name}");
+            Debug.LogWarning($"{name}: missing {nameof(storage)}");
         }
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
+    }
+
+    private void Start()
+    {
+        RefreshStats();
+
+        structure.currentHealth = structure.maxHealth;
     }
 
     private void OnEnable()
@@ -61,13 +75,20 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     private IEnumerator RegisterWhenReady()
     {
         while (WarehouseManager.Instance == null 
-            || ItemConsumerManager.Instance == null)
+            || ItemConsumerManager.Instance == null
+            || StatModifierManager.Instance == null)
         {
             yield return null;
         }
 
         WarehouseManager.Instance.Register(this);
         ItemConsumerManager.Instance.Register(this);
+
+        structure.OnDeathStartedEvent += OnDeathStarted;
+        structure.OnDeathCleanupEvent += OnDeathCleanup;
+        structure.OnDamageTakenEvent += OnDamageTaken;
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
     private void OnDisable()
@@ -80,7 +101,77 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             ItemConsumerManager.Instance.Unregister(this);
         }
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        structure.OnDeathStartedEvent -= OnDeathStarted;
+        structure.OnDeathCleanupEvent -= OnDeathCleanup;
+        structure.OnDamageTakenEvent -= OnDamageTaken;
     }
+
+    #region Stats
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (maxCapacityStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxCapacityStat)}");
+        }
+    }
+
+    void HandleModifiersChanged(string targetId, string statKeyId)
+    {
+        if (targetId == data.id)
+        {
+            RefreshStats();
+        }
+        // Global modifier:
+        else if (string.IsNullOrEmpty(targetId))
+        {
+            RefreshStats();
+        }
+    }
+
+    public void RefreshStats()
+    {
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out float finalValue))
+        {
+            structure.maxHealth = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxCapacityStat, out finalValue))
+        {
+            maxCapacity = (int)finalValue;
+        }
+    }
+
+    #endregion
+
+    #region ITarget events
+
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+
+    }
+
+    private void OnDeathStarted()
+    {
+        
+    }
+
+    private void OnDeathCleanup()
+    {
+
+    }
+
+    #endregion
+
+    #region Category
 
     // Checks whether this warehouse allows the category of the item
     private bool CategoryAllows(ItemData itemData)
@@ -91,7 +182,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             return false;
         }
 
-        foreach (ItemCategory accepted in warehouseData.acceptedCategories)
+        foreach (ItemCategory accepted in data.acceptedCategories)
         {
             if (accepted != null && accepted.Matches(itemData.category))
             {
@@ -120,7 +211,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         ItemCategory current = itemCategory;
         while (current != null)
         {
-            if (warehouseData.acceptedCategories.Contains(current))
+            if (data.acceptedCategories.Contains(current))
             {
                 return depth;
             }
@@ -130,6 +221,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
         return -1;
     }
+
+    #endregion
+
+    #region ItemConsumer
 
     public bool CanRetrieve(ItemData itemData)
     {
@@ -273,7 +368,6 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
     }
 
-
     public void OnReceived(GameObject item, ItemData itemData)
     {
         if (item == null || itemData == null)
@@ -307,6 +401,8 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
         OnItemStored?.Invoke(itemData);
     }
+
+    #endregion
 
     // Returns a readonly snapshot of stored counts by item
     public IReadOnlyDictionary<ItemData, int> GetStoredCountsSnapshot()

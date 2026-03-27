@@ -137,6 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b87509f05c57494d9fc1904daad89e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
 --- !u!114 &4501721426511079852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: fb95fba4ad7ad32408677ec8ced9752b, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &5674226201627531383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   displayName: Tree Gathering Flag
   icon: {fileID: 21300000, guid: 79f31b92ab0372745ac7dbfeb1b594f4, type: 3}
   selectionVisual: {fileID: 7968720764951574841}
@@ -178,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: fb95fba4ad7ad32408677ec8ced9752b, type: 2}
   dropSpot: {fileID: 7845275119645607659}
 --- !u!135 &8760213830577007675
 SphereCollider:

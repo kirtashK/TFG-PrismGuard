@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3389293914689070354}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8501628506427752421}
   - component: {fileID: 267893561196942076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: -918765278164954886}
   - component: {fileID: 3900475937159888613}
   - component: {fileID: 7279996062148259312}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Research bench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0499a76dea3954d962ea7cca66c031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResearchBench
+  structure: {fileID: 0}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  researchSpeedStat: {fileID: 11400000, guid: cb1ae1182b6d4d54895c318bee0b898c, type: 2}
   priority: 2
   interactionRange: 0
   baseCycleDuration: 5
@@ -155,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7824650c746cbc47a777d68cbd5ee54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Selectable
+  data: {fileID: 0}
   displayName: Research bench
   icon: {fileID: 21300000, guid: 86f0cddc9cc3a87459e681f297801c0f, type: 3}
   selectionVisual: {fileID: 6103922946569619399}
@@ -172,6 +176,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 17931b1c1401a9c4ea7b1be262618370, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &7279996062148259312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blueprint
-  structureData: {fileID: 11400000, guid: 17931b1c1401a9c4ea7b1be262618370, type: 2}
   dropSpot: {fileID: 7119147587139307166}
 --- !u!1 &6567717620021642958
 GameObject:

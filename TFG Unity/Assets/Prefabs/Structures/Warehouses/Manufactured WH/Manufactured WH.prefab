@@ -104,7 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cb4e351e97e674aaaf2b1ef63c67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structure: {fileID: 0}
   storage: {fileID: 8017301961298225194}
+  maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  maxCapacityStat: {fileID: 11400000, guid: 9c563d08f25be7a4ea927f50ffc3db76, type: 2}
   maxCapacity: 0
   currentCapacity: 0
 --- !u!114 &5795343399375247824
@@ -120,6 +123,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Structure
   structureData: {fileID: 11400000, guid: 0f0f4228f680b254f825b26428183bc9, type: 2}
+  maxHealth: 0
+  currentHealth: 0
+  attackDamage: 0
+  attackRange: 0
+  attackCooldown: 0
+  nextAttackTime: 0
+  dissolveDuration: 10
 --- !u!114 &8028998076868244391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ad0419399f43a4cbe0c632f1614343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 0f0f4228f680b254f825b26428183bc9, type: 2}
   dropSpot: {fileID: 2491825746086073757}
 --- !u!1 &8017301961298225194
 GameObject:

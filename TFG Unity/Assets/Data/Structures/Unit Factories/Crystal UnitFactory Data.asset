@@ -16,7 +16,13 @@ MonoBehaviour:
   id: 3e972d6cafe6be145b7360c7607d4690
   icon: {fileID: 0}
   requiredResearch: {fileID: 0}
-  statBases: []
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 500
+  - statKey: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
+    value: 1
+  - statKey: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
+    value: 1
   category: 4
   builtPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}
   blueprintPrefab: {fileID: 4318969222942069268, guid: 6f0bf66cb4cbb044085b0bdbc769e0b9, type: 3}
@@ -26,10 +32,10 @@ MonoBehaviour:
   placementRadius: 1
   allowRotation: 1
   isUnique: 0
+  faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
     quantity: 0
   producibleUnits:
   - {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
-  concurrentSlots: 1
   maxQueueLength: 5

@@ -9,10 +9,6 @@ public class WarehouseData : StructureData
     [Tooltip("Categories this warehouse accepts. If a category is an ancestor of an item's category it will match")]
     public List<ItemCategory> acceptedCategories = new();
 
-    [Tooltip("Maximum total number of items that can be stored")]
-    [Range(1, 100)]
-    public int maxCapacity = 12;
-
     protected override void OnValidate()
     {
         base.OnValidate();

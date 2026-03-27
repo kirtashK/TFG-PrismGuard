@@ -8,16 +8,25 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [DisallowMultipleComponent]
 public class UnitFactory : MonoBehaviour
 {
-    private UnitFactoryData unitFactoryData;
+    [HideInInspector] public Structure structure;
+    private UnitFactoryData data;
 
-    private int concurrentSlots = 1;
+    [Header("Stats")]
+
+    [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey maxConcurrentBatchesStat;
+    [SerializeField] private StatKey processingSpeedStat;
+
+    private int maxConcurrentBatches = 1;
+    private float processingSpeed = 1;
+
     private int maxQueueLength = 5;
 
     public Transform[] spawnPoints;
     private int spawnRoundRobin = 0;
 
-    [Tooltip("Parent transform where delivered items are stored")]
-    public Transform storageParent;
+    [Tooltip("Empty GameObject where delivered items are stored")]
+    public Transform storage;
 
     private readonly List<UnitProductionOrder> allOrders = new();
     private readonly Queue<UnitProductionOrder> readyQueue = new();
@@ -32,36 +41,136 @@ public class UnitFactory : MonoBehaviour
 
     private void Awake()
     {
-        if (storageParent == null)
+        if (TryGetComponent<Structure>(out Structure structure))
         {
-            Debug.LogWarning($"{name} missing storage");
-        }
-
-        if (!TryGetComponent<Structure>(out Structure structure))
-        {
-            Debug.LogError($"{name} missing Structure component");
-        }
-        if (structure.structureData is UnitFactoryData unitFactoryData)
-        {
-            this.unitFactoryData = unitFactoryData;
-
-            concurrentSlots = unitFactoryData.concurrentSlots;
-            maxQueueLength = unitFactoryData.maxQueueLength;
+            this.structure = structure;
+            data = (UnitFactoryData)structure.structureData;
         }
         else
         {
-            Debug.LogWarning($"{name} couldnt get UnitFactoryData from Structure");
+            Debug.LogError($"{name}: missing {nameof(structure)}");
         }
+
+        CheckNullStats();
+
+        if (storage == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(storage)}");
+        }
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
+    }
+
+    private void Start()
+    {
+        RefreshStats();
+
+        structure.currentHealth = structure.maxHealth;
+
+        maxQueueLength = data.maxQueueLength;
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (StatModifierManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        structure.OnDeathStartedEvent += OnDeathStarted;
+        structure.OnDeathCleanupEvent += OnDeathCleanup;
+        structure.OnDamageTakenEvent += OnDamageTaken;
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        structure.OnDeathStartedEvent -= OnDeathStarted;
+        structure.OnDeathCleanupEvent -= OnDeathCleanup;
+        structure.OnDamageTakenEvent -= OnDamageTaken;
+    }
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (maxConcurrentBatchesStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxConcurrentBatchesStat)}");
+        }
+        if (processingSpeedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(processingSpeedStat)}");
+        }
+    }
+
+    void HandleModifiersChanged(string targetId, string statKeyId)
+    {
+        if (targetId == data.id)
+        {
+            RefreshStats();
+        }
+        // Global modifier:
+        else if (string.IsNullOrEmpty(targetId))
+        {
+            RefreshStats();
+        }
+    }
+
+    public void RefreshStats()
+    {
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out float finalValue))
+        {
+            structure.maxHealth = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxConcurrentBatchesStat, out finalValue))
+        {
+            maxConcurrentBatches = (int)finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, processingSpeedStat, out finalValue))
+        {
+            processingSpeed = finalValue;
+        }
+    }
+
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+
+    }
+
+    private void OnDeathStarted()
+    {
+
+    }
+
+    private void OnDeathCleanup()
+    {
+
     }
 
     public Vector3 GetReceivePosition()
     {
-        return storageParent.position;
+        return storage.position;
     }
 
     public Transform GetOrderStorageParent()
     {
-        return storageParent;
+        return storage;
     }
 
     public Vector3 GetOrderStoragePosition()
@@ -170,7 +279,7 @@ public class UnitFactory : MonoBehaviour
     private void TryStartBuilds()
     {
         //Debug.Log($"buildingOrders count = {buildingOrders.Count} & readyQueue count = {readyQueue.Count}");
-        while (buildingOrders.Count < concurrentSlots && readyQueue.Count > 0)
+        while (buildingOrders.Count < maxConcurrentBatches && readyQueue.Count > 0)
         {
             UnitProductionOrder next = readyQueue.Dequeue();
             if (next == null || next.State != UnitProductionOrder.OrderState.Ready)
@@ -193,7 +302,7 @@ public class UnitFactory : MonoBehaviour
             yield break;
         }
 
-        float time = Mathf.Max(0f, order.unitData.buildTime);
+        float time = Mathf.Max(0f, order.unitData.buildTime * processingSpeed);
         float timePassed = 0f;
 
         while (timePassed < time)
@@ -281,9 +390,9 @@ public class UnitFactory : MonoBehaviour
 
     public IEnumerable<UnitData> GetProducibleUnits(UnitRegistryAddressables registry)
     {
-        if (unitFactoryData.producibleUnits != null && unitFactoryData.producibleUnits.Count > 0)
+        if (data.producibleUnits != null && data.producibleUnits.Count > 0)
         {
-            return unitFactoryData.producibleUnits;
+            return data.producibleUnits;
         }
         else if (registry != null)
         {

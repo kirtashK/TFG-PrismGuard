@@ -8,9 +8,6 @@ public class ProcessorData : StructureData
 
     [Tooltip("List of recipes this building has availible")]
     public List<ProcessResourceRecipe> recipes;
-    [Tooltip("Max amount of concurrent processing")]
-    [Range(1, 10)]
-    public int maxConcurrentBatches = 1;
 
     [Header("Fuel")]
 

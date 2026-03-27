@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class ResourceProcessor : MonoBehaviour, IItemConsumer
 {
-    private ProcessorData processorData;
+    [HideInInspector] public Structure structure;
+    private ProcessorData data;
+
+    [Header("Stats")]
+
+    [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey maxConcurrentBatchesStat;
+    [SerializeField] private StatKey processingSpeedStat;
 
     private float fuelMaxCapacity;
     private bool requiresFuel;
@@ -28,6 +35,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private int maxConcurrentBatches = 1;
     [SerializeField]
     private int processingCount = 0;
+    [SerializeField] 
+    private float processingSpeed = 1;
 
     public Vector3 GetReceivePosition() => transform.position;
 
@@ -45,7 +54,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
-        // Internal state of each recipe
+    // Internal state of each recipe
     private class RecipeState
     {
         public ProcessResourceRecipe recipe;
@@ -59,25 +68,25 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private void Awake()
     {
-        if (!TryGetComponent<Structure>(out Structure structure))
+        if (TryGetComponent<Structure>(out Structure structure))
         {
-            Debug.LogError($"{name} missing Structure component");
-        }
-        if (structure.structureData is ProcessorData processorData)
-        {
-            this.processorData = processorData;
-            fuelMaxCapacity = processorData.fuelMaxCapacity;
-            requiresFuel = processorData.requiresFuel;
-            maxConcurrentBatches = processorData.maxConcurrentBatches;
+            this.structure = structure;
+            data = (ProcessorData)structure.structureData;
         }
         else
         {
-            Debug.LogWarning($"{name} couldnt get {nameof(ProcessorData)} from {nameof(Structure)}");
+            Debug.LogError($"{name}: missing {nameof(structure)}");
         }
+
+        CheckNullStats();
 
         if (storage == null)
         {
-            Debug.LogWarning($"{name} missing {nameof(storage)}");
+            Debug.LogWarning($"{name}: missing {nameof(storage)}");
+        }
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
         }
 
         InitializeRecipeStates();
@@ -87,8 +96,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     {
         inputState.Clear();
 
-        recipeStates = new List<RecipeState>(processorData.recipes.Count);
-        foreach (ProcessResourceRecipe recipe in processorData.recipes)
+        recipeStates = new List<RecipeState>(data.recipes.Count);
+        foreach (ProcessResourceRecipe recipe in data.recipes)
         {
             recipeStates.Add(new RecipeState
             {
@@ -110,6 +119,16 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
+    private void Start()
+    {
+        RefreshStats();
+
+        structure.currentHealth = structure.maxHealth;
+
+        fuelMaxCapacity = data.fuelMaxCapacity;
+        requiresFuel = data.requiresFuel;
+    }
+
     private void OnEnable()
     {
         StopAllCoroutines();
@@ -123,12 +142,19 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
 
     private IEnumerator RegisterWhenReady()
     {
-        while (ItemConsumerManager.Instance == null)
+        while (ItemConsumerManager.Instance == null
+            || StatModifierManager.Instance == null)
         {
             yield return null;
         }
         ItemConsumerManager.Instance.Register(this);
         isRegistered = true;
+
+        structure.OnDeathStartedEvent += OnDeathStarted;
+        structure.OnDeathCleanupEvent += OnDeathCleanup;
+        structure.OnDamageTakenEvent += OnDamageTaken;
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
 
         StartCoroutine(DispatchOutputToWarehouse());
     }
@@ -143,7 +169,76 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             isRegistered = false;
         }
 
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        structure.OnDeathStartedEvent -= OnDeathStarted;
+        structure.OnDeathCleanupEvent -= OnDeathCleanup;
+        structure.OnDamageTakenEvent -= OnDamageTaken;
+
         ResetInternalStateAndReleaseReservations();
+    }
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (maxConcurrentBatchesStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxConcurrentBatchesStat)}");
+        }
+        if (processingSpeedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(processingSpeedStat)}");
+        }
+    }
+
+    void HandleModifiersChanged(string targetId, string statKeyId)
+    {
+        if (targetId == data.id)
+        {
+            RefreshStats();
+        }
+        // Global modifier:
+        else if (string.IsNullOrEmpty(targetId))
+        {
+            RefreshStats();
+        }
+    }
+
+    public void RefreshStats()
+    {
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out float finalValue))
+        {
+            structure.maxHealth = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxConcurrentBatchesStat, out finalValue))
+        {
+            maxConcurrentBatches = (int)finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, processingSpeedStat, out finalValue))
+        {
+            processingSpeed = finalValue;
+        }
+    }
+
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+
+    }
+
+    private void OnDeathStarted()
+    {
+
+    }
+
+    private void OnDeathCleanup()
+    {
+
     }
 
     /// <summary>
@@ -237,12 +332,14 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             yield break;
         }
 
+        float processingTime = recipeState.recipe.processingTime * processingSpeed;
+
         Debug.Log($"{name} started processing a batch of {recipeState.recipe.name}. " +
-            $"Will finish in {recipeState.recipe.processingTime} seconds. " +
+            $"Will finish in {processingTime} seconds. " +
             $"Consumed input: {recipeState.recipe.inputPerBatch}. " +
             $"Consumed fuel [{requiresFuel}]: {recipeState.recipe.fuelPerBatch}.");
 
-        yield return new WaitForSeconds(recipeState.recipe.processingTime);
+        yield return new WaitForSeconds(processingTime);
 
         recipeState.storedOutput += recipeState.recipe.outputPerInput;
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;

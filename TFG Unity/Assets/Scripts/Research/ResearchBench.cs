@@ -4,6 +4,16 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class ResearchBench : MonoBehaviour, ITask
 {
+    [HideInInspector] public Structure structure;
+    private StructureData data;
+
+    [Header("Stats")]
+
+    [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey researchSpeedStat;
+
+    private float researchSpeed = 1;
+
     [Header("Task Settings")]
 
     public int priority = 2;
@@ -40,6 +50,33 @@ public class ResearchBench : MonoBehaviour, ITask
 
     public WorkType WorkType => WorkType.None;
 
+    private void Awake()
+    {
+        if (TryGetComponent<Structure>(out Structure structure))
+        {
+            this.structure = structure;
+            data = structure.structureData;
+        }
+        else
+        {
+            Debug.LogError($"{name}: missing {nameof(structure)}");
+        }
+
+        CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
+    }
+
+    private void Start()
+    {
+        RefreshStats();
+
+        structure.currentHealth = structure.maxHealth;
+    }
+
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
@@ -54,18 +91,88 @@ public class ResearchBench : MonoBehaviour, ITask
             registeredTask = null;
         }
 
+        if (StatModifierManager.Instance != null)
+        {
+            StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+
+        structure.OnDeathStartedEvent -= OnDeathStarted;
+        structure.OnDeathCleanupEvent -= OnDeathCleanup;
+        structure.OnDamageTakenEvent -= OnDamageTaken;
+
         CancelCurrentSession();
         StopAllCoroutines();
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (TaskManager.Instance == null || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded)
+        while (TaskManager.Instance == null 
+            || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded
+            || StatModifierManager.Instance == null)
         {
             yield return null;
         }
 
+        structure.OnDeathStartedEvent += OnDeathStarted;
+        structure.OnDeathCleanupEvent += OnDeathCleanup;
+        structure.OnDamageTakenEvent += OnDamageTaken;
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+
         StartCoroutine(PollForAvailability());
+    }
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (researchSpeedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(researchSpeedStat)}");
+        }
+    }
+
+    void HandleModifiersChanged(string targetId, string statKeyId)
+    {
+        if (targetId == data.id)
+        {
+            RefreshStats();
+        }
+        // Global modifier:
+        else if (string.IsNullOrEmpty(targetId))
+        {
+            RefreshStats();
+        }
+    }
+
+    public void RefreshStats()
+    {
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out float finalValue))
+        {
+            structure.maxHealth = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, researchSpeedStat, out finalValue))
+        {
+            researchSpeed = finalValue;
+            benchPointsMultiplier *= researchSpeed;
+        }
+    }
+
+    private void OnDamageTaken(float amount, Vector3 attackOrigin)
+    {
+
+    }
+
+    private void OnDeathStarted()
+    {
+
+    }
+
+    private void OnDeathCleanup()
+    {
+
     }
 
     private IEnumerator PollForAvailability()
