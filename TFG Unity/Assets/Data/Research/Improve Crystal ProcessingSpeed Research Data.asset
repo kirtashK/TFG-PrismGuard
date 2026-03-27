@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
+  m_Name: Improve Crystal ProcessingSpeed Research Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResearchData
+  Name: Increase Worker creation speed
+  id: 834b7d95867104048a91e51f5994bfc2
+  icon: {fileID: 21300000, guid: 8e9241054a66e3a438712199709a34d6, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: Investigate how the crystal is able to create new workers while trying
+    to improve the design, speeding up the process.
+  requiredResearchPoints: 310
+  basePointsPerCycle: 10
+  prerequisiteResearchDatas: []
+  effects:
+  - {fileID: 11400000, guid: 46fe959e50dab904aaa50e2749ea008f, type: 2}

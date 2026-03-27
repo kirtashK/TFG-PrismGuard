@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
+  m_Name: Upgrade HealOnWaveCompleted Research Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResearchData
+  Name: Improve Wave's healing reward
+  id: d08b2aa6c4151c4409351625362452a6
+  icon: {fileID: 21300000, guid: 1b7d738317057814cb53fcb62c48b070, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: After a wave is completed, all player units and structures heal by
+    an extra 10% of max health.
+  requiredResearchPoints: 345
+  basePointsPerCycle: 10
+  prerequisiteResearchDatas: []
+  effects:
+  - {fileID: 11400000, guid: 78ce856abf55ad346a55baaf89fcd77d, type: 2}

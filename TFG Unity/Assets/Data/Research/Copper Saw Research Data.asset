@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
-  m_Name: New Copper Saw Research Data
+  m_Name: Copper Saw Research Data
   m_EditorClassIdentifier: Assembly-CSharp::ResearchData
   Name: Copper saws
   id: 3f33b9a201191ca499fdd7b728c21c8f

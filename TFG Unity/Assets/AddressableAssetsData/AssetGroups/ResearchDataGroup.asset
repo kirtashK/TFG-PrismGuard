@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24776fbab7b9c4b4092b60260da9dd51
+    m_Address: Assets/Data/Research/Barrack Extra Concurrent Slot Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f33b9a201191ca499fdd7b728c21c8f
     m_Address: Assets/Data/Research/New Copper Saw Research Data.asset
     m_ReadOnly: 0
@@ -81,8 +87,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 834b7d95867104048a91e51f5994bfc2
+    m_Address: Assets/Data/Research/Improve Crystal ProcessingSpeed Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf8c625e16de8094e98f8431922d5494
     m_Address: Assets/Data/Research/Improve Soldier Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d08b2aa6c4151c4409351625362452a6
+    m_Address: Assets/Data/Research/Upgrade HealOnWaveCompleted Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
