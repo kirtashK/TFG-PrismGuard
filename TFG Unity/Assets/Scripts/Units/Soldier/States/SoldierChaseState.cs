@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class SoldierChaseState : ISoldierState
 {
-    private readonly ICombatTarget target;
+    private readonly ITarget target;
 
-    public SoldierChaseState(ICombatTarget target)
+    public SoldierChaseState(ITarget target)
     {
         this.target = target;
     }

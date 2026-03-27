@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structure: {fileID: 0}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
 --- !u!114 &5650089952842091171
 MonoBehaviour:
@@ -69,6 +70,7 @@ MonoBehaviour:
   structureData: {fileID: 11400000, guid: 3660304d644e65a47a4620da796a9ff5, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   attackDamage: 0
   attackRange: 0
   attackCooldown: 0

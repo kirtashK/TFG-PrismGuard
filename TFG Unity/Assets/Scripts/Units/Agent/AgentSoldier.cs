@@ -14,6 +14,7 @@ public class AgentSoldier : Agent
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
@@ -100,8 +101,6 @@ public class AgentSoldier : Agent
             yield return null;
         }
 
-        unit.OnDeathStartedEvent += OnDeathStarted;
-        unit.OnDeathCleanupEvent += OnDeathCleanup;
         unit.OnDamageTakenEvent += OnDamageTaken;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
@@ -114,12 +113,38 @@ public class AgentSoldier : Agent
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
 
-        unit.OnDeathStartedEvent -= OnDeathStarted;
-        unit.OnDeathCleanupEvent -= OnDeathCleanup;
         unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     #region Stats
+
+    private void CheckNullStats()
+    {
+        if (maxHealthStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
+        }
+        if (moveSpeedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(moveSpeedStat)}");
+        }
+        if (attackRangeStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackRangeStat)}");
+        }
+        if (attackDamageStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackDamageStat)}");
+        }
+        if (attackCooldownStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
+        }
+    }
 
     void HandleModifiersChanged(string targetId, string statKeyId)
     {
@@ -144,6 +169,10 @@ public class AgentSoldier : Agent
         {
             unit.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            unit.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackRangeStat, out finalValue))
         {
             unit.attackRange = finalValue;
@@ -155,30 +184,6 @@ public class AgentSoldier : Agent
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
         {
             unit.attackCooldown = finalValue;
-        }
-    }
-
-    private void CheckNullStats()
-    {
-        if (maxHealthStat == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
-        }
-        if (moveSpeedStat == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(moveSpeedStat)}");
-        }
-        if (attackRangeStat == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(attackRangeStat)}");
-        }
-        if (attackDamageStat == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(attackDamageStat)}");
-        }
-        if (attackCooldownStat == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
         }
     }
 
@@ -195,7 +200,7 @@ public class AgentSoldier : Agent
         float cooldownNorm = GetAttackCooldownNormalized();
         sensor.AddObservation(cooldownNorm);
 
-        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
         float numNorm = Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest);
         sensor.AddObservation(numNorm);
 
@@ -239,7 +244,7 @@ public class AgentSoldier : Agent
         int targetIndex = Mathf.Clamp(discreteActions[0], 0, kNearest);
         int attackFlag = Mathf.Clamp(discreteActions[1], 0, 1);
 
-        List<ICombatTarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
 
         if (targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
@@ -269,7 +274,7 @@ public class AgentSoldier : Agent
         }
 
         ActionSegment<int> discreteOut = actionsOut.DiscreteActions;
-        List<ICombatTarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
 
         if (enemies.Count > 0)
         {
@@ -291,11 +296,11 @@ public class AgentSoldier : Agent
     /// <summary>
     /// Returns up to maxCount nearest ICombatTarget on the given layer, ordered by distance ascending
     /// </summary>
-    public static List<ICombatTarget> GetNearestEnemies(Vector3 origin, float maxRadius, int maxCount, string layerName)
+    public static List<ITarget> GetNearestEnemies(Vector3 origin, float maxRadius, int maxCount, string layerName)
     {
         int layerMask = LayerMask.GetMask(layerName);
 
-        List<ICombatTarget> results = new();
+        List<ITarget> results = new();
 
         if (layerMask == 0)
         {
@@ -308,8 +313,8 @@ public class AgentSoldier : Agent
             return results;
         }
 
-        HashSet<ICombatTarget> seen = new();
-        ICombatTarget combatTarget = null;
+        HashSet<ITarget> seen = new();
+        ITarget combatTarget = null;
         for (int i = 0; i < hitCount; i++)
         {
             Collider collider = agroBuffer[i];
@@ -318,7 +323,7 @@ public class AgentSoldier : Agent
                 continue;
             }
 
-            combatTarget = collider.GetComponentInParent<ICombatTarget>();
+            combatTarget = collider.GetComponentInParent<ITarget>();
             if (combatTarget == null)
             {
                 continue;
@@ -343,7 +348,7 @@ public class AgentSoldier : Agent
     /// Try to perform an attack on the target
     /// Returns true if an attack was performed
     /// </summary>
-    public bool TryAttack(ICombatTarget target)
+    public bool TryAttack(ITarget target)
     {
         if (!target.IsAlive || target == null || !unit.IsAlive)
         {
@@ -365,8 +370,6 @@ public class AgentSoldier : Agent
 
         unit.FaceTarget(target.Position, 720f);
         unit.Attack(target);
-
-        //target.TakeDamage(unit.attackDamage, unit.Position);
 
         float reward = 0;
         reward += rewardPerSuccessfulAttack;
@@ -395,17 +398,8 @@ public class AgentSoldier : Agent
         }
     }
 
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
-
-    // TODO event onHealed on unit would be better
+    // TODO use unit.heal or unit.healPercentage
+    // TODO and suscribe to event onHealed
     public void Heal(float amount)
     {
         if (!unit.IsAlive) 

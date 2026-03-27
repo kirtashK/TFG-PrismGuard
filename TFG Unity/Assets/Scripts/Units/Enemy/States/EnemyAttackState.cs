@@ -2,9 +2,9 @@
 
 public class EnemyAttackState : IEnemyState
 {
-    private readonly ICombatTarget target;
+    private readonly ITarget target;
 
-    public EnemyAttackState(ICombatTarget target)
+    public EnemyAttackState(ITarget target)
     {
         this.target = target;
     }

@@ -9,6 +9,7 @@ public class Shop : MonoBehaviour
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
 
     private void Awake()
     {
@@ -49,10 +50,6 @@ public class Shop : MonoBehaviour
             yield return null;
         }
 
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
@@ -62,10 +59,6 @@ public class Shop : MonoBehaviour
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     #region Stats
@@ -75,6 +68,10 @@ public class Shop : MonoBehaviour
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
     }
 
@@ -97,25 +94,10 @@ public class Shop : MonoBehaviour
         {
             structure.maxHealth = finalValue;
         }
-    }
-
-    #endregion
-
-    #region ITarget events
-
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
     }
 
     #endregion

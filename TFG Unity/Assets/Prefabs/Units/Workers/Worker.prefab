@@ -138,6 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   moveSpeedStat: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
   maxCarryWeightStat: {fileID: 11400000, guid: 04a38b7df2506484a995b7d23df93e33, type: 2}
   maxCarryWeight: 0
@@ -165,6 +166,7 @@ MonoBehaviour:
   unitData: {fileID: 11400000, guid: 60cf33504c2725b4ca6e00deaaa4655f, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   moveSpeed: 0
   attackDamage: 0
   attackRange: 0

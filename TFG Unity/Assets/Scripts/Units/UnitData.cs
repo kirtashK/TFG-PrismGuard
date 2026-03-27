@@ -2,13 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public enum Faction
-{
-    Player,
-    Enemy,
-    Neutral
-}
-
 public class UnitData : BaseData
 {
     [Header("Unit")]

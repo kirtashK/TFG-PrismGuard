@@ -107,6 +107,7 @@ MonoBehaviour:
   structure: {fileID: 0}
   storage: {fileID: 8128194939221459844}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   maxCapacityStat: {fileID: 11400000, guid: 9c563d08f25be7a4ea927f50ffc3db76, type: 2}
   maxCapacity: 0
   currentCapacity: 0
@@ -125,6 +126,7 @@ MonoBehaviour:
   structureData: {fileID: 11400000, guid: 74002b6421c8e2347a7b982013be2735, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   attackDamage: 0
   attackRange: 0
   attackCooldown: 0

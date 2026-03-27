@@ -14,6 +14,7 @@ public class ResourceGatherer : MonoBehaviour
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey gatheringRadiusStat;
 
     private float gatheringRadius;
@@ -75,10 +76,6 @@ public class ResourceGatherer : MonoBehaviour
             yield return null;
         }
 
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
@@ -88,10 +85,6 @@ public class ResourceGatherer : MonoBehaviour
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
 
         ResetResourceGatherer();
     }
@@ -124,11 +117,17 @@ public class ResourceGatherer : MonoBehaviour
         }
     }
 
+    #region Stats
+
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (gatheringRadiusStat == null)
         {
@@ -155,26 +154,17 @@ public class ResourceGatherer : MonoBehaviour
         {
             structure.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, gatheringRadiusStat, out finalValue))
         {
             gatheringRadius = finalValue;
         }
     }
 
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
+    #endregion
 
     private void OnTriggerEnter(Collider other)
     {

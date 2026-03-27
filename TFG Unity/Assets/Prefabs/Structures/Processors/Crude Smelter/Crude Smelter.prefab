@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structure: {fileID: 0}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   maxConcurrentBatchesStat: {fileID: 11400000, guid: 594aeb66229f9e64c94320ac2da18a65, type: 2}
   processingSpeedStat: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
   storage: {fileID: 3496389811995932038}
@@ -178,6 +179,7 @@ MonoBehaviour:
   structureData: {fileID: 11400000, guid: 9dd51a9921b3c3240ba2c6cb5cf0e173, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   attackDamage: 0
   attackRange: 0
   attackCooldown: 0

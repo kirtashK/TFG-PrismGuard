@@ -19,6 +19,8 @@ MonoBehaviour:
   statBases:
   - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
     value: 50
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
   - statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
     value: 3.5
   - statKey: {fileID: 11400000, guid: 04a38b7df2506484a995b7d23df93e33, type: 2}

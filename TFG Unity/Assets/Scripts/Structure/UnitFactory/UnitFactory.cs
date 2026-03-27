@@ -14,6 +14,7 @@ public class UnitFactory : MonoBehaviour
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey maxConcurrentBatchesStat;
     [SerializeField] private StatKey processingSpeedStat;
 
@@ -84,10 +85,6 @@ public class UnitFactory : MonoBehaviour
             yield return null;
         }
 
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
@@ -97,17 +94,19 @@ public class UnitFactory : MonoBehaviour
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
     }
+
+    #region Stats
 
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (maxConcurrentBatchesStat == null)
         {
@@ -138,6 +137,10 @@ public class UnitFactory : MonoBehaviour
         {
             structure.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxConcurrentBatchesStat, out finalValue))
         {
             maxConcurrentBatches = (int)finalValue;
@@ -148,20 +151,7 @@ public class UnitFactory : MonoBehaviour
         }
     }
 
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
+    #endregion
 
     public Vector3 GetReceivePosition()
     {

@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   structure: {fileID: 0}
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+  healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
 --- !u!114 &5335612158474111579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +67,7 @@ MonoBehaviour:
   structureData: {fileID: 11400000, guid: 696efa391f26a3249a92640eebbe17fb, type: 2}
   maxHealth: 0
   currentHealth: 0
+  healOnWaveCompleted: 0
   attackDamage: 0
   attackRange: 0
   attackCooldown: 0

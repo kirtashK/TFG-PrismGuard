@@ -10,6 +10,7 @@ public class ResearchBench : MonoBehaviour, ITask
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey researchSpeedStat;
 
     private float researchSpeed = 1;
@@ -82,6 +83,20 @@ public class ResearchBench : MonoBehaviour, ITask
         StartCoroutine(RegisterWhenReady());
     }
 
+    private IEnumerator RegisterWhenReady()
+    {
+        while (TaskManager.Instance == null
+            || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded
+            || StatModifierManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+
+        StartCoroutine(PollForAvailability());
+    }
+
     private void OnDisable()
     {
         if (isRegisteredToTaskManager && TaskManager.Instance != null)
@@ -96,37 +111,21 @@ public class ResearchBench : MonoBehaviour, ITask
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
 
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
-
         CancelCurrentSession();
         StopAllCoroutines();
     }
 
-    private IEnumerator RegisterWhenReady()
-    {
-        while (TaskManager.Instance == null 
-            || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded
-            || StatModifierManager.Instance == null)
-        {
-            yield return null;
-        }
-
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
-        StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
-
-        StartCoroutine(PollForAvailability());
-    }
+    #region Stats
 
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (researchSpeedStat == null)
         {
@@ -153,6 +152,10 @@ public class ResearchBench : MonoBehaviour, ITask
         {
             structure.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, researchSpeedStat, out finalValue))
         {
             researchSpeed = finalValue;
@@ -160,20 +163,7 @@ public class ResearchBench : MonoBehaviour, ITask
         }
     }
 
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
+    #endregion
 
     private IEnumerator PollForAvailability()
     {

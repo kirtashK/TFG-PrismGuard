@@ -10,6 +10,7 @@ public class Structure : MonoBehaviour, ITarget
 
     [HideInInspector] public float maxHealth;
     [HideInInspector] public float currentHealth;
+    [HideInInspector] public float healOnWaveCompleted;
 
     [HideInInspector] public float attackDamage;
     [HideInInspector] public float attackRange;
@@ -35,6 +36,29 @@ public class Structure : MonoBehaviour, ITarget
         CacheRenderers();
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (UIManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
+    }
+
+    private void OnDisable()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
+        }
+    }
+
     #region ICombatTarget
 
     public event Action OnDeathStartedEvent;
@@ -51,11 +75,6 @@ public class Structure : MonoBehaviour, ITarget
 
     public Category Category => Category.Structure;
 
-    /// <summary>
-    /// Damages structure, if health falls to 0 the structure is destroyed, otherwise calls OnDamageTaken
-    /// </summary>
-    /// <param name="amount">Damage received</param>
-    /// <param name="attackOrigin"></param>
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
         if (isDying || amount <= 0f)
@@ -81,7 +100,37 @@ public class Structure : MonoBehaviour, ITarget
         OnDamageTakenEvent?.Invoke(amount, attackOrigin);
     }
 
-    //TODO Heal after wave ? Check faction
+    public void Heal(float healAmount)
+    {
+        if (!IsAlive || healAmount <= 0f || currentHealth == maxHealth)
+        {
+            return;
+        }
+
+        currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+
+        Debug.Log($"{name} healed by {healAmount}. Health: {currentHealth}/{maxHealth}");
+    }
+
+    public void HealPercentage(float percent)
+    {
+        if (!IsAlive || percent <= 0f)
+        {
+            return;
+        }
+
+        Heal(maxHealth * percent);
+    }
+
+    private void OnWaveCompleted(int waveNumber)
+    {
+        if (Faction != Faction.Player)
+        {
+            return;
+        }
+
+        HealPercentage(healOnWaveCompleted);
+    }
 
     public void Attack(ITarget combatTarget)
     {

@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
@@ -27,9 +28,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     private IEnemyState currentState;
 
-    public ICombatTarget MainTarget { get; private set; }
-
-    private readonly Collider[] aggroBuffer = new Collider[16];
+    public ITarget MainTarget { get; private set; }
 
     public enum Behaviour
     {
@@ -67,14 +66,14 @@ public class Enemy : MonoBehaviour, IStatRefresher
     {
         if (crystalTransform != null)
         {
-            MainTarget = crystalTransform.GetComponent<ICombatTarget>();
+            MainTarget = crystalTransform.GetComponent<ITarget>();
         }
         else
         {
             GameObject crystalObject = GameObject.FindWithTag("Crystal");
             if (crystalObject != null)
             {
-                MainTarget = crystalObject.GetComponent<ICombatTarget>();
+                MainTarget = crystalObject.GetComponent<ITarget>();
             }
             else
             {
@@ -120,7 +119,6 @@ public class Enemy : MonoBehaviour, IStatRefresher
         }
 
         unit.OnDeathStartedEvent += OnDeathStarted;
-        unit.OnDeathCleanupEvent += OnDeathCleanup;
         unit.OnDamageTakenEvent += OnDamageTaken;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
@@ -134,7 +132,6 @@ public class Enemy : MonoBehaviour, IStatRefresher
         }
 
         unit.OnDeathStartedEvent -= OnDeathStarted;
-        unit.OnDeathCleanupEvent -= OnDeathCleanup;
         unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
@@ -145,11 +142,17 @@ public class Enemy : MonoBehaviour, IStatRefresher
         currentState.EnterState(this);
     }
 
+    #region Stats
+
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (moveSpeedStat == null)
         {
@@ -188,6 +191,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
         {
             unit.moveSpeed = unit.agent.speed = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            unit.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxHealthStat, out finalValue))
         {
             unit.maxHealth = finalValue;
@@ -206,12 +213,14 @@ public class Enemy : MonoBehaviour, IStatRefresher
         }
     }
 
+    #endregion
+
     public void Initialize(Transform crystal, Behaviour behaviour, Vector3? homeOverride = null)
     {
         if (crystal != null)
         {
             crystalTransform = crystal;
-            MainTarget = crystalTransform.GetComponent<ICombatTarget>();
+            MainTarget = crystalTransform.GetComponent<ITarget>();
         }
 
         this.behaviour = behaviour;
@@ -261,41 +270,15 @@ public class Enemy : MonoBehaviour, IStatRefresher
         UIManager.Instance.ChangeEnemyCount(-1);
     }
 
-    private void OnDeathCleanup()
-    {
-
-    }
-
     /// <summary>
-    /// Finds the closests player unit inside aggroRadius
+    /// Finds the closest player unit/structure inside aggroRadius
     /// </summary>
-    public ICombatTarget FindNearestPlayerUnit()
+    /// <param name="isGuarding">Is the enemy neutral/guarding?</param>
+    /// <returns></returns>
+    public ITarget FindNearestPlayerTarget(bool isGuarding = false)
     {
-        int hitCount = Physics.OverlapSphereNonAlloc
-            (transform.position,
-            aggroRadius,
-            aggroBuffer,
-            LayerMask.GetMask("PlayerUnit"));
-
-        ICombatTarget best = null;
-        float bestDist = float.MaxValue;
-
-        for (int i = 0; i < hitCount; i++)
-        {
-            ICombatTarget playerUnit = aggroBuffer[i].GetComponentInParent<ICombatTarget>();
-            if (playerUnit != null 
-                && playerUnit.IsAlive 
-                && playerUnit is not Crystal)
-            {
-                float dist = Vector3.Distance(transform.position, playerUnit.Position);
-                if (dist < bestDist)
-                {
-                    bestDist = dist;
-                    best = playerUnit;
-                }
-            }
-        }
-        return best;
+        return TargetSearchUtility.SearchTarget(transform.position, aggroRadius,
+            Faction.Enemy, isGuarding == true ? null : MainTarget);
     }
 
     private void OnDrawGizmosSelected()

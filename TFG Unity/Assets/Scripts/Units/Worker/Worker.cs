@@ -11,6 +11,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey maxCarryWeightStat;
 
@@ -81,7 +82,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
 
         unit.OnDeathStartedEvent += OnDeathStarted;
-        unit.OnDeathCleanupEvent += OnDeathCleanup;
         unit.OnDamageTakenEvent += OnDamageTaken;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
@@ -95,7 +95,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
 
         unit.OnDeathStartedEvent -= OnDeathStarted;
-        unit.OnDeathCleanupEvent -= OnDeathCleanup;
         unit.OnDamageTakenEvent -= OnDamageTaken;
     }    
 
@@ -121,6 +120,10 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (moveSpeedStat == null)
         {
@@ -155,6 +158,10 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         {
             unit.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            unit.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxCarryWeightStat, out finalValue))
         {
             maxCarryWeight = finalValue;
@@ -175,11 +182,6 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
     private void OnDeathStarted()
     {
         ClearWorkAnimation();
-    }
-
-    private void OnDeathCleanup()
-    {
-        
     }
 
     /// <summary>

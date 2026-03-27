@@ -10,6 +10,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey maxConcurrentBatchesStat;
     [SerializeField] private StatKey processingSpeedStat;
 
@@ -150,10 +151,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         ItemConsumerManager.Instance.Register(this);
         isRegistered = true;
 
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
 
         StartCoroutine(DispatchOutputToWarehouse());
@@ -168,24 +165,25 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
             ItemConsumerManager.Instance.Unregister(this);
             isRegistered = false;
         }
-
         if (StatModifierManager.Instance != null)
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
 
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
-
         ResetInternalStateAndReleaseReservations();
     }
+
+    #region Stats
 
     private void CheckNullStats()
     {
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (maxConcurrentBatchesStat == null)
         {
@@ -216,6 +214,10 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         {
             structure.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxConcurrentBatchesStat, out finalValue))
         {
             maxConcurrentBatches = (int)finalValue;
@@ -226,20 +228,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
+    #endregion
 
     /// <summary>
     /// Releases reservations and restores values to initial state

@@ -13,6 +13,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
+    [SerializeField] private StatKey healOnWaveCompletedStat;
     [SerializeField] private StatKey maxCapacityStat;
 
     [Header("Runtime")]
@@ -84,10 +85,6 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         WarehouseManager.Instance.Register(this);
         ItemConsumerManager.Instance.Register(this);
 
-        structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
-        structure.OnDamageTakenEvent += OnDamageTaken;
-
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
 
@@ -105,10 +102,6 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
-        structure.OnDamageTakenEvent -= OnDamageTaken;
     }
 
     #region Stats
@@ -118,6 +111,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         if (maxHealthStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(maxHealthStat)}");
+        }
+        if (healOnWaveCompletedStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(healOnWaveCompletedStat)}");
         }
         if (maxCapacityStat == null)
         {
@@ -144,6 +141,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             structure.maxHealth = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, healOnWaveCompletedStat, out finalValue))
+        {
+            structure.healOnWaveCompleted = finalValue;
+        }
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, maxCapacityStat, out finalValue))
         {
             maxCapacity = (int)finalValue;
@@ -152,26 +153,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     #endregion
 
-    #region ITarget events
-
-    private void OnDamageTaken(float amount, Vector3 attackOrigin)
-    {
-
-    }
-
-    private void OnDeathStarted()
-    {
-        
-    }
-
-    private void OnDeathCleanup()
-    {
-
-    }
-
-    #endregion
-
-    #region Category
+    #region Storage Category
 
     // Checks whether this warehouse allows the category of the item
     private bool CategoryAllows(ItemData itemData)

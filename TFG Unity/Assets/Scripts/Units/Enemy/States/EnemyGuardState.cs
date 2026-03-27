@@ -47,7 +47,7 @@ public class EnemyGuardState : IEnemyState
         {
             detectionTimer = detectionInterval;
 
-            ICombatTarget intruder = enemy.FindNearestPlayerUnit();
+            ITarget intruder = enemy.FindNearestPlayerTarget(isGuarding: true);
 
             if (intruder != null && intruder.IsAlive)
             {
