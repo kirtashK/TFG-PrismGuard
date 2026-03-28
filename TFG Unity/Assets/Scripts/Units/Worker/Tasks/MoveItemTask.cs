@@ -193,7 +193,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         {
             Debug.Log($"{name} is not being carried, resetting...");
 
-            Worker[] workers = FindObjectsByType<Worker>(FindObjectsSortMode.None);
+            Worker[] workers = FindObjectsByType<Worker>();
             foreach (Worker worker in workers)
             {
                 if (worker == null)
