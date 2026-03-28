@@ -190,7 +190,7 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             return;
         }
 
-        // Close when click outside research UI:
+        // Close when click outside Construction UI:
         if (clickAction != null && clickAction.triggered)
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
