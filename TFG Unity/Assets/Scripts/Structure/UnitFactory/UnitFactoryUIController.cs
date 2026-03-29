@@ -1,12 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class UnitFactoryUIController : MonoBehaviour, IHideElement
 {
     public GameObject panelRoot;
+
+    [SerializeField] private TMP_Text nameText;
+    [SerializeField] private TMP_Text capacityText;
+    [SerializeField] private TMP_Text concurrentText;
 
     public GameObject unitEntryPrefab;
     public Transform unitListContainer;
@@ -100,7 +105,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             return;
         }
 
-        // Close when click outside research UI:
+        // Close when click outside Factory UI:
         if (clickAction != null && clickAction.triggered)
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
@@ -151,7 +156,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             HidePanel();
             return;
         }
-
+        
         ShowPanelForFactory(factory);
     }
 
@@ -160,6 +165,8 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         HideElementManager.Instance.ShowOnly(this);
 
         currentFactory = factory;
+        SetupTexts(factory);
+
         if (panelRoot != null)
         {
             panelRoot.SetActive(true);
@@ -177,6 +184,22 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.OnScoreChanged += OnScoreChanged;
+        }
+    }
+
+    private void SetupTexts(UnitFactory factory)
+    {
+        if (nameText != null)
+        {
+            nameText.text = factory.structure.structureData.Name;
+        }
+        if (capacityText != null)
+        {
+            capacityText.text = $"Capacity: {factory.QueueCount}/{factory.maxQueueLength}";
+        }
+        if (concurrentText != null)
+        {
+            concurrentText.text = $"Slots: {factory.CurrentConcurrentBatches}/{factory.maxConcurrentBatches}";
         }
     }
 
@@ -292,16 +315,19 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
     // Factory events
     private void OnFactoryOrderEnqueued(UnitFactory factory, UnitProductionOrder order)
     {
+        SetupTexts(factory);
         AddOrUpdateOrderEntry(order);
     }
 
     private void OnFactoryOrderStateChanged(UnitFactory factory, UnitProductionOrder order)
     {
+        SetupTexts(factory);
         AddOrUpdateOrderEntry(order);
     }
 
     private void OnFactoryOrderCompleted(UnitFactory factory, UnitProductionOrder order)
     {
+        SetupTexts(factory);
         if (orderEntryObjects.TryGetValue(order.orderId, out GameObject gameObject))
         {
             Destroy(gameObject);
@@ -311,6 +337,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
 
     private void OnFactoryOrderCancelled(UnitFactory factory, UnitProductionOrder order)
     {
+        SetupTexts(factory);
         if (orderEntryObjects.TryGetValue(order.orderId, out GameObject gameObject))
         {
             Destroy(gameObject);

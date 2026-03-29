@@ -18,10 +18,14 @@ public class UnitFactory : MonoBehaviour
     [SerializeField] private StatKey maxConcurrentBatchesStat;
     [SerializeField] private StatKey processingSpeedStat;
 
-    private int maxConcurrentBatches = 1;
+    [HideInInspector] public int maxConcurrentBatches = 1;
+    [HideInInspector] public int CurrentConcurrentBatches => buildingOrders.Count;
+
     private float processingSpeed = 1;
 
-    private int maxQueueLength = 5;
+    [HideInInspector] public int maxQueueLength = 5;
+    [HideInInspector] public int QueueCount => allOrders.Count;
+    private int enqueueCounter = 0;
 
     public Transform[] spawnPoints;
     private int spawnRoundRobin = 0;
@@ -37,8 +41,6 @@ public class UnitFactory : MonoBehaviour
     public event Action<UnitFactory, UnitProductionOrder> OnOrderStateChanged;
     public event Action<UnitFactory, UnitProductionOrder> OnOrderCompleted;
     public event Action<UnitFactory, UnitProductionOrder> OnOrderCancelled;
-
-    private int enqueueCounter = 0;
 
     private void Awake()
     {
@@ -173,13 +175,13 @@ public class UnitFactory : MonoBehaviour
     {
         if (unit == null)
         {
-            Debug.LogWarning("UnitFactory.EnqueueProduction: unit null");
+            Debug.LogWarning($"{nameof(UnitFactory)}: missing {nameof(unit)}");
             return Guid.Empty;
         }
 
         if (maxQueueLength >= 0 && CountPendingOrders() >= maxQueueLength)
         {
-            Debug.LogWarning("UnitFactory.EnqueueProduction: queue is full");
+            Debug.LogWarning($"{nameof(UnitFactory)}: queue is full");
             return Guid.Empty;
         }
 
@@ -187,7 +189,7 @@ public class UnitFactory : MonoBehaviour
         Guid scoreToken = ScoreManager.Instance.ReserveScore(unit.scoreCost);
         if (scoreToken == Guid.Empty)
         {
-            Debug.Log($"UnitFactory: Not enough available score to enqueue {unit.Name}");
+            Debug.Log($"{nameof(UnitFactory)}: Not enough available score to enqueue {unit.Name}");
             return Guid.Empty;
         }
 
@@ -229,6 +231,11 @@ public class UnitFactory : MonoBehaviour
         }
         if (order.State != UnitProductionOrder.OrderState.Ready)
         {
+            return;
+        }
+        if (readyQueue.Contains(order))
+        {
+            Debug.LogWarning($"{name}: tried to enqueue a duplicate order: {order.enqueueIndex}");
             return;
         }
 
@@ -274,6 +281,7 @@ public class UnitFactory : MonoBehaviour
             UnitProductionOrder next = readyQueue.Dequeue();
             if (next == null || next.State != UnitProductionOrder.OrderState.Ready)
             {
+                Debug.LogWarning($"{name}: skipped invalid ready queue entry: {next.enqueueIndex}");
                 continue;
             }
 
