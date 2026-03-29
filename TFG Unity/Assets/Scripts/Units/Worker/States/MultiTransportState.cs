@@ -12,6 +12,7 @@ public class MultiTransportState : IWorkerState
 
     private MoveItemTask task;
     private IItemConsumer consumer;
+    private Vector3 currentDeliveryDestination;
 
     private struct CollectedItem
     {
@@ -22,6 +23,7 @@ public class MultiTransportState : IWorkerState
     private readonly List<CollectedItem> collectedItems = new();
 
     private const float maxPickupRadius = 10f;
+    private const float destinationToleranceSqr = 0.01f;
 
     public void EnterState(Worker worker)
     {
@@ -47,6 +49,8 @@ public class MultiTransportState : IWorkerState
             worker.ChangeState(new IdleState());
             return;
         }
+
+        currentDeliveryDestination = consumer.GetReceivePosition();
 
         phase = Phase.Pickup;
         worker.unit.agent.SetDestination(task.TaskPosition);
@@ -80,7 +84,6 @@ public class MultiTransportState : IWorkerState
         {
             return;
         }
-
         if (task == null)
         {
             Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(task)}");
@@ -88,7 +91,6 @@ public class MultiTransportState : IWorkerState
             worker.ChangeState(new IdleState());
             return;
         }
-
         if (consumer == null)
         {
             Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
@@ -99,8 +101,10 @@ public class MultiTransportState : IWorkerState
         worker.PickUp(task.gameObject);
         TaskManager.Instance.CompleteTask(task);
 
-        task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance);
-        task.source?.ConfirmRetrieval(instance.itemData);
+        if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance))
+        {
+            task.source?.ConfirmRetrieval(instance.itemData);
+        }
 
         collectedItems.Add(new CollectedItem
         {
@@ -111,37 +115,29 @@ public class MultiTransportState : IWorkerState
         MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
             worker.transform.position,
             worker.maxCarryWeight - worker.currentLoad,
-            consumer.GetReceivePosition(),
+            currentDeliveryDestination,
             maxPickupRadius
         );
 
-        if (consumer == null)
-        {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer after pickup");
-            TryResetCollectedAndDrop();
-            return;
-        }
-
         if (next != null)
         {
-            task = next;
-            arrivalRange = next.InteractionRange;
-            worker.CurrentTask = next;
-            worker.unit.agent.SetDestination(next.TaskPosition);
-            return;
-        }
+            IItemConsumer nextConsumer = next.TargetConsumer;
 
-        if (consumer == null || (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled))
-        {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer or is deactivated");
-            TryResetCollectedAndDrop();
-            return;
+            if (nextConsumer != null
+                && AreSameDestination(nextConsumer.GetReceivePosition(), currentDeliveryDestination))
+            {
+                task = next;
+                consumer = nextConsumer;
+                arrivalRange = next.InteractionRange;
+                worker.CurrentTask = next;
+                worker.unit.agent.SetDestination(next.TaskPosition);
+                return;
+            }
         }
 
         phase = Phase.Delivery;
         worker.unit.agent.SetDestination(consumer.GetReceivePosition());
     }
-
 
     private void HandleDeliveryPhase()
     {
@@ -151,7 +147,6 @@ public class MultiTransportState : IWorkerState
         {
             return;
         }
-
         if (consumer == null)
         {
             Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
@@ -198,5 +193,10 @@ public class MultiTransportState : IWorkerState
         collectedItems.Clear();
         worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
+    }
+
+    private bool AreSameDestination(Vector3 first, Vector3 second)
+    {
+        return (first - second).sqrMagnitude <= destinationToleranceSqr;
     }
 }
