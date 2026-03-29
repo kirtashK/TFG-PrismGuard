@@ -13,7 +13,13 @@ public class MultiTransportState : IWorkerState
     private MoveItemTask task;
     private IItemConsumer consumer;
 
-    private readonly List<MoveItemTask> collectedTasks = new();
+    private struct CollectedItem
+    {
+        public MoveItemTask task;
+        public IItemConsumer targetConsumer;
+    }
+
+    private readonly List<CollectedItem> collectedItems = new();
 
     private const float maxPickupRadius = 10f;
 
@@ -44,7 +50,7 @@ public class MultiTransportState : IWorkerState
 
         phase = Phase.Pickup;
         worker.unit.agent.SetDestination(task.TaskPosition);
-        collectedTasks.Clear();
+        collectedItems.Clear();
     }
 
     public void UpdateState(Worker worker)
@@ -63,7 +69,7 @@ public class MultiTransportState : IWorkerState
 
     public void ExitState(Worker worker)
     {
-        collectedTasks.Clear();
+        collectedItems.Clear();
     }
 
     private void HandlePickupPhase()
@@ -77,7 +83,7 @@ public class MultiTransportState : IWorkerState
 
         if (task == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null task");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(task)}");
             worker.CurrentTask = null;
             worker.ChangeState(new IdleState());
             return;
@@ -85,7 +91,7 @@ public class MultiTransportState : IWorkerState
 
         if (consumer == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
             TryResetCollectedAndDrop();
             return;
         }
@@ -96,7 +102,11 @@ public class MultiTransportState : IWorkerState
         task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance);
         task.source?.ConfirmRetrieval(instance.itemData);
 
-        collectedTasks.Add(task);
+        collectedItems.Add(new CollectedItem
+        {
+            task = task,
+            targetConsumer = task.TargetConsumer
+        });
 
         MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
             worker.transform.position,
@@ -144,47 +154,48 @@ public class MultiTransportState : IWorkerState
 
         if (consumer == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
             TryResetCollectedAndDrop();
             return;
         }
 
-        foreach (MoveItemTask task in collectedTasks)
+        foreach (CollectedItem collectedItem in collectedItems)
         {
-            if (task == null)
+            if (collectedItem.task == null || collectedItem.targetConsumer == null)
             {
                 continue;
             }
-            
-            consumer.OnReceived(task.gameObject, task.TaskData);
-            worker.currentLoad = Mathf.Max(0f, worker.currentLoad - task.TaskData.weight);
-            worker.ClearFromInventory(task.gameObject);
-            if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+
+            collectedItem.targetConsumer.OnReceived(collectedItem.task.gameObject, collectedItem.task.TaskData);
+            worker.currentLoad = Mathf.Max(0f, worker.currentLoad - collectedItem.task.TaskData.weight);
+            worker.ClearFromInventory(collectedItem.task.gameObject);
+
+            if (collectedItem.task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
             {
                 itemInstance.carrier = null;
             }
         }
 
-        collectedTasks.Clear();
+        collectedItems.Clear();
         worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
     }
 
     private void TryResetCollectedAndDrop()
     {
-        foreach (MoveItemTask collected in collectedTasks)
+        foreach (CollectedItem collected in collectedItems)
         {
-            if (collected == null)
+            if (collected.task == null)
             {
                 continue;
             }
 
-            collected.Reset();
+            collected.task.Reset();
         }
 
         worker.DropAll(worker.unit.Position);
 
-        collectedTasks.Clear();
+        collectedItems.Clear();
         worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
     }
