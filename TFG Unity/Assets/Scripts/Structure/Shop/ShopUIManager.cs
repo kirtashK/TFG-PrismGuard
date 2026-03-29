@@ -156,7 +156,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             return;
         }
 
-        // Close when click outside research UI:
+        // Close when click outside shop UI:
         if (clickAction != null && clickAction.triggered)
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();

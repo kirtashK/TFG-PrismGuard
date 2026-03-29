@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
@@ -18,6 +19,9 @@ public class SelectionController : MonoBehaviour
 
     private RectTransform selectionRectTransform;
 
+    private InputAction pointerAction;
+    private InputAction selectAction;
+
     private void Awake()
     {
         if (targetCamera == null)
@@ -30,54 +34,86 @@ public class SelectionController : MonoBehaviour
             selectionRectTransform = selectionBoxImage.GetComponent<RectTransform>();
             selectionBoxImage.gameObject.SetActive(false);
         }
+
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        selectAction = new InputAction("Select", InputActionType.Button);
+        selectAction.AddBinding("<Mouse>/leftButton");
+    }
+
+    private void OnEnable()
+    {
+        pointerAction?.Enable();
+        selectAction?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pointerAction?.Disable();
+        selectAction?.Disable();
+
+        isDragging = false;
+
+        if (selectionBoxImage != null)
+        {
+            selectionBoxImage.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        pointerAction?.Dispose();
+        selectAction?.Dispose();
     }
 
     private void Update()
     {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        if (selectAction == null || pointerAction == null)
         {
             return;
         }
 
-        // If left mouse button is held, player is trying to select
-        if (Input.GetMouseButtonDown(0))
+        if (selectAction.WasPressedThisFrame())
         {
-            dragStartScreen = Input.mousePosition;
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
+            dragStartScreen = pointerAction.ReadValue<Vector2>();
+            dragEndScreen = dragStartScreen;
             isDragging = true;
+
             if (selectionBoxImage != null)
             {
                 selectionBoxImage.gameObject.SetActive(true);
             }
         }
 
-        // While dragging update selection area
-        if (isDragging)
+        if (isDragging && selectAction.IsPressed())
         {
-            dragEndScreen = Input.mousePosition;
+            dragEndScreen = pointerAction.ReadValue<Vector2>();
             UpdateSelectionGraphics();
         }
 
-        // On release decide click or drag
-        if (isDragging && Input.GetMouseButtonUp(0))
+        if (isDragging && selectAction.WasReleasedThisFrame())
         {
             isDragging = false;
+
             if (selectionBoxImage != null)
             {
                 selectionBoxImage.gameObject.SetActive(false);
             }
 
             float dragDistance = (dragEndScreen - dragStartScreen).magnitude;
-
-            bool additive = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            bool additive = Keyboard.current != null
+                && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
 
             if (dragDistance < 6f)
             {
-                // Treat as click
                 HandleClick(dragEndScreen, additive);
             }
             else
             {
-                // Drag selection
                 HandleDragSelection(dragStartScreen, dragEndScreen, additive);
             }
         }

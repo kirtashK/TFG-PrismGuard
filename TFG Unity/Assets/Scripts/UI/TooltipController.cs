@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Shows a tooltip on UI with the provided text around the pointer
@@ -72,7 +73,10 @@ public class TooltipController : MonoBehaviour
 
     private void UpdatePositionToMouse()
     {
-        Vector2 mousePos = Input.mousePosition;
+        Vector2 mousePos = Pointer.current != null
+            ? Pointer.current.position.ReadValue()
+            : Vector2.zero;
+
         RectTransform canvasRect = parentCanvas.GetComponent<RectTransform>();
 
         // Convert screen point to Canvas local point

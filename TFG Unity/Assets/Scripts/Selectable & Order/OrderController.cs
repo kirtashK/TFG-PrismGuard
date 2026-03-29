@@ -1,66 +1,104 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class OrdersController : MonoBehaviour
 {
     public LayerMask groundLayerMask = 1 << 0;
 
+    private InputAction pointerAction;
+    private InputAction orderAction;
+
+    private void Awake()
+    {
+        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
+        orderAction = new InputAction("Order", InputActionType.Button);
+        orderAction.AddBinding("<Mouse>/rightButton");
+    }
+
+    private void OnEnable()
+    {
+        pointerAction?.Enable();
+        orderAction?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pointerAction?.Disable();
+        orderAction?.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        pointerAction?.Dispose();
+        orderAction?.Dispose();
+    }
+
     private void Update()
     {
-        // Move order with right click
-        if (Input.GetMouseButtonDown(1))
+        if (orderAction == null || pointerAction == null)
         {
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+        }
+        if (!orderAction.WasPressedThisFrame())
+        {
+            return;
+        }
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        Vector2 mousePosition = pointerAction.ReadValue<Vector2>();
+        if (Camera.main == null)
+        {
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayerMask))
+        {
+            return;
+        }
+
+        Vector3 targetPosition = hit.point;
+
+        IReadOnlyList<ISelectable> selection = SelectionManager.Instance.CurrentSelection;
+        if (selection == null || selection.Count == 0)
+        {
+            return;
+        }
+
+        List<IOrderable> selectionObjects = new();
+        foreach (ISelectable selectable in selection)
+        {
+            if (selectable is Component component
+                && component.TryGetComponent<IOrderable>(out IOrderable orderableComponent))
             {
-                return;
-            }
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayerMask))
-            {
-                Vector3 targetPosition = hit.point;
-
-                IReadOnlyList<ISelectable> selection = SelectionManager.Instance.CurrentSelection;
-                if (selection == null || selection.Count == 0)
-                {
-                    return;
-                }
-
-                List<IOrderable> selectionObjects = new();
-                foreach (ISelectable selectable in selection)
-                {
-                    if (selectable is Component comp)
-                    {
-                        if (comp.TryGetComponent<IOrderable>(out IOrderable orderableComponent))
-                        {
-                            selectionObjects.Add(orderableComponent);
-                        }
-                    }
-                }
-
-                if (selectionObjects.Count == 0)
-                {
-                    return;
-                }
-
-                // Default options
-                MoveOrderOptions options = MoveOrderOptions.Default;
-
-                // If Shift is held: set return to guard false
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-                {
-                    options.returnToGuard = false;
-                }
-
-                // If Ctrl is held: set attackMove to false
-                if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-                {
-                    options.attackMove = false;
-                }
-
-                OrderManager.Instance.IssueMoveOrder(selectionObjects, targetPosition, options);
+                selectionObjects.Add(orderableComponent);
             }
         }
+
+        if (selectionObjects.Count == 0)
+        {
+            return;
+        }
+
+        MoveOrderOptions options = MoveOrderOptions.Default;
+
+        if (Keyboard.current != null
+            && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
+        {
+            options.returnToGuard = false;
+        }
+
+        if (Keyboard.current != null
+            && (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed))
+        {
+            options.attackMove = false;
+        }
+
+        OrderManager.Instance.IssueMoveOrder(selectionObjects, targetPosition, options);
     }
 }

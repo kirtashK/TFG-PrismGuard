@@ -33,6 +33,8 @@ public class UnitProductionOrder : IItemConsumer
     public event Action<UnitProductionOrder> OnCompleted;
     public event Action<UnitProductionOrder> OnCancelled;
 
+    private bool isQueuedForBuild = false;
+
     public UnitProductionOrder(UnitData unitData, UnitFactory owner, int enqueueIndex, Guid scoreToken)
     {
         this.orderId = Guid.NewGuid();
@@ -172,10 +174,13 @@ public class UnitProductionOrder : IItemConsumer
         receivedItems.Add(item);
 
         // If all items received, change state to ready and notify
-        if (AllRequirementsMet())
+        if (AllRequirementsMet() && SetState(OrderState.Ready))
         {
-            SetState(OrderState.Ready);
-            ownerFactory.NotifyOrderReady(this);
+            if (!isQueuedForBuild)
+            {
+                isQueuedForBuild = true;
+                ownerFactory.NotifyOrderReady(this);
+            }
         }
     }
 
@@ -184,14 +189,16 @@ public class UnitProductionOrder : IItemConsumer
 
     }
 
-    private void SetState(OrderState newState)
+    private bool SetState(OrderState newState)
     {
         if (State == newState)
         {
-            return;
+            return false;
         }
+
         State = newState;
         OnStateChanged?.Invoke(this);
+        return true;
     }
 
     public void StartBuilding()
@@ -200,11 +207,14 @@ public class UnitProductionOrder : IItemConsumer
         {
             return;
         }
+
+        isQueuedForBuild = false;
         SetState(OrderState.Building);
     }
 
     public void Complete()
     {
+        isQueuedForBuild = false;
         SetState(OrderState.Completed);
         OnCompleted?.Invoke(this);
     }
@@ -215,6 +225,8 @@ public class UnitProductionOrder : IItemConsumer
         {
             return;
         }
+
+        isQueuedForBuild = false;
 
         // Release score reservation
         if (scoreReservationToken != Guid.Empty)

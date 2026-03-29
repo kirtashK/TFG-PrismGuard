@@ -12,10 +12,18 @@ public class MultiTransportState : IWorkerState
 
     private MoveItemTask task;
     private IItemConsumer consumer;
+    private Vector3 currentDeliveryDestination;
 
-    private readonly List<MoveItemTask> collectedTasks = new();
+    private struct CollectedItem
+    {
+        public MoveItemTask task;
+        public IItemConsumer targetConsumer;
+    }
+
+    private readonly List<CollectedItem> collectedItems = new();
 
     private const float maxPickupRadius = 10f;
+    private const float destinationToleranceSqr = 0.01f;
 
     public void EnterState(Worker worker)
     {
@@ -42,9 +50,11 @@ public class MultiTransportState : IWorkerState
             return;
         }
 
+        currentDeliveryDestination = consumer.GetReceivePosition();
+
         phase = Phase.Pickup;
         worker.unit.agent.SetDestination(task.TaskPosition);
-        collectedTasks.Clear();
+        collectedItems.Clear();
     }
 
     public void UpdateState(Worker worker)
@@ -63,7 +73,7 @@ public class MultiTransportState : IWorkerState
 
     public void ExitState(Worker worker)
     {
-        collectedTasks.Clear();
+        collectedItems.Clear();
     }
 
     private void HandlePickupPhase()
@@ -74,18 +84,16 @@ public class MultiTransportState : IWorkerState
         {
             return;
         }
-
         if (task == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null task");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(task)}");
             worker.CurrentTask = null;
             worker.ChangeState(new IdleState());
             return;
         }
-
         if (consumer == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
             TryResetCollectedAndDrop();
             return;
         }
@@ -93,45 +101,43 @@ public class MultiTransportState : IWorkerState
         worker.PickUp(task.gameObject);
         TaskManager.Instance.CompleteTask(task);
 
-        task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance);
-        task.source?.ConfirmRetrieval(instance.itemData);
+        if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance))
+        {
+            task.source?.ConfirmRetrieval(instance.itemData);
+        }
 
-        collectedTasks.Add(task);
+        collectedItems.Add(new CollectedItem
+        {
+            task = task,
+            targetConsumer = task.TargetConsumer
+        });
 
         MoveItemTask next = TaskManager.Instance.RequestMoveItemTask(
             worker.transform.position,
             worker.maxCarryWeight - worker.currentLoad,
-            consumer.GetReceivePosition(),
+            currentDeliveryDestination,
             maxPickupRadius
         );
 
-        if (consumer == null)
-        {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer after pickup");
-            TryResetCollectedAndDrop();
-            return;
-        }
-
         if (next != null)
         {
-            task = next;
-            arrivalRange = next.InteractionRange;
-            worker.CurrentTask = next;
-            worker.unit.agent.SetDestination(next.TaskPosition);
-            return;
-        }
+            IItemConsumer nextConsumer = next.TargetConsumer;
 
-        if (consumer == null || (consumer is MonoBehaviour monoBehaviour && !monoBehaviour.isActiveAndEnabled))
-        {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer or is deactivated");
-            TryResetCollectedAndDrop();
-            return;
+            if (nextConsumer != null
+                && AreSameDestination(nextConsumer.GetReceivePosition(), currentDeliveryDestination))
+            {
+                task = next;
+                consumer = nextConsumer;
+                arrivalRange = next.InteractionRange;
+                worker.CurrentTask = next;
+                worker.unit.agent.SetDestination(next.TaskPosition);
+                return;
+            }
         }
 
         phase = Phase.Delivery;
         worker.unit.agent.SetDestination(consumer.GetReceivePosition());
     }
-
 
     private void HandleDeliveryPhase()
     {
@@ -141,51 +147,56 @@ public class MultiTransportState : IWorkerState
         {
             return;
         }
-
         if (consumer == null)
         {
-            Debug.LogWarning("[MultiTransportState] HandlePickupPhase: null consumer");
+            Debug.LogWarning($"{nameof(MultiTransportState)}: null {nameof(consumer)}");
             TryResetCollectedAndDrop();
             return;
         }
 
-        foreach (MoveItemTask task in collectedTasks)
+        foreach (CollectedItem collectedItem in collectedItems)
         {
-            if (task == null)
+            if (collectedItem.task == null || collectedItem.targetConsumer == null)
             {
                 continue;
             }
-            
-            consumer.OnReceived(task.gameObject, task.TaskData);
-            worker.currentLoad = Mathf.Max(0f, worker.currentLoad - task.TaskData.weight);
-            worker.ClearFromInventory(task.gameObject);
-            if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+
+            collectedItem.targetConsumer.OnReceived(collectedItem.task.gameObject, collectedItem.task.TaskData);
+            worker.currentLoad = Mathf.Max(0f, worker.currentLoad - collectedItem.task.TaskData.weight);
+            worker.ClearFromInventory(collectedItem.task.gameObject);
+
+            if (collectedItem.task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
             {
                 itemInstance.carrier = null;
             }
         }
 
-        collectedTasks.Clear();
+        collectedItems.Clear();
         worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
     }
 
     private void TryResetCollectedAndDrop()
     {
-        foreach (MoveItemTask collected in collectedTasks)
+        foreach (CollectedItem collected in collectedItems)
         {
-            if (collected == null)
+            if (collected.task == null)
             {
                 continue;
             }
 
-            collected.Reset();
+            collected.task.Reset();
         }
 
         worker.DropAll(worker.unit.Position);
 
-        collectedTasks.Clear();
+        collectedItems.Clear();
         worker.CurrentTask = null;
         worker.ChangeState(new IdleState());
+    }
+
+    private bool AreSameDestination(Vector3 first, Vector3 second)
+    {
+        return (first - second).sqrMagnitude <= destinationToleranceSqr;
     }
 }
