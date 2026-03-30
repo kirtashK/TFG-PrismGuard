@@ -298,21 +298,22 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             return;
         }
 
-        amount = Mathf.Abs(amount);
-        if (amount == 0)
-        {
-            SetStatus("Score amount must be greater than 0");
-            return;
-        }
-
         if (ScoreManager.Instance == null)
         {
             SetStatus("ScoreManager not available");
             return;
         }
 
-        ScoreManager.Instance.AddScore(amount);
-        SetStatus($"+{amount} score");
+        if (amount >= 0)
+        {
+            ScoreManager.Instance.AddScore(amount);
+            SetStatus($"+{amount} score");            
+        }
+        else
+        {
+            ScoreManager.Instance.SpendScore(amount);
+            SetStatus($"{amount} score");
+        }
     }
 
     private void ToggleWaves()
@@ -335,7 +336,6 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             return;
         }
 
-        amount = Mathf.Abs(amount);
         if (Mathf.Approximately(amount, 0f))
         {
             SetStatus("Stat amount must be greater than 0");
@@ -369,7 +369,14 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             amount
         );
 
-        SetStatus($"+{amount:0.##} {statKey.Name}");
+        if (amount >= 0f)
+        {
+            SetStatus($"+{amount:0.##} {statKey.Name}");
+        }
+        else
+        {
+            SetStatus($"{amount:0.##} {statKey.Name}");
+        }
     }
 
     private void RefreshWaveState()
