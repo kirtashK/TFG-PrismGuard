@@ -262,49 +262,69 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         }
 
         return queue.Peek();
-}
+    } 
 
-    public void ConfirmRetrieval(ItemData itemData)
+    public void ConfirmRetrieval(GameObject retrievedObject)
     {
-        if (itemData == null)
+        if (retrievedObject == null)
         {
-            Debug.LogError($"{name}: ConfirmRetrieval: null ItemData: [{itemData}]");
+            Debug.LogError($"{name}: null {nameof(retrievedObject)}");
             return;
         }
-        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        if (!retrievedObject.TryGetComponent<ItemInstance>(out ItemInstance instance))
         {
-            Debug.LogError($"{name}: ConfirmRetrieval: Failed to get queue from storedItems for [{itemData}]");
+            Debug.LogError($"{name}: retrievedObject has no {nameof(ItemInstance)}");
             return;
         }
-        if (queue.Count == 0)
+        if (!storedItems.TryGetValue(instance.itemData, out Queue<GameObject> queue))
         {
-            Debug.LogError($"{name}: ConfirmRetrieval: Queue empty [{itemData}]");
+            Debug.LogError($"{name}: Failed to get queue for {instance.itemData}");
             return;
         }
 
-        GameObject front = queue.Peek();
-        if (front != null)
+        Queue<GameObject> rebuiltQueue = new();
+        bool removed = false;
+
+        while (queue.Count > 0)
         {
-            if (front.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+            GameObject current = queue.Dequeue();
+
+            if (!removed && current == retrievedObject)
             {
-                moveItemTask.ClearStored();
+                if (current != null && current.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+                {
+                    moveItemTask.ClearStored();
+                }
+
+                currentCapacity = Mathf.Max(0, currentCapacity - 1);
+
+                if (reservedForRetrieveByItem.TryGetValue(instance.itemData, out int reserved) && reserved > 0)
+                {
+                    reservedForRetrieveByItem[instance.itemData] = reserved - 1;
+                }
+
+                removed = true;
+                continue;
             }
+
+            rebuiltQueue.Enqueue(current);
         }
 
-        GameObject gameObject = queue.Dequeue();
-        currentCapacity = Mathf.Max(0, currentCapacity - 1);
-
-        if (reservedForRetrieveByItem.TryGetValue(itemData, out int reserved) && reserved > 0)
+        if (!removed)
         {
-            reservedForRetrieveByItem[itemData] = reserved - 1;
+            Debug.LogError($"{name}: retrieved object not found in queue for {instance.itemData}");
         }
 
-        if (queue.Count == 0)
+        if (rebuiltQueue.Count == 0)
         {
-            storedItems.Remove(itemData);
+            storedItems.Remove(instance.itemData);
+        }
+        else
+        {
+            storedItems[instance.itemData] = rebuiltQueue;
         }
 
-        OnItemRetrieved?.Invoke(itemData);
+        OnItemRetrieved?.Invoke(instance.itemData);
     }
 
     public bool CanReceive(ItemData itemData)

@@ -337,6 +337,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bundle of logs (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6071192463067212858, guid: f914a0d30485e7b418d11291c27da2c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

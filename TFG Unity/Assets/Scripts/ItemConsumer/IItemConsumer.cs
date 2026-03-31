@@ -18,5 +18,5 @@ public interface IItemConsumer
 
     // For IItemConsumers that can store items that can later be taken, 
     // this reduces the current capacity
-    void ConfirmRetrieval(ItemData data);
+    void ConfirmRetrieval(GameObject item);
 }

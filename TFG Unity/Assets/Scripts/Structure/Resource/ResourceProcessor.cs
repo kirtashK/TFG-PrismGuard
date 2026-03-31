@@ -525,8 +525,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
-    public void ConfirmRetrieval(ItemData item)
+    public void ConfirmRetrieval(GameObject item)
     {
-
+        
     }
 }
