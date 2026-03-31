@@ -25,7 +25,7 @@ public class SoldierMoveState : ISoldierState
         // If enemies and attackMove enabled, switch to chase/attack
         if (attackMove)
         {
-            ITarget target = soldier.FindNearestPlayerTarget();
+            ITarget target = soldier.FindNearestEnemyTarget();
 
             if (target != null)
             {

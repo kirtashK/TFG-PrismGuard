@@ -13,7 +13,7 @@ public class EnemyChaseState : IEnemyState
     {
         enemy.unit.agent.isStopped = false;
         enemy.unit.agent.stoppingDistance = enemy.unit.attackRange;
-        enemy.unit.agent.SetDestination(target.Position);
+        enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(target));
     }
 
     public void UpdateState(Enemy enemy)
@@ -52,7 +52,7 @@ public class EnemyChaseState : IEnemyState
         }
         else
         {
-            enemy.unit.agent.SetDestination(target.Position);
+            enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(target));
         }
     }
 

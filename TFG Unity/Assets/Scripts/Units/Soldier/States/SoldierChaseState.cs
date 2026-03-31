@@ -23,9 +23,9 @@ public class SoldierChaseState : ISoldierState
             return;
         }
 
-        soldier.unit.agent.SetDestination(target.Position);
+        soldier.unit.agent.SetDestination(soldier.unit.GetTargetAttackPosition(target));
 
-        float distance = Vector3.Distance(soldier.transform.position, target.Position);
+        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(target));
         if (distance <= soldier.unit.attackRange)
         {
             soldier.ChangeState(new SoldierAttackState(target));

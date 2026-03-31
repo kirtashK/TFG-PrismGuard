@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [DisallowMultipleComponent]
 public class Structure : MonoBehaviour, ITarget
@@ -33,6 +34,7 @@ public class Structure : MonoBehaviour, ITarget
             selectable.data = structureData;
         }
 
+        CacheAttackColliders();
         CacheRenderers();
     }
 
@@ -59,6 +61,7 @@ public class Structure : MonoBehaviour, ITarget
         }
     }
 
+
     #region ICombatTarget
 
     public event Action OnDeathStartedEvent;
@@ -74,6 +77,89 @@ public class Structure : MonoBehaviour, ITarget
     public Faction Faction => structureData.faction;
 
     public Category Category => Category.Structure;
+
+    [Header("Attack position")]
+    [SerializeField] private float attackPositionOffset = 0f;
+    [SerializeField] private float navMeshSampleDistance = 2f;
+    private readonly List<Collider> cachedAttackColliders = new();
+
+    private void CacheAttackColliders()
+    {
+        cachedAttackColliders.Clear();
+
+        Collider[] colliders = GetComponentsInChildren<Collider>(includeInactive: false);
+        foreach (Collider collider in colliders)
+        {
+            if (collider == null || !collider.enabled || collider.isTrigger)
+            {
+                continue;
+            }
+
+            cachedAttackColliders.Add(collider);
+        }
+    }
+
+    public bool TryGetAttackPosition(Vector3 attackerPosition, out Vector3 attackPosition)
+    {
+        attackPosition = transform.position;
+
+        if (cachedAttackColliders.Count == 0)
+        {
+            return false;
+        }
+
+        bool foundValidPosition = false;
+        float bestDistanceSqr = float.MaxValue;
+        Vector3 bestPosition = transform.position;
+
+        for (int i = 0; i < cachedAttackColliders.Count; i++)
+        {
+            Collider collider = cachedAttackColliders[i];
+            if (collider == null || !collider.enabled)
+            {
+                continue;
+            }
+
+            Vector3 candidate = GetCandidateAttackPosition(collider, attackerPosition);
+
+            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, navMeshSampleDistance, NavMesh.AllAreas))
+            {
+                float distanceSqr = (hit.position - attackerPosition).sqrMagnitude;
+                if (distanceSqr < bestDistanceSqr)
+                {
+                    bestDistanceSqr = distanceSqr;
+                    bestPosition = hit.position;
+                    foundValidPosition = true;
+                }
+            }
+        }
+
+        if (foundValidPosition)
+        {
+            attackPosition = bestPosition;
+        }
+
+        return foundValidPosition;
+    }
+
+    private Vector3 GetCandidateAttackPosition(Collider collider, Vector3 attackerPosition)
+    {
+        Vector3 closestPoint = collider.ClosestPoint(attackerPosition);
+        Vector3 center = collider.bounds.center;
+
+        Vector3 outwardDirection = closestPoint - center;
+        if (outwardDirection.sqrMagnitude < 0.0001f)
+        {
+            outwardDirection = attackerPosition - center;
+        }
+
+        if (outwardDirection.sqrMagnitude < 0.0001f)
+        {
+            outwardDirection = transform.forward;
+        }
+
+        return closestPoint + outwardDirection.normalized * attackPositionOffset;
+    }
 
     public void TakeDamage(float amount, Vector3 attackOrigin)
     {
@@ -172,6 +258,11 @@ public class Structure : MonoBehaviour, ITarget
         foreach (Collider collider in colliders)
         {
             collider.enabled = false;
+        }
+        foreach (NavMeshObstacle obstacle in GetComponentsInChildren<NavMeshObstacle>())
+        {
+            obstacle.carving = false;
+            obstacle.enabled = false;
         }
 
         OnDeathStarted();
@@ -287,5 +378,4 @@ public class Structure : MonoBehaviour, ITarget
             }
         }
     }
-
 }

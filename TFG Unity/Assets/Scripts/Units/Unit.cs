@@ -118,6 +118,12 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
     public Category Category => Category.Unit;
 
+    public bool TryGetAttackPosition(Vector3 attackerPosition, out Vector3 attackPosition)
+    {
+        attackPosition = Position;
+        return true;
+    }
+
     /// <summary>
     /// Damages unit, if health falls to 0 the unit dies, otherwise calls OnDamageTaken
     /// </summary>
@@ -178,6 +184,21 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
         }
 
         HealPercentage(healOnWaveCompleted);
+    }
+
+    public Vector3 GetTargetAttackPosition(ITarget target)
+    {
+        Vector3 destination;
+        if (target is ITarget iTarget
+            && iTarget.TryGetAttackPosition(transform.position, out Vector3 attackPosition))
+        {
+            destination = attackPosition;
+        }
+        else
+        {
+            destination = target.Position;
+        }
+        return destination;
     }
 
     public void Attack(ITarget combatTarget)

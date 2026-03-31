@@ -9,7 +9,7 @@ public class SoldierIdleState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        ITarget target = soldier.FindNearestPlayerTarget();
+        ITarget target = soldier.FindNearestEnemyTarget();
 
         if (target != null)
         {

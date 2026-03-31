@@ -227,7 +227,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     /// Finds the closest enemy unit/structure inside aggroRadius
     /// </summary>
     /// <returns></returns>
-    public ITarget FindNearestPlayerTarget()
+    public ITarget FindNearestEnemyTarget()
     {
         return TargetSearchUtility.SearchTarget(transform.position, aggroRadius,
             Faction.Player);
