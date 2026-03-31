@@ -103,7 +103,7 @@ public class MultiTransportState : IWorkerState
 
         if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance))
         {
-            task.source?.ConfirmRetrieval(instance.itemData);
+            task.source?.ConfirmRetrieval(task.gameObject);
         }
 
         collectedItems.Add(new CollectedItem

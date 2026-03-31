@@ -10,8 +10,8 @@ public class WaveManager : MonoBehaviour
     [Header("Testing")]
 
     [SerializeField]
-    [Tooltip("If false, waves wont be generated (for testing)")]
-    private bool isEnabled_TESTING = true;
+    [Tooltip("Are new waves allowed to start?")]
+    private bool newWavesEnabled_TESTING = true;
 
     [SerializeField]
     [Tooltip("If true, first wave will happen instantly")]
@@ -84,10 +84,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        if (isEnabled_TESTING)
-        {
-            StartCoroutine(LoadEnemies());
-        }
+        StartCoroutine(LoadEnemies());
     }
 
     private void OnEnable()
@@ -155,34 +152,29 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator RunWaves()
     {
-        if (InstantFirstWave_TESTING)
+        waitingForNextWaveToComplete = false;
+        if (InstantFirstWave_TESTING && newWavesEnabled_TESTING)
         {
             yield return SpawnWave();
             waitingForNextWaveToComplete = true;
         }
-        else
-        {
-            waitingForNextWaveToComplete = false;
-        }
 
+        float waveIntervalFirstWarning = waveInterval * 0.35f;
+        float waveIntervalSecondWarning = waveInterval * 0.15f;
         while (true)
         {
             // If there is an ongoing wave the timer for next wave wont start
-            yield return new WaitUntil(() => waitingForNextWaveToComplete == false);
-
-            float waveIntervalFirstWarning = waveInterval * 0.35f;
-            float waveIntervalSecondWarning = waveInterval * 0.15f;
+            yield return new WaitUntil(() => waitingForNextWaveToComplete == false && newWavesEnabled_TESTING);
 
             yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
-
+            if (!newWavesEnabled_TESTING) { continue; }
             UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
 
             yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
-
+            if (!newWavesEnabled_TESTING) { continue; }
             UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
 
             yield return new WaitForSeconds(waveIntervalSecondWarning);
-
             yield return SpawnWave();
         }
     }
@@ -207,6 +199,13 @@ public class WaveManager : MonoBehaviour
     {
         float raw = rewardCurve.rewardByWave.Evaluate(Mathf.Max(1, waveNumber));
         return Mathf.RoundToInt(raw);
+    }
+
+    public bool AreNewWavesEnabled => newWavesEnabled_TESTING;
+
+    public void ToggleNewWavesEnabled()
+    {
+        newWavesEnabled_TESTING = !newWavesEnabled_TESTING;
     }
 
     /// <summary>
@@ -247,6 +246,11 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private IEnumerator SpawnWave()
     {
+        if (!newWavesEnabled_TESTING)
+        {
+            yield break;
+        }
+
         //TODO Animaciones, efectos, sonidos
 
         waitingForNextWaveToComplete = true;

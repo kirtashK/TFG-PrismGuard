@@ -184,9 +184,10 @@ public class UnitProductionOrder : IItemConsumer
         }
     }
 
-    public void ConfirmRetrieval(ItemData item)
+    public void ConfirmRetrieval(GameObject item)
     {
-
+        // Does nothing as UnitProductionOrder doesnt
+        // store items to be picked up
     }
 
     private bool SetState(OrderState newState)

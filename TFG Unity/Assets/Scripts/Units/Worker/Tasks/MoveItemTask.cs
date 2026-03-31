@@ -32,9 +32,9 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     private IItemConsumer lastConsumer;
     private bool isStored = false;
+    public bool IsStored => isStored;
 
     public WorkType WorkType => WorkType.None;
-
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         if (itemInstance == null)
         {
-            Debug.LogError($"{name}: null ItemInstance");
+            Debug.LogError($"{name}: null {nameof(ItemInstance)}");
         }
     }
 
@@ -158,7 +158,7 @@ public class MoveItemTask : MonoBehaviour, ITask
             return;
         }
 
-        Debug.Log($"{name} target consumer {target} unregistered: {consumer}");
+        Debug.Log($"{name}: target consumer {target} unregistered: {consumer}");
 
         consumer.Release(TaskData);
 
@@ -241,7 +241,7 @@ public class MoveItemTask : MonoBehaviour, ITask
     {
         if (target == null || !target.CanReceive(TaskData))
         {
-            Debug.Log($"[MoveItemTask] Execute: target invalid at delivery time for {name} - resetting task.");
+            Debug.Log($"{name}: target invalid at delivery time for {name} - resetting task");
 
             worker.DropItem(gameObject, worker.unit.Position);
 

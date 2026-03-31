@@ -120,7 +120,7 @@ public class WarehouseManager : MonoBehaviour
                 }
 
                 itemsFound.Add(grabbed);
-                warehouse.ConfirmRetrieval(itemData);
+                warehouse.ConfirmRetrieval(grabbed);
                 quantity--;
             }
         }
