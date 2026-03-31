@@ -5,6 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class AgentSoldier : Agent
 {
@@ -248,7 +249,7 @@ public class AgentSoldier : Agent
 
         if (targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
-            Vector3 dest = nearbyEnemies[targetIndex].Position;
+            Vector3 dest = unit.GetTargetAttackPosition(nearbyEnemies[targetIndex]);
             SetDestination(dest);
         }
         else
@@ -362,7 +363,7 @@ public class AgentSoldier : Agent
         }
 
         // Range
-        float distSqr = (target.Position - unit.Position).sqrMagnitude;
+        float distSqr = (unit.GetTargetAttackPosition(target) - unit.Position).sqrMagnitude;
         if (distSqr > unit.attackRange * unit.attackRange)
         {
             return false;
