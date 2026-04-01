@@ -26,10 +26,6 @@ public class AgentSoldier : Agent
     [Tooltip("Number of enemies to include in observations")]
     public int kNearest = 4;
 
-    public string enemyLayer = "EnemyUnit";
-
-    private static readonly Collider[] agroBuffer = new Collider[16];
-
     private float lastAttackTime = -Mathf.Infinity;
 
     [Header("Rewards")]
@@ -103,6 +99,7 @@ public class AgentSoldier : Agent
         }
 
         unit.OnDamageTakenEvent += OnDamageTaken;
+        unit.OnHealedEvent += OnHealed;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
@@ -115,6 +112,7 @@ public class AgentSoldier : Agent
         }
 
         unit.OnDamageTakenEvent -= OnDamageTaken;
+        unit.OnHealedEvent -= OnHealed;
     }
 
     #region Stats
@@ -201,7 +199,7 @@ public class AgentSoldier : Agent
         float cooldownNorm = GetAttackCooldownNormalized();
         sensor.AddObservation(cooldownNorm);
 
-        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest);
         float numNorm = Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest);
         sensor.AddObservation(numNorm);
 
@@ -245,7 +243,7 @@ public class AgentSoldier : Agent
         int targetIndex = Mathf.Clamp(discreteActions[0], 0, kNearest);
         int attackFlag = Mathf.Clamp(discreteActions[1], 0, 1);
 
-        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest);
 
         if (targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
@@ -275,7 +273,7 @@ public class AgentSoldier : Agent
         }
 
         ActionSegment<int> discreteOut = actionsOut.DiscreteActions;
-        List<ITarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest);
 
         if (enemies.Count > 0)
         {
@@ -297,48 +295,12 @@ public class AgentSoldier : Agent
     /// <summary>
     /// Returns up to maxCount nearest ICombatTarget on the given layer, ordered by distance ascending
     /// </summary>
-    public static List<ITarget> GetNearestEnemies(Vector3 origin, float maxRadius, int maxCount, string layerName)
+    public static List<ITarget> GetNearestEnemies(Vector3 origin, float maxRadius, int maxCount)
     {
-        int layerMask = LayerMask.GetMask(layerName);
-
-        List<ITarget> results = new();
-
-        if (layerMask == 0)
-        {
-            return results;
-        }
-
-        int hitCount = Physics.OverlapSphereNonAlloc(origin, maxRadius, agroBuffer, layerMask);
-        if (hitCount <= 0)
-        {
-            return results;
-        }
-
-        HashSet<ITarget> seen = new();
-        ITarget combatTarget = null;
-        for (int i = 0; i < hitCount; i++)
-        {
-            Collider collider = agroBuffer[i];
-            if (collider == null)
-            {
-                continue;
-            }
-
-            combatTarget = collider.GetComponentInParent<ITarget>();
-            if (combatTarget == null)
-            {
-                continue;
-            }
-
-            if (!seen.Contains(combatTarget))
-            {
-                seen.Add(combatTarget);
-                results.Add(combatTarget);
-            }
-        }
+        List<ITarget> results = TargetSearchUtility.SearchTargets(origin, maxRadius, Faction.Player);
 
         results = results
-            .OrderBy(gameObject => Vector3.SqrMagnitude(combatTarget.Position - origin))
+            .OrderBy(target => Vector3.SqrMagnitude(target.Position - origin))
             .Take(maxCount)
             .ToList();
 
@@ -399,26 +361,22 @@ public class AgentSoldier : Agent
         }
     }
 
-    // TODO use unit.heal or unit.healPercentage
-    // TODO and suscribe to event onHealed
+    private void OnHealed(float amount)
+    {
+        
+    }
+
     public void Heal(float amount)
     {
-        if (!unit.IsAlive) 
-        { 
-            return; 
-        }
-
         float before = unit.currentHealth;
-        float healed = Mathf.Min(unit.currentHealth + amount, unit.maxHealth) - before;
 
-        AddReward(healed * rewardPerHealHP);
+        unit.Heal(amount);
+        AddReward(amount * rewardPerHealHP);
 
         if (before / unit.maxHealth > 0.9f)
         {
             AddReward(-penaltyWastedHeal);
         }
-
-        unit.Heal(amount);
     }
 
     /// <summary>
