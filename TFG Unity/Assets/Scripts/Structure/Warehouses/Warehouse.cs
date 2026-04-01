@@ -86,6 +86,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         ItemConsumerManager.Instance.Register(this);
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+        structure.OnDeathStartedEvent += OnDeathStarted;
     }
 
     private void OnDisable()
@@ -102,6 +103,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
+        structure.OnDeathStartedEvent -= OnDeathStarted;
     }
 
     #region Stats
@@ -152,6 +154,59 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     }
 
     #endregion
+
+    private void OnDeathStarted()
+    {
+        DropAllStoredItems();
+    }
+
+    private void DropAllStoredItems()
+    {
+        if (storage == null)
+        {
+            return;
+        }
+
+        Vector3 dropOrigin = storage.transform.position;
+
+        foreach (KeyValuePair<ItemData, Queue<GameObject>> pair in storedItems)
+        {
+            Queue<GameObject> queue = pair.Value;
+
+            while (queue.Count > 0)
+            {
+                GameObject item = queue.Dequeue();
+                if (item == null)
+                {
+                    continue;
+                }
+
+                item.transform.SetParent(null, true);
+
+                Vector3 randomPosition = UnityEngine.Random.insideUnitSphere * 1.5f;
+                randomPosition.y = -0.1f;
+                item.transform.position = dropOrigin + randomPosition;
+
+                float randomYRotation = UnityEngine.Random.Range(0f, 360f);
+                item.transform.rotation = Quaternion.Euler(0f, randomYRotation, 0f) * item.transform.rotation;
+
+                if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
+                {
+                    itemInstance.SetVisible(true);
+                }
+                if (item.TryGetComponent<MoveItemTask>(out MoveItemTask moveItemTask))
+                {
+                    moveItemTask.ClearStored();
+                }
+            }
+        }
+
+        storedItems.Clear();
+        reservedForStoreByItem.Clear();
+        reservedForRetrieveByItem.Clear();
+        reservedForStoreTotal = 0;
+        currentCapacity = 0;
+    }
 
     #region Storage Category
 
