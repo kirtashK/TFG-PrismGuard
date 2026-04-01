@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 843428391497259055, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
       propertyPath: m_Name
-      value: Quarry Blueprint2
+      value: Quarry Blueprint
       objectReference: {fileID: 0}
     - target: {fileID: 1038606458405097454, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
       propertyPath: m_LocalPosition.x
@@ -59,7 +59,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7934089972654560959, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
     - {fileID: 2168727113389277981, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4369800795309219316, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc533b19dedfebb439d7bd3a0f772a20, type: 3}

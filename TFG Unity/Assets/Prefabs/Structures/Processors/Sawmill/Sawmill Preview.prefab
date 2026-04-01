@@ -54,14 +54,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9147099120324929794, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
       propertyPath: m_Name
-      value: Sawmill Preview Variant
+      value: Sawmill Preview
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4533883100969938562, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
     - {fileID: 2284186026734877851, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
     - {fileID: 6436802545834418224, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
     - {fileID: 6541478737453798836, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 303873747837621506, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65ab8399237eb1243817e03fd3a7db19, type: 3}

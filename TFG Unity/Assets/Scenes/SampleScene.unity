@@ -873,6 +873,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rocks WH
       objectReference: {fileID: 0}
+    - target: {fileID: 9079424207317062502, guid: 5126ef149edb6734486182211aae076e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1520,6 +1524,10 @@ PrefabInstance:
     - target: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
       propertyPath: m_Name
       value: Manufactured WH
+      objectReference: {fileID: 0}
+    - target: {fileID: 6567947584304241201, guid: 87accbbf0d2cd8e46814d68bbd23a2c5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3600,6 +3608,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plants WH
       objectReference: {fileID: 0}
+    - target: {fileID: 4997700568044319798, guid: ab2100a325c7368438e6deee0041faaf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4171,6 +4183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Resources WH
       objectReference: {fileID: 0}
+    - target: {fileID: 5143866289489264262, guid: 63d2adee99858e148965697c99064d19, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4595,6 +4611,10 @@ PrefabInstance:
     - target: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
       propertyPath: m_Name
       value: Ores WH
+      objectReference: {fileID: 0}
+    - target: {fileID: 5143866289489264262, guid: 0e6eaf154976bfb4d9bcb7abd3862412, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5807,7 +5827,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 749700605330282204, guid: 90ad8d02ced767e44b387e2557dab245, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.86
+      value: 5.61
       objectReference: {fileID: 0}
     - target: {fileID: 749700605330282204, guid: 90ad8d02ced767e44b387e2557dab245, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5815,7 +5835,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 749700605330282204, guid: 90ad8d02ced767e44b387e2557dab245, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.35
+      value: -8.4
       objectReference: {fileID: 0}
     - target: {fileID: 749700605330282204, guid: 90ad8d02ced767e44b387e2557dab245, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8108,7 +8128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: newWavesEnabled_TESTING
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 915740414688475827, guid: 13adb3347dec19e4ab67fb7d1bcee068, type: 3}
       propertyPath: InstantFirstWave_TESTING
