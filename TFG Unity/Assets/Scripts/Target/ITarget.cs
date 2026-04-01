@@ -45,6 +45,9 @@ public interface ITarget
     /// </summary>
     Category Category { get; }
 
+    float CurrentHealth { get; }
+    float MaxHealth { get; }
+
     /// <summary>
     /// Deals damage to the Target, specifying from where
     /// </summary>
@@ -75,6 +78,11 @@ public interface ITarget
     /// </summary>
     /// <param name="percent">Percent of max hp to heal</param>
     void HealPercentage(float percent);
+
+    /// <summary>
+    /// Event with heal amount
+    /// </summary>
+    public event Action<float> OnHealedEvent;
 
     /// <summary>
     /// Deal damage to Target

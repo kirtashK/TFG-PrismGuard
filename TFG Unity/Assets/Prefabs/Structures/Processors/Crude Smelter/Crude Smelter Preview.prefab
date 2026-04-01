@@ -54,14 +54,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4245718380385456774, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
       propertyPath: m_Name
-      value: Basic Smelter Preview
+      value: Crude Smelter Preview
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2975000824401172141, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
     - {fileID: 3309558972003691439, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
     - {fileID: 216417968583139314, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
     - {fileID: 8498928330062369427, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1065956815134613451, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7cec526a23c1754189ff5aac7e9e287, type: 3}
