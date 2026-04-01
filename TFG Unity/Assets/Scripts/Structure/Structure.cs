@@ -67,6 +67,7 @@ public class Structure : MonoBehaviour, ITarget
     public event Action OnDeathStartedEvent;
     public event Action OnDeathCleanupEvent;
     public event Action<float, Vector3> OnDamageTakenEvent;
+    public event Action<float> OnHealedEvent;
 
     ITarget target;
 
@@ -77,6 +78,9 @@ public class Structure : MonoBehaviour, ITarget
     public Faction Faction => structureData.faction;
 
     public Category Category => Category.Structure;
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
 
     [Header("Attack position")]
     [SerializeField] private float attackPositionOffset = 0f;
@@ -193,9 +197,13 @@ public class Structure : MonoBehaviour, ITarget
             return;
         }
 
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+        float actualHealed = currentHealth - previousHealth;
 
-        Debug.Log($"{name} healed by {healAmount}. Health: {currentHealth}/{maxHealth}");
+        OnHealedEvent?.Invoke(actualHealed);
+
+        Debug.Log($"{name} healed by {actualHealed}. Health: {currentHealth}/{maxHealth}");
     }
 
     public void HealPercentage(float percent)

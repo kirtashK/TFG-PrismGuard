@@ -41,10 +41,6 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
     private readonly List<Renderer> cachedRenderers = new();
     private MaterialPropertyBlock propertyBlock;
 
-    public event Action OnDeathStartedEvent;
-    public event Action OnDeathCleanupEvent;
-    public event Action<float, Vector3> OnDamageTakenEvent;
-
     private void Awake()
     {
         if (TryGetComponent<Selectable>(out Selectable selectable))
@@ -110,6 +106,11 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
     #region ICombatTarget
 
+    public event Action OnDeathStartedEvent;
+    public event Action OnDeathCleanupEvent;
+    public event Action<float, Vector3> OnDamageTakenEvent;
+    public event Action<float> OnHealedEvent;
+
     public Vector3 Position => transform.position;
 
     public bool IsAlive => currentHealth > 0f;
@@ -117,6 +118,9 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
     public Faction Faction => unitData.faction;
 
     public Category Category => Category.Unit;
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
 
     public bool TryGetAttackPosition(Vector3 attackerPosition, out Vector3 attackPosition)
     {
@@ -161,9 +165,13 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
             return;
         }
 
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+        float actualHealed = currentHealth - previousHealth;
 
-        Debug.Log($"{name} healed by {healAmount}. Health: {currentHealth}/{maxHealth}");
+        OnHealedEvent?.Invoke(actualHealed);
+
+        Debug.Log($"{name} healed by {actualHealed}. Health: {currentHealth}/{maxHealth}");
     }
 
     public void HealPercentage(float percent)
