@@ -29,7 +29,8 @@ public class SoldierMoveState : ISoldierState
 
             if (target != null)
             {
-                soldier.ChangeState(new SoldierChaseState(target));
+                soldier.target = target;
+                soldier.ChangeState(new SoldierChaseState());
             }
         }
 

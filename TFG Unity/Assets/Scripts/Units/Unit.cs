@@ -107,7 +107,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
     #region ICombatTarget
 
-    public event Action OnDeathStartedEvent;
+    public event Action<ITarget> OnDeathStartedEvent;
     public event Action OnDeathCleanupEvent;
     public event Action<float, Vector3> OnDamageTakenEvent;
     public event Action<float> OnHealedEvent;
@@ -220,8 +220,8 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        Debug.Log($"{name} took {amount} damage" +
-            $"\nHealth of {name}: {currentHealth}/{maxHealth}");
+        //Debug.Log($"{name} took {amount} damage" +
+        //    $"\nHealth of {name}: {currentHealth}/{maxHealth}");
 
         OnDamageTaken(amount, attackOrigin);
 
@@ -359,7 +359,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
     {
         // TODO notify player of unit death ?
 
-        OnDeathStartedEvent?.Invoke();
+        OnDeathStartedEvent?.Invoke(this);
     }
 
     private IEnumerator DeathAnimationTimeout()

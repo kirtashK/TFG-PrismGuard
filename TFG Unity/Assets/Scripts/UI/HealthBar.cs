@@ -81,7 +81,7 @@ public class HealthBar : MonoBehaviour
         UpdateHealthBar();
     }
 
-    private void HandleDeathStarted()
+    private void HandleDeathStarted(ITarget deadTarget)
     {
         backgroundImage.gameObject.SetActive(false);
     }

@@ -2,25 +2,19 @@ using UnityEngine;
 
 public class EnemyChaseState : IEnemyState
 {
-    private readonly ITarget target;
-
-    public EnemyChaseState(ITarget target)
-    {
-        this.target = target;
-    }
-
     public void EnterState(Enemy enemy)
     {
         enemy.unit.agent.isStopped = false;
         enemy.unit.agent.stoppingDistance = enemy.unit.attackRange;
-        enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(target));
+        enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.target));
     }
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.IsAlive)
+        if (enemy.target == null || !enemy.target.IsAlive)
         {
-            enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
+            enemy.target = enemy.MainTarget;
+            enemy.ChangeState(new EnemyChaseState());
             return;
         }
 
@@ -39,20 +33,21 @@ public class EnemyChaseState : IEnemyState
 
         if (soldier != null 
             && soldier.IsAlive
-            && soldier != target)
+            && soldier != enemy.target)
         {
-            enemy.ChangeState(new EnemyChaseState(soldier));
+            enemy.target = soldier;
+            enemy.ChangeState(new EnemyChaseState());
             return;
         }
 
         if (!enemy.unit.agent.pathPending
             && enemy.unit.agent.remainingDistance <= enemy.unit.attackRange)
         {
-            enemy.ChangeState(new EnemyAttackState(target));
+            enemy.ChangeState(new EnemyAttackState());
         }
         else
         {
-            enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(target));
+            enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.target));
         }
     }
 

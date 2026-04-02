@@ -2,13 +2,6 @@ using UnityEngine;
 
 public class SoldierAttackState : ISoldierState
 {
-    private readonly ITarget target;
-
-    public SoldierAttackState(ITarget target)
-    {
-        this.target = target;
-    }
-
     public void EnterState(Soldier soldier)
     {
         soldier.unit.agent.isStopped = true;
@@ -16,24 +9,24 @@ public class SoldierAttackState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (target == null || !target.IsAlive)
+        if (soldier.target == null || !soldier.target.IsAlive)
         {
             soldier.HandleCombatEnd();
             return;
         }
 
-        float distance = Vector3.Distance(soldier.transform.position, target.Position);
+        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(soldier.target));
         if (distance > soldier.unit.attackRange + 0.1f)
         {
-            soldier.ChangeState(new SoldierChaseState(target));
+            soldier.ChangeState(new SoldierChaseState());
             return;
         }
 
-        soldier.unit.FaceTarget(target.Position, 720f);
+        soldier.unit.FaceTarget(soldier.target.Position, 720f);
 
         if (Time.time >= soldier.unit.nextAttackTime)
         {
-            soldier.unit.Attack(target);
+            soldier.unit.Attack(soldier.target);
 
             soldier.unit.nextAttackTime = Time.time + soldier.unit.attackCooldown;
         }

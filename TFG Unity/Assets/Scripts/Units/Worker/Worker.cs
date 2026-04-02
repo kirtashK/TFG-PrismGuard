@@ -179,7 +179,7 @@ public class Worker : MonoBehaviour, IOrderable, IStatRefresher
         }
     }
 
-    private void OnDeathStarted()
+    private void OnDeathStarted(ITarget deadTarget)
     {
         ClearWorkAnimation();
     }

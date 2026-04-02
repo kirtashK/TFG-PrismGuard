@@ -155,7 +155,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     #endregion
 
-    private void OnDeathStarted()
+    private void OnDeathStarted(ITarget deadTarget)
     {
         DropAllStoredItems();
     }

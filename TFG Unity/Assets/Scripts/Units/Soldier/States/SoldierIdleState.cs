@@ -11,9 +11,10 @@ public class SoldierIdleState : ISoldierState
     {
         ITarget target = soldier.FindNearestEnemyTarget();
 
-        if (target != null)
+        if (target != null && target.IsAlive)
         {
-            soldier.ChangeState(new SoldierChaseState(target));
+            soldier.target = target;
+            soldier.ChangeState(new SoldierChaseState());
         }
     }
 

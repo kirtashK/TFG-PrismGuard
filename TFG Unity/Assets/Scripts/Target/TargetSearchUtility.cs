@@ -4,72 +4,56 @@ using UnityEngine;
 
 public static class TargetSearchUtility
 {
-    private static readonly Collider[] overlapBuffer = new Collider[16];
-
     /// <summary>
-    /// Searches all targets within searchRadius with faction different than requesterFaction, sorted by distance
+    /// 
     /// </summary>
+    /// <param name="targets"></param>
     /// <param name="origin"></param>
-    /// <param name="searchRadius"></param>
-    /// <param name="requesterFaction">Faction of the requester</param>
-    /// <returns>All targets found, sorted by distance</returns>
-    public static List<ITarget> SearchTargets(Vector3 origin, float searchRadius, Faction requesterFaction)
+    /// <param name="prioritizeUnits"></param>
+    /// <returns></returns>
+    public static List<ITarget> SortTargets(IEnumerable<ITarget> targets, Vector3 origin, bool prioritizeUnits = false)
     {
-        int enemyFactionMask = requesterFaction == Faction.Player
-            ? LayerMask.GetMask("EnemyUnit", "Structure")
-            : LayerMask.GetMask("PlayerUnit", "Structure");
-
-        int hitCount = Physics.OverlapSphereNonAlloc(origin, searchRadius, overlapBuffer, enemyFactionMask);
-
-        List<ITarget> targets = new();
-
-        for (int i = 0; i < hitCount; i++)
+        if (targets == null)
         {
-            Collider collider = overlapBuffer[i];
-            if (collider == null)
-            {
-                continue;
-            }
-            ITarget target = collider.GetComponentInParent<ITarget>();
-            if (target == null || !target.IsAlive)
-            {
-                continue;
-            }
-            if (target.Faction == requesterFaction)
-            {
-                continue;
-            }
-
-            targets.Add(target);
+            return new List<ITarget>();
         }
 
-        return targets
-            .OrderBy(target => Vector3.SqrMagnitude(target.Position - origin))
-            .ToList();
+        IEnumerable<ITarget> validTargets = targets.Where(target => target != null && target.IsAlive);
+
+        if (prioritizeUnits)
+        {
+            validTargets = validTargets
+                .OrderByDescending(target => target.Category == Category.Unit ? 1 : 0)
+                .ThenBy(target => (target.Position - origin).sqrMagnitude);
+        }
+        else
+        {
+            validTargets = validTargets.OrderBy(target => (target.Position - origin).sqrMagnitude);
+        }
+
+        return validTargets.ToList();
     }
 
     /// <summary>
-    /// Searches the closest target with faction different than requesterFaction.
-    /// Prioritizes units over structures.
-    /// If crystal fallback is provided and requesterFaction is enemy, returns it when no targets are found
+    /// 
     /// </summary>
+    /// <param name="targets"></param>
     /// <param name="origin"></param>
-    /// <param name="searchRadius"></param>
-    /// <param name="requesterFaction">Faction of the requester</param>
-    /// <param name="crystalFallback">Crystal target, only useful for enemy faction</param>
-    /// <returns>Closest target found of a different faction, prioritizing units over structures</returns>
-    public static ITarget SearchTarget(Vector3 origin, float searchRadius, Faction requesterFaction, ITarget crystalFallback = null)
+    /// <param name="requesterFaction"></param>
+    /// <param name="crystalFallback"></param>
+    /// <returns></returns>
+    public static ITarget GetBestTarget(IEnumerable<ITarget> targets, Vector3 origin, Faction requesterFaction, ITarget crystalFallback = null)
     {
-        List<ITarget> targets = SearchTargets(origin, searchRadius, requesterFaction);
+        List<ITarget> sortedTargets = SortTargets(targets, origin, prioritizeUnits: true);
 
-        ITarget bestUnit = targets.FirstOrDefault(target => target.Category == Category.Unit);
+        ITarget bestUnit = sortedTargets.FirstOrDefault(target => target.Category == Category.Unit && target.Faction != requesterFaction);
         if (bestUnit != null)
         {
             return bestUnit;
         }
 
-        ITarget bestStructure = targets.FirstOrDefault(target => target.Category == Category.Structure);
-        if (bestStructure != null && requesterFaction == Faction.Enemy)
+        ITarget bestStructure = sortedTargets.FirstOrDefault(target => target.Category == Category.Structure && target.Faction != requesterFaction);
+        if (bestStructure != null)
         {
             return bestStructure;
         }
