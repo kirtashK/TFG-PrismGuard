@@ -2,13 +2,6 @@
 
 public class EnemyAttackState : IEnemyState
 {
-    private readonly ITarget target;
-
-    public EnemyAttackState(ITarget target)
-    {
-        this.target = target;
-    }
-
     public void EnterState(Enemy enemy)
     {
         enemy.unit.agent.isStopped = true;
@@ -16,25 +9,26 @@ public class EnemyAttackState : IEnemyState
 
     public void UpdateState(Enemy enemy)
     {
-        if (target == null || !target.IsAlive)
+        if (enemy.target == null || !enemy.target.IsAlive)
         {
             enemy.unit.agent.isStopped = false;
-            enemy.ChangeState(new EnemyChaseState(enemy.MainTarget));
+            enemy.target = enemy.MainTarget;
+            enemy.ChangeState(new EnemyChaseState());
             return;
         }
 
-        float distance = Vector3.Distance(enemy.transform.position, enemy.unit.GetTargetAttackPosition(target));
+        float distance = Vector3.Distance(enemy.transform.position, enemy.unit.GetTargetAttackPosition(enemy.target));
         if (distance > enemy.unit.attackRange + 0.1f)
         {
-            enemy.ChangeState(new EnemyChaseState(target));
+            enemy.ChangeState(new EnemyChaseState());
             return;
         }
 
-        enemy.unit.FaceTarget(target.Position, 720f);
+        enemy.unit.FaceTarget(enemy.target.Position, 720f);
 
         if (Time.time >= enemy.unit.nextAttackTime)
         {
-            enemy.unit.Attack(target);
+            enemy.unit.Attack(enemy.target);
 
             enemy.unit.nextAttackTime = Time.time + enemy.unit.attackCooldown;
         }

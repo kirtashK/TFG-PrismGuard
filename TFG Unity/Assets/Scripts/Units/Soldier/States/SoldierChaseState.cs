@@ -2,13 +2,6 @@ using UnityEngine;
 
 public class SoldierChaseState : ISoldierState
 {
-    private readonly ITarget target;
-
-    public SoldierChaseState(ITarget target)
-    {
-        this.target = target;
-    }
-
     public void EnterState(Soldier soldier)
     {
         soldier.unit.agent.isStopped = false;
@@ -17,18 +10,18 @@ public class SoldierChaseState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (target == null || !target.IsAlive)
+        if (soldier.target == null || !soldier.target.IsAlive)
         {
             soldier.HandleCombatEnd();
             return;
         }
 
-        soldier.unit.agent.SetDestination(soldier.unit.GetTargetAttackPosition(target));
+        soldier.unit.agent.SetDestination(soldier.unit.GetTargetAttackPosition(soldier.target));
 
-        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(target));
+        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(soldier.target));
         if (distance <= soldier.unit.attackRange)
         {
-            soldier.ChangeState(new SoldierAttackState(target));
+            soldier.ChangeState(new SoldierAttackState());
         }
     }
 

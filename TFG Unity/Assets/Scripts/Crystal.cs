@@ -40,7 +40,7 @@ public class Crystal : MonoBehaviour
         structure.OnDeathCleanupEvent -= OnDeathCleanup;
     }
 
-    private void OnDeathStarted()
+    private void OnDeathStarted(ITarget deadTarget)
     {
         Debug.Log($"{name} has been destroyed! Game over!");
 

@@ -114,6 +114,6 @@ public interface ITarget
     /// </summary>
     void OnDeathCleanup();
 
-    public event Action OnDeathStartedEvent;
+    public event Action<ITarget> OnDeathStartedEvent;
     public event Action OnDeathCleanupEvent;
 }

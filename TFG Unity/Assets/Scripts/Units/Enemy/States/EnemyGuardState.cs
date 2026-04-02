@@ -51,7 +51,8 @@ public class EnemyGuardState : IEnemyState
 
             if (intruder != null && intruder.IsAlive)
             {
-                enemy.ChangeState(new EnemyChaseState(intruder));
+                enemy.target = intruder;
+                enemy.ChangeState(new EnemyChaseState());
                 return;
             }
         }

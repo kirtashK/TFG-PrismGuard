@@ -64,7 +64,7 @@ public class Structure : MonoBehaviour, ITarget
 
     #region ICombatTarget
 
-    public event Action OnDeathStartedEvent;
+    public event Action<ITarget> OnDeathStartedEvent;
     public event Action OnDeathCleanupEvent;
     public event Action<float, Vector3> OnDamageTakenEvent;
     public event Action<float> OnHealedEvent;
@@ -282,7 +282,7 @@ public class Structure : MonoBehaviour, ITarget
     {
         // TODO notify player of structure death ?
 
-        OnDeathStartedEvent?.Invoke();
+        OnDeathStartedEvent?.Invoke(this);
     }
 
     public IEnumerator DeathCleanupDelay()

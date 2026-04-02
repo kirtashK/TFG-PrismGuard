@@ -20,6 +20,10 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
     private ISoldierState currentState;
 
+    private Sensor sensor;
+
+    public ITarget target;
+
     // IGuardable
     private Vector3 guardPoint;
     private bool hasGuardPoint = false;
@@ -38,6 +42,12 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
             Debug.LogError($"{name}: missing {nameof(unit)}");
         }
 
+        sensor = GetComponentInChildren<Sensor>(true);
+        if (sensor == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(Sensor)}");
+        }
+
         CheckNullStats();
 
         if (data == null)
@@ -53,6 +63,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         unit.currentHealth = unit.maxHealth;
 
         aggroRadius = data.AggroRadius;
+        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
 
         ChangeState(new SoldierIdleState());
     }
@@ -211,6 +222,8 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     // Called by states when combat finishes or target lost
     public void HandleCombatEnd()
     {
+        target = null;
+
         if (returnToGuardOnFinish && hasGuardPoint)
         {
             // Return to guard point
@@ -229,8 +242,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     /// <returns></returns>
     public ITarget FindNearestEnemyTarget()
     {
-        return TargetSearchUtility.SearchTarget(transform.position, aggroRadius,
-            Faction.Player);
+        return sensor.GetBestTarget(transform.position);
     }
 
     private void OnDrawGizmosSelected()

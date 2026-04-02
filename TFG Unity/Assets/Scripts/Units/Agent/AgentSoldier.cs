@@ -5,6 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.GraphicsBuffer;
 
 public class AgentSoldier : Agent
@@ -26,11 +27,9 @@ public class AgentSoldier : Agent
     [Tooltip("Number of enemies to include in observations")]
     public int kNearest = 4;
 
-    public string enemyLayer = "EnemyUnit";
-
-    private static readonly Collider[] agroBuffer = new Collider[16];
-
     private float lastAttackTime = -Mathf.Infinity;
+
+    private Sensor sensor;
 
     [Header("Rewards")]
 
@@ -69,7 +68,18 @@ public class AgentSoldier : Agent
             Debug.LogError($"{name}: missing {nameof(unit)}");
         }
 
+        sensor = GetComponentInChildren<Sensor>(true);
+        if (sensor == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(Sensor)}");
+        }
+
         CheckNullStats();
+
+        if (data == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(data)}");
+        }
     }
 
     private void Start()
@@ -79,6 +89,7 @@ public class AgentSoldier : Agent
         unit.currentHealth = unit.maxHealth;
 
         aggroRadius = data.AggroRadius;
+        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
 
         unit.agent.stoppingDistance = unit.attackRange;
     }
@@ -103,6 +114,7 @@ public class AgentSoldier : Agent
         }
 
         unit.OnDamageTakenEvent += OnDamageTaken;
+        unit.OnHealedEvent += OnHealed;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
     }
@@ -115,6 +127,7 @@ public class AgentSoldier : Agent
         }
 
         unit.OnDamageTakenEvent -= OnDamageTaken;
+        unit.OnHealedEvent -= OnHealed;
     }
 
     #region Stats
@@ -192,18 +205,18 @@ public class AgentSoldier : Agent
 
     #region ML Agent
 
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations(VectorSensor vectorSensor)
     {
 
         float healthNorm = Mathf.Clamp01(unit.currentHealth / Mathf.Max(0.0001f, unit.maxHealth));
-        sensor.AddObservation(healthNorm);
+        vectorSensor.AddObservation(healthNorm);
 
         float cooldownNorm = GetAttackCooldownNormalized();
-        sensor.AddObservation(cooldownNorm);
+        vectorSensor.AddObservation(cooldownNorm);
 
-        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearbyEnemies();
         float numNorm = Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest);
-        sensor.AddObservation(numNorm);
+        vectorSensor.AddObservation(numNorm);
 
         // Local x, local z normalized
         for (int i = 0; i < kNearest; i++)
@@ -215,17 +228,17 @@ public class AgentSoldier : Agent
                 float nx = Mathf.Clamp(local.x / aggroRadius, -1f, 1f);
                 float nz = Mathf.Clamp(local.z / aggroRadius, -1f, 1f);
 
-                sensor.AddObservation(nx);
-                sensor.AddObservation(nz);
+                vectorSensor.AddObservation(nx);
+                vectorSensor.AddObservation(nz);
 
                 float dist = Mathf.Clamp01(local.magnitude / aggroRadius);
-                sensor.AddObservation(dist);
+                vectorSensor.AddObservation(dist);
             }
             else
             {
-                sensor.AddObservation(0f);
-                sensor.AddObservation(0f);
-                sensor.AddObservation(0f);
+                vectorSensor.AddObservation(0f);
+                vectorSensor.AddObservation(0f);
+                vectorSensor.AddObservation(0f);
             }
         }
     }
@@ -245,7 +258,7 @@ public class AgentSoldier : Agent
         int targetIndex = Mathf.Clamp(discreteActions[0], 0, kNearest);
         int attackFlag = Mathf.Clamp(discreteActions[1], 0, 1);
 
-        List<ITarget> nearbyEnemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> nearbyEnemies = GetNearbyEnemies();
 
         if (targetIndex >= 0 && targetIndex < nearbyEnemies.Count)
         {
@@ -275,7 +288,7 @@ public class AgentSoldier : Agent
         }
 
         ActionSegment<int> discreteOut = actionsOut.DiscreteActions;
-        List<ITarget> enemies = GetNearestEnemies(transform.position, aggroRadius, kNearest, enemyLayer);
+        List<ITarget> enemies = GetNearbyEnemies();
 
         if (enemies.Count > 0)
         {
@@ -295,54 +308,16 @@ public class AgentSoldier : Agent
     #region Combat
 
     /// <summary>
-    /// Returns up to maxCount nearest ICombatTarget on the given layer, ordered by distance ascending
+    /// Returns ITargets inside aggroRadius, ordered by distance ascending
     /// </summary>
-    public static List<ITarget> GetNearestEnemies(Vector3 origin, float maxRadius, int maxCount, string layerName)
+    private List<ITarget> GetNearbyEnemies()
     {
-        int layerMask = LayerMask.GetMask(layerName);
-
-        List<ITarget> results = new();
-
-        if (layerMask == 0)
+        if (sensor == null)
         {
-            return results;
+            return new List<ITarget>();
         }
 
-        int hitCount = Physics.OverlapSphereNonAlloc(origin, maxRadius, agroBuffer, layerMask);
-        if (hitCount <= 0)
-        {
-            return results;
-        }
-
-        HashSet<ITarget> seen = new();
-        ITarget combatTarget = null;
-        for (int i = 0; i < hitCount; i++)
-        {
-            Collider collider = agroBuffer[i];
-            if (collider == null)
-            {
-                continue;
-            }
-
-            combatTarget = collider.GetComponentInParent<ITarget>();
-            if (combatTarget == null)
-            {
-                continue;
-            }
-
-            if (!seen.Contains(combatTarget))
-            {
-                seen.Add(combatTarget);
-                results.Add(combatTarget);
-            }
-        }
-
-        results = results
-            .OrderBy(gameObject => Vector3.SqrMagnitude(combatTarget.Position - origin))
-            .Take(maxCount)
-            .ToList();
-
-        return results;
+        return sensor.GetSortedTargets(transform.position, prioritizeUnits: true);
     }
 
     /// <summary>
@@ -399,26 +374,22 @@ public class AgentSoldier : Agent
         }
     }
 
-    // TODO use unit.heal or unit.healPercentage
-    // TODO and suscribe to event onHealed
+    private void OnHealed(float amount)
+    {
+        
+    }
+
     public void Heal(float amount)
     {
-        if (!unit.IsAlive) 
-        { 
-            return; 
-        }
-
         float before = unit.currentHealth;
-        float healed = Mathf.Min(unit.currentHealth + amount, unit.maxHealth) - before;
 
-        AddReward(healed * rewardPerHealHP);
+        unit.Heal(amount);
+        AddReward(amount * rewardPerHealHP);
 
         if (before / unit.maxHealth > 0.9f)
         {
             AddReward(-penaltyWastedHeal);
         }
-
-        unit.Heal(amount);
     }
 
     /// <summary>

@@ -25,7 +25,7 @@ public class Selectable : MonoBehaviour, ISelectable
     {
         if (data != null)
         {
-            displayName = data.name;
+            displayName = data.Name;
             icon = data.icon;
         }
         else

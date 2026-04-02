@@ -28,6 +28,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     private IEnemyState currentState;
 
+    private Sensor sensor;
+
+    public ITarget target;
+
     public ITarget MainTarget { get; private set; }
 
     public enum Behaviour
@@ -53,6 +57,12 @@ public class Enemy : MonoBehaviour, IStatRefresher
         }
 
         SetMainTarget();
+
+        sensor = GetComponentInChildren<Sensor>(true);
+        if (sensor == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(Sensor)}");
+        }
 
         CheckNullStats();
 
@@ -89,6 +99,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
         unit.currentHealth = unit.maxHealth;
 
         aggroRadius = data.AggroRadius;
+        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
 
         guardRadius = data.guardRadius;
         guardChaseBuffer = data.guardChaseBuffer;
@@ -243,7 +254,9 @@ public class Enemy : MonoBehaviour, IStatRefresher
             if (MainTarget != null)
             {
                 UIManager.Instance.ChangeEnemyCount(1);
-                ChangeState(new EnemyChaseState(MainTarget));
+
+                target = MainTarget;
+                ChangeState(new EnemyChaseState());
             }
             else
             {
@@ -260,11 +273,13 @@ public class Enemy : MonoBehaviour, IStatRefresher
         {
             behaviour = Behaviour.Aggressive;
             UIManager.Instance.ChangeEnemyCount(1);
-            ChangeState(new EnemyChaseState(MainTarget));
+
+            target = MainTarget;
+            ChangeState(new EnemyChaseState());
         }
     }
 
-    private void OnDeathStarted()
+    private void OnDeathStarted(ITarget deadTarget)
     {
         ScoreManager.Instance.AddScore(data.spawnCost);
         UIManager.Instance.ChangeEnemyCount(-1);
@@ -277,8 +292,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
     /// <returns></returns>
     public ITarget FindNearestPlayerTarget(bool isGuarding = false)
     {
-        return TargetSearchUtility.SearchTarget(transform.position, aggroRadius,
-            Faction.Enemy, isGuarding == true ? null : MainTarget);
+        return sensor.GetBestTarget(transform.position, isGuarding == true ? null : MainTarget);
     }
 
     private void OnDrawGizmosSelected()
