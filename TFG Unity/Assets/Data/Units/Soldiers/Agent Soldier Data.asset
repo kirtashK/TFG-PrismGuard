@@ -44,4 +44,4 @@ MonoBehaviour:
     quantity: 30
   faction: 0
   isPlayerControllable: 1
-  AggroRadius: 20
+  AggroRadius: 10
