@@ -36,6 +36,10 @@ public class PlacementController : MonoBehaviour
 
     public bool instantiateBlueprintOnConfirm = true;
 
+    private readonly float rotationStep = 45f;
+    private float previewRotationY;
+    private Quaternion previewBaseRotation = Quaternion.identity;
+
     private GameObject previewPrefab;
     private StructureData currentStructure;
     private bool isPlacing;
@@ -47,6 +51,7 @@ public class PlacementController : MonoBehaviour
     private InputAction pointerAction;
     private InputAction confirmAction;
     private InputAction cancelAction;
+    private InputAction rotateAction;
 
     private void Awake()
     {
@@ -76,12 +81,15 @@ public class PlacementController : MonoBehaviour
         cancelAction = new InputAction("Cancel", InputActionType.Button);
         cancelAction.AddBinding("<Mouse>/rightButton");
         cancelAction.AddBinding("<Keyboard>/escape");
+        rotateAction = new InputAction("RotatePreview", InputActionType.Button);
+        rotateAction.AddBinding("<Keyboard>/r");
     }
     private void OnEnable()
     {
         pointerAction?.Enable();
         confirmAction?.Enable();
         cancelAction?.Enable();
+        rotateAction?.Enable();
     }
 
     private void OnDisable()
@@ -89,6 +97,7 @@ public class PlacementController : MonoBehaviour
         pointerAction?.Disable();
         confirmAction?.Disable();
         cancelAction?.Disable();
+        rotateAction?.Disable();
 
         EndPlacement();
     }
@@ -98,6 +107,7 @@ public class PlacementController : MonoBehaviour
         pointerAction?.Dispose();
         confirmAction?.Dispose();
         cancelAction?.Dispose();
+        rotateAction?.Dispose();
     }
 
     private void Update()
@@ -144,6 +154,11 @@ public class PlacementController : MonoBehaviour
             }
         }
 
+        if (rotateAction != null && rotateAction.triggered)
+        {
+            RotatePreview();
+        }
+
         // Confirm (left click)
         if (confirmAction != null && confirmAction.triggered)
         {
@@ -182,7 +197,12 @@ public class PlacementController : MonoBehaviour
         lastValidState = false;
         placementErrorMessage = null;
 
-        previewPrefab = Instantiate(structureData.previewPrefab, Vector3.zero, Quaternion.identity);
+        previewRotationY = 0f;
+        previewBaseRotation = structureData.previewPrefab != null
+            ? structureData.previewPrefab.transform.rotation
+            : Quaternion.identity;
+
+        previewPrefab = Instantiate(structureData.previewPrefab, Vector3.zero, previewBaseRotation);
 
         UpdatePreviewVisual(false);
 
@@ -337,6 +357,17 @@ public class PlacementController : MonoBehaviour
         {
             TooltipController.Instance.Hide();
         }
+    }
+
+    private void RotatePreview()
+    {
+        if (!isPlacing || previewPrefab == null)
+        {
+            return;
+        }
+
+        previewRotationY = (previewRotationY + rotationStep) % 360f;
+        previewPrefab.transform.rotation = previewBaseRotation * Quaternion.Euler(0f, previewRotationY, 0f);
     }
 
     /// <summary>

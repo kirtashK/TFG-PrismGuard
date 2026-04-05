@@ -21,6 +21,7 @@ public class SelectionController : MonoBehaviour
 
     private InputAction pointerAction;
     private InputAction selectAction;
+    private InputAction shiftAction;
 
     private void Awake()
     {
@@ -38,18 +39,23 @@ public class SelectionController : MonoBehaviour
         pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
         selectAction = new InputAction("Select", InputActionType.Button);
         selectAction.AddBinding("<Mouse>/leftButton");
+        shiftAction = new InputAction("AdditiveSelect", InputActionType.Button);
+        shiftAction.AddBinding("<Keyboard>/leftShift");
+        shiftAction.AddBinding("<Keyboard>/rightShift");
     }
 
     private void OnEnable()
     {
         pointerAction?.Enable();
         selectAction?.Enable();
+        shiftAction?.Enable();
     }
 
     private void OnDisable()
     {
         pointerAction?.Disable();
         selectAction?.Disable();
+        shiftAction?.Disable();
 
         isDragging = false;
 
@@ -63,6 +69,7 @@ public class SelectionController : MonoBehaviour
     {
         pointerAction?.Dispose();
         selectAction?.Dispose();
+        shiftAction?.Dispose();
     }
 
     private void Update()
@@ -105,8 +112,7 @@ public class SelectionController : MonoBehaviour
             }
 
             float dragDistance = (dragEndScreen - dragStartScreen).magnitude;
-            bool additive = Keyboard.current != null
-                && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
+            bool additive = shiftAction != null && shiftAction.IsPressed();
 
             if (dragDistance < 6f)
             {

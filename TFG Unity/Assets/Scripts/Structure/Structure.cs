@@ -40,7 +40,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
             selectable.data = structureData;
         }
 
-        if (combatFeedbackPosition == null)
+        if (combatFeedbackPosition == null && !name.ToLower().Contains("blueprint"))
         {
             Debug.LogWarning($"{name}: missing {nameof(combatFeedbackPosition)}");
         }
