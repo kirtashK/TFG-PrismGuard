@@ -164,6 +164,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
+  combatFeedbackPosition: {fileID: 6184472397325735009}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &3839334282225054200

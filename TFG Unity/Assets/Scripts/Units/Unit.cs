@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class Unit : MonoBehaviour, IAddressableInstance, ITarget
+public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbackSource
 {
     public UnitData unitData;
 
@@ -41,6 +41,12 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
     private readonly List<Renderer> cachedRenderers = new();
     private MaterialPropertyBlock propertyBlock;
 
+    public event Action<float, Vector3> OnDamageTakenCombatFeedbackEvent;
+    public event Action<float, Vector3> OnHealedCombatFeedbackEvent;
+
+    [SerializeField] private Transform combatFeedbackPosition;
+    public Vector3 CombatFeedbackPosition => combatFeedbackPosition.position;
+
     private void Awake()
     {
         if (TryGetComponent<Selectable>(out Selectable selectable))
@@ -63,6 +69,11 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
             }
         }
 
+        if (combatFeedbackPosition == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(combatFeedbackPosition)}");
+        }
+
         CacheAttackColliders();
         CacheRenderers();
     }
@@ -83,12 +94,14 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
     private IEnumerator RegisterWhenReady()
     {
-        while (UIManager.Instance == null)
+        while (UIManager.Instance == null
+            || CombatFeedbackManager.Instance == null)
         {
             yield return null;
         }
 
         UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
+        CombatFeedbackManager.Instance.Register(this);
     }
 
     private void OnDisable()
@@ -96,6 +109,10 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OnWaveCompleted -= OnWaveCompleted;
+        }
+        if (CombatFeedbackManager.Instance != null)
+        {
+            CombatFeedbackManager.Instance.Unregister(this);
         }
     }
 
@@ -220,9 +237,6 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
 
         currentHealth = Mathf.Max(currentHealth - amount, 0f);
 
-        //Debug.Log($"{name} took {amount} damage" +
-        //    $"\nHealth of {name}: {currentHealth}/{maxHealth}");
-
         OnDamageTaken(amount, attackOrigin);
 
         if (!IsAlive)
@@ -234,6 +248,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
     public void OnDamageTaken(float amount, Vector3 attackOrigin)
     {
         OnDamageTakenEvent?.Invoke(amount, attackOrigin);
+        OnDamageTakenCombatFeedbackEvent?.Invoke(amount, transform.position);
     }
 
     public void Heal(float healAmount)
@@ -248,8 +263,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
         float actualHealed = currentHealth - previousHealth;
 
         OnHealedEvent?.Invoke(actualHealed);
-
-        Debug.Log($"{name} healed by {actualHealed}. Health: {currentHealth}/{maxHealth}");
+        OnHealedCombatFeedbackEvent?.Invoke(actualHealed, transform.position);
     }
 
     public void HealPercentage(float percent)
@@ -325,8 +339,6 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget
             return;
         }
         isDying = true;
-
-        Debug.Log($"{name} has died");
 
         // Stop movement
         if (agent != null)

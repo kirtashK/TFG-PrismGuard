@@ -133,6 +133,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
+  combatFeedbackPosition: {fileID: 1472445706752384235}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &3835306820276940410
@@ -328,6 +329,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
+--- !u!1 &1472445706752384235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3990923133885527614, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
+  m_PrefabInstance: {fileID: 2525876055036979925}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5449867481144685657 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542517253274607244, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
