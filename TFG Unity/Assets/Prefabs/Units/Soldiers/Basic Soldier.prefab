@@ -169,6 +169,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   agent: {fileID: 0}
   dissolveDuration: 10
+  combatFeedbackPosition: {fileID: 366241404429821998}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &-3259754284008945153

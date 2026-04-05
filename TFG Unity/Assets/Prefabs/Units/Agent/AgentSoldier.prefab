@@ -204,6 +204,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   agent: {fileID: 0}
   dissolveDuration: 10
+  combatFeedbackPosition: {fileID: 1863345302888801780}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &4268843887165381387
@@ -375,6 +376,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
+--- !u!1 &1863345302888801780 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3990923133885527614, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
+  m_PrefabInstance: {fileID: 3366851785023476682}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5049963065232510278 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542517253274607244, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
