@@ -9,30 +9,44 @@ public class OrdersController : MonoBehaviour
 
     private InputAction pointerAction;
     private InputAction orderAction;
+    private InputAction shiftAction;
+    private InputAction ctrlAction;
 
     private void Awake()
     {
         pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
         orderAction = new InputAction("Order", InputActionType.Button);
         orderAction.AddBinding("<Mouse>/rightButton");
+        shiftAction = new InputAction("QueueOrder", InputActionType.Button);
+        shiftAction.AddBinding("<Keyboard>/leftShift");
+        shiftAction.AddBinding("<Keyboard>/rightShift");
+        ctrlAction = new InputAction("AttackMoveModifier", InputActionType.Button);
+        ctrlAction.AddBinding("<Keyboard>/leftCtrl");
+        ctrlAction.AddBinding("<Keyboard>/rightCtrl");
     }
 
     private void OnEnable()
     {
         pointerAction?.Enable();
         orderAction?.Enable();
+        shiftAction?.Enable();
+        ctrlAction?.Enable();
     }
 
     private void OnDisable()
     {
         pointerAction?.Disable();
         orderAction?.Disable();
+        shiftAction?.Disable();
+        ctrlAction?.Disable();
     }
 
     private void OnDestroy()
     {
         pointerAction?.Dispose();
         orderAction?.Dispose();
+        shiftAction?.Dispose();
+        ctrlAction?.Dispose();
     }
 
     private void Update()
@@ -87,14 +101,12 @@ public class OrdersController : MonoBehaviour
 
         MoveOrderOptions options = MoveOrderOptions.Default;
 
-        if (Keyboard.current != null
-            && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
+        if (shiftAction != null && shiftAction.IsPressed())
         {
             options.returnToGuard = false;
         }
 
-        if (Keyboard.current != null
-            && (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed))
+        if (ctrlAction != null && ctrlAction.IsPressed())
         {
             options.attackMove = false;
         }
