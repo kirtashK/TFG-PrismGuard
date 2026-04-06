@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a7e49e3ae562d498d64e3627370c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnabled: 1
-  InstantFirstWave: 0
-  enableLimitBudget: 1
-  limitBudget: 16
+  newWavesEnabled_TESTING: 1
+  InstantFirstWave_TESTING: 1
+  enableLimitBudget_TESTING: 0
+  limitBudget_TESTING: 0
   enemyLabel: Unit
   enemyPool: []
   cheapMaxCost: 5
@@ -58,6 +58,12 @@ MonoBehaviour:
   initialBudget: 10
   linearDelta: 5
   exponentialRate: 1.02
-  spawnPoint: {fileID: 0}
+  spawnPoints:
+  - spawnPoint: {fileID: 0}
+    waveFlag: {fileID: 0}
+  - spawnPoint: {fileID: 0}
+    waveFlag: {fileID: 0}
+  - spawnPoint: {fileID: 0}
+    waveFlag: {fileID: 0}
   waveInterval: 10
   rewardCurve: {fileID: 11400000, guid: 8990b5db01519f843b702ec7b83cf98b, type: 2}
