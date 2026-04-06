@@ -29,15 +29,29 @@ public class GameManager : MonoBehaviour
     {
         finalScoreOnDefeat = ScoreManager.Instance.CurrentScore;
 
-        // Pause game
-        Time.timeScale = 0f;
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.Pause();
+        }
+        else
+        {
+            Time.timeScale = 0f;
+        }
 
         UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.SetGameSpeed(1f);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+
         SceneManager.LoadScene("MainMenu");
     }
 
