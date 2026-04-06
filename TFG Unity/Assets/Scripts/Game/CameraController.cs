@@ -62,6 +62,7 @@ public class CameraController : MonoBehaviour
     private InputAction rightMouseAction;
     private InputAction zoomAction;
     private InputAction lookAction;
+    private InputAction speedModifierAction;
 
     private float yaw;
     private float pitch;
@@ -87,30 +88,43 @@ public class CameraController : MonoBehaviour
         
         rightMouseAction = new InputAction("RightMouse", InputActionType.Button, "<Mouse>/rightButton");
 
-        moveAction.Enable();
-        lookAction.Enable();
-        zoomAction.Enable();
-        rotateModeAction.Enable();
-        rightMouseAction.Enable();
+        speedModifierAction = new InputAction("CameraSpeedModifier", InputActionType.Button);
+        speedModifierAction.AddBinding("<Keyboard>/leftShift");
+        speedModifierAction.AddBinding("<Keyboard>/rightShift");
 
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x;
     }
 
-    private void OnDestroy()
+    private void OnEnable()
+    {
+        moveAction?.Enable();
+        lookAction?.Enable();
+        zoomAction?.Enable();
+        rotateModeAction?.Enable();
+        rightMouseAction?.Enable();
+        speedModifierAction?.Enable();
+    }
+
+    private void OnDisable()
     {
         moveAction.Disable();
         lookAction.Disable();
         zoomAction.Disable();
         rotateModeAction.Disable();
         rightMouseAction.Disable();
+        speedModifierAction.Disable();
+    }
 
+    private void OnDestroy()
+    {
         moveAction.Dispose();
         lookAction.Dispose();
         zoomAction.Dispose();
         rotateModeAction.Dispose();
         rightMouseAction.Dispose();
+        speedModifierAction.Dispose();
     }
 
     private void Update()
@@ -146,7 +160,7 @@ public class CameraController : MonoBehaviour
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
 
         float multiplier = 1f;
-        if (Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
+        if (speedModifierAction != null && speedModifierAction.IsPressed())
         {
             multiplier = speedMultiplier;
         }
@@ -161,7 +175,7 @@ public class CameraController : MonoBehaviour
             right.y = 0f;
             right.Normalize();
 
-            Vector3 move = multiplier * panSpeed * Time.deltaTime * (right * moveInput.x + forward * moveInput.y);
+            Vector3 move = multiplier * panSpeed * Time.unscaledDeltaTime * (right * moveInput.x + forward * moveInput.y);
             transform.Translate(move, Space.World);
         }
     }
@@ -181,7 +195,7 @@ public class CameraController : MonoBehaviour
             forward.y = 0f;
             forward.Normalize();
 
-            Vector3 deltaWorld = dragPanSensitivity * Time.deltaTime * (-right * mouseDelta.x + -forward * mouseDelta.y);
+            Vector3 deltaWorld = dragPanSensitivity * Time.unscaledDeltaTime * (-right * mouseDelta.x + -forward * mouseDelta.y);
             transform.Translate(deltaWorld, Space.World);
         }
     }
@@ -224,13 +238,13 @@ public class CameraController : MonoBehaviour
         if (Mathf.Abs(scrollMove) > 0.001f)
         {
             float multiplier = 1f;
-            if (Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed))
+            if (speedModifierAction != null && speedModifierAction.IsPressed())
             {
                 multiplier = speedMultiplier;
             }
 
             Vector3 position = transform.position;
-            position.y += scrollMove * verticalScrollSpeed * multiplier * Time.deltaTime;
+            position.y += scrollMove * verticalScrollSpeed * multiplier * Time.unscaledDeltaTime;
             position.y = Mathf.Clamp(position.y, minHeight, maxHeight);
             transform.position = position;
         }
