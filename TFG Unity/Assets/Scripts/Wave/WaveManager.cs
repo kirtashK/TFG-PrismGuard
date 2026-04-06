@@ -64,7 +64,7 @@ public class WaveManager : MonoBehaviour
 
     [Header("Spawn")]
 
-    public Transform spawnPoint;
+    public GameObject spawnPoint;
     [Tooltip("Seconds between waves")]
     public float waveInterval = 100f;
 
@@ -184,6 +184,8 @@ public class WaveManager : MonoBehaviour
         // Once the wave is completed (notified by event), timer will start
         waitingForNextWaveToComplete = false;
 
+        ToggleFlag(false);
+
         int gainedThisWave = ScoreManager.Instance.CurrentScore - scoreAtWaveStart;
 
         // Give extra score proportional to the completed wave number
@@ -254,8 +256,9 @@ public class WaveManager : MonoBehaviour
         //TODO Animaciones, efectos, sonidos
 
         waitingForNextWaveToComplete = true;
-
         waveIndex++;
+
+        ToggleFlag(true);
 
         scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
 
@@ -312,8 +315,8 @@ public class WaveManager : MonoBehaviour
 
             // Spawn the candidate
             GameObject gameObject = null;
-            AsyncOperationHandle<GameObject> handle = chosen.GetRandomPrefabReference().InstantiateAsync(spawnPoint.position, spawnPoint.rotation);
-            
+            AsyncOperationHandle<GameObject> handle = chosen.GetRandomPrefabReference().InstantiateAsync(spawnPoint.transform.position, spawnPoint.transform.rotation);
+
             yield return handle;
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
@@ -338,14 +341,23 @@ public class WaveManager : MonoBehaviour
             }
 
             Transform crystal = GameObject.FindWithTag("Crystal").transform;
-            enemy.Initialize(crystal, Enemy.Behaviour.Aggressive, spawnPoint.position);
+            enemy.Initialize(crystal, Enemy.Behaviour.Aggressive, spawnPoint.transform.position);
 
             budget -= chosen.spawnCost;
 
             // Add a small delay so not all enemies spawn at the same instant
-            yield return new WaitForSeconds(0.25f); 
+            yield return new WaitForSeconds(0.25f);
         }
 
         yield return null;
+    }
+
+    private void ToggleFlag(bool toggle)
+    {
+        if (!spawnPoint.TryGetComponent<WaveFlag>(out WaveFlag waveFlag))
+        {
+            Debug.LogWarning($"{spawnPoint} missing {nameof(WaveFlag)}");
+        }
+        waveFlag.ToggleModel(toggle);
     }
 }
