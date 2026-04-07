@@ -34,6 +34,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 325a1059b7fdd124d9102f1933e95779
+    m_Address: Assets/Data/Structures/Defenses/Wood Wall Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3660304d644e65a47a4620da796a9ff5
     m_Address: Assets/Data/Structures/Flags/IronGatheringFlag ResourceGatherer Data.asset
     m_ReadOnly: 0

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0167880c5b8919845bf9bd158e4c17b4, type: 3}
+  m_Name: Log Wall Structure Data
+  m_EditorClassIdentifier: Assembly-CSharp::StructureData
+  Name: Log wall
+  id: 325a1059b7fdd124d9102f1933e95779
+  icon: {fileID: 21300000, guid: 325f71e0a56a3c3419c68befe53e3641, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 160
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  category: 3
+  builtPrefab: {fileID: 8908537884098008895, guid: e626c2c2c83179a47b6ac3a2aae52e89, type: 3}
+  blueprintPrefab: {fileID: 6844892534594752479, guid: e2d259d005d4f004abfa6d404d07e3dc, type: 3}
+  previewPrefab: {fileID: 4088512318064399749, guid: 90e850c077034d24ebe8c790f1c31ba2, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  faction: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
+    quantity: 3
