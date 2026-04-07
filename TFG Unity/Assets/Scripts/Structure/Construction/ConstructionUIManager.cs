@@ -189,28 +189,6 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             HidePanel();
             return;
         }
-
-        // Close when click outside Construction UI:
-        if (clickAction != null && clickAction.triggered)
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
     }
 
     private void BuildCategoryBar()
