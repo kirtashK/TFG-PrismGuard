@@ -70,6 +70,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Structure
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72482a267b800ef4c88835593a36d0da
+    m_Address: Assets/Data/Structures/Defenses/Tower Structure Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Structure
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 74002b6421c8e2347a7b982013be2735
     m_Address: Assets/Data/Structures/Warehouses/Ores.asset
     m_ReadOnly: 0
