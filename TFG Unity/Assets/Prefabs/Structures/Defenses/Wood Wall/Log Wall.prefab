@@ -240,7 +240,7 @@ MonoBehaviour:
   data: {fileID: 0}
   displayName: 
   icon: {fileID: 0}
-  selectionVisual: {fileID: 0}
+  selectionVisual: {fileID: 7519377439539606337}
   InformationVisual: {fileID: 0}
 --- !u!1001 &2921740850942622098
 PrefabInstance:
@@ -330,7 +330,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3411406563104285518, guid: bfea7d808d9e9d643a408b4a47e6c9c7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.75
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3411406563104285518, guid: bfea7d808d9e9d643a408b4a47e6c9c7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -381,6 +381,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfea7d808d9e9d643a408b4a47e6c9c7, type: 3}
+--- !u!1 &7519377439539606337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4234535159332202382, guid: bfea7d808d9e9d643a408b4a47e6c9c7, type: 3}
+  m_PrefabInstance: {fileID: 5953238344836961487}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9064029207544838017 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3411406563104285518, guid: bfea7d808d9e9d643a408b4a47e6c9c7, type: 3}

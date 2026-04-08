@@ -252,14 +252,14 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
 
         target = combatTarget;
 
-        // TODO Structure attacks via arrow, call OnAttackHit when arrow's collider hits different faction ?
+        // TODO Structure attacks via arrows...
         target.TakeDamage(attackDamage, Position);
         target = null;
     }
 
-    // TODO Called by arrows shot by a structure, implement shooting arrows
     public void OnAttackHit()
     {
+        // TODO Structures attack via arrows, this is not used as arrows have code to check when they hit
         if (IsAlive && target != null && target.IsAlive)
         {
             target.TakeDamage(attackDamage, Position);
