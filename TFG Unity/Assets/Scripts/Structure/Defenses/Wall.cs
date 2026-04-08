@@ -11,6 +11,8 @@ public class Wall : MonoBehaviour
     [SerializeField] private StatKey maxHealthStat;
     [SerializeField] private StatKey healOnWaveCompletedStat;
 
+    #region Unity methods
+
     private void Awake()
     {
         if (TryGetComponent<Structure>(out Structure structure))
@@ -60,6 +62,8 @@ public class Wall : MonoBehaviour
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
     }
+
+    #endregion
 
     #region Stats
 

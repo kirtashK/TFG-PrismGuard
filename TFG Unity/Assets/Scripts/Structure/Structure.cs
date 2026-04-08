@@ -32,6 +32,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
     [SerializeField] private Transform combatFeedbackPosition;
     public Vector3 CombatFeedbackPosition => combatFeedbackPosition.position;
 
+    #region Unity methods
 
     private void Awake()
     {
@@ -79,6 +80,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
         }
     }
 
+    #endregion
 
     #region ICombatTarget
 
@@ -87,7 +89,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
     public event Action<float, Vector3> OnDamageTakenEvent;
     public event Action<float> OnHealedEvent;
 
-    ITarget target;
+    public ITarget target;
 
     public Vector3 Position => transform.position;
 

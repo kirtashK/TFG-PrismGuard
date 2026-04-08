@@ -10,15 +10,15 @@ public class SoldierChaseState : ISoldierState
 
     public void UpdateState(Soldier soldier)
     {
-        if (soldier.target == null || !soldier.target.IsAlive)
+        if (soldier.unit.target == null || !soldier.unit.target.IsAlive)
         {
             soldier.HandleCombatEnd();
             return;
         }
 
-        soldier.unit.agent.SetDestination(soldier.unit.GetTargetAttackPosition(soldier.target));
+        soldier.unit.agent.SetDestination(soldier.unit.GetTargetAttackPosition(soldier.unit.target));
 
-        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(soldier.target));
+        float distance = Vector3.Distance(soldier.transform.position, soldier.unit.GetTargetAttackPosition(soldier.unit.target));
         if (distance <= soldier.unit.attackRange)
         {
             soldier.ChangeState(new SoldierAttackState());

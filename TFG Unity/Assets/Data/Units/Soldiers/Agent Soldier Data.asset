@@ -29,6 +29,8 @@ MonoBehaviour:
     value: 45
   - statKey: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
     value: 1.5
+  - statKey: {fileID: 11400000, guid: 8f94e186081480c459b1389100bfb5a3, type: 2}
+    value: 10
   PrefabVariants:
   - m_AssetGUID: d554e948d5394334ea75f2430708bf98
     m_SubObjectName: 
@@ -44,4 +46,3 @@ MonoBehaviour:
     quantity: 30
   faction: 0
   isPlayerControllable: 1
-  AggroRadius: 10

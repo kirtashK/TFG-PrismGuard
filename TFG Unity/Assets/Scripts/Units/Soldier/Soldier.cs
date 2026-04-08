@@ -4,31 +4,32 @@ using UnityEngine;
 public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IStatRefresher
 {
     [HideInInspector] public Unit unit;
+    private SoldierData data;
 
     [Header("Stats")]
 
     [SerializeField] private StatKey maxHealthStat;
     [SerializeField] private StatKey healOnWaveCompletedStat;
+
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
+    [SerializeField] private StatKey detectionRadiusStat;
 
-    [HideInInspector] public float aggroRadius;
-
-    private SoldierData data;
+    [HideInInspector] public float detectionRadius;
 
     private ISoldierState currentState;
 
     private Sensor sensor;
-
-    public ITarget target;
 
     // IGuardable
     private Vector3 guardPoint;
     private bool hasGuardPoint = false;
     private bool returnToGuardOnFinish = false;
     private bool attackMove = false;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -62,8 +63,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
 
         unit.currentHealth = unit.maxHealth;
 
-        aggroRadius = data.AggroRadius;
-        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
+        sensor.Initialize(unit.transform, unit.Faction, detectionRadius);
 
         ChangeState(new SoldierIdleState());
     }
@@ -98,6 +98,8 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         }
     }
 
+    #endregion
+
     #region Stats
 
     private void CheckNullStats()
@@ -125,6 +127,10 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         if (attackCooldownStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
+        }
+        if (detectionRadiusStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(detectionRadiusStat)}");
         }
     }
 
@@ -166,6 +172,10 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, attackCooldownStat, out finalValue))
         {
             unit.attackCooldown = finalValue;
+        }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, detectionRadiusStat, out finalValue))
+        {
+            detectionRadius = finalValue;
         }
     }
 
@@ -222,7 +232,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     // Called by states when combat finishes or target lost
     public void HandleCombatEnd()
     {
-        target = null;
+        unit.target = null;
 
         if (returnToGuardOnFinish && hasGuardPoint)
         {
@@ -248,7 +258,7 @@ public class Soldier : MonoBehaviour, IOrderable, IGuardable, IAttackMovable, IS
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, aggroRadius);
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
         if (hasGuardPoint)
         {

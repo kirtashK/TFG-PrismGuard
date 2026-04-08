@@ -144,7 +144,8 @@ MonoBehaviour:
   attackRangeStat: {fileID: 11400000, guid: f003bf0e95e143a4fb8fc9a9caa5f862, type: 2}
   attackDamageStat: {fileID: 11400000, guid: 3a74a2fe627e93b42a81a139a9ac8178, type: 2}
   attackCooldownStat: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
-  aggroRadius: 0
+  detectionRadiusStat: {fileID: 11400000, guid: 8f94e186081480c459b1389100bfb5a3, type: 2}
+  detectionRadius: 0
 --- !u!114 &1883437086491929082
 MonoBehaviour:
   m_ObjectHideFlags: 0

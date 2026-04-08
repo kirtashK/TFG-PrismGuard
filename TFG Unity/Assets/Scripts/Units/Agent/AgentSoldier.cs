@@ -17,12 +17,14 @@ public class AgentSoldier : Agent
 
     [SerializeField] private StatKey maxHealthStat;
     [SerializeField] private StatKey healOnWaveCompletedStat;
+
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
+    [SerializeField] private StatKey detectionRadiusStat;
 
-    [HideInInspector] public float aggroRadius;
+    [HideInInspector] public float detectionRadius;
 
     [Tooltip("Number of enemies to include in observations")]
     public int kNearest = 4;
@@ -53,6 +55,8 @@ public class AgentSoldier : Agent
 
     [Header("Debug")]
     public bool drawGizmos = true;
+
+    #region Unity methods
 
     protected override void Awake()
     {
@@ -88,8 +92,7 @@ public class AgentSoldier : Agent
 
         unit.currentHealth = unit.maxHealth;
 
-        aggroRadius = data.AggroRadius;
-        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
+        sensor.Initialize(unit.transform, unit.Faction, detectionRadius);
 
         unit.agent.stoppingDistance = unit.attackRange;
     }
@@ -130,6 +133,8 @@ public class AgentSoldier : Agent
         unit.OnHealedEvent -= OnHealed;
     }
 
+    #endregion
+
     #region Stats
 
     private void CheckNullStats()
@@ -157,6 +162,10 @@ public class AgentSoldier : Agent
         if (attackCooldownStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
+        }
+        if (detectionRadiusStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(detectionRadiusStat)}");
         }
     }
 
@@ -199,6 +208,10 @@ public class AgentSoldier : Agent
         {
             unit.attackCooldown = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, detectionRadiusStat, out finalValue))
+        {
+            detectionRadius = finalValue;
+        }
     }
 
     #endregion
@@ -225,13 +238,13 @@ public class AgentSoldier : Agent
             {
                 Vector3 worldPos = nearbyEnemies[i].Position;
                 Vector3 local = transform.InverseTransformPoint(worldPos);
-                float nx = Mathf.Clamp(local.x / aggroRadius, -1f, 1f);
-                float nz = Mathf.Clamp(local.z / aggroRadius, -1f, 1f);
+                float nx = Mathf.Clamp(local.x / detectionRadius, -1f, 1f);
+                float nz = Mathf.Clamp(local.z / detectionRadius, -1f, 1f);
 
                 vectorSensor.AddObservation(nx);
                 vectorSensor.AddObservation(nz);
 
-                float dist = Mathf.Clamp01(local.magnitude / aggroRadius);
+                float dist = Mathf.Clamp01(local.magnitude / detectionRadius);
                 vectorSensor.AddObservation(dist);
             }
             else
@@ -469,6 +482,6 @@ public class AgentSoldier : Agent
         }
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, aggroRadius);
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }

@@ -17,12 +17,6 @@ public class EnemyData : UnitData
     [Range(0f, 1000f)]
     public int rewardExperience = 2;
 
-    [Header("AI")]
-
-    [Tooltip("Radius around enemy to detect targets")]
-    [Range(0f, 100f)]
-    public float AggroRadius = 5f;
-
     [Header("Guard")]
 
     [Tooltip("Radius to guard")]
