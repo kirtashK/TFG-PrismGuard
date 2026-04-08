@@ -11,12 +11,14 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     [SerializeField] private StatKey maxHealthStat;
     [SerializeField] private StatKey healOnWaveCompletedStat;
+
     [SerializeField] private StatKey moveSpeedStat;
     [SerializeField] private StatKey attackRangeStat;
     [SerializeField] private StatKey attackDamageStat;
     [SerializeField] private StatKey attackCooldownStat;
+    [SerializeField] private StatKey detectionRadiusStat;
 
-    [HideInInspector] public float aggroRadius;
+    [HideInInspector] public float detectionRadius;
 
     [HideInInspector] public float guardRadius;
     [HideInInspector] public float guardChaseBuffer;
@@ -30,8 +32,6 @@ public class Enemy : MonoBehaviour, IStatRefresher
 
     private Sensor sensor;
 
-    public ITarget target;
-
     public ITarget MainTarget { get; private set; }
 
     public enum Behaviour
@@ -43,6 +43,8 @@ public class Enemy : MonoBehaviour, IStatRefresher
     public Behaviour behaviour = Behaviour.Aggressive;
 
     public Vector3 homePosition;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -72,34 +74,13 @@ public class Enemy : MonoBehaviour, IStatRefresher
         }
     }
 
-    private void SetMainTarget()
-    {
-        if (crystalTransform != null)
-        {
-            MainTarget = crystalTransform.GetComponent<ITarget>();
-        }
-        else
-        {
-            GameObject crystalObject = GameObject.FindWithTag("Crystal");
-            if (crystalObject != null)
-            {
-                MainTarget = crystalObject.GetComponent<ITarget>();
-            }
-            else
-            {
-                MainTarget = null;
-            }
-        }
-    }
-
     private void Start()
     {
         RefreshStats();
 
         unit.currentHealth = unit.maxHealth;
 
-        aggroRadius = data.AggroRadius;
-        sensor.Initialize(unit.transform, unit.Faction, aggroRadius);
+        sensor.Initialize(unit.transform, unit.Faction, detectionRadius);
 
         guardRadius = data.guardRadius;
         guardChaseBuffer = data.guardChaseBuffer;
@@ -146,6 +127,8 @@ public class Enemy : MonoBehaviour, IStatRefresher
         unit.OnDamageTakenEvent -= OnDamageTaken;
     }
 
+    #endregion
+
     public void ChangeState(IEnemyState newState)
     {
         currentState?.ExitState(this);
@@ -180,6 +163,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
         if (attackCooldownStat == null)
         {
             Debug.LogError($"{name}: missing {nameof(attackCooldownStat)}");
+        }
+        if (detectionRadiusStat == null)
+        {
+            Debug.LogError($"{name}: missing {nameof(detectionRadiusStat)}");
         }
     }
 
@@ -222,6 +209,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
         {
             unit.attackCooldown = finalValue;
         }
+        if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, detectionRadiusStat, out finalValue))
+        {
+            detectionRadius = finalValue;
+        }
     }
 
     #endregion
@@ -255,7 +246,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
             {
                 UIManager.Instance.ChangeEnemyCount(1);
 
-                target = MainTarget;
+                unit.target = MainTarget;
                 ChangeState(new EnemyChaseState());
             }
             else
@@ -274,7 +265,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
             behaviour = Behaviour.Aggressive;
             UIManager.Instance.ChangeEnemyCount(1);
 
-            target = MainTarget;
+            unit.target = MainTarget;
             ChangeState(new EnemyChaseState());
         }
     }
@@ -283,6 +274,26 @@ public class Enemy : MonoBehaviour, IStatRefresher
     {
         ScoreManager.Instance.AddScore(data.spawnCost);
         UIManager.Instance.ChangeEnemyCount(-1);
+    }
+
+    private void SetMainTarget()
+    {
+        if (crystalTransform != null)
+        {
+            MainTarget = crystalTransform.GetComponent<ITarget>();
+        }
+        else
+        {
+            GameObject crystalObject = GameObject.FindWithTag("Crystal");
+            if (crystalObject != null)
+            {
+                MainTarget = crystalObject.GetComponent<ITarget>();
+            }
+            else
+            {
+                MainTarget = null;
+            }
+        }
     }
 
     /// <summary>
@@ -298,7 +309,7 @@ public class Enemy : MonoBehaviour, IStatRefresher
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, aggroRadius);
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
         if (behaviour == Behaviour.Guard)
         {

@@ -29,6 +29,8 @@ MonoBehaviour:
     value: 13
   - statKey: {fileID: 11400000, guid: 2e2df56f39e3c2147a6e1706bb8aecbe, type: 2}
     value: 1.5
+  - statKey: {fileID: 11400000, guid: 8f94e186081480c459b1389100bfb5a3, type: 2}
+    value: 5
   PrefabVariants:
   - m_AssetGUID: a70e0d193fd04154b8bbce7950c85ca0
     m_SubObjectName: 
@@ -47,7 +49,6 @@ MonoBehaviour:
   isPlayerControllable: 0
   spawnCost: 5
   rewardExperience: 2
-  AggroRadius: 5
   guardRadius: 8
   guardChaseBuffer: 3
   patrolDelayMin: 1

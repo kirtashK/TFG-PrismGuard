@@ -330,7 +330,12 @@ public class PlacementController : MonoBehaviour
             }
         }
 
-        EndPlacement();
+        // If not building defenses or storage, end placement, otherwise can keep placing without having to reselect
+        if (currentStructure.category != StructureCategory.Defense 
+            && currentStructure.category != StructureCategory.Storage)
+        {
+            EndPlacement();
+        }
     }
 
     public void CancelPlacement()

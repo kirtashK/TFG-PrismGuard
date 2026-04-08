@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
     private static readonly int AnimatorDie = Animator.StringToHash("Die");
     private static readonly int AnimatorIsDead = Animator.StringToHash("IsDead");
 
-    ITarget target;
+    public ITarget target;
 
     [SerializeField] private float dissolveDuration = 10.0f;
     private static readonly int DissolveAmountId = Shader.PropertyToID("_DissolveAmount");
@@ -46,6 +46,8 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
 
     [SerializeField] private Transform combatFeedbackPosition;
     public Vector3 CombatFeedbackPosition => combatFeedbackPosition.position;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -115,6 +117,8 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
             CombatFeedbackManager.Instance.Unregister(this);
         }
     }
+
+    #endregion
 
     public void SetAddressableInstanceHandle(AsyncOperationHandle<GameObject> handle)
     {

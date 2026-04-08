@@ -13,7 +13,7 @@ public class SoldierIdleState : ISoldierState
 
         if (target != null && target.IsAlive)
         {
-            soldier.target = target;
+            soldier.unit.target = target;
             soldier.ChangeState(new SoldierChaseState());
         }
     }

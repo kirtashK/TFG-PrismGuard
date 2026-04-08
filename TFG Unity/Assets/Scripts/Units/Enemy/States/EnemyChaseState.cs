@@ -6,14 +6,14 @@ public class EnemyChaseState : IEnemyState
     {
         enemy.unit.agent.isStopped = false;
         enemy.unit.agent.stoppingDistance = enemy.unit.attackRange;
-        enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.target));
+        enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.unit.target));
     }
 
     public void UpdateState(Enemy enemy)
     {
-        if (enemy.target == null || !enemy.target.IsAlive)
+        if (enemy.unit.target == null || !enemy.unit.target.IsAlive)
         {
-            enemy.target = enemy.MainTarget;
+            enemy.unit.target = enemy.MainTarget;
             enemy.ChangeState(new EnemyChaseState());
             return;
         }
@@ -33,9 +33,9 @@ public class EnemyChaseState : IEnemyState
 
         if (soldier != null 
             && soldier.IsAlive
-            && soldier != enemy.target)
+            && soldier != enemy.unit.target)
         {
-            enemy.target = soldier;
+            enemy.unit.target = soldier;
             enemy.ChangeState(new EnemyChaseState());
             return;
         }
@@ -47,7 +47,7 @@ public class EnemyChaseState : IEnemyState
         }
         else
         {
-            enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.target));
+            enemy.unit.agent.SetDestination(enemy.unit.GetTargetAttackPosition(enemy.unit.target));
         }
     }
 

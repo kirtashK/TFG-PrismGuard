@@ -75,6 +75,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Research
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 798e6391be67ea0459c2ec0f6ac69328
+    m_Address: Assets/Data/Research/Unlock Tower Research Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Research
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a19a9db5436d5c4a8c9eda876986078
     m_Address: Assets/Data/Research/Upgrade Warehouses Capacity Research Data.asset
     m_ReadOnly: 0

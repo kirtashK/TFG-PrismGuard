@@ -32,6 +32,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
     [SerializeField] private Transform combatFeedbackPosition;
     public Vector3 CombatFeedbackPosition => combatFeedbackPosition.position;
 
+    #region Unity methods
 
     private void Awake()
     {
@@ -79,6 +80,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
         }
     }
 
+    #endregion
 
     #region ICombatTarget
 
@@ -87,7 +89,7 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
     public event Action<float, Vector3> OnDamageTakenEvent;
     public event Action<float> OnHealedEvent;
 
-    ITarget target;
+    public ITarget target;
 
     public Vector3 Position => transform.position;
 
@@ -250,14 +252,14 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
 
         target = combatTarget;
 
-        // TODO Structure attacks via arrow, call OnAttackHit when arrow's collider hits different faction ?
+        // TODO Structure attacks via arrows...
         target.TakeDamage(attackDamage, Position);
         target = null;
     }
 
-    // TODO Called by arrows shot by a structure, implement shooting arrows
     public void OnAttackHit()
     {
+        // TODO Structures attack via arrows, this is not used as arrows have code to check when they hit
         if (IsAlive && target != null && target.IsAlive)
         {
             target.TakeDamage(attackDamage, Position);
