@@ -381,7 +381,7 @@ public class PlacementController : MonoBehaviour
     /// <param name="root">GameObject to modify, including children</param>
     /// <param name="targetMaterial">Material to apply</param>
     /// <param name="alpha"></param>
-    private void ApplyMaterialToObject(GameObject root, Material targetMaterial, float alpha = 1f)
+    public void ApplyMaterialToObject(GameObject root, Material targetMaterial, float alpha = 1f)
     {
         if (root == null || targetMaterial == null)
         {

@@ -366,6 +366,16 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
     public void OnDeathCleanup()
     {
         OnDeathCleanupEvent?.Invoke();
+
+        if (structureData == null || structureData.faction != Faction.Player
+            || structureData.blueprintPrefab == null)
+        {
+            return;
+        }
+
+        GameObject blueprintObject = Instantiate(structureData.blueprintPrefab, transform.position, transform.rotation);
+        blueprintObject.transform.localScale = transform.localScale;
+        PlacementController.Instance.ApplyMaterialToObject(blueprintObject, PlacementController.Instance.blueprintMaterial);
     }
 
     #endregion
