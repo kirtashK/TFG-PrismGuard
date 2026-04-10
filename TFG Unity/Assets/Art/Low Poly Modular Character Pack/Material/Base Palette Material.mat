@@ -11,15 +11,16 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: f67d12dbdff210e4a8e5fcffbc030e47, type: 3}
   m_Parent: {fileID: 2100000, guid: 1dcf44a7e9fbb32478f97fce0252ed8d, type: 2}
   m_ModifiedSerializedProperties: 18
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords:
   - _EMISSION
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 2450
   stringTagMap:
-    RenderType: Opaque
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 

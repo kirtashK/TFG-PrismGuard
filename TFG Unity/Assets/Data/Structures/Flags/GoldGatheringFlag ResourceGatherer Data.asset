@@ -24,6 +24,7 @@ MonoBehaviour:
   - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
     value: 10
   category: 2
+  buildDuration: 2
   builtPrefab: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
   blueprintPrefab: {fileID: 9064850209583715879, guid: 7ec9d89b4f6bf9f42bcf352d2f3097fb, type: 3}
   previewPrefab: {fileID: 2411167958785837199, guid: 5f4214b1ef0f4194da44c11c8abd6125, type: 3}
@@ -34,6 +35,6 @@ MonoBehaviour:
   isUnique: 0
   faction: 0
   buildRequirements:
-  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-    quantity: 0
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 1
   allowedCategories: 04000000
