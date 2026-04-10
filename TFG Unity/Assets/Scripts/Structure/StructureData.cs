@@ -9,6 +9,10 @@ public class StructureData : BaseData
     [Tooltip("Category to show in construction UI")]
     public StructureCategory category = StructureCategory.Misc;
 
+    [Tooltip("Seconds needed to build the structure")]
+    [Min(0f)]
+    public float buildDuration = 5f;
+
     [Tooltip("Prefab of the structure once built")]
     public GameObject builtPrefab;
 
