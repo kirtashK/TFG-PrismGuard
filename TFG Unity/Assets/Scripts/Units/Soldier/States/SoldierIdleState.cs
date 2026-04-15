@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class SoldierIdleState : ISoldierState
 {
     public void EnterState(Soldier soldier)
