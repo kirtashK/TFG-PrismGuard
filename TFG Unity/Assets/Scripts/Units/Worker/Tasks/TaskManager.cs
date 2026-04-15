@@ -21,16 +21,28 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void RegisterTask(ITask newTask)
+    public void RegisterTask(ITask task)
     {
-        if (!availableTasks.Contains(newTask))
+        if (task == null)
         {
-            availableTasks.Add(newTask);
+            Debug.LogWarning($"{name}: received null {nameof(task)}");
+            return;
+        }
+
+        if (!availableTasks.Contains(task))
+        {
+            availableTasks.Add(task);
         }
     }
 
     public void UnregisterTask(ITask task)
     {
+        if (task == null)
+        {
+            Debug.LogWarning($"{name}: received null {nameof(task)}");
+            return;
+        }
+
         if (availableTasks.Contains(task))
         {
             availableTasks.Remove(task);
@@ -50,6 +62,14 @@ public class TaskManager : MonoBehaviour
 
         foreach (ITask task in availableTasks)
         {
+            if (task == null)
+            {
+                Debug.LogWarning($"{name}: null {nameof(task)}");
+
+                UnregisterTask(task);
+                continue;
+            }
+
             int taskPriority = task.Priority;
             float taskDistance = GetPathLength(workerPosition, task.TaskPosition);
 
@@ -111,16 +131,7 @@ public class TaskManager : MonoBehaviour
         return -1f;
     }
 
-    public void CompleteTask(ITask task)
-    {
-        UnregisterTask(task);
-    }
-
-    public MoveItemTask RequestMoveItemTask
-        (Vector3 fromPosition,
-        float maxWeight,
-        Vector3 destination,
-        float maxDistance = Mathf.Infinity)
+    public MoveItemTask RequestMoveItemTask(Vector3 fromPosition, float maxWeight, Vector3 destination, float maxDistance = Mathf.Infinity)
     {
         MoveItemTask best = null;
         float bestDist = float.MaxValue;

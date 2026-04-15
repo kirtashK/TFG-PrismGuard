@@ -83,6 +83,22 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private void OnDisable()
     {
+        Unregister();
+
+        CancelCurrentSession();
+        StopAllCoroutines();
+    }
+
+    private void OnDestroy()
+    {
+        Unregister();
+
+        CancelCurrentSession();
+        StopAllCoroutines();
+    }
+
+    private void Unregister()
+    {
         if (ItemConsumerManager.Instance != null)
         {
             ItemConsumerManager.Instance.Unregister(this);
@@ -95,9 +111,6 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         isRegisteredToTaskManager = false;
         registeredTask = null;
-
-        CancelCurrentSession();
-        StopAllCoroutines();
     }
 
     #endregion
@@ -343,11 +356,8 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     private void CancelCurrentSession()
     {
-        if (currentSession != null)
-        {
-            currentSession.Cancel();
-            currentSession = null;
-        }
+        currentSession?.Cancel();
+        currentSession = null;
 
         isOccupied = false;
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ItemInstance))]
 public class MoveItemTask : MonoBehaviour, ITask
 {
     [SerializeField]
@@ -36,10 +37,11 @@ public class MoveItemTask : MonoBehaviour, ITask
 
     public WorkType WorkType => WorkType.None;
 
+    #region Unity methods
+
     private void Awake()
     {
         itemInstance = GetComponent<ItemInstance>();
-
         if (itemInstance == null)
         {
             Debug.LogError($"{name}: null {nameof(ItemInstance)}");
@@ -64,17 +66,6 @@ public class MoveItemTask : MonoBehaviour, ITask
         }
     }
 
-    private void OnDisable()
-    {
-        if (isRegisteredToTaskManager && TaskManager.Instance != null)
-        {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegisteredToTaskManager = false;
-        }
-
-        UnsubscribeFromConsumerEvents();
-    }
-
     private IEnumerator RegisterWhenReady()
     {
         while (ItemConsumerManager.Instance == null || TaskManager.Instance == null)
@@ -86,6 +77,29 @@ public class MoveItemTask : MonoBehaviour, ITask
 
         StartCoroutine(PollForConsumer());
     }
+
+    private void OnDisable()
+    {
+        Unregister();
+        UnsubscribeFromConsumerEvents();
+    }
+
+    private void OnDestroy()
+    {
+        Unregister();
+        UnsubscribeFromConsumerEvents();
+    }
+
+    private void Unregister()
+    {
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
+        {
+            TaskManager.Instance.UnregisterTask(this);
+            isRegisteredToTaskManager = false;
+        }        
+    }
+
+    #endregion
 
     private void SubscribeToConsumerEvents()
     {
@@ -165,11 +179,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         lastConsumer = null;
         target = null;
 
-        if (isRegisteredToTaskManager && TaskManager.Instance != null)
-        {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegisteredToTaskManager = false;
-        }
+        Unregister();
 
         // Drop item if it was being transported to
         // a consumer that no longer exists
@@ -227,11 +237,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         target = null;
         source = null;
 
-        if (isRegisteredToTaskManager && TaskManager.Instance != null)
-        {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegisteredToTaskManager = false;
-        }
+        Unregister();
 
         StopAllCoroutines();
         StartCoroutine(PollForConsumer());
@@ -245,11 +251,7 @@ public class MoveItemTask : MonoBehaviour, ITask
 
             worker.DropItem(gameObject, worker.unit.Position);
 
-            if (isRegisteredToTaskManager && TaskManager.Instance != null)
-            {
-                TaskManager.Instance.UnregisterTask(this);
-                isRegisteredToTaskManager = false;
-            }
+            Unregister();
 
             StartCoroutine(PollForConsumer());
 
@@ -264,11 +266,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         source = null;
         itemInstance.carrier = null;
 
-        if (isRegisteredToTaskManager)
-        {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegisteredToTaskManager = false;
-        }
+        Unregister();
     }
 
     public void Cancel(Worker requester)
@@ -292,11 +290,7 @@ public class MoveItemTask : MonoBehaviour, ITask
         }
         source = null;
 
-        if (isRegisteredToTaskManager && TaskManager.Instance != null)
-        {
-            TaskManager.Instance.UnregisterTask(this);
-            isRegisteredToTaskManager = false;
-        }
+        Unregister();
 
         StopAllCoroutines();
         StartCoroutine(PollForConsumer());
