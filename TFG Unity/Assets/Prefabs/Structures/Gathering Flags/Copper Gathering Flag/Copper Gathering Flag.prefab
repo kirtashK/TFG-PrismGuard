@@ -55,6 +55,9 @@ MonoBehaviour:
   maxHealthStat: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
   healOnWaveCompletedStat: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
   gatheringRadiusStat: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
+  outputThresholds:
+  - itemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
+    threshold: 5
 --- !u!114 &8637009301420071870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +79,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
-  combatFeedbackPosition: {fileID: 3161280542264783672}
+  combatFeedbackPosition: {fileID: 8363716601821354890}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &8548758030102401255
@@ -109,6 +112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropSpot: {fileID: 9074328651961370620}
+  priority: 3
+  interactionRange: 1
 --- !u!135 &5154415911146534877
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -305,11 +310,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
---- !u!1 &3161280542264783672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3990923133885527614, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
-  m_PrefabInstance: {fileID: 2070957180825715974}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8363716601821354890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542517253274607244, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}

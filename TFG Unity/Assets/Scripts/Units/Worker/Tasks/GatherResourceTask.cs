@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(ResourceInstance))]
 public class GatherResourceTask : MonoBehaviour, ITask
 {
     public GatherResourceRecipe gatherResourceRecipe;
@@ -25,6 +26,9 @@ public class GatherResourceTask : MonoBehaviour, ITask
 
     public float InteractionRange => gatherResourceRecipe.interactionRange;
 
+    private bool isRegisteredToTaskManager;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -33,8 +37,6 @@ public class GatherResourceTask : MonoBehaviour, ITask
             int minRange = Mathf.Max(1, gatherResourceRecipe.resourceAmount - gatherResourceRecipe.resourceMaxDeviation);
             int maxRange = gatherResourceRecipe.resourceAmount + gatherResourceRecipe.resourceMaxDeviation;
             currentResourceAmount = Random.Range(minRange, maxRange + 1);
-
-            //Debug.Log($"{name} initial resources: {currentResourceAmount}. Deviation: {currentResourceAmount - gatherResourceRecipe.resourceAmount}");
         }
     }
 
@@ -49,16 +51,31 @@ public class GatherResourceTask : MonoBehaviour, ITask
         {
             yield return null;
         }
+
         TaskManager.Instance.RegisterTask(this);
+        isRegisteredToTaskManager = true;
     }
 
     private void OnDisable()
     {
-        if (TaskManager.Instance != null)
+        Unregister();
+    }
+
+    private void OnDestroy()
+    {
+        Unregister();
+    }
+
+    private void Unregister()
+    {
+        if (isRegisteredToTaskManager && TaskManager.Instance != null)
         {
             TaskManager.Instance.UnregisterTask(this);
+            isRegisteredToTaskManager = false;
         }
     }
+
+    #endregion
 
     public void Execute(Worker worker, System.Action onComplete)
     {
@@ -69,6 +86,8 @@ public class GatherResourceTask : MonoBehaviour, ITask
     {
         // Force reset so the task registers again in a clean state
         TaskManager.Instance.UnregisterTask(this);
+        isRegisteredToTaskManager = false;
+
         StopAllCoroutines();
         StartCoroutine(RegisterWhenReady());
     }
@@ -117,8 +136,19 @@ public class GatherResourceTask : MonoBehaviour, ITask
             {
                 Debug.Log($"{name} has been depleted");
                 Destroy(gameObject);
+                yield break;
             }
-            else 
+
+            ResourceInstance resourceInstance = GetComponent<ResourceInstance>();
+            if (resourceInstance == null || !resourceInstance.IsCovered())
+            {
+                Unregister();
+
+                enabled = false;
+                yield break;
+            }
+
+            if (isRegisteredToTaskManager)
             {
                 TaskManager.Instance.UnregisterTask(this);
                 TaskManager.Instance.RegisterTask(this);

@@ -11,6 +11,8 @@ public class ResourceInstance : MonoBehaviour
     // ResourceGatherers currently covering this resource
     private readonly HashSet<ResourceGatherer> coveringGatherers = new();
 
+    #region Unity methods
+
     private void Awake()
     {
         gatherTask = GetComponent<GatherResourceTask>();
@@ -40,6 +42,21 @@ public class ResourceInstance : MonoBehaviour
             }
         }
         coveringGatherers.Clear();
+    }
+
+    #endregion
+
+    public bool TryGetGatherOutputItemData(out ItemData itemData)
+    {
+        itemData = null;
+
+        if (gatherTask == null || gatherTask.gatherResourceRecipe == null)
+        {
+            return false;
+        }
+
+        itemData = gatherTask.gatherResourceRecipe.resourceItemData;
+        return itemData != null;
     }
 
     public void AddGatherer(ResourceGatherer gatherer)

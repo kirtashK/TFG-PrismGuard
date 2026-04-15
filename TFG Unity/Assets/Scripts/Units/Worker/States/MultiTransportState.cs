@@ -99,7 +99,7 @@ public class MultiTransportState : IWorkerState
         }
 
         worker.PickUp(task.gameObject);
-        TaskManager.Instance.CompleteTask(task);
+        TaskManager.Instance.UnregisterTask(task);
 
         if (task.gameObject.TryGetComponent<ItemInstance>(out ItemInstance instance))
         {

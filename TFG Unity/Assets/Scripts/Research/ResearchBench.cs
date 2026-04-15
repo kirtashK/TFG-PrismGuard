@@ -99,6 +99,22 @@ public class ResearchBench : MonoBehaviour, ITask
 
     private void OnDisable()
     {
+        Unregister();
+
+        CancelCurrentSession();
+        StopAllCoroutines();
+    }
+
+    private void OnDestroy()
+    {
+        Unregister();
+
+        CancelCurrentSession();
+        StopAllCoroutines();
+    }
+
+    private void Unregister()
+    {
         if (isRegisteredToTaskManager && TaskManager.Instance != null)
         {
             TaskManager.Instance.UnregisterTask(registeredTask);
@@ -110,9 +126,6 @@ public class ResearchBench : MonoBehaviour, ITask
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
-
-        CancelCurrentSession();
-        StopAllCoroutines();
     }
 
     #region Stats
@@ -339,11 +352,8 @@ public class ResearchBench : MonoBehaviour, ITask
 
     public void CancelCurrentSession()
     {
-        if (currentSession != null)
-        {
-            currentSession.Cancel();
-            currentSession = null;
-        }
+        currentSession?.Cancel();
+        currentSession = null;
 
         isOccupied = false;
         currentWorker = null;
