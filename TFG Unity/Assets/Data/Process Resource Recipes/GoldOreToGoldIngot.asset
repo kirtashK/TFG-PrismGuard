@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProcessResourceRecipe
   Name: Smelt gold ore
   id: 9e946a5595a89a24cbaf4d4e05d6ff85
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 777c7c34d4a98f34799f7f7bd553c616, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
   inputItemData: {fileID: 11400000, guid: 24dc255145ef14f4fb4333bfaa95427f, type: 2}

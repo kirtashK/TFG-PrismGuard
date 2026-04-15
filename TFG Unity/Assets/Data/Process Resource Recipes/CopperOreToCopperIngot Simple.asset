@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Smelt copper ore
   id: 36aa50ff6bd5bd74f9c8ee068799ac2e
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 592cf5adaca6ca141b284ae23652e70d, type: 3}
   requiredResearch: {fileID: 0}
   statBases: []
   inputItemData: {fileID: 11400000, guid: 129f1d707c0f98a4e96037a75c2be876, type: 2}
