@@ -36,6 +36,6 @@ MonoBehaviour:
   faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 8
+    quantity: 4
   acceptedCategories:
   - {fileID: 11400000, guid: a07ef24556ffb8342a8ad373ae63d616, type: 2}
