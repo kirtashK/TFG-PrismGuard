@@ -56,6 +56,7 @@ MonoBehaviour:
   processingSpeedStat: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
   storage: {fileID: 1927618727268396039}
   processingCheckInterval: 1
+  recipeThresholds: []
   storedFuel: 0
   reservedFuel: 0
   maxConcurrentBatches: 1
@@ -115,6 +116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropSpot: {fileID: 1927618727268396039}
+  priority: 3
+  interactionRange: 1
 --- !u!1 &6038108138648192566
 GameObject:
   m_ObjectHideFlags: 0

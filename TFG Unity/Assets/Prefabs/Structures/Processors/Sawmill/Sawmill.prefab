@@ -306,6 +306,7 @@ MonoBehaviour:
   processingSpeedStat: {fileID: 11400000, guid: 6e7235c1d6ac8a2478ffb55a8437e0ad, type: 2}
   storage: {fileID: 4009856531128985332}
   processingCheckInterval: 1
+  recipeThresholds: []
   storedFuel: 0
   reservedFuel: 0
   maxConcurrentBatches: 1
@@ -332,7 +333,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
-  combatFeedbackPosition: {fileID: 303873747837621506}
+  combatFeedbackPosition: {fileID: 6627451027912080816}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &6436802545834418224
@@ -365,6 +366,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropSpot: {fileID: 4009856531128985332}
+  priority: 3
+  interactionRange: 1
 --- !u!1001 &2515407807644131158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -557,11 +560,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
---- !u!1 &303873747837621506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3990923133885527614, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
-  m_PrefabInstance: {fileID: 3698872436873175868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6627451027912080816 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542517253274607244, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}

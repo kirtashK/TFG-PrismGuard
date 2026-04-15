@@ -117,12 +117,19 @@ public class GatherResourceTask : MonoBehaviour, ITask
             {
                 Debug.Log($"{name} has been depleted");
                 Destroy(gameObject);
+                yield break;
             }
-            else 
+
+            ResourceInstance resourceInstance = GetComponent<ResourceInstance>();
+            if (resourceInstance == null || !resourceInstance.IsCovered())
             {
                 TaskManager.Instance.UnregisterTask(this);
-                TaskManager.Instance.RegisterTask(this);
+                enabled = false;
+                yield break;
             }
+
+            TaskManager.Instance.UnregisterTask(this);
+            TaskManager.Instance.RegisterTask(this);
         }
     }
 }

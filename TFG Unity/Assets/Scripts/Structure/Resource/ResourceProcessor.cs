@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceProcessor : MonoBehaviour, IItemConsumer
+public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvider
 {
     [HideInInspector] public Structure structure;
     private ProcessorData data;
@@ -25,6 +25,18 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private float processingCheckTimer = 0f;
 
     private readonly Dictionary<ItemData, InputState> inputState = new();
+
+    [Header("Thresholds")]
+
+    [SerializeField] private List<RecipeThresholdEntry> recipeThresholds = new();
+
+    [System.Serializable]
+    private class RecipeThresholdEntry
+    {
+        public ProcessResourceRecipe recipe;
+        [Range(1, 100)]
+        public int threshold = 1;
+    }
 
     [Header("Debug")]
 
@@ -66,6 +78,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private List<RecipeState> recipeStates;
 
     private bool isRegistered = false;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -144,14 +158,17 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     private IEnumerator RegisterWhenReady()
     {
         while (ItemConsumerManager.Instance == null
-            || StatModifierManager.Instance == null)
+            || StatModifierManager.Instance == null
+            || InventoryManager.Instance == null)
         {
             yield return null;
         }
+
         ItemConsumerManager.Instance.Register(this);
         isRegistered = true;
 
         StatModifierManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+        InventoryManager.Instance.OnInventoryChanged += HandleInventoryChanged;
 
         StartCoroutine(DispatchOutputToWarehouse());
     }
@@ -169,9 +186,25 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         {
             StatModifierManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.OnInventoryChanged -= HandleInventoryChanged;
+        }
 
         ResetInternalStateAndReleaseReservations();
     }
+
+    private void Update()
+    {
+        processingCheckTimer -= Time.deltaTime;
+        if (processingCheckTimer <= 0f)
+        {
+            StartProcessingBatches();
+            processingCheckTimer = processingCheckInterval;
+        }
+    }
+
+    #endregion
 
     #region Stats
 
@@ -261,19 +294,12 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
-    private void Update()
-    {
-        processingCheckTimer -= Time.deltaTime;
-        if (processingCheckTimer <= 0f)
-        {
-            StartProcessingBatches();
-            processingCheckTimer = processingCheckInterval;
-        }
-    }
-
     private void StartProcessingBatches()
     {
-        if (recipeStates == null || recipeStates.Count == 0) { return; }
+        if (recipeStates == null || recipeStates.Count == 0) 
+        { 
+            return; 
+        }
 
         foreach (RecipeState recipeState in recipeStates)
         {
@@ -283,17 +309,13 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 return;
             }
 
-            // Check if there is enough input & storage & fuel if needed:
-            bool readyForBatch =
-                state.Stored >= recipeState.recipe.inputPerBatch
-                && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
-                    <= recipeState.recipe.outputMaxCapacity
-                && (!requiresFuel || storedFuel >= recipeState.recipe.fuelPerBatch);
+            bool readyForBatch = CanStartBatch(recipeState, state);
 
             while (readyForBatch && processingCount < maxConcurrentBatches)
             {
                 // Consume input & fuel
                 state.Stored -= recipeState.recipe.inputPerBatch;
+
                 if (requiresFuel)
                 {
                     storedFuel -= recipeState.recipe.fuelPerBatch;
@@ -304,12 +326,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
                 processingCount++;
                 StartCoroutine(ProcessBatch(recipeState));
 
-                // Check if another batch is possible
-                readyForBatch =
-                    state.Stored >= recipeState.recipe.inputPerBatch
-                    && recipeState.storedOutput + recipeState.recipe.outputPerInput + recipeState.reservedOutput
-                        <= recipeState.recipe.outputMaxCapacity
-                    && (!requiresFuel || storedFuel >= recipeState.recipe.fuelPerBatch);
+                readyForBatch = CanStartBatch(recipeState, state);
             }
         }
     }
@@ -389,6 +406,172 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
         }
     }
 
+    private bool CanStartBatch(RecipeState recipeState, InputState state)
+    {
+        if (recipeState == null || recipeState.recipe == null || state == null)
+        {
+            return false;
+        }
+        if (state.Stored < recipeState.recipe.inputPerBatch)
+        {
+            return false;
+        }
+        if (requiresFuel && storedFuel < recipeState.recipe.fuelPerBatch)
+        {
+            return false;
+        }
+        int pendingOutput = GetPendingOutputCount(recipeState);
+        if (pendingOutput + recipeState.recipe.outputPerInput > recipeState.recipe.outputMaxCapacity)
+        {
+            return false;
+        }
+
+        int currentTotalOutput = GetCurrentTotalOutputCount(recipeState);
+        int threshold = GetThreshold(recipeState.recipe.outputItemData);        
+
+        return currentTotalOutput + recipeState.recipe.outputPerInput <= threshold;
+    }
+
+    private int GetPendingOutputCount(RecipeState recipeState)
+    {
+        int pendingOutput = recipeState.storedOutput + recipeState.reservedOutput;
+
+        Transform recipeStorage = TryGetRecipeStorage(recipeState.recipe);
+        if (recipeStorage != null)
+        {
+            pendingOutput += recipeStorage.childCount;
+        }
+
+        return pendingOutput;
+    }
+
+    private int GetCurrentTotalOutputCount(RecipeState recipeState)
+    {
+        int storedInWarehouses = InventoryManager.Instance != null
+            ? InventoryManager.Instance.GetTotal(recipeState.recipe.outputItemData)
+            : 0;
+
+        return storedInWarehouses + GetPendingOutputCount(recipeState);
+    }
+
+    #region Thresholds
+
+    public List<ItemData> GetOutputs()
+    {
+        List<ItemData> outputs = new();
+
+        foreach (RecipeState recipeState in recipeStates)
+        {
+            if (recipeState?.recipe.outputItemData != null)
+            {
+                outputs.Add(recipeState.recipe.outputItemData);
+            }
+        }
+
+        return outputs;
+    }
+
+    public int GetThreshold(ItemData itemData)
+    {
+        RecipeState itemRecipe = null;
+        foreach (RecipeState recipeState in recipeStates)
+        {
+            if (recipeState.recipe.outputItemData == itemData)
+            {
+                itemRecipe = recipeState;
+                foreach (RecipeThresholdEntry entry in recipeThresholds)
+                {
+                    if (entry != null && entry.recipe == recipeState.recipe)
+                    {
+                        return Mathf.Max(0, entry.threshold);
+                    }
+                }
+            }
+        }
+
+        return Mathf.Max(1, itemRecipe.recipe.outputMaxCapacity);
+    }
+
+    public void SetThreshold(ItemData itemData, int threshold)
+    {
+        foreach (RecipeState recipeState in recipeStates)
+        {
+            if (recipeState.recipe.outputItemData == itemData)
+            {
+                int normalizedThreshold = Mathf.Max(0, threshold);
+
+                foreach (RecipeThresholdEntry entry in recipeThresholds)
+                {
+                    if (entry != null && entry.recipe == recipeState.recipe)
+                    {
+                        entry.threshold = normalizedThreshold;
+                        processingCheckTimer = 0f;
+                        StartProcessingBatches();
+                        return;
+                    }
+                }
+
+                recipeThresholds.Add(new RecipeThresholdEntry
+                {
+                    recipe = recipeState.recipe,
+                    threshold = normalizedThreshold
+                });
+
+                processingCheckTimer = 0f;
+                StartProcessingBatches();
+                return;
+            }
+        }
+    }
+
+    public IReadOnlyList<ProcessResourceRecipe> GetRecipes()
+    {
+        return data.recipes;
+    }
+
+    private void HandleInventoryChanged(ItemData itemData, int currentTotal)
+    {
+        if (itemData == null || recipeStates == null)
+        {
+            return;
+        }
+
+        if (!HasRecipeWithOutput(itemData))
+        {
+            return;
+        }
+
+        processingCheckTimer = 0f;
+        StartProcessingBatches();
+    }
+
+    private bool HasRecipeWithOutput(ItemData itemData)
+    {
+        foreach (RecipeState recipeState in recipeStates)
+        {
+            if (recipeState != null
+                && recipeState.recipe != null
+                && recipeState.recipe.outputItemData == itemData)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    #endregion
+
+    private Transform TryGetRecipeStorage(ProcessResourceRecipe recipe)
+    {
+        if (storage == null || recipe == null || recipe.outputItemData == null)
+        {
+            return null;
+        }
+
+        return storage.Find($"Storage_{recipe.outputItemData.Name}");
+    }
+
     /// <summary>
     /// Returns the storage for a specific recipe,
     /// if it doesnt exist it creates it first
@@ -397,19 +580,21 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     /// <returns>Transform of the storage</returns>
     private Transform GetRecipeStorage(ProcessResourceRecipe recipe)
     {
-        string name = $"Storage_{recipe.outputItemData.Name}";
-        Transform transform = storage.Find(name);
-        if (transform != null)
+        Transform existingStorage = TryGetRecipeStorage(recipe);
+        if (existingStorage != null)
         {
-            return transform;
+            return existingStorage;
         }
 
         // This storage recipe doesnt exist yet, create it
-        GameObject gameObject = new(name);
-        gameObject.transform.SetParent(storage, worldPositionStays: false);
-        gameObject.transform.localPosition = Vector3.zero;
-        return gameObject.transform;
+        string storageName = $"Storage_{recipe.outputItemData.Name}";
+        GameObject storageGameObject = new(storageName);
+        storageGameObject.transform.SetParent(storage, worldPositionStays: false);
+        storageGameObject.transform.localPosition = Vector3.zero;
+        return storageGameObject.transform;
     }
+
+    #region Item Consumer
 
     public bool CanReceive(ItemData data)
     {
@@ -529,4 +714,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer
     {
         
     }
+
+    #endregion
 }
