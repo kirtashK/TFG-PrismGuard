@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class DebugMenuManager : MonoBehaviour, IHideElement
@@ -28,10 +27,11 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
     [Header("Feedback")]
     [SerializeField] private TMP_Text statusText;
 
-    private InputAction toggleMenuAction;
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    private InputSystem_Actions.UIActions uiActions;
+    private bool uiModePushed;
+    private bool inputReady;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -39,18 +39,6 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
-
-        toggleMenuAction = new InputAction("ToggleDebugMenu", InputActionType.Button, "<Keyboard>/k");
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelDebugMenu", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        toggleMenuAction.Enable();
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
 
         if (waveManager == null)
         {
@@ -71,13 +59,18 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
 
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null)
+        while (HideElementManager.Instance == null
+            || InputManager.Instance == null)
         {
             yield return null;
         }
 
         HideElementManager.Instance.Register(this);
         RefreshWaveState();
+
+        uiActions = InputManager.Instance.UI;
+        InputManager.Instance.OnDebugToggleRequested += TogglePanel;
+        inputReady = true;
     }
 
     private void OnDisable()
@@ -87,16 +80,15 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             HideElementManager.Instance.Unregister(this);
         }
 
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnDebugToggleRequested -= TogglePanel;
+        }
+
+        inputReady = false;
+
         RemoveButtonListeners();
         RemoveStatDropdownListener();
-    }
-
-    private void OnDestroy()
-    {
-        toggleMenuAction?.Dispose();
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
     }
 
     private void Start()
@@ -107,25 +99,26 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
 
     private void Update()
     {
-        if (toggleMenuAction != null && toggleMenuAction.triggered)
-        {
-            TogglePanel();
-            return;
-        }
         if (panelRoot == null || !panelRoot.activeSelf)
         {
             return;
         }
-        if (cancelAction != null && cancelAction.triggered)
+
+        if (!inputReady)
+        {
+            return;
+        }
+
+        if (uiActions.Cancel.WasPressedThisFrame())
         {
             HidePanel();
             return;
         }
 
-        if (clickAction != null && clickAction.triggered)
+        if (uiActions.Click.WasPressedThisFrame())
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPosition = pointerAction.ReadValue<Vector2>();
+            Vector2 pointerPosition = uiActions.Point.ReadValue<Vector2>();
 
             Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
             Camera uiCamera = null;
@@ -142,6 +135,8 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
         }
     }
 
+    #endregion
+
     public void TogglePanel()
     {
         if (panelRoot == null)
@@ -150,12 +145,21 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             return;
         }
 
-        if (!panelRoot.activeSelf)
+        if (panelRoot.activeSelf)
         {
-            HideElementManager.Instance.ShowOnly(this);
+            HidePanel();
+            return;
         }
 
+        HideElementManager.Instance.ShowOnly(this);
         panelRoot.SetActive(!panelRoot.activeSelf);
+
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
+        }
+
         RefreshWaveState();
     }
 
@@ -164,6 +168,12 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
+        }
+
+        if (uiModePushed)
+        {
+            InputManager.Instance.PopMode();
+            uiModePushed = false;
         }
     }
 

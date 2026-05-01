@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ResearchUIManager : MonoBehaviour, IHideElement
 {
@@ -12,26 +11,36 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
 
     private readonly Dictionary<string, ResearchNodeEntryUI> nodeEntries = new();
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    private InputSystem_Actions.UIActions uiActions;
+    private bool uiModePushed;
+    private bool inputReady;
 
-    private void Awake()
-    {
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
-    }
+    #region Unity methods
 
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (HideElementManager.Instance == null
+            || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded
+            || InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        HideElementManager.Instance.Register(this);
+
+        BuildNodeList();
+
+        ResearchManager.Instance.OnResearchProgressChanged += OnResearchProgressChanged;
+        ResearchManager.Instance.OnResearchCompleted += OnResearchCompleted;
+        ResearchManager.Instance.OnResearchDataLoaded += OnResearchDataLoaded;
+
+        uiActions = InputManager.Instance.UI;
+        inputReady = true;
     }
 
     private void OnDisable()
@@ -40,40 +49,17 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
         {
             HideElementManager.Instance.Unregister(this);
         }
+
         if (ResearchManager.Instance != null)
         {
             ResearchManager.Instance.OnResearchProgressChanged -= OnResearchProgressChanged;
             ResearchManager.Instance.OnResearchCompleted -= OnResearchCompleted;
             ResearchManager.Instance.OnResearchDataLoaded -= OnResearchDataLoaded;
         }
+
+        inputReady = false;
     }
 
-    private IEnumerator RegisterWhenReady()
-    {
-        while (HideElementManager.Instance == null)
-        {
-            yield return null;
-        }
-        HideElementManager.Instance.Register(this);
-
-        while (ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded)
-        {
-            yield return null;
-        }
-
-        BuildNodeList();
-
-        ResearchManager.Instance.OnResearchProgressChanged += OnResearchProgressChanged;
-        ResearchManager.Instance.OnResearchCompleted += OnResearchCompleted;
-        ResearchManager.Instance.OnResearchDataLoaded += OnResearchDataLoaded;
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
-    }
 
     private void Update()
     {
@@ -82,17 +68,22 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
             return;
         }
 
-        if (cancelAction != null && cancelAction.triggered)
+        if(!inputReady)
+        {
+            return;
+        }
+
+        if (uiActions.Cancel.WasPressedThisFrame())
         {
             HidePanel();
             return;
         }
 
         // Close when click outside research UI:
-        if (clickAction != null && clickAction.triggered)
+        if (uiActions.Click.WasPressedThisFrame())
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
 
             bool clickedInside;
             Camera uiCamera = null;
@@ -111,6 +102,8 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
         }
     }
 
+    #endregion
+
     // Called by button press
     public void TogglePanel()
     {
@@ -125,6 +118,12 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
             HideElementManager.Instance.ShowOnly(this);
         }
         panelRoot.SetActive(!panelRoot.activeSelf);
+
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
+        }
     }
 
     public void HidePanel()
@@ -132,6 +131,12 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
+        }
+
+        if (uiModePushed)
+        {
+            InputManager.Instance.PopMode();
+            uiModePushed = false;
         }
     }
 

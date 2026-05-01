@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ThresholdUIController : MonoBehaviour, IHideElement
 {
@@ -15,11 +14,11 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
     private ResourceProcessor currentProcessor;
     private ResourceGatherer currentGatherer;
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
-
     private bool isRegistered;
+
+    private InputSystem_Actions.UIActions uiActions;
+    private bool uiModePushed;
+    private bool inputReady;
 
     #region Unity methods
 
@@ -29,16 +28,6 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
     }
 
     private void OnEnable()
@@ -48,7 +37,9 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
 
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null || HideElementManager.Instance == null)
+        while (SelectionManager.Instance == null 
+            || HideElementManager.Instance == null
+            || InputManager.Instance == null)
         {
             yield return null;
         }
@@ -56,6 +47,9 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
         HideElementManager.Instance.Register(this);
         isRegistered = true;
+
+        uiActions = InputManager.Instance.UI;
+        inputReady = true;
     }
 
     private void OnDisable()
@@ -70,13 +64,7 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         }
 
         isRegistered = false;
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
+        inputReady = false;
     }
 
     private void Update()
@@ -86,16 +74,21 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
             return;
         }
 
-        if (cancelAction != null && cancelAction.triggered)
+        if (!inputReady)
+        {
+            return;
+        }
+
+        if (uiActions.Cancel.WasPressedThisFrame())
         {
             HidePanel();
             return;
         }
 
-        if (clickAction != null && clickAction.triggered)
+        if (uiActions.Click.WasPressedThisFrame())
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
 
             Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
             Camera uiCamera = null;
@@ -166,6 +159,12 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
             panelRoot.SetActive(true);
         }
 
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
+        }
+
         if (structureNameText != null)
         {
             structureNameText.text = title;
@@ -185,6 +184,12 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
             panelRoot.SetActive(true);
         }
 
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
+        }
+
         if (structureNameText != null)
         {
             structureNameText.text = title;
@@ -198,6 +203,12 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
+        }
+
+        if (uiModePushed)
+        {
+            InputManager.Instance.PopMode();
+            uiModePushed = false;
         }
     }
 

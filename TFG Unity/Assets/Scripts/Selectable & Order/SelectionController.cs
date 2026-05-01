@@ -1,7 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
@@ -19,9 +19,10 @@ public class SelectionController : MonoBehaviour
 
     private RectTransform selectionRectTransform;
 
-    private InputAction pointerAction;
-    private InputAction selectAction;
-    private InputAction shiftAction;
+    private InputSystem_Actions.GameplayActions gameplayActions;
+    private bool inputReady;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -35,58 +36,51 @@ public class SelectionController : MonoBehaviour
             selectionRectTransform = selectionBoxImage.GetComponent<RectTransform>();
             selectionBoxImage.gameObject.SetActive(false);
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        selectAction = new InputAction("Select", InputActionType.Button);
-        selectAction.AddBinding("<Mouse>/leftButton");
-        shiftAction = new InputAction("AdditiveSelect", InputActionType.Button);
-        shiftAction.AddBinding("<Keyboard>/leftShift");
-        shiftAction.AddBinding("<Keyboard>/rightShift");
     }
 
     private void OnEnable()
     {
-        pointerAction?.Enable();
-        selectAction?.Enable();
-        shiftAction?.Enable();
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        gameplayActions = InputManager.Instance.Gameplay;
+        inputReady = true;
     }
 
     private void OnDisable()
     {
-        pointerAction?.Disable();
-        selectAction?.Disable();
-        shiftAction?.Disable();
-
         isDragging = false;
 
         if (selectionBoxImage != null)
         {
             selectionBoxImage.gameObject.SetActive(false);
         }
-    }
 
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        selectAction?.Dispose();
-        shiftAction?.Dispose();
+        inputReady = false;
     }
 
     private void Update()
     {
-        if (selectAction == null || pointerAction == null)
+        if (!inputReady)
         {
             return;
         }
 
-        if (selectAction.WasPressedThisFrame())
+        if (gameplayActions.Select.WasPressedThisFrame())
         {
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
 
-            dragStartScreen = pointerAction.ReadValue<Vector2>();
+            dragStartScreen = InputManager.Instance.PointerPosition;
             dragEndScreen = dragStartScreen;
             isDragging = true;
 
@@ -96,23 +90,23 @@ public class SelectionController : MonoBehaviour
             }
         }
 
-        if (isDragging && selectAction.IsPressed())
+        if (isDragging && gameplayActions.Select.IsPressed())
         {
-            dragEndScreen = pointerAction.ReadValue<Vector2>();
+            dragEndScreen = InputManager.Instance.PointerPosition;
             UpdateSelectionGraphics();
         }
 
-        if (isDragging && selectAction.WasReleasedThisFrame())
+        if (isDragging && gameplayActions.Select.WasReleasedThisFrame())
         {
             isDragging = false;
 
             if (selectionBoxImage != null)
             {
                 selectionBoxImage.gameObject.SetActive(false);
-            }
+            } 
 
             float dragDistance = (dragEndScreen - dragStartScreen).magnitude;
-            bool additive = shiftAction != null && shiftAction.IsPressed();
+            bool additive = gameplayActions.MultiSelect.IsPressed();
 
             if (dragDistance < 6f)
             {
@@ -124,6 +118,8 @@ public class SelectionController : MonoBehaviour
             }
         }
     }
+
+    #endregion
 
     private void UpdateSelectionGraphics()
     {

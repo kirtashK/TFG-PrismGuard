@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class ConstructionUIManager : MonoBehaviour, IHideElement
@@ -38,22 +37,11 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
     public Action<StructureData> OnStructureSelected;
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    private InputSystem_Actions.UIActions uiActions;
+    private bool uiModePushed;
+    private bool inputReady;
 
-    private void Awake()
-    {
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
-    }
+    #region Unity methods
 
     private void Start()
     {
@@ -70,12 +58,17 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
     private IEnumerator RegisterWhenReady()
     {
         while (HideElementManager.Instance == null
-            || ResearchManager.Instance == null)
+            || ResearchManager.Instance == null
+            || InputManager.Instance == null
+            || PlacementController.Instance == null)
         {
             yield return null;
         }
+
         HideElementManager.Instance.Register(this);
         ResearchManager.Instance.OnEffectApplied += HandleStructureUnlocked;
+        uiActions = InputManager.Instance.UI;
+        inputReady = true;
     }
 
     private void OnDisable()
@@ -85,6 +78,8 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             HideElementManager.Instance.Unregister(this);
         }
         ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
+
+        inputReady = false;
     }
 
     private void OnDestroy()
@@ -95,11 +90,28 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             allStructures.Clear();
             isLoaded = false;
         }
-
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
     }
+
+    private void Update()
+    {
+        if (panelRoot == null || !panelRoot.activeSelf)
+        {
+            return;
+        }
+
+        if (!inputReady)
+        {
+            return;
+        }
+
+        if (uiActions.Cancel.WasPressedThisFrame())
+        {
+            HidePanel();
+            return;
+        }
+    }
+
+    #endregion
 
     private IEnumerator LoadStructures()
     {
@@ -174,20 +186,6 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
                     break;
                 }
             }
-        }
-    }
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (cancelAction != null && cancelAction.triggered)
-        {
-            HidePanel();
-            return;
         }
     }
 
@@ -279,6 +277,12 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             HideElementManager.Instance.ShowOnly(this);
         }
         panelRoot.SetActive(!panelRoot.activeSelf);
+
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
+        }
     }
 
     public void HidePanel()
@@ -286,6 +290,14 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
+        }
+
+        PlacementController.Instance.CancelPlacement();
+
+        if (uiModePushed)
+        {
+            InputManager.Instance.PopMode();
+            uiModePushed = false;
         }
     }
 }

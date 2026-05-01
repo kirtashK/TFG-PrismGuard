@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class UnitFactoryUIController : MonoBehaviour, IHideElement
 {
@@ -28,9 +27,11 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
 
     private bool isRegistered = false;
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    private InputSystem_Actions.UIActions uiActions;
+    private bool uiModePushed;
+    private bool inputReady;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -38,21 +39,29 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
     }
 
     private void OnEnable()
     {
         StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (SelectionManager.Instance == null 
+            || HideElementManager.Instance == null
+            || ResearchManager.Instance == null
+            || InputManager.Instance == null)
+        {
+            yield return null;
+        }
+        SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
+        ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
+        HideElementManager.Instance.Register(this);
+        isRegistered = true;
+
+        uiActions = InputManager.Instance.UI;
+        inputReady = true;
     }
 
     private void OnDisable()
@@ -67,30 +76,13 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
         if (isRegistered && ResearchManager.Instance != null)
         {
-            ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
+            ResearchManager.Instance.OnEffectApplied -= HandleUnitUnlocked;
         }
+
+        isRegistered = false;
+        inputReady = false;
     }
 
-    private IEnumerator RegisterWhenReady()
-    {
-        while (SelectionManager.Instance == null 
-            || HideElementManager.Instance == null
-            || ResearchManager.Instance == null)
-        {
-            yield return null;
-        }
-        SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
-        ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
-        HideElementManager.Instance.Register(this);
-        isRegistered = true;
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
-    }
 
     private void Update()
     {
@@ -99,17 +91,22 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             return;
         }
 
-        if (cancelAction != null && cancelAction.triggered)
+        if (!inputReady)
+        {
+            return;
+        }
+
+        if (uiActions.Cancel.WasPressedThisFrame())
         {
             HidePanel();
             return;
         }
 
         // Close when click outside Factory UI:
-        if (clickAction != null && clickAction.triggered)
+        if (uiActions.Click.WasPressedThisFrame())
         {
             RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
+            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
 
             bool clickedInside;
             Camera uiCamera = null;
@@ -127,6 +124,8 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             }
         }
     }
+
+    #endregion
 
     private void HandleSelectionChanged(IReadOnlyList<ISelectable> selection)
     {
@@ -170,6 +169,12 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(true);
+        }
+
+        if (!uiModePushed)
+        {
+            InputManager.Instance.PushMode(InputManager.InputMode.UI);
+            uiModePushed = true;
         }
 
         RefreshUnitList();
@@ -218,6 +223,12 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         if (panelRoot != null)
         {
             panelRoot.SetActive(false);
+        }
+
+        if (uiModePushed)
+        {
+            InputManager.Instance.PopMode();
+            uiModePushed = false;
         }
 
         ClearUnitList();

@@ -1,6 +1,6 @@
 using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameSpeedManager : MonoBehaviour
 {
@@ -14,16 +14,13 @@ public class GameSpeedManager : MonoBehaviour
     [SerializeField] private float fastSpeed = 2f;
     [SerializeField] private float veryFastSpeed = 3f;
 
-    private InputAction pauseAction;
-    private InputAction normalSpeedAction;
-    private InputAction fastSpeedAction;
-    private InputAction veryFastSpeedAction;
-
     private float baseFixedDeltaTime;
     private float previousSpeedBeforePause = 1f;
 
     public bool IsPaused { get; private set; }
     public float CurrentSpeed { get; private set; } = 1f;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -35,66 +32,61 @@ public class GameSpeedManager : MonoBehaviour
 
         Instance = this;
         baseFixedDeltaTime = Time.fixedDeltaTime;
-
-        pauseAction = new InputAction("PauseGame", InputActionType.Button);
-        pauseAction.AddBinding("<Keyboard>/space");
-        normalSpeedAction = new InputAction("GameSpeed1x", InputActionType.Button);
-        normalSpeedAction.AddBinding("<Keyboard>/1");
-        fastSpeedAction = new InputAction("GameSpeed2x", InputActionType.Button);
-        fastSpeedAction.AddBinding("<Keyboard>/2");
-        veryFastSpeedAction = new InputAction("GameSpeed3x", InputActionType.Button);
-        veryFastSpeedAction.AddBinding("<Keyboard>/3");
     }
 
     private void OnEnable()
     {
-        pauseAction?.Enable();
-        normalSpeedAction?.Enable();
-        fastSpeedAction?.Enable();
-        veryFastSpeedAction?.Enable();
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        InputManager.Instance.OnGameSpeedPausedRequested += TogglePause;
+        InputManager.Instance.OnGameSpeedNormalRequested += HandleGameSpeedNormalRequested;
+        InputManager.Instance.OnGameSpeedFastRequested += HandleGameSpeedFastRequested;
+        InputManager.Instance.OnGameSpeedVeryFastRequested += HandleGameSpeedVeryFastRequested;
     }
 
     private void OnDisable()
     {
-        pauseAction?.Disable();
-        normalSpeedAction?.Disable();
-        fastSpeedAction?.Disable();
-        veryFastSpeedAction?.Disable();
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnGameSpeedPausedRequested -= TogglePause;
+            InputManager.Instance.OnGameSpeedNormalRequested -= HandleGameSpeedNormalRequested;
+            InputManager.Instance.OnGameSpeedFastRequested -= HandleGameSpeedFastRequested;
+            InputManager.Instance.OnGameSpeedVeryFastRequested -= HandleGameSpeedVeryFastRequested;
+        }
     }
 
     private void OnDestroy()
     {
         if (Instance == this)
         {
-            SetGameSpeed(1f);
+            SetGameSpeed(normalSpeed);
             Instance = null;
         }
-
-        pauseAction?.Dispose();
-        normalSpeedAction?.Dispose();
-        fastSpeedAction?.Dispose();
-        veryFastSpeedAction?.Dispose();
     }
 
-    private void Update()
-    {
-        if (pauseAction != null && pauseAction.WasPressedThisFrame())
-        {
-            TogglePause();
-        }
+    #endregion
 
-        if (normalSpeedAction != null && normalSpeedAction.WasPressedThisFrame())
-        {
-            SetGameSpeed(normalSpeed);
-        }
-        else if (fastSpeedAction != null && fastSpeedAction.WasPressedThisFrame())
-        {
-            SetGameSpeed(fastSpeed);
-        }
-        else if (veryFastSpeedAction != null && veryFastSpeedAction.WasPressedThisFrame())
-        {
-            SetGameSpeed(veryFastSpeed);
-        }
+    private void HandleGameSpeedNormalRequested()
+    {
+        SetGameSpeed(normalSpeed);
+    }
+
+    private void HandleGameSpeedFastRequested()
+    {
+        SetGameSpeed(fastSpeed);
+    }
+
+    private void HandleGameSpeedVeryFastRequested()
+    {
+        SetGameSpeed(veryFastSpeed);
     }
 
     /// <summary>
