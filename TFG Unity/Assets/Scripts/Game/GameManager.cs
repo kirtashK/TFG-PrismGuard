@@ -7,6 +7,13 @@ public class GameManager : MonoBehaviour
 
     private int finalScoreOnDefeat;
 
+    public bool IsDefeated { get; private set; } = false;
+
+    public event System.Action OnGamePaused;
+    public event System.Action OnGameResumed;
+
+    public event System.Action OnCrystalDestroyed;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,9 +30,10 @@ public class GameManager : MonoBehaviour
     /// Called when the crystal is destroyed
     /// Pauses the game and shows a defeat screen
     /// </summary>
-    public void OnCrystalDestroyed()
+    public void CrystalDestroyed()
     {
         finalScoreOnDefeat = ScoreManager.Instance.CurrentScore;
+        IsDefeated = true;
 
         if (GameSpeedManager.Instance != null)
         {
@@ -36,7 +44,28 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
 
+        OnCrystalDestroyed?.Invoke();
         UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
+    }
+
+    public void PauseGame()
+    {
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.Pause();
+        }
+
+        OnGamePaused?.Invoke();
+    }
+
+    public void ResumeGame()
+    {
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.ResumePreviousSpeed();
+        }
+
+        OnGameResumed?.Invoke();
     }
 
     public void GoToMainMenu()

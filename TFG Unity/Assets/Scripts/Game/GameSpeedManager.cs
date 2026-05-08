@@ -31,6 +31,7 @@ public class GameSpeedManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
         baseFixedDeltaTime = Time.fixedDeltaTime;
     }
 
@@ -133,6 +134,11 @@ public class GameSpeedManager : MonoBehaviour
 
     public void SetGameSpeed(float speed)
     {
+        if (IsPauseMenuOpen())
+        {
+            return;
+        }
+
         if (speed <= pausedSpeed)
         {
             Pause();
@@ -151,5 +157,11 @@ public class GameSpeedManager : MonoBehaviour
         Time.fixedDeltaTime = baseFixedDeltaTime * speed;
 
         OnGameSpeedChanged?.Invoke(CurrentSpeed, IsPaused);
+    }
+
+    private bool IsPauseMenuOpen()
+    {
+        return InputManager.Instance != null
+            && InputManager.Instance.CurrentMode == InputManager.InputMode.PauseMenu;
     }
 }

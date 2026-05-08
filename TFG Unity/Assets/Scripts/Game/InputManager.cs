@@ -50,6 +50,7 @@ public class InputManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
         inputActions = new InputSystem_Actions();
         ApplyMode(defaultMode);
@@ -105,7 +106,7 @@ public class InputManager : MonoBehaviour
             OnDebugToggleRequested?.Invoke();
         }
 
-        if (CurrentMode == InputMode.Gameplay)
+        if (CurrentMode == InputMode.Gameplay || CurrentMode == InputMode.PauseMenu)
         {
             if (Global.PauseMenuToggle.WasPressedThisFrame())
             {

@@ -46,10 +46,12 @@ public class Crystal : MonoBehaviour
 
         // TODO Move camera near crystal
         // TODO Change model to broken crystal
+
+        GameManager.Instance.CrystalDestroyed();
     }
 
     private void OnDeathCleanup()
     {
-        GameManager.Instance.OnCrystalDestroyed();
+        
     }
 }
