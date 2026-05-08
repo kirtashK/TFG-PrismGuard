@@ -14,11 +14,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            Instance = this;
-        }
-        //DontDestroyOnLoad(gameObject);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>
@@ -52,11 +50,44 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
         }
 
+        if (HideElementManager.Instance != null)
+        {
+            HideElementManager.Instance.HideAll();
+        }
+
+        IsDefeated = false;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void NewGame()
+    {
+        IsDefeated = false;
+        // TODO load new game scene
+        Debug.LogWarning("NewGame() not implemented yet");
     }
 
     public void LoadGame()
     {
+        IsDefeated = false;
         Debug.LogWarning("LoadGame() not implemented yet");
+    }
+
+    /// <summary>
+    /// Loads the most recent save
+    /// </summary>
+    public void ContinueLastGame()
+    {
+        IsDefeated = false;
+        // TODO load the most recent save 
+        Debug.LogWarning("ContinueLastGame() not implemented yet");
+
+        // TODO remove once proper load implemented
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public void SaveGame()
+    {
+        // TODO save current game state
+        Debug.LogWarning("SaveGame() not implemented yet");
     }
 }
