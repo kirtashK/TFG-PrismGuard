@@ -40,7 +40,6 @@ public class TaskManager : MonoBehaviour
         if (task == null)
         {
             Debug.LogWarning($"{name}: received null {nameof(task)}");
-            return;
         }
 
         if (availableTasks.Contains(task))
