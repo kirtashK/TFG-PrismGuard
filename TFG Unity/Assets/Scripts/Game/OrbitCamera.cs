@@ -8,6 +8,7 @@ using UnityEngine;
 /// The camera glides in a horizontal circle at a fixed height, 
 /// always facing the pivot point
 /// </summary>
+[RequireComponent(typeof(CameraController))]
 public class OrbitCamera : MonoBehaviour
 {
     [Tooltip("Degrees per second the camera rotates around the pivot")]
@@ -130,6 +131,7 @@ public class OrbitCamera : MonoBehaviour
         else
         {
             Debug.LogError($"{name}: missing crystal");
+            return;
         }
 
         restorePositionAfterOrbit = true;

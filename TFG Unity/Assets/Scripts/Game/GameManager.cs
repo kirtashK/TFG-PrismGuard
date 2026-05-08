@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
 
+        InputManager.Instance.PushMode(InputManager.InputMode.PauseMenu);
+
         OnCrystalDestroyed?.Invoke();
         UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
     }
@@ -85,12 +87,16 @@ public class GameManager : MonoBehaviour
         }
 
         IsDefeated = false;
+        InputManager.Instance.PopMode();
+
         SceneManager.LoadScene("MainMenu");
     }
 
     public void NewGame()
     {
         IsDefeated = false;
+        InputManager.Instance.PopMode();
+
         // TODO load new game scene
         Debug.LogWarning("NewGame() not implemented yet");
     }
@@ -98,6 +104,8 @@ public class GameManager : MonoBehaviour
     public void LoadGame()
     {
         IsDefeated = false;
+        InputManager.Instance.PopMode();
+
         Debug.LogWarning("LoadGame() not implemented yet");
     }
 
@@ -107,6 +115,8 @@ public class GameManager : MonoBehaviour
     public void ContinueLastGame()
     {
         IsDefeated = false;
+        InputManager.Instance.PopMode();
+
         // TODO load the most recent save 
         Debug.LogWarning("ContinueLastGame() not implemented yet");
 

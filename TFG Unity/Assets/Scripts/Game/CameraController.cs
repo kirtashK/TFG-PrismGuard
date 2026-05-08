@@ -87,12 +87,14 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
 
+        InputManager.Instance.OnInputModeChanged += HandleInputModeChanged;
         cameraActions = InputManager.Instance.Camera;
         inputReady = true;
     }
 
     private void OnDisable()
     {
+        InputManager.Instance.OnInputModeChanged -= HandleInputModeChanged;
         inputReady = false;
     }
 
@@ -223,5 +225,19 @@ public class CameraController : MonoBehaviour
             position.y = Mathf.Clamp(position.y, minHeight, maxHeight);
             transform.position = position;
         }
+    }
+
+    private void HandleInputModeChanged(InputManager.InputMode inputMode)
+    {
+        if (inputMode == InputManager.InputMode.PauseMenu)
+        {
+            ReleaseMouseCapture();
+        }
+    }
+
+    public void ReleaseMouseCapture()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
