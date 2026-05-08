@@ -6,9 +6,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class ConstructionUIManager : MonoBehaviour, IHideElement
+public class ConstructionUIManager : BasePanel
 {
-
     [Tooltip("Label used in Addressables for StructureData")]
     public string structureLabel = "Structure";
 
@@ -30,16 +29,10 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
     public GameObject blueprintEntryPrefab;
 
-    public GameObject panelRoot;
-
     private Dictionary<StructureCategory, List<StructureData>> grouped = new();
     private StructureCategory currentCategory = StructureCategory.Storage;
 
     public Action<StructureData> OnStructureSelected;
-
-    private InputSystem_Actions.UIActions uiActions;
-    private bool uiModePushed;
-    private bool inputReady;
 
     #region Unity methods
 
@@ -50,36 +43,30 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         ShowCategory(currentCategory);
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady() 
     {
         StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null
-            || ResearchManager.Instance == null
-            || InputManager.Instance == null
+        while (ResearchManager.Instance == null
             || PlacementController.Instance == null)
         {
             yield return null;
         }
 
-        HideElementManager.Instance.Register(this);
         ResearchManager.Instance.OnEffectApplied += HandleStructureUnlocked;
-        uiActions = InputManager.Instance.UI;
-        inputReady = true;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        if (HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
-        ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
+        base.OnDisable();
 
-        inputReady = false;
+        if (ResearchManager.Instance != null)
+        {
+            ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
+        }
     }
 
     private void OnDestroy()
@@ -89,25 +76,6 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             Addressables.Release(loadHandle);
             allStructures.Clear();
             isLoaded = false;
-        }
-    }
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (!inputReady)
-        {
-            return;
-        }
-
-        if (uiActions.Cancel.WasPressedThisFrame())
-        {
-            HidePanel();
-            return;
         }
     }
 
@@ -264,40 +232,8 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         }
     }
 
-    // Fired by button press
-    public void TogglePanel()
+    protected override void OnPanelHidden() 
     {
-        if (panelRoot == null)
-        {
-            return;
-        }
-        // If not active, hide other elements then get activated
-        if (!panelRoot.activeSelf)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-        }
-        panelRoot.SetActive(!panelRoot.activeSelf);
-
-        if (!uiModePushed)
-        {
-            InputManager.Instance.PushMode(InputManager.InputMode.UI);
-            uiModePushed = true;
-        }
-    }
-
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
-
         PlacementController.Instance.CancelPlacement();
-
-        if (uiModePushed)
-        {
-            InputManager.Instance.PopMode();
-            uiModePushed = false;
-        }
     }
 }

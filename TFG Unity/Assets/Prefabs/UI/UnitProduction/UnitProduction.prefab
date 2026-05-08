@@ -718,7 +718,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.611, y: 1}
-  m_AnchoredPosition: {x: -0.960022, y: 0}
+  m_AnchoredPosition: {x: -0.95996094, y: 0}
   m_SizeDelta: {x: -1.9199829, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &268945593818666110
@@ -999,7 +999,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6119445601708793513}
   m_HandleRect: {fileID: 2347586104171418204}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1055,6 +1055,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitFactoryUIController
   panelRoot: {fileID: 1860876974707559729}
+  inputModeOnOpen: 1
+  closeOnClickOutside: 1
+  CloseOnCancelKey: 1
   nameText: {fileID: 8752353752864357531}
   capacityText: {fileID: 8386453734633474283}
   concurrentText: {fileID: 7192999642284703924}
@@ -1241,7 +1244,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.611, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.4999084, y: -25}
+  m_AnchoredPosition: {x: -1.4998779, y: -25}
   m_SizeDelta: {x: 3, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1822942500179305784

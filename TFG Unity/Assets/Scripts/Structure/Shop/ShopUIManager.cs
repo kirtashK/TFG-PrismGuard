@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// Controls the shop UI panel
 /// Automatically loads all ItemData assets and creates a ShopItemEntryUI per ItemData
 /// </summary>
-public class ShopUIManager : MonoBehaviour, IHideElement
+public class ShopUIManager : BasePanel
 {
     public static ShopUIManager Instance { get; private set; }
 
@@ -20,7 +20,6 @@ public class ShopUIManager : MonoBehaviour, IHideElement
     public string itemsLabel = "Item";
 
     [Header("UI refs")]
-    public GameObject panelRoot;
     public TMP_Text shopNameText;
     public RectTransform itemListContent;
     public GameObject itemEntryUIPrefab;
@@ -43,10 +42,6 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
     private Structure currentStructure;
 
-    private InputSystem_Actions.UIActions uiActions;
-    private bool uiModePushed;
-    private bool inputReady;
-
     #region Unity methods
 
     private void Awake()
@@ -64,7 +59,7 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
         StartCoroutine(LoadItemsWhenReady());
@@ -72,19 +67,13 @@ public class ShopUIManager : MonoBehaviour, IHideElement
 
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null 
-            || HideElementManager.Instance == null
-            || InputManager.Instance == null)
+        while (SelectionManager.Instance == null)
         {
             yield return null;
         }
 
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
-        HideElementManager.Instance.Register(this);
         isRegistered = true;
-
-        uiActions = InputManager.Instance.UI;
-        inputReady = true;
 
         if (confirmButton != null)
         {
@@ -100,19 +89,16 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         if (isRegistered && SelectionManager.Instance != null)
         {
             SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
         }
-        if (isRegistered && HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
 
         isRegistered = false;
-        inputReady = false;
 
         if (confirmButton != null)
         {
@@ -132,47 +118,6 @@ public class ShopUIManager : MonoBehaviour, IHideElement
             Addressables.Release(loadHandle);
             loadedItems.Clear();
             isLoaded = false;
-        }
-    }
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if(!inputReady)
-        {
-            return;
-        }
-
-        if (uiActions.Cancel.WasPressedThisFrame())
-        {
-            HidePanel();
-            return;
-        }
-
-        // Close when click outside shop UI:
-        if (uiActions.Click.WasPressedThisFrame())
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
         }
     }
 
@@ -332,7 +277,8 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         Structure structure = transform.GetComponentInParent<Structure>();
         if (structure != null && structure.structureData.Name.ToLower().Contains("shop"))
         {
-            ShowShopUI(structure);
+            currentStructure = structure;
+            ShowPanel();
         }
         else
         {
@@ -340,10 +286,8 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
     }
 
-    private void ShowShopUI(Structure structure)
+    protected override void OnPanelShown()
     {
-        currentStructure = structure;
-
         if (shopNameText != null)
         {
             if (currentStructure != null && currentStructure.structureData != null && !string.IsNullOrEmpty(currentStructure.structureData.Name))
@@ -357,36 +301,11 @@ public class ShopUIManager : MonoBehaviour, IHideElement
         }
 
         ClearAllSlotsAndTransactions();
-
-        if (panelRoot != null)
-        {
-            if (HideElementManager.Instance != null)
-            {
-                HideElementManager.Instance.ShowOnly(this);
-            }
-            panelRoot.SetActive(true);
-
-            if (!uiModePushed)
-            {
-                InputManager.Instance.PushMode(InputManager.InputMode.UI);
-                uiModePushed = true;
-            }
-        }
     }
 
-    public void HidePanel()
+    protected override void OnPanelHidden()
     {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
         currentStructure = null;
-
-        if (uiModePushed)
-        {
-            InputManager.Instance.PopMode();
-            uiModePushed = false;
-        }
     }
 
     public void HidePanelImmediate() => HidePanel();

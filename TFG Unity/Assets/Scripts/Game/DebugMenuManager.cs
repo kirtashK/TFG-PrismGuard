@@ -5,10 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DebugMenuManager : MonoBehaviour, IHideElement
+public class DebugMenuManager : BasePanel
 {
-    [SerializeField] private GameObject panelRoot;
-
     [Header("Score")]
     [SerializeField] private TMP_InputField scoreAmountInputField;
     [SerializeField] private Button addScoreInputButton;
@@ -27,9 +25,7 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
     [Header("Feedback")]
     [SerializeField] private TMP_Text statusText;
 
-    private InputSystem_Actions.UIActions uiActions;
-    private bool uiModePushed;
-    private bool inputReady;
+    private bool isListeningForDebugToggle;
 
     #region Unity methods
 
@@ -50,42 +46,34 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
         }
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        StartCoroutine(RegisterWhenReady());
+        base.OnEnable();
+
         AddButtonListeners();
         InitializeStatDropdown();
     }
 
-    private IEnumerator RegisterWhenReady()
+    protected override void OnPanelReady() 
     {
-        while (HideElementManager.Instance == null
-            || InputManager.Instance == null)
-        {
-            yield return null;
-        }
-
-        HideElementManager.Instance.Register(this);
         RefreshWaveState();
 
-        uiActions = InputManager.Instance.UI;
-        InputManager.Instance.OnDebugToggleRequested += TogglePanel;
-        inputReady = true;
+        if (!isListeningForDebugToggle && InputManager.Instance != null)
+        {
+            InputManager.Instance.OnDebugToggleRequested += TogglePanel;
+            isListeningForDebugToggle = true;
+        }
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        if (HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
+        base.OnDisable();
 
-        if (InputManager.Instance != null)
+        if (isListeningForDebugToggle && InputManager.Instance != null)
         {
             InputManager.Instance.OnDebugToggleRequested -= TogglePanel;
+            isListeningForDebugToggle = false;
         }
-
-        inputReady = false;
 
         RemoveButtonListeners();
         RemoveStatDropdownListener();
@@ -97,85 +85,16 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
         SetStatus(string.Empty);
     }
 
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (!inputReady)
-        {
-            return;
-        }
-
-        if (uiActions.Cancel.WasPressedThisFrame())
-        {
-            HidePanel();
-            return;
-        }
-
-        if (uiActions.Click.WasPressedThisFrame())
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPosition = uiActions.Point.ReadValue<Vector2>();
-
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            Camera uiCamera = null;
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            bool clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPosition, uiCamera);
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
-    }
-
     #endregion
 
-    public void TogglePanel()
+    public override void TogglePanel()
     {
-        if (panelRoot == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(panelRoot)}");
-            return;
-        }
-
-        if (panelRoot.activeSelf)
-        {
-            HidePanel();
-            return;
-        }
-
-        HideElementManager.Instance.ShowOnly(this);
-        panelRoot.SetActive(!panelRoot.activeSelf);
-
-        if (!uiModePushed)
-        {
-            InputManager.Instance.PushMode(InputManager.InputMode.UI);
-            uiModePushed = true;
-        }
+        base.TogglePanel();
 
         RefreshWaveState();
     }
 
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
-
-        if (uiModePushed)
-        {
-            InputManager.Instance.PopMode();
-            uiModePushed = false;
-        }
-    }
+    #region Private methods
 
     private void AddButtonListeners()
     {
@@ -428,4 +347,6 @@ public class DebugMenuManager : MonoBehaviour, IHideElement
             statusText.text = message;
         }
     }
+
+    #endregion
 }

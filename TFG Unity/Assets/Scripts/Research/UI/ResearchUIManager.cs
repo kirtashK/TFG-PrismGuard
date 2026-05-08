@@ -2,53 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResearchUIManager : MonoBehaviour, IHideElement
+public class ResearchUIManager : BasePanel
 {
-    public GameObject panelRoot;
     public RectTransform nodeListParent;
     public GameObject nodeEntryPrefab;
     public ResearchDetailsPanel detailsPanel;
 
     private readonly Dictionary<string, ResearchNodeEntryUI> nodeEntries = new();
 
-    private InputSystem_Actions.UIActions uiActions;
-    private bool uiModePushed;
-    private bool inputReady;
-
     #region Unity methods
 
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null
-            || ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded
-            || InputManager.Instance == null)
+        while (ResearchManager.Instance == null 
+            || !ResearchManager.Instance.IsLoaded)
         {
             yield return null;
         }
-
-        HideElementManager.Instance.Register(this);
 
         BuildNodeList();
 
         ResearchManager.Instance.OnResearchProgressChanged += OnResearchProgressChanged;
         ResearchManager.Instance.OnResearchCompleted += OnResearchCompleted;
         ResearchManager.Instance.OnResearchDataLoaded += OnResearchDataLoaded;
-
-        uiActions = InputManager.Instance.UI;
-        inputReady = true;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        if (HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
+        base.OnDisable();
 
         if (ResearchManager.Instance != null)
         {
@@ -56,89 +42,9 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
             ResearchManager.Instance.OnResearchCompleted -= OnResearchCompleted;
             ResearchManager.Instance.OnResearchDataLoaded -= OnResearchDataLoaded;
         }
-
-        inputReady = false;
-    }
-
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if(!inputReady)
-        {
-            return;
-        }
-
-        if (uiActions.Cancel.WasPressedThisFrame())
-        {
-            HidePanel();
-            return;
-        }
-
-        // Close when click outside research UI:
-        if (uiActions.Click.WasPressedThisFrame())
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
     }
 
     #endregion
-
-    // Called by button press
-    public void TogglePanel()
-    {
-        if (panelRoot == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(panelRoot)}");
-            return;
-        }
-
-        if (!panelRoot.activeSelf)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-        }
-        panelRoot.SetActive(!panelRoot.activeSelf);
-
-        if (!uiModePushed)
-        {
-            InputManager.Instance.PushMode(InputManager.InputMode.UI);
-            uiModePushed = true;
-        }
-    }
-
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
-
-        if (uiModePushed)
-        {
-            InputManager.Instance.PopMode();
-            uiModePushed = false;
-        }
-    }
 
     void OnResearchDataLoaded()
     {

@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UnitFactoryUIController : MonoBehaviour, IHideElement
+public class UnitFactoryUIController : BasePanel
 {
-    public GameObject panelRoot;
-
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text capacityText;
     [SerializeField] private TMP_Text concurrentText;
@@ -27,10 +25,6 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
 
     private bool isRegistered = false;
 
-    private InputSystem_Actions.UIActions uiActions;
-    private bool uiModePushed;
-    private bool inputReady;
-
     #region Unity methods
 
     private void Awake()
@@ -41,38 +35,30 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null 
-            || HideElementManager.Instance == null
-            || ResearchManager.Instance == null
-            || InputManager.Instance == null)
+        while (SelectionManager.Instance == null
+            || ResearchManager.Instance == null)
         {
             yield return null;
         }
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
         ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
-        HideElementManager.Instance.Register(this);
         isRegistered = true;
-
-        uiActions = InputManager.Instance.UI;
-        inputReady = true;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         if (isRegistered && SelectionManager.Instance != null)
         {
             SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
-        }
-        if (isRegistered && HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
         }
         if (isRegistered && ResearchManager.Instance != null)
         {
@@ -80,49 +66,6 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
 
         isRegistered = false;
-        inputReady = false;
-    }
-
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (!inputReady)
-        {
-            return;
-        }
-
-        if (uiActions.Cancel.WasPressedThisFrame())
-        {
-            HidePanel();
-            return;
-        }
-
-        // Close when click outside Factory UI:
-        if (uiActions.Click.WasPressedThisFrame())
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = uiActions.Point.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
     }
 
     #endregion
@@ -155,36 +98,22 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             HidePanel();
             return;
         }
-        
-        ShowPanelForFactory(factory);
-    }
-
-    private void ShowPanelForFactory(UnitFactory factory)
-    {
-        HideElementManager.Instance.ShowOnly(this);
 
         currentFactory = factory;
-        SetupTexts(factory);
+        ShowPanel();
+    }
 
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(true);
-        }
-
-        if (!uiModePushed)
-        {
-            InputManager.Instance.PushMode(InputManager.InputMode.UI);
-            uiModePushed = true;
-        }
-
+    protected override void OnPanelShown()
+    {
+        SetupTexts(currentFactory);
         RefreshUnitList();
         RefreshOrderList();
 
         // Subscribe to updates
-        factory.OnOrderEnqueued += OnFactoryOrderEnqueued;
-        factory.OnOrderStateChanged += OnFactoryOrderStateChanged;
-        factory.OnOrderCompleted += OnFactoryOrderCompleted;
-        factory.OnOrderCancelled += OnFactoryOrderCancelled;
+        currentFactory.OnOrderEnqueued += OnFactoryOrderEnqueued;
+        currentFactory.OnOrderStateChanged += OnFactoryOrderStateChanged;
+        currentFactory.OnOrderCompleted += OnFactoryOrderCompleted;
+        currentFactory.OnOrderCancelled += OnFactoryOrderCancelled;
 
         if (ScoreManager.Instance != null)
         {
@@ -208,7 +137,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
     }
 
-    public void HidePanel()
+    protected override void OnPanelHidden()
     {
         if (currentFactory != null)
         {
@@ -219,17 +148,6 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
 
         currentFactory = null;
-
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
-
-        if (uiModePushed)
-        {
-            InputManager.Instance.PopMode();
-            uiModePushed = false;
-        }
 
         ClearUnitList();
         ClearOrderList();
