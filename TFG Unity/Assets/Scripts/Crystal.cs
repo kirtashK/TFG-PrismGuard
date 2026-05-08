@@ -5,6 +5,10 @@ public class Crystal : MonoBehaviour
 {
     [HideInInspector] public Structure structure;
 
+    [SerializeField] private GameObject crystal;
+    [SerializeField] private GameObject crystalDestroyed;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -40,12 +44,12 @@ public class Crystal : MonoBehaviour
         structure.OnDeathCleanupEvent -= OnDeathCleanup;
     }
 
+    #endregion
+
     private void OnDeathStarted(ITarget deadTarget)
     {
-        Debug.Log($"{name} has been destroyed! Game over!");
-
-        // TODO Move camera near crystal
-        // TODO Change model to broken crystal
+        crystalDestroyed.SetActive(true);
+        crystal.SetActive(false);
 
         GameManager.Instance.CrystalDestroyed();
     }
