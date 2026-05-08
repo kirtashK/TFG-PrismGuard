@@ -1,70 +1,56 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class OrdersController : MonoBehaviour
 {
     public LayerMask groundLayerMask = 1 << 0;
 
-    private InputAction pointerAction;
-    private InputAction orderAction;
-    private InputAction shiftAction;
-    private InputAction ctrlAction;
+    private InputSystem_Actions.GameplayActions gameplayActions;
+    private bool inputReady;
 
-    private void Awake()
-    {
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        orderAction = new InputAction("Order", InputActionType.Button);
-        orderAction.AddBinding("<Mouse>/rightButton");
-        shiftAction = new InputAction("QueueOrder", InputActionType.Button);
-        shiftAction.AddBinding("<Keyboard>/leftShift");
-        shiftAction.AddBinding("<Keyboard>/rightShift");
-        ctrlAction = new InputAction("AttackMoveModifier", InputActionType.Button);
-        ctrlAction.AddBinding("<Keyboard>/leftCtrl");
-        ctrlAction.AddBinding("<Keyboard>/rightCtrl");
-    }
+    #region Unity methods
 
     private void OnEnable()
     {
-        pointerAction?.Enable();
-        orderAction?.Enable();
-        shiftAction?.Enable();
-        ctrlAction?.Enable();
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        gameplayActions = InputManager.Instance.Gameplay;
+        inputReady = true;
     }
 
     private void OnDisable()
     {
-        pointerAction?.Disable();
-        orderAction?.Disable();
-        shiftAction?.Disable();
-        ctrlAction?.Disable();
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        orderAction?.Dispose();
-        shiftAction?.Dispose();
-        ctrlAction?.Dispose();
+        inputReady = false;
     }
 
     private void Update()
     {
-        if (orderAction == null || pointerAction == null)
+        if (!inputReady)
         {
             return;
         }
-        if (!orderAction.WasPressedThisFrame())
+
+        if (!gameplayActions.ContextAction.WasPressedThisFrame())
         {
             return;
         }
+
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
 
-        Vector2 mousePosition = pointerAction.ReadValue<Vector2>();
+        Vector2 mousePosition = InputManager.Instance.PointerPosition;
         if (Camera.main == null)
         {
             return;
@@ -101,16 +87,18 @@ public class OrdersController : MonoBehaviour
 
         MoveOrderOptions options = MoveOrderOptions.Default;
 
-        if (shiftAction != null && shiftAction.IsPressed())
+        if (gameplayActions.MultiSelect.IsPressed())
         {
             options.returnToGuard = false;
         }
 
-        if (ctrlAction != null && ctrlAction.IsPressed())
+        if (gameplayActions.Modifier.IsPressed())
         {
             options.attackMove = false;
         }
 
         OrderManager.Instance.IssueMoveOrder(selectionObjects, targetPosition, options);
     }
+
+    #endregion
 }

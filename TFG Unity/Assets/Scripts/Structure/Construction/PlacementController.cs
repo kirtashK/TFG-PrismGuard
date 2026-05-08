@@ -1,8 +1,8 @@
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class PlacementController : MonoBehaviour
 {
@@ -48,10 +48,10 @@ public class PlacementController : MonoBehaviour
 
     private string placementErrorMessage;
 
-    private InputAction pointerAction;
-    private InputAction confirmAction;
-    private InputAction cancelAction;
-    private InputAction rotateAction;
+    private InputSystem_Actions.ConstructionActions constructionActions;
+    private bool inputReady;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -74,40 +74,31 @@ public class PlacementController : MonoBehaviour
         {
             Debug.LogWarning($"{name}: missing {nameof(blueprintMaterial)}");
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        confirmAction = new InputAction("Confirm", InputActionType.Button);
-        confirmAction.AddBinding("<Mouse>/leftButton");
-        cancelAction = new InputAction("Cancel", InputActionType.Button);
-        cancelAction.AddBinding("<Mouse>/rightButton");
-        cancelAction.AddBinding("<Keyboard>/escape");
-        rotateAction = new InputAction("RotatePreview", InputActionType.Button);
-        rotateAction.AddBinding("<Keyboard>/r");
     }
     private void OnEnable()
     {
-        pointerAction?.Enable();
-        confirmAction?.Enable();
-        cancelAction?.Enable();
-        rotateAction?.Enable();
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        constructionActions = InputManager.Instance.Construction;
+        inputReady = true;
     }
 
     private void OnDisable()
     {
-        pointerAction?.Disable();
-        confirmAction?.Disable();
-        cancelAction?.Disable();
-        rotateAction?.Disable();
+        if (isPlacing)
+        {
+            EndPlacement();
+        }
 
-        EndPlacement();
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        confirmAction?.Dispose();
-        cancelAction?.Dispose();
-        rotateAction?.Dispose();
+        inputReady = false;
     }
 
     private void Update()
@@ -117,12 +108,17 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
+        if (!inputReady)
+        {
+            return;
+        }
+
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
 
-        Vector2 mousePos = pointerAction != null ? pointerAction.ReadValue<Vector2>() : Pointer.current.position.ReadValue();
+        Vector2 mousePos = InputManager.Instance.PointerPosition;
         Vector3 screenPoint = new(mousePos.x, mousePos.y, 0f);
 
         Ray ray = Camera.main.ScreenPointToRay(screenPoint);
@@ -154,13 +150,12 @@ public class PlacementController : MonoBehaviour
             }
         }
 
-        if (rotateAction != null && rotateAction.triggered)
+        if (constructionActions.Rotate.WasPressedThisFrame())
         {
             RotatePreview();
         }
 
-        // Confirm (left click)
-        if (confirmAction != null && confirmAction.triggered)
+        if (constructionActions.PlacementConfirm.WasPressedThisFrame())
         {
             if (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject())
             {
@@ -171,12 +166,13 @@ public class PlacementController : MonoBehaviour
             }
         }
 
-        // Cancel (right click or Escape)
-        if (cancelAction != null && cancelAction.triggered)
+        if (constructionActions.PlacementCancel.WasPressedThisFrame())
         {
             CancelPlacement();
         }
     }
+
+    #endregion
 
     public void EnterPlacement(StructureData structureData)
     {
@@ -191,6 +187,8 @@ public class PlacementController : MonoBehaviour
         {
             CancelPlacement();
         }
+
+        InputManager.Instance.PushMode(InputManager.InputMode.Construction);
 
         currentStructure = structureData;
         isPlacing = true;
@@ -350,6 +348,8 @@ public class PlacementController : MonoBehaviour
 
     private void EndPlacement()
     {
+        InputManager.Instance.PopMode();
+
         if (previewPrefab != null)
         {
             Destroy(previewPrefab);

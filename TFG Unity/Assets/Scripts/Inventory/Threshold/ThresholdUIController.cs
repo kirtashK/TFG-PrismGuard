@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class ThresholdUIController : MonoBehaviour, IHideElement
+public class ThresholdUIController : BasePanel
 {
-    [SerializeField] private GameObject panelRoot;
     [SerializeField] private TMP_Text structureNameText;
     [SerializeField] private RectTransform rowsParent;
     [SerializeField] private ThresholdRowUI rowPrefab;
@@ -14,10 +12,6 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
     private readonly List<ThresholdRowUI> spawnedRows = new();
     private ResourceProcessor currentProcessor;
     private ResourceGatherer currentGatherer;
-
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
 
     private bool isRegistered;
 
@@ -29,87 +23,34 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null || HideElementManager.Instance == null)
+        while (SelectionManager.Instance == null )
         {
             yield return null;
         }
 
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
-        HideElementManager.Instance.Register(this);
         isRegistered = true;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         if (isRegistered && SelectionManager.Instance != null)
         {
             SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
         }
-        if (isRegistered && HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
 
         isRegistered = false;
-    }
-
-    private void OnDestroy()
-    {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
-    }
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (cancelAction != null && cancelAction.triggered)
-        {
-            HidePanel();
-            return;
-        }
-
-        if (clickAction != null && clickAction.triggered)
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
-
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            Camera uiCamera = null;
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            bool clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
     }
 
     #endregion
@@ -160,11 +101,7 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         currentProcessor = processor;
         currentGatherer = null;
 
-        if (panelRoot != null)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-            panelRoot.SetActive(true);
-        }
+        ShowPanel();
 
         if (structureNameText != null)
         {
@@ -179,11 +116,7 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         currentGatherer = gatherer;
         currentProcessor = null;
 
-        if (panelRoot != null)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-            panelRoot.SetActive(true);
-        }
+        ShowPanel();
 
         if (structureNameText != null)
         {
@@ -191,14 +124,6 @@ public class ThresholdUIController : MonoBehaviour, IHideElement
         }
 
         BuildGathererRows();
-    }
-
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
     }
 
     private void BuildProcessorRows()

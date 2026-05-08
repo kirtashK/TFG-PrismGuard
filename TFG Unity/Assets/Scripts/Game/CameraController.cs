@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
@@ -56,41 +56,19 @@ public class CameraController : MonoBehaviour
     [Tooltip("Maximum camera height")]
     private float maxHeight = 80f;
 
-
-    private InputAction moveAction;
-    private InputAction rotateModeAction;
-    private InputAction rightMouseAction;
-    private InputAction zoomAction;
-    private InputAction lookAction;
-    private InputAction speedModifierAction;
-
     private float yaw;
     private float pitch;
 
     private Camera cam;
 
+    private InputSystem_Actions.CameraActions cameraActions;
+    private bool inputReady;
+
+    #region Unity methods
+
     private void Awake()
     {
         cam = GetComponent<Camera>();
-
-        moveAction = new InputAction("Move", InputActionType.Value);
-        moveAction.AddCompositeBinding("2DVector")
-        .With("Up", "<Keyboard>/w")
-        .With("Down", "<Keyboard>/s")
-        .With("Left", "<Keyboard>/a")
-        .With("Right", "<Keyboard>/d");
-
-        zoomAction = new InputAction("Zoom", binding: "<Mouse>/scroll");
-
-        lookAction = new InputAction("Look", binding: "<Mouse>/delta");
-
-        rotateModeAction = new InputAction("RotateMode", InputActionType.Button, "<Mouse>/middleButton");
-        
-        rightMouseAction = new InputAction("RightMouse", InputActionType.Button, "<Mouse>/rightButton");
-
-        speedModifierAction = new InputAction("CameraSpeedModifier", InputActionType.Button);
-        speedModifierAction.AddBinding("<Keyboard>/leftShift");
-        speedModifierAction.AddBinding("<Keyboard>/rightShift");
 
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
@@ -99,36 +77,32 @@ public class CameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        moveAction?.Enable();
-        lookAction?.Enable();
-        zoomAction?.Enable();
-        rotateModeAction?.Enable();
-        rightMouseAction?.Enable();
-        speedModifierAction?.Enable();
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (InputManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        cameraActions = InputManager.Instance.Camera;
+        inputReady = true;
     }
 
     private void OnDisable()
     {
-        moveAction.Disable();
-        lookAction.Disable();
-        zoomAction.Disable();
-        rotateModeAction.Disable();
-        rightMouseAction.Disable();
-        speedModifierAction.Disable();
-    }
-
-    private void OnDestroy()
-    {
-        moveAction.Dispose();
-        lookAction.Dispose();
-        zoomAction.Dispose();
-        rotateModeAction.Dispose();
-        rightMouseAction.Dispose();
-        speedModifierAction.Dispose();
+        inputReady = false;
     }
 
     private void Update()
     {
+        if (!inputReady)
+        {
+            return;
+        }
+
         HandleKeyboardPan();
 
         bool pointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
@@ -143,8 +117,9 @@ public class CameraController : MonoBehaviour
         {
             RestoreCursorIfNeeded();
         }
-
     }
+
+    #endregion
 
     private void OnApplicationFocus(bool hasFocus)
     {
@@ -157,10 +132,10 @@ public class CameraController : MonoBehaviour
 
     private void HandleKeyboardPan()
     {
-        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        Vector2 moveInput = cameraActions.Move.ReadValue<Vector2>();
 
         float multiplier = 1f;
-        if (speedModifierAction != null && speedModifierAction.IsPressed())
+        if (cameraActions.SpeedModifier.IsPressed())
         {
             multiplier = speedMultiplier;
         }
@@ -182,10 +157,10 @@ public class CameraController : MonoBehaviour
 
     private void HandleRightDragPan()
     {
-        float rightHeld = rightMouseAction.ReadValue<float>();
-        if (rightHeld > 0f)
+        float dragPanHeld = cameraActions.DragPan.ReadValue<float>();
+        if (dragPanHeld > 0f)
         {
-            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+            Vector2 mouseDelta = cameraActions.Look.ReadValue<Vector2>();
 
             Vector3 right = cam.transform.right;
             right.y = 0f;
@@ -202,13 +177,13 @@ public class CameraController : MonoBehaviour
 
     private void HandleRotationMode()
     {
-        float rotateHeld = rotateModeAction.ReadValue<float>();
+        float rotateHeld = cameraActions.RotateMode.ReadValue<float>();
         if (rotateHeld > 0f)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            Vector2 delta = lookAction.ReadValue<Vector2>();
+            Vector2 delta = cameraActions.Look.ReadValue<Vector2>();
             yaw += delta.x * rotateSensitivity;
             pitch += -delta.y * rotateSensitivity;
             pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
@@ -232,13 +207,13 @@ public class CameraController : MonoBehaviour
 
     private void HandleScrollVertical()
     {
-        Vector2 scroll = zoomAction.ReadValue<Vector2>();
+        Vector2 scroll = cameraActions.Zoom.ReadValue<Vector2>();
         float scrollMove = -scroll.y;
 
         if (Mathf.Abs(scrollMove) > 0.001f)
         {
             float multiplier = 1f;
-            if (speedModifierAction != null && speedModifierAction.IsPressed())
+            if (cameraActions.SpeedModifier.IsPressed())
             {
                 multiplier = speedMultiplier;
             }

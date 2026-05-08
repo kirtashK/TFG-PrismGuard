@@ -7,6 +7,13 @@ public class GameManager : MonoBehaviour
 
     private int finalScoreOnDefeat;
 
+    public bool IsDefeated { get; private set; } = false;
+
+    public event System.Action OnGamePaused;
+    public event System.Action OnGameResumed;
+
+    public event System.Action OnCrystalDestroyed;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -14,20 +21,19 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            Instance = this;
-        }
-        //DontDestroyOnLoad(gameObject);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>
     /// Called when the crystal is destroyed
     /// Pauses the game and shows a defeat screen
     /// </summary>
-    public void OnCrystalDestroyed()
+    public void CrystalDestroyed()
     {
         finalScoreOnDefeat = ScoreManager.Instance.CurrentScore;
+        IsDefeated = true;
 
         if (GameSpeedManager.Instance != null)
         {
@@ -38,7 +44,28 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
 
+        OnCrystalDestroyed?.Invoke();
         UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
+    }
+
+    public void PauseGame()
+    {
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.Pause();
+        }
+
+        OnGamePaused?.Invoke();
+    }
+
+    public void ResumeGame()
+    {
+        if (GameSpeedManager.Instance != null)
+        {
+            GameSpeedManager.Instance.ResumePreviousSpeed();
+        }
+
+        OnGameResumed?.Invoke();
     }
 
     public void GoToMainMenu()
@@ -52,11 +79,44 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
         }
 
+        if (HideElementManager.Instance != null)
+        {
+            HideElementManager.Instance.HideAll();
+        }
+
+        IsDefeated = false;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void NewGame()
+    {
+        IsDefeated = false;
+        // TODO load new game scene
+        Debug.LogWarning("NewGame() not implemented yet");
     }
 
     public void LoadGame()
     {
+        IsDefeated = false;
         Debug.LogWarning("LoadGame() not implemented yet");
+    }
+
+    /// <summary>
+    /// Loads the most recent save
+    /// </summary>
+    public void ContinueLastGame()
+    {
+        IsDefeated = false;
+        // TODO load the most recent save 
+        Debug.LogWarning("ContinueLastGame() not implemented yet");
+
+        // TODO remove once proper load implemented
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public void SaveGame()
+    {
+        // TODO save current game state
+        Debug.LogWarning("SaveGame() not implemented yet");
     }
 }

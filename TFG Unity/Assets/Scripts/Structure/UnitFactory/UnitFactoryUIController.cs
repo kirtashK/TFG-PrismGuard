@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class UnitFactoryUIController : MonoBehaviour, IHideElement
+public class UnitFactoryUIController : BasePanel
 {
-    public GameObject panelRoot;
-
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text capacityText;
     [SerializeField] private TMP_Text concurrentText;
@@ -28,9 +25,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
 
     private bool isRegistered = false;
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    #region Unity methods
 
     private void Awake()
     {
@@ -38,95 +33,42 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         {
             panelRoot.SetActive(false);
         }
-
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
     }
 
-    private void OnDisable()
-    {
-        if (isRegistered && SelectionManager.Instance != null)
-        {
-            SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
-        }
-        if (isRegistered && HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
-        if (isRegistered && ResearchManager.Instance != null)
-        {
-            ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
-        }
-    }
-
     private IEnumerator RegisterWhenReady()
     {
-        while (SelectionManager.Instance == null 
-            || HideElementManager.Instance == null
+        while (SelectionManager.Instance == null
             || ResearchManager.Instance == null)
         {
             yield return null;
         }
         SelectionManager.Instance.OnSelectionChanged += HandleSelectionChanged;
         ResearchManager.Instance.OnEffectApplied += HandleUnitUnlocked;
-        HideElementManager.Instance.Register(this);
         isRegistered = true;
     }
 
-    private void OnDestroy()
+    protected override void OnDisable()
     {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
+        base.OnDisable();
+
+        if (isRegistered && SelectionManager.Instance != null)
+        {
+            SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
+        }
+        if (isRegistered && ResearchManager.Instance != null)
+        {
+            ResearchManager.Instance.OnEffectApplied -= HandleUnitUnlocked;
+        }
+
+        isRegistered = false;
     }
 
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (cancelAction != null && cancelAction.triggered)
-        {
-            HidePanel();
-            return;
-        }
-
-        // Close when click outside Factory UI:
-        if (clickAction != null && clickAction.triggered)
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
-        }
-    }
+    #endregion
 
     private void HandleSelectionChanged(IReadOnlyList<ISelectable> selection)
     {
@@ -156,30 +98,22 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
             HidePanel();
             return;
         }
-        
-        ShowPanelForFactory(factory);
-    }
-
-    private void ShowPanelForFactory(UnitFactory factory)
-    {
-        HideElementManager.Instance.ShowOnly(this);
 
         currentFactory = factory;
-        SetupTexts(factory);
+        ShowPanel();
+    }
 
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(true);
-        }
-
+    protected override void OnPanelShown()
+    {
+        SetupTexts(currentFactory);
         RefreshUnitList();
         RefreshOrderList();
 
         // Subscribe to updates
-        factory.OnOrderEnqueued += OnFactoryOrderEnqueued;
-        factory.OnOrderStateChanged += OnFactoryOrderStateChanged;
-        factory.OnOrderCompleted += OnFactoryOrderCompleted;
-        factory.OnOrderCancelled += OnFactoryOrderCancelled;
+        currentFactory.OnOrderEnqueued += OnFactoryOrderEnqueued;
+        currentFactory.OnOrderStateChanged += OnFactoryOrderStateChanged;
+        currentFactory.OnOrderCompleted += OnFactoryOrderCompleted;
+        currentFactory.OnOrderCancelled += OnFactoryOrderCancelled;
 
         if (ScoreManager.Instance != null)
         {
@@ -203,7 +137,7 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
     }
 
-    public void HidePanel()
+    protected override void OnPanelHidden()
     {
         if (currentFactory != null)
         {
@@ -214,11 +148,6 @@ public class UnitFactoryUIController : MonoBehaviour, IHideElement
         }
 
         currentFactory = null;
-
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
 
         ClearUnitList();
         ClearOrderList();

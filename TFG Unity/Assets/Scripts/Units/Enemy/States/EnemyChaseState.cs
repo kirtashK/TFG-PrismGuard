@@ -13,6 +13,11 @@ public class EnemyChaseState : IEnemyState
     {
         if (enemy.unit.target == null || !enemy.unit.target.IsAlive)
         {
+            if (enemy.MainTarget == null || !enemy.MainTarget.IsAlive)
+            {
+                enemy.ChangeState(new EnemyIdleState());
+            }
+
             enemy.unit.target = enemy.MainTarget;
             enemy.ChangeState(new EnemyChaseState());
             return;

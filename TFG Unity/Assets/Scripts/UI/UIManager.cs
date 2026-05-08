@@ -85,6 +85,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ShowDefeatScreen(int finalScore)
     {
+        HideElementManager.Instance.HideAll();
+
         if (defeatScoreText != null)
         {
             defeatScoreText.text = $"Score obtained: {finalScore}";

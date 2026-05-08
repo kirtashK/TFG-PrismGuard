@@ -1,62 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class ResearchUIManager : MonoBehaviour, IHideElement
+public class ResearchUIManager : BasePanel
 {
-    public GameObject panelRoot;
     public RectTransform nodeListParent;
     public GameObject nodeEntryPrefab;
     public ResearchDetailsPanel detailsPanel;
 
     private readonly Dictionary<string, ResearchNodeEntryUI> nodeEntries = new();
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
+    #region Unity methods
 
-    private void Awake()
-    {
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
-    }
-
-    private void OnEnable()
+    protected override void OnPanelReady()
     {
         StartCoroutine(RegisterWhenReady());
     }
 
-    private void OnDisable()
-    {
-        if (HideElementManager.Instance != null)
-        {
-            HideElementManager.Instance.Unregister(this);
-        }
-        if (ResearchManager.Instance != null)
-        {
-            ResearchManager.Instance.OnResearchProgressChanged -= OnResearchProgressChanged;
-            ResearchManager.Instance.OnResearchCompleted -= OnResearchCompleted;
-            ResearchManager.Instance.OnResearchDataLoaded -= OnResearchDataLoaded;
-        }
-    }
-
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null)
-        {
-            yield return null;
-        }
-        HideElementManager.Instance.Register(this);
-
-        while (ResearchManager.Instance == null || !ResearchManager.Instance.IsLoaded)
+        while (ResearchManager.Instance == null 
+            || !ResearchManager.Instance.IsLoaded)
         {
             yield return null;
         }
@@ -68,72 +32,19 @@ public class ResearchUIManager : MonoBehaviour, IHideElement
         ResearchManager.Instance.OnResearchDataLoaded += OnResearchDataLoaded;
     }
 
-    private void OnDestroy()
+    protected override void OnDisable()
     {
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
-    }
+        base.OnDisable();
 
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
+        if (ResearchManager.Instance != null)
         {
-            return;
-        }
-
-        if (cancelAction != null && cancelAction.triggered)
-        {
-            HidePanel();
-            return;
-        }
-
-        // Close when click outside research UI:
-        if (clickAction != null && clickAction.triggered)
-        {
-            RectTransform rect = panelRoot.GetComponent<RectTransform>();
-            Vector2 pointerPos = pointerAction.ReadValue<Vector2>();
-
-            bool clickedInside;
-            Camera uiCamera = null;
-            Canvas canvas = panelRoot.GetComponentInParent<Canvas>();
-            if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
-                uiCamera = canvas.worldCamera;
-            }
-
-            clickedInside = RectTransformUtility.RectangleContainsScreenPoint(rect, pointerPos, uiCamera);
-
-            if (!clickedInside)
-            {
-                HidePanel();
-            }
+            ResearchManager.Instance.OnResearchProgressChanged -= OnResearchProgressChanged;
+            ResearchManager.Instance.OnResearchCompleted -= OnResearchCompleted;
+            ResearchManager.Instance.OnResearchDataLoaded -= OnResearchDataLoaded;
         }
     }
 
-    // Called by button press
-    public void TogglePanel()
-    {
-        if (panelRoot == null)
-        {
-            Debug.LogError($"{name}: missing {nameof(panelRoot)}");
-            return;
-        }
-
-        if (!panelRoot.activeSelf)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-        }
-        panelRoot.SetActive(!panelRoot.activeSelf);
-    }
-
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
-    }
+    #endregion
 
     void OnResearchDataLoaded()
     {

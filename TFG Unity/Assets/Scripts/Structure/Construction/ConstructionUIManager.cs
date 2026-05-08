@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class ConstructionUIManager : MonoBehaviour, IHideElement
+public class ConstructionUIManager : BasePanel
 {
-
     [Tooltip("Label used in Addressables for StructureData")]
     public string structureLabel = "Structure";
 
@@ -31,29 +29,12 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
 
     public GameObject blueprintEntryPrefab;
 
-    public GameObject panelRoot;
-
     private Dictionary<StructureCategory, List<StructureData>> grouped = new();
     private StructureCategory currentCategory = StructureCategory.Storage;
 
     public Action<StructureData> OnStructureSelected;
 
-    private InputAction pointerAction;
-    private InputAction clickAction;
-    private InputAction cancelAction;
-
-    private void Awake()
-    {
-        pointerAction = new InputAction("Pointer", InputActionType.Value, "<Pointer>/position");
-        clickAction = new InputAction("LeftClick", InputActionType.Button, "<Mouse>/leftButton");
-        cancelAction = new InputAction("CancelUI", InputActionType.Button);
-        cancelAction.AddBinding("<Keyboard>/escape");
-        cancelAction.AddBinding("<Mouse>/rightButton");
-
-        pointerAction.Enable();
-        clickAction.Enable();
-        cancelAction.Enable();
-    }
+    #region Unity methods
 
     private void Start()
     {
@@ -62,29 +43,30 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         ShowCategory(currentCategory);
     }
 
-    private void OnEnable()
+    protected override void OnPanelReady() 
     {
         StartCoroutine(RegisterWhenReady());
     }
 
     private IEnumerator RegisterWhenReady()
     {
-        while (HideElementManager.Instance == null
-            || ResearchManager.Instance == null)
+        while (ResearchManager.Instance == null
+            || PlacementController.Instance == null)
         {
             yield return null;
         }
-        HideElementManager.Instance.Register(this);
+
         ResearchManager.Instance.OnEffectApplied += HandleStructureUnlocked;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        if (HideElementManager.Instance != null)
+        base.OnDisable();
+
+        if (ResearchManager.Instance != null)
         {
-            HideElementManager.Instance.Unregister(this);
+            ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
         }
-        ResearchManager.Instance.OnEffectApplied -= HandleStructureUnlocked;
     }
 
     private void OnDestroy()
@@ -95,11 +77,9 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
             allStructures.Clear();
             isLoaded = false;
         }
-
-        pointerAction?.Dispose();
-        clickAction?.Dispose();
-        cancelAction?.Dispose();
     }
+
+    #endregion
 
     private IEnumerator LoadStructures()
     {
@@ -174,20 +154,6 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
                     break;
                 }
             }
-        }
-    }
-
-    private void Update()
-    {
-        if (panelRoot == null || !panelRoot.activeSelf)
-        {
-            return;
-        }
-
-        if (cancelAction != null && cancelAction.triggered)
-        {
-            HidePanel();
-            return;
         }
     }
 
@@ -266,26 +232,8 @@ public class ConstructionUIManager : MonoBehaviour, IHideElement
         }
     }
 
-    // Fired by button press
-    public void TogglePanel()
+    protected override void OnPanelHidden() 
     {
-        if (panelRoot == null)
-        {
-            return;
-        }
-        // If not active, hide other elements then get activated
-        if (!panelRoot.activeSelf)
-        {
-            HideElementManager.Instance.ShowOnly(this);
-        }
-        panelRoot.SetActive(!panelRoot.activeSelf);
-    }
-
-    public void HidePanel()
-    {
-        if (panelRoot != null)
-        {
-            panelRoot.SetActive(false);
-        }
+        PlacementController.Instance.CancelPlacement();
     }
 }

@@ -3543,6 +3543,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugMenuManager
   panelRoot: {fileID: 7630879380955868656}
+  inputModeOnOpen: 1
+  closeOnClickOutside: 1
+  CloseOnCancelKey: 1
   scoreAmountInputField: {fileID: 8234652061320449867}
   addScoreInputButton: {fileID: 7709728512121501901}
   toggleWavesButton: {fileID: 1497311432227544390}
@@ -3863,7 +3866,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6100139963378134785
 RectTransform:
   m_ObjectHideFlags: 0
