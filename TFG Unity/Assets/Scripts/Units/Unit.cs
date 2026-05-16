@@ -479,6 +479,23 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
 
     #endregion
 
+    #region Hero abilities
+
+    public event Action OnAbilityHitEvent;
+    public event Action OnAbilityEndEvent;
+
+    public void OnAbilityHit()
+    {
+        OnAbilityHitEvent?.Invoke();
+    }
+
+    public void OnAbilityEnd()
+    {
+        OnAbilityEndEvent?.Invoke();
+    }
+
+    #endregion
+
     public void FaceTarget(Vector3 targetPosition, float rotationSpeed)
     {
         Vector3 direction = targetPosition - transform.position;

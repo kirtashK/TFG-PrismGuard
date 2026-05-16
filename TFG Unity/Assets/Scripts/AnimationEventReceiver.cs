@@ -24,4 +24,14 @@ public class AnimationEventReceiver : MonoBehaviour
     {
         unit.OnAttackHit();
     }
+
+    public void OnAbilityHit()
+    {
+        unit.OnAbilityHit();
+    }
+
+    public void OnAbilityEnd()
+    {
+        unit.OnAbilityEnd();
+    }
 }

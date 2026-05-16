@@ -14,6 +14,16 @@ public class Sensor : MonoBehaviour
     private Transform root;
     private Faction faction = Faction.Neutral;
 
+    private SensorMode mode = SensorMode.Enemies;
+
+    public enum SensorMode
+    {
+        Enemies,
+        Allies,
+    }
+
+    #region Unity methods
+
     private void Awake()
     {
         sphereCollider = GetComponent<SphereCollider>();
@@ -26,10 +36,29 @@ public class Sensor : MonoBehaviour
         rigidBody.isKinematic = true;
     }
 
-    public void Initialize(Transform ownerRoot, Faction ownerFaction, float aggroRadius)
+    private void OnDisable()
+    {
+        targets.Clear();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        TryAddTarget(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        TryRemoveTarget(other);
+    }
+
+    #endregion
+
+    public void Initialize(Transform ownerRoot, Faction ownerFaction, 
+        float aggroRadius, SensorMode mode = SensorMode.Enemies)
     {
         root = ownerRoot;
         faction = ownerFaction;
+        this.mode = mode;
 
         SetRadius(aggroRadius);
     }
@@ -47,18 +76,14 @@ public class Sensor : MonoBehaviour
 
     public ITarget GetBestTarget(Vector3 origin, ITarget crystalFallback = null)
     {
+        if (mode == SensorMode.Allies)
+        {
+            Debug.LogWarning($"{name}: {nameof(GetBestTarget)} not supported on ally mode");
+            return null;
+        }
+
         CleanupInvalidTargets();
         return TargetSearchUtility.GetBestTarget(targets, origin, faction, crystalFallback);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        TryAddTarget(other);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        TryRemoveTarget(other);
     }
 
     private void TryAddTarget(Collider other)
@@ -71,12 +96,13 @@ public class Sensor : MonoBehaviour
         {
             return;
         }
+
         ITarget target = other.GetComponentInParent<ITarget>();
         if (target == null || !target.IsAlive)
         {
             return;
         }
-        if (target.Faction == faction)
+        if (!ShouldTrackTarget(target))
         {
             return;
         }
@@ -93,8 +119,8 @@ public class Sensor : MonoBehaviour
         {
             return;
         }
-        ITarget target = other.GetComponentInParent<ITarget>();
 
+        ITarget target = other.GetComponentInParent<ITarget>();
         RemoveTarget(target);
     }
 
@@ -122,7 +148,7 @@ public class Sensor : MonoBehaviour
 
         foreach (ITarget target in targets)
         {
-            if (target == null || !target.IsAlive || target.Faction == faction)
+            if (target == null || !target.IsAlive || !ShouldTrackTarget(target))
             {
                 targetsToRemove ??= new List<ITarget>();
                 targetsToRemove.Add(target);
@@ -140,8 +166,13 @@ public class Sensor : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    private bool ShouldTrackTarget(ITarget target)
     {
-        targets.Clear();
+        return mode switch
+        {
+            SensorMode.Enemies => target.Faction != faction,
+            SensorMode.Allies => target.Faction == faction,
+            _ => false
+        };
     }
 }

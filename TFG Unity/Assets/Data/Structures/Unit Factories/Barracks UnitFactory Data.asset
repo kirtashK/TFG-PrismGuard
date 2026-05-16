@@ -46,4 +46,5 @@ MonoBehaviour:
   producibleUnits:
   - {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   - {fileID: 11400000, guid: 74485857ba9c0224e97c0f4ae5fdca31, type: 2}
+  - {fileID: 11400000, guid: a4c501a8425c12d4497955cecc1fa3e8, type: 2}
   maxQueueLength: 5
