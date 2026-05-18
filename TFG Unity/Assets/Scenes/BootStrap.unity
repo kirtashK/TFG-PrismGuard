@@ -262,9 +262,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8450baba6543dd94aa0194b89c506bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BootstrapLoader
-  firstScene: MainMenu
   scenesToSkipRedirect:
   - SampleScene
+  - ML TrainingScene
+  initialScene: MainMenu
+  bootstrapScene: BootStrap
 --- !u!4 &1077349628
 Transform:
   m_ObjectHideFlags: 0

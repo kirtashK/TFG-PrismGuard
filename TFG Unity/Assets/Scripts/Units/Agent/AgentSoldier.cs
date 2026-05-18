@@ -264,16 +264,36 @@ public class AgentSoldier : Agent
 
     #region ML Agent
 
+    public override void OnEpisodeBegin()
+    {
+        unit.currentHealth = unit.maxHealth;
+        lastAttackTime = -Mathf.Infinity;
+
+        if (abilityCooldownTimers != null)
+        {
+            for (int i = 0; i < abilityCooldownTimers.Length; i++)
+            {
+                abilityCooldownTimers[i] = 0f;
+            }
+        }
+
+        ClearPendingAbility();
+
+        if (unit.agent != null)
+        {
+            unit.agent.ResetPath();
+            unit.agent.isStopped = false;
+        }
+    }
+
     public override void CollectObservations(VectorSensor vectorSensor)
     {
-        float healthNorm = Mathf.Clamp01(unit.currentHealth / Mathf.Max(0.0001f, unit.maxHealth));
-        vectorSensor.AddObservation(healthNorm);
+        vectorSensor.AddObservation(Mathf.Clamp01(unit.currentHealth / unit.maxHealth));
 
         vectorSensor.AddObservation(GetAttackCooldownNormalized());
 
         List<ITarget> nearbyEnemies = GetNearbyEnemies();
-        float numNorm = Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest);
-        vectorSensor.AddObservation(numNorm);
+        vectorSensor.AddObservation(Mathf.Clamp01((float)nearbyEnemies.Count / (float)kNearest));
 
         // kNearest * 3: per-enemy local position + distance
         for (int i = 0; i < kNearest; i++)
@@ -349,8 +369,7 @@ public class AgentSoldier : Agent
                     break;
 
                 default:
-                    int abilityIndex = actionType - 2;
-                    TryUseAbility(abilityIndex, selectedTarget);
+                    TryUseAbility(actionType - 2, selectedTarget);
                     break;
             }
         }
@@ -490,18 +509,19 @@ public class AgentSoldier : Agent
         {
             ClearPendingAbility();
             AddReward(-penaltyOnDeath);
+
+            if (TrainingManager.Instance != null)
+            {
+                TrainingManager.Instance.NotifyAgentDied(this);
+            }
+
             EndEpisode();
         }
     }
 
     private void OnHealed(float amount)
     {
-        AddReward(amount * rewardPerHealHP);
 
-        if (unit.currentHealth / unit.maxHealth > 0.9f)
-        {
-            AddReward(-penaltyWastedHeal);
-        }
     }
 
     /// <summary>
@@ -681,22 +701,24 @@ public class AgentSoldier : Agent
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
-        if (abilities != null)
+        if (abilities == null)
         {
-            foreach (HeroAbility ability in abilities)
-            {
-                if (ability is AoEAttackAbility aoeAttack)
-                {
-                    Gizmos.color = new Color(1f, 0f, 0f, 0.65f);
-                    Gizmos.DrawWireSphere(transform.position, aoeAttack.aoeRadius);
-                }
-                if (ability is AoEHealAbility aoeHeal)
-                {
-                    Gizmos.color = new Color(0f, 0f, 1f, 0.65f);
-                    Gizmos.DrawWireSphere(transform.position, aoeHeal.aoeRadius);
-                }
-            }
+            return;
         }
+
+        foreach (HeroAbility ability in abilities)
+        {
+            if (ability is AoEAttackAbility aoeAttack)
+            {
+                Gizmos.color = new Color(1f, 0f, 0f, 0.65f);
+                Gizmos.DrawWireSphere(transform.position, aoeAttack.aoeRadius);
+            }
+            if (ability is AoEHealAbility aoeHeal)
+            {
+                Gizmos.color = new Color(0f, 0f, 1f, 0.65f);
+                Gizmos.DrawWireSphere(transform.position, aoeHeal.aoeRadius);
+            }
+        }        
     }
 #endif
 }

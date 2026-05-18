@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbackSource
 {
     public UnitData unitData;
@@ -33,6 +34,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
     private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
     private static readonly int AnimatorDie = Animator.StringToHash("Die");
     private static readonly int AnimatorIsDead = Animator.StringToHash("IsDead");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
 
     public ITarget target;
 
@@ -316,7 +318,7 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
 
         if (animator != null)
         {
-            animator.SetTrigger("Attack");
+            animator.SetTrigger(AttackHash);
         }
         else
         {
@@ -373,8 +375,6 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
 
     public void OnDeathStarted()
     {
-        // TODO notify player of unit death ?
-
         OnDeathStartedEvent?.Invoke(this);
     }
 
@@ -472,6 +472,29 @@ public class Unit : MonoBehaviour, IAddressableInstance, ITarget, ICombatFeedbac
     public void OnDeathCleanup()
     {
         OnDeathCleanupEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Instantly cleans up the unit without playing death animations
+    /// </summary>
+    public void ForceKill()
+    {
+        if (isDying)
+        {
+            return;
+        }
+        isDying = true;
+
+        currentHealth = 0f;
+
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        OnDeathStarted();
+        CompleteDeathCleanup();
     }
 
     #endregion
