@@ -4,13 +4,6 @@ using UnityEngine;
 
 public static class TargetSearchUtility
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="targets"></param>
-    /// <param name="origin"></param>
-    /// <param name="prioritizeUnits"></param>
-    /// <returns></returns>
     public static List<ITarget> SortTargets(IEnumerable<ITarget> targets, Vector3 origin, bool prioritizeUnits = false)
     {
         if (targets == null)
@@ -34,14 +27,6 @@ public static class TargetSearchUtility
         return validTargets.ToList();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="targets"></param>
-    /// <param name="origin"></param>
-    /// <param name="requesterFaction"></param>
-    /// <param name="crystalFallback"></param>
-    /// <returns></returns>
     public static ITarget GetBestTarget(IEnumerable<ITarget> targets, Vector3 origin, Faction requesterFaction, ITarget crystalFallback = null)
     {
         List<ITarget> sortedTargets = SortTargets(targets, origin, prioritizeUnits: true);

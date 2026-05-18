@@ -94,7 +94,10 @@ public class CameraController : MonoBehaviour
 
     private void OnDisable()
     {
-        InputManager.Instance.OnInputModeChanged -= HandleInputModeChanged;
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnInputModeChanged -= HandleInputModeChanged;
+        }
         inputReady = false;
     }
 

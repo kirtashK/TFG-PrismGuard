@@ -47,7 +47,10 @@ public class GameManager : MonoBehaviour
         InputManager.Instance.PushMode(InputManager.InputMode.PauseMenu);
 
         OnCrystalDestroyed?.Invoke();
-        UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowDefeatScreen(finalScoreOnDefeat);
+        }
     }
 
     public void PauseGame()

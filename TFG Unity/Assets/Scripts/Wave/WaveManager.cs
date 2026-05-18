@@ -181,12 +181,26 @@ public class WaveManager : MonoBehaviour
             yield return new WaitUntil(() => waitingForNextWaveToComplete == false && newWavesEnabled_TESTING);
 
             yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
-            if (!newWavesEnabled_TESTING) { continue; }
-            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+            if (!newWavesEnabled_TESTING) 
+            { 
+                continue; 
+            }
+
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+            }
 
             yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
-            if (!newWavesEnabled_TESTING) { continue; }
-            UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+            if (!newWavesEnabled_TESTING) 
+            { 
+                continue; 
+            }
+
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+            }
 
             yield return new WaitForSeconds(waveIntervalSecondWarning);
             yield return SpawnWave();
@@ -208,7 +222,10 @@ public class WaveManager : MonoBehaviour
 
         ScoreManager.Instance.AddScore(waveScoreReward);
 
-        UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave, waveScoreReward);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowWaveCompletedBanner(waveNumber, gainedThisWave, waveScoreReward);
+        }
     }
 
     private int CalculateRewardForCompletingWave(int waveNumber)
@@ -283,7 +300,10 @@ public class WaveManager : MonoBehaviour
 
         scoreAtWaveStart = ScoreManager.Instance.CurrentScore;
 
-        UIManager.Instance.ShowWaveStartedBanner(waveIndex);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowWaveStartedBanner(waveIndex);
+        }
 
         // Obtain budget: (initial + delta*n) * r^n
         float budget = (initialBudget + linearDelta * waveIndex)

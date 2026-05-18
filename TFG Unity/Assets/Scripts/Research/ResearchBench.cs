@@ -28,6 +28,7 @@ public class ResearchBench : MonoBehaviour, ITask
 
     [Tooltip("Multiplier applied to base points per cycle")]
     public float benchPointsMultiplier = 1f;
+    private float basePointsMultiplier = 1f;
 
     private const float pollInterval = 1f;
 
@@ -50,6 +51,8 @@ public class ResearchBench : MonoBehaviour, ITask
     private Transform SitSpot;
 
     public WorkType WorkType => WorkType.None;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -128,6 +131,8 @@ public class ResearchBench : MonoBehaviour, ITask
         }
     }
 
+    #endregion
+
     #region Stats
 
     private void CheckNullStats()
@@ -172,7 +177,7 @@ public class ResearchBench : MonoBehaviour, ITask
         if (StatModifierManager.Instance.TryGetValueAfterModifiers(data, researchSpeedStat, out finalValue))
         {
             researchSpeed = finalValue;
-            benchPointsMultiplier *= researchSpeed;
+            benchPointsMultiplier = basePointsMultiplier * researchSpeed;
         }
     }
 
