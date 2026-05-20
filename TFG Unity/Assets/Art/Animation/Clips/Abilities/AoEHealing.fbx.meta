@@ -62,7 +62,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.99749994
+      - time: 0.92149043
         functionName: OnAbilityEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
