@@ -6,7 +6,7 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using static Sensor;
 
-public class AgentSoldier : Agent
+public class AgentSoldier : Agent, IOrderable, IGuardable
 {
     [HideInInspector] public Unit unit;
     private SoldierData data;
@@ -66,6 +66,10 @@ public class AgentSoldier : Agent
     private static readonly int AnimatorCastAbility = Animator.StringToHash("CastAbility");
     private static readonly int AnimatorAbilityIndex = Animator.StringToHash("AbilityIndex");
 
+    private bool isMovingToGuardSpot;
+    private bool hasGuardPoint;
+    private Vector3 playerGuardPoint;
+
     [Header("Debug")]
     public bool drawGizmos = true;
 
@@ -113,8 +117,9 @@ public class AgentSoldier : Agent
         enemySensor.Initialize(unit.transform, unit.Faction, detectionRadius, SensorMode.Enemies);
         allySensor.Initialize(unit.transform, unit.Faction, detectionRadius, SensorMode.Allies);
 
-
         unit.agent.stoppingDistance = unit.attackRange;
+
+        SetGuardPoint(unit.Position, true);
     }
 
     public override void Initialize()
@@ -175,6 +180,8 @@ public class AgentSoldier : Agent
                 abilityCooldownTimers[i] -= Time.deltaTime;
             }
         }
+
+        HandleGuardBehavior();
     }
 
     #endregion
@@ -266,6 +273,11 @@ public class AgentSoldier : Agent
 
     public override void OnEpisodeBegin()
     {
+        if (TrainingManager.Instance == null)
+        {
+            return;
+        }
+
         unit.currentHealth = unit.maxHealth;
         lastAttackTime = -Mathf.Infinity;
 
@@ -278,6 +290,7 @@ public class AgentSoldier : Agent
         }
 
         ClearPendingAbility();
+        ClearGuardPoint();
 
         if (unit.agent != null)
         {
@@ -352,26 +365,26 @@ public class AgentSoldier : Agent
         ITarget selectedTarget = (targetIndex < nearbyEnemies.Count) 
             ? nearbyEnemies[targetIndex] : null;
 
-        if (!isPerformingAbility)
+        switch (actionType)
         {
-            switch (actionType)
-            {
-                case 0: 
-                    Stop(); 
-                    break;
+            case 0:
+                if (!isMovingToGuardSpot)
+                {
+                    Stop();
+                }
+                break;
 
-                case 1:
-                    if (selectedTarget != null)
-                    {
-                        TryAttack(selectedTarget);
-                        SetDestination(unit.GetTargetAttackPosition(selectedTarget));
-                    }
-                    break;
+            case 1:
+                if (selectedTarget != null)
+                {
+                    TryAttack(selectedTarget);
+                    SetDestination(unit.GetTargetAttackPosition(selectedTarget));
+                }
+                break;
 
-                default:
-                    TryUseAbility(actionType - 2, selectedTarget);
-                    break;
-            }
+            default:
+                TryUseAbility(actionType - 2, selectedTarget);
+                break;
         }
 
         // Encourage movement efficiency
@@ -567,6 +580,78 @@ public class AgentSoldier : Agent
             ExecutePendingAbility();
             ClearPendingAbility();
         }
+    }
+
+    #endregion
+
+    #region Guard & Orders
+
+    public void ReceiveMoveOrder(Vector3 destination, MoveOrderOptions options)
+    {
+        SetGuardPoint(destination, options.returnToGuard);
+    }
+
+    public void SetGuardPoint(Vector3 worldPosition, bool returnToGuard)
+    {
+        playerGuardPoint = worldPosition;
+        hasGuardPoint = true;
+        isMovingToGuardSpot = true;
+
+        SetDestination(worldPosition);
+    }
+
+    public void ClearGuardPoint()
+    {
+        isMovingToGuardSpot = false;
+        hasGuardPoint = false;
+
+        Stop();
+    }
+
+    private void HandleGuardBehavior()
+    {
+        if (!unit.IsAlive)
+        {
+            return;
+        }
+
+        List<ITarget> nearbyEnemies = GetNearbyEnemies();
+        if (nearbyEnemies.Count > 0)
+        {
+            return;
+        }
+
+        if (hasGuardPoint)
+        {
+            if (HasReachedGuardPoint())
+            {
+                if (isMovingToGuardSpot)
+                {
+                    isMovingToGuardSpot = false;
+                    Stop();              
+                }
+            }
+            else
+            {
+                isMovingToGuardSpot = true;
+                SetDestination(playerGuardPoint);
+            }
+        }
+    }
+
+    private bool HasReachedGuardPoint()
+    {
+        if (unit == null)
+        {
+            return false;
+        }
+
+        float arrivalThreshold = unit.agent != null
+            ? Mathf.Max(unit.agent.stoppingDistance + 0.25f, 0.5f)
+            : 0.5f;
+
+        float distanceSqr = (unit.Position - playerGuardPoint).sqrMagnitude;
+        return distanceSqr <= arrivalThreshold * arrivalThreshold;
     }
 
     #endregion
