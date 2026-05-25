@@ -18,4 +18,4 @@ MonoBehaviour:
   healPercent: 0.3
   rewardPerHealHP: 0.02
   penaltyPerWastedHP: 0.05
-  usableHealthThreshold: 0.85
+  usableHealthThreshold: 0.7

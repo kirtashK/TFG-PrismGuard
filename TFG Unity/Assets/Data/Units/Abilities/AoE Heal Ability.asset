@@ -17,7 +17,7 @@ MonoBehaviour:
   cooldown: 60
   aoeRadius: 4
   healPercent: 0.3
-  usableHealthThreshold: 0.9
+  usableHealthThreshold: 0.7
   rewardPerHealHP: 0.02
   penaltyPerWastedHP: 0.04
   playerLayerMask:

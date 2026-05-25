@@ -48,15 +48,25 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   agentSpawnPoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  maxEnemiesAlive: 5
+  - {fileID: 0}
+  - {fileID: 0}
+  maxEnemiesAlive: 11
   enemyPool:
   - {fileID: 11400000, guid: 90f6b53b391572542b6f136330ee140a, type: 2}
   - {fileID: 11400000, guid: 0575f3ef668f3eb43b6296060b5aeb0b, type: 2}
   enemySpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

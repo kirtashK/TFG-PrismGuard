@@ -291,6 +291,7 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
 
         ClearPendingAbility();
         ClearGuardPoint();
+        SetGuardPoint(unit.Position, true);
 
         if (unit.agent != null)
         {
@@ -367,13 +368,6 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
 
         switch (actionType)
         {
-            case 0:
-                if (!isMovingToGuardSpot)
-                {
-                    Stop();
-                }
-                break;
-
             case 1:
                 if (selectedTarget != null)
                 {
@@ -570,6 +564,11 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
         pendingAbilityTarget = target;
         isPerformingAbility = true;
 
+        if (target != null)
+        {
+            unit.FaceTarget(target.Position, 720f);
+        }
+
         if (unit.animator != null)
         {
             unit.animator.SetInteger(AnimatorAbilityIndex, slotIndex);
@@ -582,6 +581,23 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
         }
     }
 
+    private int GetUsableAbility(ITarget target)
+    {
+        for (int i = 0; i < abilities.Count && i < MaxAbilitySlots; i++)
+        {
+            if (abilities[i] == null
+                || abilityCooldownTimers[i] > 0f
+                || !abilities[i].IsUsable(this, target))
+            {
+                continue;
+            }
+
+            return i;
+        }
+
+        return -1;
+    }
+
     #endregion
 
     #region Guard & Orders
@@ -591,13 +607,10 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
         SetGuardPoint(destination, options.returnToGuard);
     }
 
-    public void SetGuardPoint(Vector3 worldPosition, bool returnToGuard)
+    public void SetGuardPoint(Vector3 guardPosition, bool returnToGuard)
     {
-        playerGuardPoint = worldPosition;
+        playerGuardPoint = guardPosition;
         hasGuardPoint = true;
-        isMovingToGuardSpot = true;
-
-        SetDestination(worldPosition);
     }
 
     public void ClearGuardPoint()
@@ -633,8 +646,11 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
             }
             else
             {
-                isMovingToGuardSpot = true;
-                SetDestination(playerGuardPoint);
+                if (!isMovingToGuardSpot)
+                {
+                    isMovingToGuardSpot = true;
+                    SetDestination(playerGuardPoint);
+                }
             }
         }
     }
@@ -757,23 +773,6 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
     }
 
     #endregion
-
-    private int GetUsableAbility(ITarget target)
-    {
-        for (int i = 0; i < abilities.Count && i < MaxAbilitySlots; i++)
-        {
-            if (abilities[i] == null
-                || abilityCooldownTimers[i] > 0f
-                || !abilities[i].IsUsable(this, target))
-            {
-                continue;
-            }
-
-            return i;
-        }
-
-        return -1;
-    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()

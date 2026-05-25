@@ -35,13 +35,11 @@ public class Crystal : MonoBehaviour
         }
 
         structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
     }
 
     private void OnDisable()
     {
         structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
     }
 
     #endregion
@@ -60,10 +58,5 @@ public class Crystal : MonoBehaviour
         {
             GameManager.Instance.CrystalDestroyed();
         }
-    }
-
-    private void OnDeathCleanup()
-    {
-        
     }
 }
