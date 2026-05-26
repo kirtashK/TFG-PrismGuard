@@ -1,0 +1,65 @@
+{
+    "AgentSoldierBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 3600138,
+                "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-3600138.onnx",
+                "reward": null,
+                "creation_time": 1779708925.617869,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-3600138.pt"
+                ]
+            },
+            {
+                "steps": 3999965,
+                "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-3999965.onnx",
+                "reward": 15.85362645238638,
+                "creation_time": 1779720548.6053684,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-3999965.pt"
+                ]
+            },
+            {
+                "steps": 4499945,
+                "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-4499945.onnx",
+                "reward": 8.190500319004059,
+                "creation_time": 1779721367.3866172,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-4499945.pt"
+                ]
+            },
+            {
+                "steps": 4999935,
+                "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-4999935.onnx",
+                "reward": null,
+                "creation_time": 1779722176.1760259,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-4999935.pt"
+                ]
+            },
+            {
+                "steps": 5000063,
+                "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-5000063.onnx",
+                "reward": null,
+                "creation_time": 1779722177.1110368,
+                "auxillary_file_paths": [
+                    "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-5000063.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5000063,
+            "file_path": "results\\AgentSoldier_abilities\\AgentSoldierBehaviour.onnx",
+            "reward": null,
+            "creation_time": 1779722177.1110368,
+            "auxillary_file_paths": [
+                "results\\AgentSoldier_abilities\\AgentSoldierBehaviour\\AgentSoldierBehaviour-5000063.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.9.1+cpu"
+    }
+}
