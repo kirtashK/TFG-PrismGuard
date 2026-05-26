@@ -290,6 +290,12 @@ public class Structure : MonoBehaviour, ITarget, ICombatFeedbackSource
 
         OnDeathStarted();
 
+        // Skip animations if training ML
+        if (TrainingManager.Instance != null)
+        {
+            return;
+        }
+
         StartCoroutine(DeathCleanupDelay());
     }
 

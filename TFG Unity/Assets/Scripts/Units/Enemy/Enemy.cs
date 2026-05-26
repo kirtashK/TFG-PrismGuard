@@ -244,7 +244,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
         {
             if (MainTarget != null)
             {
-                UIManager.Instance.ChangeEnemyCount(1);
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.ChangeEnemyCount(1);
+                }
 
                 unit.target = MainTarget;
                 ChangeState(new EnemyChaseState());
@@ -263,7 +266,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
         if (unit.IsAlive && behaviour == Behaviour.Guard)
         {
             behaviour = Behaviour.Aggressive;
-            UIManager.Instance.ChangeEnemyCount(1);
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ChangeEnemyCount(1);
+            }
 
             unit.target = MainTarget;
             ChangeState(new EnemyChaseState());
@@ -273,7 +279,10 @@ public class Enemy : MonoBehaviour, IStatRefresher
     private void OnDeathStarted(ITarget deadTarget)
     {
         ScoreManager.Instance.AddScore(data.spawnCost);
-        UIManager.Instance.ChangeEnemyCount(-1);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ChangeEnemyCount(-1);
+        }
     }
 
     private void SetMainTarget()

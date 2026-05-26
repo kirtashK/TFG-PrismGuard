@@ -35,13 +35,11 @@ public class Crystal : MonoBehaviour
         }
 
         structure.OnDeathStartedEvent += OnDeathStarted;
-        structure.OnDeathCleanupEvent += OnDeathCleanup;
     }
 
     private void OnDisable()
     {
         structure.OnDeathStartedEvent -= OnDeathStarted;
-        structure.OnDeathCleanupEvent -= OnDeathCleanup;
     }
 
     #endregion
@@ -51,11 +49,14 @@ public class Crystal : MonoBehaviour
         crystalDestroyed.SetActive(true);
         crystal.SetActive(false);
 
-        GameManager.Instance.CrystalDestroyed();
-    }
-
-    private void OnDeathCleanup()
-    {
-        
+        // TrainingManager only exists on ML Agent training scene
+        if (TrainingManager.Instance != null)
+        {
+            TrainingManager.Instance.NotifyEpisodeEnd();
+        }
+        else if (GameManager.Instance != null)
+        {
+            GameManager.Instance.CrystalDestroyed();
+        }
     }
 }
