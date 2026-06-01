@@ -100,8 +100,9 @@ public class GameManager : MonoBehaviour
         IsDefeated = false;
         InputManager.Instance.PopMode();
 
-        // TODO load new game scene
-        Debug.LogWarning("NewGame() not implemented yet");
+        Debug.Log("NewGame() Demo");
+
+        SceneManager.LoadScene("Demo Scene");
     }
 
     public void LoadGame()
@@ -124,7 +125,7 @@ public class GameManager : MonoBehaviour
         Debug.LogWarning("ContinueLastGame() not implemented yet");
 
         // TODO remove once proper load implemented
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Demo Scene");
     }
 
     public void SaveGame()
