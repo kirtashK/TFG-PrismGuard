@@ -22,7 +22,7 @@ MonoBehaviour:
   - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
     value: 0.25
   - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
-    value: 10
+    value: 15
   category: 2
   buildDuration: 2
   builtPrefab: {fileID: 3923448407394807079, guid: be91ff141696c29488dc17fc39a52ff7, type: 3}
