@@ -73,7 +73,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
-  combatFeedbackPosition: {fileID: 549621086901511082}
+  combatFeedbackPosition: {fileID: 6372128927947066136}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &554532882235054087
@@ -106,6 +106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Blueprint
   dropSpot: {fileID: 7191026175863920374}
+  priority: 3
+  interactionRange: 1
 --- !u!1 &6994114695348730636
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,11 +308,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
---- !u!1 &549621086901511082 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3990923133885527614, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
-  m_PrefabInstance: {fileID: 3513438852192048532}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6372128927947066136 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7542517253274607244, guid: dfd75a8a01d99ff40bb6cf44538a3a28, type: 3}
