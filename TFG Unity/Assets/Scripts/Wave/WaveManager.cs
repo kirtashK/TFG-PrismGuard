@@ -84,6 +84,9 @@ public class WaveManager : MonoBehaviour
 
     private int waveIndex = 0;
 
+    private float timeUntilNextWave = 0f;
+    public float TimeUntilNextWave => timeUntilNextWave;
+
     private readonly List<EnemyData> cheapList = new();
     private readonly List<EnemyData> mediumList = new();
     private readonly List<EnemyData> expensiveList = new();
@@ -94,6 +97,8 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private WaveRewardCurve rewardCurve;
 
+    #region Unity methods
+
     private void Start()
     {
         StartCoroutine(LoadEnemies());
@@ -101,7 +106,17 @@ public class WaveManager : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(RegisterWhenUIManagerReady());
+        StartCoroutine(RegisterWhenReady());
+    }
+
+    private IEnumerator RegisterWhenReady()
+    {
+        while (UIManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
     }
 
     private void OnDisable()
@@ -123,6 +138,8 @@ public class WaveManager : MonoBehaviour
             isLoaded = false;
         }
     }
+
+    #endregion
 
     private IEnumerator LoadEnemies()
     {
@@ -154,16 +171,6 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private IEnumerator RegisterWhenUIManagerReady()
-    {
-        while (UIManager.Instance == null)
-        {
-            yield return null;
-        }
-
-        UIManager.Instance.OnWaveCompleted += OnWaveCompleted;
-    }
-
     private IEnumerator RunWaves()
     {
         waitingForNextWaveToComplete = false;
@@ -175,36 +182,59 @@ public class WaveManager : MonoBehaviour
 
         float waveIntervalFirstWarning = waveInterval * 0.35f;
         float waveIntervalSecondWarning = waveInterval * 0.15f;
+
         while (true)
         {
             // If there is an ongoing wave the timer for next wave wont start
             yield return new WaitUntil(() => waitingForNextWaveToComplete == false && newWavesEnabled_TESTING);
 
-            yield return new WaitForSeconds(waveInterval - waveIntervalFirstWarning);
-            if (!newWavesEnabled_TESTING) 
-            { 
-                continue; 
-            }
+            timeUntilNextWave = waveInterval;
 
-            if (UIManager.Instance != null)
+            bool firstWarningShown = false;
+            bool secondWarningShown = false;
+
+            while (timeUntilNextWave > 0f)
             {
-                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+                if (!newWavesEnabled_TESTING)
+                {
+                    break;
+                }
+
+                timeUntilNextWave -= Time.deltaTime;
+
+                if (!firstWarningShown && timeUntilNextWave <= waveIntervalFirstWarning)
+                {
+                    firstWarningShown = true;
+                    if (UIManager.Instance != null)
+                    {
+                        UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalFirstWarning);
+                    }
+                }
+
+                if (!secondWarningShown && timeUntilNextWave <= waveIntervalSecondWarning)
+                {
+                    secondWarningShown = true;
+                    if (UIManager.Instance != null)
+                    {
+                        UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+                    }
+                }
+
+                yield return null;
             }
 
-            yield return new WaitForSeconds(waveIntervalFirstWarning - waveIntervalSecondWarning);
-            if (!newWavesEnabled_TESTING) 
-            { 
-                continue; 
-            }
-
-            if (UIManager.Instance != null)
+            if (!newWavesEnabled_TESTING)
             {
-                UIManager.Instance.ShowTimeUntilWaveBanner(waveIndex + 1, waveIntervalSecondWarning);
+                continue;
             }
 
-            yield return new WaitForSeconds(waveIntervalSecondWarning);
             yield return SpawnWave();
         }
+    }
+
+    public void SetTimeUntilNextWave(float seconds)
+    {
+        timeUntilNextWave = Mathf.Max(5f, seconds);
     }
 
     private void OnWaveCompleted(int waveNumber)

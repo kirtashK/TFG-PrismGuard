@@ -16,6 +16,10 @@ public class DebugMenuManager : BasePanel
     [SerializeField] private TMP_Text wavesStatusText;
     [SerializeField] private WaveManager waveManager;
 
+    [SerializeField] private TMP_Text waveTimerText;
+    [SerializeField] private TMP_InputField waveTimeInputField;
+    [SerializeField] private Button setWaveTimeButton;
+
     [Header("Global stat")]
     [SerializeField] private List<StatKey> availableStatKeys = new();
     [SerializeField] private TMP_Dropdown statKeyDropdown;
@@ -85,6 +89,16 @@ public class DebugMenuManager : BasePanel
         SetStatus(string.Empty);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if (waveTimerText != null && waveManager != null)
+        {
+            waveTimerText.text = $"Next wave in: {waveManager.TimeUntilNextWave:F1} seconds";
+        }
+    }
+
     #endregion
 
     public override void TogglePanel()
@@ -108,6 +122,11 @@ public class DebugMenuManager : BasePanel
             toggleWavesButton.onClick.RemoveListener(ToggleWaves);
             toggleWavesButton.onClick.AddListener(ToggleWaves);
         }
+        if (setWaveTimeButton != null)
+        {
+            setWaveTimeButton.onClick.RemoveListener(SetWaveTimeFromInput);
+            setWaveTimeButton.onClick.AddListener(SetWaveTimeFromInput);
+        }
         if (addStatInputButton != null)
         {
             addStatInputButton.onClick.RemoveListener(AddGlobalStatFromInput);
@@ -124,6 +143,10 @@ public class DebugMenuManager : BasePanel
         if (toggleWavesButton != null)
         {
             toggleWavesButton.onClick.RemoveListener(ToggleWaves);
+        }
+        if (setWaveTimeButton != null)
+        {
+            setWaveTimeButton.onClick.RemoveListener(SetWaveTimeFromInput);
         }
         if (addStatInputButton != null)
         {
@@ -236,12 +259,19 @@ public class DebugMenuManager : BasePanel
         if (amount >= 0)
         {
             ScoreManager.Instance.AddScore(amount);
-            SetStatus($"+{amount} score");            
+            SetStatus($"{amount} score added");            
         }
         else
         {
-            ScoreManager.Instance.SpendScore(amount);
-            SetStatus($"{amount} score");
+            if (ScoreManager.Instance.CanSpendScore(amount))
+            {
+                ScoreManager.Instance.SpendScore(amount);
+                SetStatus($"{-amount} score removed");
+            }
+            else
+            {
+                SetStatus($"Cannot remove {-amount} score");
+            }
         }
     }
 
@@ -249,6 +279,26 @@ public class DebugMenuManager : BasePanel
     {
         waveManager.ToggleNewWavesEnabled();
         RefreshWaveState();
+    }
+
+    private void SetWaveTimeFromInput()
+    {
+        if (!TryReadFloat(waveTimeInputField, out float seconds))
+        {
+            SetStatus("Invalid wave time");
+            return;
+        }
+
+        if (waveManager == null)
+        {
+            SetStatus("WaveManager not available");
+            return;
+        }
+
+        seconds = Math.Max(0f, seconds);
+
+        waveManager.SetTimeUntilNextWave(seconds);
+        SetStatus($"Wave timer set to {seconds:F1} seconds");
     }
 
     private void AddGlobalStatFromInput()
