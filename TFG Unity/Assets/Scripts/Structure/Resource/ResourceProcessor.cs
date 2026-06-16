@@ -340,10 +340,12 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
         float processingTime = recipeState.recipe.processingTime * processingSpeed;
 
+#if UNITY_EDITOR
         Debug.Log($"{name} started processing a batch of {recipeState.recipe.name}. " +
             $"Will finish in {processingTime} seconds. " +
             $"Consumed input: {recipeState.recipe.inputPerBatch}. " +
             $"Consumed fuel [{requiresFuel}]: {recipeState.recipe.fuelPerBatch}.");
+#endif
 
         yield return new WaitForSeconds(processingTime);
 
@@ -351,9 +353,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;
         processingCount--;
 
+#if UNITY_EDITOR
         Debug.Log($"{name} has processed a batch of {recipeState.recipe.name}" +
             $"\nStored amount = {recipeState.storedOutput}" +
             $"\nMax amount = {recipeState.recipe.outputMaxCapacity}");
+#endif
     }
 
     private IEnumerator DispatchOutputToWarehouse()
