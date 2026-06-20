@@ -260,6 +260,8 @@ public class ResourceGatherer : MonoBehaviour
 
     private bool HasTrackedNodeWithOutput(ItemData itemData)
     {
+        string itemId = itemData.id;
+
         foreach (ResourceInstance instance in trackedNodes)
         {
             if (instance == null)
@@ -268,7 +270,7 @@ public class ResourceGatherer : MonoBehaviour
             }
 
             if (instance.TryGetGatherOutputItemData(out ItemData outputItemData)
-                && outputItemData == itemData)
+                && outputItemData.id == itemId)
             {
                 return true;
             }
@@ -301,14 +303,16 @@ public class ResourceGatherer : MonoBehaviour
 
     public int GetThreshold(ItemData itemData)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
             return int.MaxValue;
         }
 
         foreach (OutputThresholdEntry entry in outputThresholds)
         {
-            if (entry != null && entry.itemData == itemData)
+            if (entry != null && entry.itemData.id == itemId)
             {
                 return Mathf.Max(0, entry.threshold);
             }
@@ -319,7 +323,9 @@ public class ResourceGatherer : MonoBehaviour
 
     public void SetThreshold(ItemData itemData, int threshold)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
             return;
         }
@@ -328,7 +334,7 @@ public class ResourceGatherer : MonoBehaviour
 
         foreach (OutputThresholdEntry entry in outputThresholds)
         {
-            if (entry != null && entry.itemData == itemData)
+            if (entry != null && entry.itemData.id == itemId)
             {
                 entry.threshold = normalizedThreshold;
                 RefreshTrackedNodes();

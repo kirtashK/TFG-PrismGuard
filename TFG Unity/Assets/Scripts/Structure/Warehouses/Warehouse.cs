@@ -24,18 +24,20 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     private int currentCapacity = 0;
 
     // Each ItemData has a queue of items stored in the warehouse
-    private readonly Dictionary<ItemData, Queue<GameObject>> storedItems = new();
+    private readonly Dictionary<string, Queue<GameObject>> storedItems = new();
 
-    private readonly Dictionary<ItemData, int> reservedForStoreByItem = new();
+    private readonly Dictionary<string, int> reservedForStoreByItem = new();
     private int reservedForStoreTotal = 0;
 
-    private readonly Dictionary<ItemData, int> reservedForRetrieveByItem = new();
+    private readonly Dictionary<string, int> reservedForRetrieveByItem = new();
 
     public int FreeSlots => Mathf.Max(0, maxCapacity - (currentCapacity + reservedForStoreTotal));
     public Vector3 GetReceivePosition() => storage.transform.position;
 
     public event Action<ItemData> OnItemStored;
     public event Action<ItemData> OnItemRetrieved;
+
+    #region Unity methods
 
     private void Awake()
     {
@@ -106,6 +108,8 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         structure.OnDeathStartedEvent -= OnDeathStarted;
     }
 
+    #endregion
+
     #region Stats
 
     private void CheckNullStats()
@@ -169,7 +173,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
         Vector3 dropOrigin = storage.transform.position;
 
-        foreach (KeyValuePair<ItemData, Queue<GameObject>> pair in storedItems)
+        foreach (KeyValuePair<string, Queue<GameObject>> pair in storedItems)
         {
             Queue<GameObject> queue = pair.Value;
 
@@ -215,7 +219,7 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     {
         if (itemData == null || itemData.category == null)
         {
-            Debug.LogError($"{name}: CategoryAllows: null ItemData or category");
+            Debug.LogError($"{name}: {nameof(CategoryAllows)}: null {nameof(ItemData)} or {nameof(itemData.category)}");
             return false;
         }
 
@@ -248,9 +252,12 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         ItemCategory current = itemCategory;
         while (current != null)
         {
-            if (data.acceptedCategories.Contains(current))
+            foreach (ItemCategory acceptedCategory in data.acceptedCategories)
             {
-                return depth;
+                if (acceptedCategory != null && acceptedCategory.id == current.id)
+                {
+                    return depth;
+                }
             }
             current = current.parentCategory;
             depth++;
@@ -265,48 +272,54 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public bool CanRetrieve(ItemData itemData)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
-            Debug.LogError($"{name}: CanRetrieve: null ItemData: [{itemData}]");
+            Debug.LogError($"{name}: {nameof(CanRetrieve)}: null {nameof(ItemData)}");
             return false;
         }
-        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        if (!storedItems.TryGetValue(itemId, out Queue<GameObject> queue))
         {
             return false;
         }
 
-        int reserved = reservedForRetrieveByItem.TryGetValue(itemData, out int storedReserved) ? storedReserved : 0;
+        int reserved = reservedForRetrieveByItem.TryGetValue(itemId, out int storedReserved) ? storedReserved : 0;
         return (queue.Count - reserved) > 0;
     }
 
     public bool ReserveForRetrieve(ItemData itemData)
     {
-        if (!CanRetrieve(itemData))
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId) || !CanRetrieve(itemData))
         {
             return false;
         }
-        if (reservedForRetrieveByItem.TryGetValue(itemData, out int reserved))
+        if (reservedForRetrieveByItem.TryGetValue(itemId, out int reserved))
         {
-            reservedForRetrieveByItem[itemData] = reserved + 1;
+            reservedForRetrieveByItem[itemId] = reserved + 1;
         }
         else
         {
-            reservedForRetrieveByItem[itemData] = 1;
+            reservedForRetrieveByItem[itemId] = 1;
         }
         return true;
     }
 
     public GameObject RetrieveItem(ItemData itemData)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
-            Debug.LogError($"{name}: RetrieveItem: null ItemData [{itemData}]");
+            Debug.LogError($"{name}: {nameof(RetrieveItem)}: null {nameof(ItemData)}");
             return null;
         }
 
-        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        if (!storedItems.TryGetValue(itemId, out Queue<GameObject> queue))
         {
-            Debug.LogError($"{name}: RetrieveItem: Failed to get queue from storedItems for [{itemData}]");
+            Debug.LogError($"{name}: {nameof(RetrieveItem)}: Failed to get queue from storedItems for [{itemData}]");
             return null;
         }
 
@@ -331,7 +344,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
             Debug.LogError($"{name}: retrievedObject has no {nameof(ItemInstance)}");
             return;
         }
-        if (!storedItems.TryGetValue(instance.itemData, out Queue<GameObject> queue))
+
+        string itemId = instance.itemData.id;
+
+        if (!storedItems.TryGetValue(itemId, out Queue<GameObject> queue))
         {
             Debug.LogError($"{name}: Failed to get queue for {instance.itemData}");
             return;
@@ -353,9 +369,9 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
                 currentCapacity = Mathf.Max(0, currentCapacity - 1);
 
-                if (reservedForRetrieveByItem.TryGetValue(instance.itemData, out int reserved) && reserved > 0)
+                if (reservedForRetrieveByItem.TryGetValue(itemId, out int reserved) && reserved > 0)
                 {
-                    reservedForRetrieveByItem[instance.itemData] = reserved - 1;
+                    reservedForRetrieveByItem[itemId] = reserved - 1;
                 }
 
                 removed = true;
@@ -372,11 +388,11 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
         if (rebuiltQueue.Count == 0)
         {
-            storedItems.Remove(instance.itemData);
+            storedItems.Remove(itemId);
         }
         else
         {
-            storedItems[instance.itemData] = rebuiltQueue;
+            storedItems[itemId] = rebuiltQueue;
         }
 
         OnItemRetrieved?.Invoke(instance.itemData);
@@ -393,18 +409,20 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public bool Reserve(ItemData itemData)
     {
-        if (!CanReceive(itemData))
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId) || !CanReceive(itemData))
         {
             return false;
         }
 
-        if (reservedForStoreByItem.TryGetValue(itemData, out int current))
+        if (reservedForStoreByItem.TryGetValue(itemId, out int current))
         {
-            reservedForStoreByItem[itemData] = current + 1;
+            reservedForStoreByItem[itemId] = current + 1;
         }
         else
         {
-            reservedForStoreByItem[itemData] = 1;
+            reservedForStoreByItem[itemId] = 1;
         }
 
         reservedForStoreTotal++;
@@ -413,14 +431,17 @@ public class Warehouse : MonoBehaviour, IItemConsumer
 
     public void Release(ItemData itemData)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
-            Debug.LogError($"{name}: Release: null ItemData: [{itemData}]");
+            Debug.LogError($"{name}: {nameof(Release)}: null {nameof(ItemData)}");
             return;
         }
-        if (reservedForStoreByItem.TryGetValue(itemData, out int current) && current > 0)
+
+        if (reservedForStoreByItem.TryGetValue(itemId, out int current) && current > 0)
         {
-            reservedForStoreByItem[itemData] = current - 1;
+            reservedForStoreByItem[itemId] = current - 1;
             reservedForStoreTotal = Mathf.Max(0, reservedForStoreTotal - 1);
         }
     }
@@ -429,9 +450,11 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     {
         if (item == null || itemData == null)
         {
-            Debug.LogError($"{name}: OnReceived: null item or ItemData");
+            Debug.LogError($"{name}: {nameof(OnReceived)}: null item or {nameof(ItemData)}");
             return;
         }
+
+        string itemId = itemData.id;
 
         if (item.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
         {
@@ -441,10 +464,10 @@ public class Warehouse : MonoBehaviour, IItemConsumer
         item.transform.SetParent(storage.transform, worldPositionStays: true);
         item.transform.position = GetReceivePosition();
 
-        if (!storedItems.TryGetValue(itemData, out Queue<GameObject> queue))
+        if (!storedItems.TryGetValue(itemId, out Queue<GameObject> queue))
         {
             queue = new Queue<GameObject>();
-            storedItems[itemData] = queue;
+            storedItems[itemId] = queue;
         }
         queue.Enqueue(item);
         currentCapacity = Mathf.Max(0, currentCapacity + 1);
@@ -465,9 +488,12 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     public IReadOnlyDictionary<ItemData, int> GetStoredCountsSnapshot()
     {
         Dictionary<ItemData, int> snapshot = new();
-        foreach (KeyValuePair<ItemData, Queue<GameObject>> pair in storedItems)
+        foreach (KeyValuePair<string, Queue<GameObject>> pair in storedItems)
         {
-            snapshot[pair.Key] = pair.Value.Count;
+            if (pair.Value.Count > 0 && pair.Value.Peek() != null && pair.Value.Peek().TryGetComponent<ItemInstance>(out ItemInstance instance))
+            {
+                snapshot[instance.itemData] = pair.Value.Count;
+            }
         }
         return snapshot;
     }

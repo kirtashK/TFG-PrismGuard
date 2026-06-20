@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class BaseData : ScriptableObject
@@ -14,8 +15,9 @@ public abstract class BaseData : ScriptableObject
     public ResearchData requiredResearch;
 
     [Header("Stats")]
-    public List<StatBaseEntry> statBases = new();    
+    public List<StatBaseEntry> statBases = new();
 
+#if UNITY_EDITOR
     protected virtual void OnValidate()
     {
         if (string.IsNullOrEmpty(Name))
@@ -23,27 +25,13 @@ public abstract class BaseData : ScriptableObject
             Debug.LogWarning($"{name} missing {nameof(Name)}");
         }
 
-        // Assign ID a GUID to make it unique
-        string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
-        if (!string.IsNullOrEmpty(assetPath))
-        {
-            string guid = UnityEditor.AssetDatabase.AssetPathToGUID(assetPath);
-            if (!string.IsNullOrEmpty(guid))
-            {
-                id = guid;
-            }
-            else
-            {
-                id = System.Guid.NewGuid().ToString("N");
-            }
-        }
-        // Created at runtime:
-        else
-        {
-            id = System.Guid.NewGuid().ToString("N");
-        }
+        CheckID();
+    }
+#endif
 
-        UnityEditor.EditorUtility.SetDirty(this);
+    private void OnEnable()
+    {
+        CheckID();
     }
 
     /// <summary>
@@ -60,9 +48,16 @@ public abstract class BaseData : ScriptableObject
             return false;
         }
 
+        string targetId = statKey.id;
+
         foreach (StatBaseEntry entry in statBases)
         {
-            if (entry != null && entry.statKey == statKey)
+            if (entry == null || entry.statKey == null)
+            {
+                continue;
+            }
+
+            if (entry.statKey.id == targetId)
             {
                 baseValue = entry.value;
                 return true;
@@ -70,6 +65,33 @@ public abstract class BaseData : ScriptableObject
         }
 
         return false;
+    }
+
+    private void CheckID()
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            return;
+        }
+
+#if UNITY_EDITOR
+        string assetPath = AssetDatabase.GetAssetPath(this);
+
+        if (!string.IsNullOrEmpty(assetPath))
+        {
+            string guid = AssetDatabase.AssetPathToGUID(assetPath);
+            id = !string.IsNullOrEmpty(guid) ? guid : Guid.NewGuid().ToString("N");
+        }
+        else
+        {
+            id = Guid.NewGuid().ToString("N");
+        }
+
+        EditorUtility.SetDirty(this);
+#else
+        // Runtime
+        id = Guid.NewGuid().ToString("N");
+#endif
     }
 }
 

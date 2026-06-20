@@ -23,8 +23,9 @@ public class UnitProductionOrder : IItemConsumer
 
     private readonly UnitFactory ownerFactory;
 
-    private readonly Dictionary<ItemData, int> requiredCounts = new();
-    private readonly Dictionary<ItemData, int> reservedCounts = new();
+    private readonly Dictionary<string, int> requiredCounts = new();
+    private readonly Dictionary<string, int> reservedCounts = new();
+    private readonly Dictionary<string, ItemData> requiredItemsById = new();
     private readonly List<GameObject> receivedItems = new();
 
     public Guid scoreReservationToken = Guid.Empty;
@@ -46,27 +47,39 @@ public class UnitProductionOrder : IItemConsumer
         // initialize requiredCounts from unitData.createCosts
         foreach (UnitData.ResourceRequirement required in unitData.createCosts)
         {
-            if (required.itemData == null)
+            if (required.itemData == null || string.IsNullOrEmpty(required.itemData.id))
             {
                 continue;
             }
-            requiredCounts[required.itemData] = required.quantity;
-            reservedCounts[required.itemData] = 0;
+
+            string itemId = required.itemData.id;
+
+            requiredCounts[itemId] = required.quantity;
+            reservedCounts[itemId] = 0;
+            requiredItemsById[itemId] = required.itemData;
         }
     }
 
     public int GetRemainingFor(ItemData data)
     {
-        if (!requiredCounts.TryGetValue(data, out int required))
+        if (data == null || !requiredCounts.TryGetValue(data.id, out int required))
         {
             return 0;
         }
+
         int received = CountReceived(data);
         return Mathf.Max(0, required - received);
     }
 
     private int CountReceived(ItemData data)
     {
+        if (data == null)
+        {
+            return 0;
+        }
+
+        string itemId = data.id;
+        
         int count = 0;
         foreach (GameObject item in receivedItems)
         {
@@ -74,8 +87,9 @@ public class UnitProductionOrder : IItemConsumer
             {
                 continue;
             }
+
             ItemInstance itemInstance = item.GetComponent<ItemInstance>();
-            if (itemInstance != null && itemInstance.itemData == data)
+            if (itemInstance != null && itemInstance.itemData != null && itemInstance.itemData.id == itemId)
             {
                 count++;
             }
@@ -85,18 +99,19 @@ public class UnitProductionOrder : IItemConsumer
 
     private int ReservedFor(ItemData data)
     {
-        if (reservedCounts.TryGetValue(data, out int value))
+        if (data != null && reservedCounts.TryGetValue(data.id, out int value))
         {
             return value;
         }
+
         return 0;
     }
 
     private bool AllRequirementsMet()
     {
-        foreach (KeyValuePair<ItemData, int> keyValue in requiredCounts)
+        foreach (KeyValuePair<string, int> keyValue in requiredCounts)
         {
-            if (CountReceived(keyValue.Key) < keyValue.Value)
+            if (CountReceived(requiredItemsById[keyValue.Key]) < keyValue.Value)
             {
                 return false;
             }
@@ -110,7 +125,7 @@ public class UnitProductionOrder : IItemConsumer
         {
             return false;
         }
-        if (!requiredCounts.ContainsKey(data))
+        if (data == null || !requiredCounts.ContainsKey(data.id))
         {
             return false;
         }
@@ -134,18 +149,18 @@ public class UnitProductionOrder : IItemConsumer
             return false;
         }
 
-        reservedCounts[data] = alreadyReserved + 1;
+        reservedCounts[data.id] = alreadyReserved + 1;
 
         return true;
     }
 
     public void Release(ItemData data)
     {
-        if (!reservedCounts.ContainsKey(data))
+        if (data == null || !reservedCounts.ContainsKey(data.id))
         {
             return;
         }
-        reservedCounts[data] = Mathf.Max(0, reservedCounts[data] - 1);
+        reservedCounts[data.id] = Mathf.Max(0, reservedCounts[data.id] - 1);
     }
 
     public Vector3 GetReceivePosition()

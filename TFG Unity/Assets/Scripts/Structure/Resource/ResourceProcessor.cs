@@ -24,7 +24,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
     public float processingCheckInterval = 1f;
     private float processingCheckTimer = 0f;
 
-    private readonly Dictionary<ItemData, InputState> inputState = new();
+    private readonly Dictionary<string, InputState> inputState = new();
 
     [Header("Thresholds")]
 
@@ -67,7 +67,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
         }
     }
 
-    // Internal state of each recipe
     private class RecipeState
     {
         public ProcessResourceRecipe recipe;
@@ -75,6 +74,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
         public int storedOutput;
         public int reservedOutput;
     }
+
     private List<RecipeState> recipeStates;
 
     private bool isRegistered = false;
@@ -121,15 +121,20 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
                 reservedOutput = 0
             });
 
-            ItemData key = recipe.inputItemData;
-            if (!inputState.ContainsKey(key))
+            string inputId = recipe.inputItemData.id;
+            if (string.IsNullOrEmpty(inputId))
             {
-                inputState[key] = new InputState(recipe.inputPerBatch);
+                continue;
+            }
+
+            if (!inputState.TryGetValue(inputId, out InputState state))
+            {
+                inputState[inputId] = new InputState(recipe.inputPerBatch);
             }
             // If ItemData already exists, keep MaxCapacity as the maximun input needed 
             else
             {
-                inputState[key].MaxCapacity = Mathf.Max(inputState[key].MaxCapacity, recipe.inputPerBatch);
+                inputState[inputId].MaxCapacity = Mathf.Max(inputState[inputId].MaxCapacity, recipe.inputPerBatch);
             }
         }
     }
@@ -275,15 +280,11 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
         reservedFuel = 0;
         storedFuel = 0;
-
         processingCount = 0;
 
-        foreach (KeyValuePair<ItemData, InputState> input in inputState)
+        foreach (KeyValuePair<string, InputState> input in inputState)
         {
-            while (input.Value.Reserved > 0)
-            {
-                Release(input.Key);
-            }
+            input.Value.Reserved = 0;
             input.Value.Stored = 0;
         }
 
@@ -303,7 +304,9 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (!inputState.TryGetValue(recipeState.recipe.inputItemData, out InputState state))
+            string inputId = recipeState.recipe.inputItemData.id;
+
+            if (!inputState.TryGetValue(inputId, out InputState state))
             {
                 Debug.LogError($"{name} couldnt get value of {nameof(InputState)} with key {recipeState.recipe.inputItemData}");
                 return;
@@ -477,36 +480,50 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
     public int GetThreshold(ItemData itemData)
     {
-        RecipeState itemRecipe = null;
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
+        {
+            return int.MaxValue;
+        }
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (recipeState.recipe.outputItemData == itemData)
+            if (recipeState.recipe.outputItemData.id == itemId)
             {
-                itemRecipe = recipeState;
                 foreach (RecipeThresholdEntry entry in recipeThresholds)
                 {
-                    if (entry != null && entry.recipe == recipeState.recipe)
+                    if (entry != null && entry.recipe != null && entry.recipe.id == recipeState.recipe.id)
                     {
                         return Mathf.Max(0, entry.threshold);
                     }
                 }
+
+                return Mathf.Max(1, recipeState.recipe.outputMaxCapacity);
             }
         }
-
-        return Mathf.Max(1, itemRecipe.recipe.outputMaxCapacity);
+        
+        return int.MaxValue;
     }
 
     public void SetThreshold(ItemData itemData, int threshold)
     {
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
+        {
+            return;
+        }
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (recipeState.recipe.outputItemData == itemData)
+            if (recipeState.recipe.outputItemData.id == itemId)
             {
                 int normalizedThreshold = Mathf.Max(0, threshold);
 
                 foreach (RecipeThresholdEntry entry in recipeThresholds)
                 {
-                    if (entry != null && entry.recipe == recipeState.recipe)
+                    if (entry != null && entry.recipe != null && entry.recipe.id == recipeState.recipe.id)
                     {
                         entry.threshold = normalizedThreshold;
                         processingCheckTimer = 0f;
@@ -551,11 +568,13 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
     private bool HasRecipeWithOutput(ItemData itemData)
     {
+        string itemId = itemData.id;
+
         foreach (RecipeState recipeState in recipeStates)
         {
             if (recipeState != null
                 && recipeState.recipe != null
-                && recipeState.recipe.outputItemData == itemData)
+                && recipeState.recipe.outputItemData.id == itemId)
             {
                 return true;
             }
@@ -602,13 +621,15 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
     public bool CanReceive(ItemData data)
     {
+        string itemId = data.id;
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
+            if (recipeState.recipe.inputItemData.id == itemId
+                && inputState.TryGetValue(itemId, out InputState state))
             {
                 if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
-                    //Debug.Log($"{name}: Can receive input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
                     return true;
                 }
             }
@@ -618,7 +639,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
         {
             if (storedFuel + reservedFuel + data.fuelValue <= fuelMaxCapacity)
             {
-                //Debug.Log($"{name}: Can receive fuel {data.itemName}. Stored {storedFuel} + Reserved {reservedFuel} + fuelValue {data.fuelValue} <= Max {fuelMaxCapacity}");
                 return true;
             }
         }
@@ -627,14 +647,16 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
     public bool Reserve(ItemData data)
     {
+        string itemId = data.id;
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
+            if (recipeState.recipe.inputItemData.id == itemId
+                && inputState.TryGetValue(itemId, out InputState state))
             {
                 if (state.Stored + state.Reserved < state.MaxCapacity)
                 {
                     state.Reserved++;
-                    //Debug.Log($"{name}: Reserved input {data.itemName}. Stored {state.Stored} + Reserved {state.Reserved} < Max {state.MaxCapacity}");
 
                     return true;
                 }
@@ -646,7 +668,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
             if (storedFuel + reservedFuel + data.fuelValue <= fuelMaxCapacity)
             {
                 reservedFuel = Mathf.Min(fuelMaxCapacity, reservedFuel + data.fuelValue);
-                //Debug.Log($"{name}: Reserved fuel {data.itemName} [{reservedFuel}]");
 
                 return true;
             }
@@ -658,15 +679,17 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
     {
         Destroy(item);
 
+        string itemId = data.id;
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
+            if (recipeState.recipe.inputItemData.id == itemId 
+                && inputState.TryGetValue(itemId, out InputState state))
             {
                 if (state.Stored < state.MaxCapacity)
                 {
                     state.Stored++;
                     Release(data);
-                    //Debug.Log($"{name}: Received input {data.itemName}. Stored = {state.Stored}. Max = {state.MaxCapacity}");
 
                     return;
                 }
@@ -679,7 +702,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
             {
                 storedFuel = Mathf.Min(storedFuel + data.fuelValue, fuelMaxCapacity);
                 Release(data);
-                //Debug.Log($"{name}: Received fuel {data.itemName}. Stored = {storedFuel}. Max = {fuelMaxCapacity}");
 
                 return;
             }
@@ -688,14 +710,16 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
     public void Release(ItemData data)
     {
+        string itemId = data.id;
+
         foreach (RecipeState recipeState in recipeStates)
         {
-            if (data == recipeState.recipe.inputItemData && inputState.TryGetValue(data, out InputState state))
+            if (recipeState.recipe.inputItemData.id == itemId
+                && inputState.TryGetValue(itemId, out InputState state))
             {
                 if (state.Reserved > 0)
                 {
                     state.Reserved--;
-                    //Debug.Log($"{name}: Released input {data.itemName}. Still reserved: {state.Reserved}");
 
                     return;
                 }
@@ -707,7 +731,6 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
             if (reservedFuel > 0)
             {
                 reservedFuel = Mathf.Max(0, reservedFuel - data.fuelValue);
-                //Debug.Log($"{name}: Released fuel {data.itemName}, still reserved: [{reservedFuel}]");
 
                 return;
             }

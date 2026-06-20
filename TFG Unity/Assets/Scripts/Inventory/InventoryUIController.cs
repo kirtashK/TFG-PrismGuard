@@ -11,7 +11,7 @@ public class InventoryUIController : MonoBehaviour
 
     private readonly SortedList<string, InventorySlotUI> slots = new();
 
-    private readonly HashSet<ItemData> dirtyItems = new();
+    private readonly Dictionary<string, ItemData> dirtyItems = new();
     private bool refreshScheduled = false;
 
     private void OnEnable()
@@ -28,11 +28,9 @@ public class InventoryUIController : MonoBehaviour
 
         InventoryManager.Instance.OnInventoryChanged += OnInventoryChanged;
 
-        foreach (KeyValuePair<ItemData, int> kv in InventoryManager.Instance.GetType()
-            .GetField("totals", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(InventoryManager.Instance) as Dictionary<ItemData, int>)
+        foreach (ItemData item in InventoryManager.Instance.GetAllTrackedItems())
         {
-            EnqueueUpdate(kv.Key);
+            EnqueueUpdate(item);
         }
     }
 
@@ -48,7 +46,13 @@ public class InventoryUIController : MonoBehaviour
 
     private void EnqueueUpdate(ItemData item)
     {
-        dirtyItems.Add(item);
+        if (item == null || string.IsNullOrEmpty(item.id))
+        {
+            Debug.LogError($"{name}: {nameof(EnqueueUpdate)}: null {nameof(ItemData)} or {nameof(item.id)}");
+            return;
+        }
+
+        dirtyItems[item.id] = item;
         if (!refreshScheduled)
         {
             refreshScheduled = true;
@@ -60,13 +64,13 @@ public class InventoryUIController : MonoBehaviour
     {
         yield return new WaitForSeconds(debounceTime);
 
-        List<ItemData> batch = new(dirtyItems);
+        List<ItemData> batch = new(dirtyItems.Values);
         batch.Sort((a, b) => a.Name.CompareTo(b.Name));
 
         foreach (ItemData item in batch)
         {
             int count = InventoryManager.Instance.GetTotal(item);
-            string key = item.Name;
+            string key = item.id;
 
             if (count <= 0)
             {

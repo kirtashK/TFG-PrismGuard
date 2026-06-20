@@ -32,8 +32,9 @@ public class ShopUIManager : BasePanel
     private List<ItemData> loadedItems = new();
     private readonly List<ShopItemEntryUI> entryInstances = new();
 
-    private readonly Dictionary<ItemData, int> pendingBuys = new();
-    private readonly Dictionary<ItemData, int> pendingSells = new();
+    private readonly Dictionary<string, int> pendingBuys = new();
+    private readonly Dictionary<string, int> pendingSells = new();
+    private readonly Dictionary<string, ItemData> pendingItemsById = new();
 
     private AsyncOperationHandle<IList<ItemData>> loadHandle;
     private bool isLoaded = false;
@@ -193,13 +194,19 @@ public class ShopUIManager : BasePanel
 
     private void Slot_OnQuantityChanged(ItemData item, int buyQuantity, int sellQuantity)
     {
-        if (item == null) { return; }
+        if (item == null || string.IsNullOrEmpty(item.id))
+        {
+            return;
+        }
+
+        string itemId = item.id;
+        pendingItemsById[itemId] = item;
 
         if (buyQuantity > 0)
         {
             if (item.canBeBought)
             {
-                pendingBuys[item] = buyQuantity;
+                pendingBuys[itemId] = buyQuantity;
             }
             else
             {
@@ -208,14 +215,14 @@ public class ShopUIManager : BasePanel
         }
         else
         {
-            pendingBuys.Remove(item);
+            pendingBuys.Remove(itemId);
         }
 
         if (sellQuantity > 0)
         {
             if (item.canBeSold)
             {
-                pendingSells[item] = sellQuantity;
+                pendingSells[itemId] = sellQuantity;
             }
             else
             {
@@ -224,7 +231,7 @@ public class ShopUIManager : BasePanel
         }
         else
         {
-            pendingSells.Remove(item);
+            pendingSells.Remove(itemId);
         }
 
         RefreshTexts();
@@ -242,8 +249,8 @@ public class ShopUIManager : BasePanel
 
     private void RefreshTexts()
     {
-        int totalBuy = pendingBuys.Sum(pending => pending.Value * GetBuyPriceForItem(pending.Key));
-        int totalSell = pendingSells.Sum(pending => pending.Value * GetSellPriceForItem(pending.Key));
+        int totalBuy = pendingBuys.Sum(pending => pending.Value * GetBuyPriceForItem(pendingItemsById[pending.Key]));
+        int totalSell = pendingSells.Sum(pending => pending.Value * GetSellPriceForItem(pendingItemsById[pending.Key]));
         int net = totalSell - totalBuy;
 
         if (netTotalText != null)
@@ -314,6 +321,7 @@ public class ShopUIManager : BasePanel
     {
         pendingBuys.Clear();
         pendingSells.Clear();
+        pendingItemsById.Clear();
 
         foreach (ShopItemEntryUI entry in entryInstances)
         {
@@ -341,8 +349,8 @@ public class ShopUIManager : BasePanel
             return;
         }
 
-        int totalBuy = pendingBuys.Sum(pending => pending.Value * GetBuyPriceForItem(pending.Key));
-        int totalSell = pendingSells.Sum(pending => pending.Value * GetSellPriceForItem(pending.Key));
+        int totalBuy = pendingBuys.Sum(pending => pending.Value * GetBuyPriceForItem(pendingItemsById[pending.Key]));
+        int totalSell = pendingSells.Sum(pending => pending.Value * GetSellPriceForItem(pendingItemsById[pending.Key]));
         int net = totalSell - totalBuy;
 
         // Not enough score to pay
@@ -355,9 +363,9 @@ public class ShopUIManager : BasePanel
         if (totalSell > 0)
         {
             // Check if there is stock of the items to sell:
-            foreach (KeyValuePair<ItemData, int> sellPair in pendingSells)
+            foreach (KeyValuePair<string, int> sellPair in pendingSells)
             {
-                ItemData itemToSell = sellPair.Key;
+                ItemData itemToSell = pendingItemsById[sellPair.Key];
                 int quantityToSell = sellPair.Value;
                 int totalAvailable = InventoryManager.Instance != null ? InventoryManager.Instance.GetTotal(itemToSell) : 0;
 
@@ -374,9 +382,9 @@ public class ShopUIManager : BasePanel
             // Destroy sold items from warehouses:
             if (pendingSells.Count > 0)
             {
-                foreach (KeyValuePair<ItemData, int> sellPair in pendingSells)
+                foreach (KeyValuePair<string, int> sellPair in pendingSells)
                 {
-                    ItemData itemToSell = sellPair.Key;
+                    ItemData itemToSell = pendingItemsById[sellPair.Key];
                     int quantity = sellPair.Value;
 
                     List<GameObject> itemsFound = WarehouseManager.Instance.FindItemsInWarehouses(itemToSell, quantity);
@@ -408,9 +416,9 @@ public class ShopUIManager : BasePanel
 
             Transform storageTransform = currentStructure.transform.Find("Storage");
 
-            foreach (KeyValuePair<ItemData, int> pending in pendingBuys)
+            foreach (KeyValuePair<string, int> pending in pendingBuys)
             {
-                ItemData item = pending.Key;
+                ItemData item = pendingItemsById[pending.Key];
                 int quantity = pending.Value;
                 for (int i = 0; i < quantity; i++)
                 {
