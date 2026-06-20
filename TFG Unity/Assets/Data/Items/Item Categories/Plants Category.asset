@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5dc42f043264241b31234223ff2a06, type: 3}
   m_Name: Plants Category
   m_EditorClassIdentifier: Assembly-CSharp::ItemCategory
-  categoryName: Plants
+  Name: Plants
+  id: e01d75e305d1b4143b830e182d94342f
+  icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   parentCategory: {fileID: 11400000, guid: 4206b9f7f3283f749a40e0cdda112e0a, type: 2}

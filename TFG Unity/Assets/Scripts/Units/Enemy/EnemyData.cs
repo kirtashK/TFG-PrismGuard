@@ -35,6 +35,7 @@ public class EnemyData : UnitData
     [Range(0f, 50f)]
     public float patrolDelayMax = 3f;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -42,4 +43,5 @@ public class EnemyData : UnitData
         faction = Faction.Enemy;
         isPlayerControllable = false;
     }
+#endif
 }

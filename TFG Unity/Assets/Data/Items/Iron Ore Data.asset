@@ -23,7 +23,7 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: a07ef24556ffb8342a8ad373ae63d616, type: 2}
   isFuel: 0
   fuelValue: 0
-  canBeBought: 0
+  canBeBought: 1
   buyPrice: 5
-  canBeSold: 1
+  canBeSold: 0
   sellFraction: 1

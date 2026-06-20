@@ -13,6 +13,7 @@ public class UnitFactoryData : StructureData
     [Min(-1)]
     public int maxQueueLength = 5;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -22,4 +23,5 @@ public class UnitFactoryData : StructureData
             Debug.LogWarning($"{name}: producible units not configured");
         }
     }
+#endif
 }

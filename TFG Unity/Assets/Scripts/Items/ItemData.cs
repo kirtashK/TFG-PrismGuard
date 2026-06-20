@@ -36,6 +36,7 @@ public class ItemData : BaseData
     [Tooltip("Sell price is buy price * sellFraction")]
     public float sellFraction = 0.25f;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -57,4 +58,5 @@ public class ItemData : BaseData
             Debug.LogWarning($"{name} is fuel but has no fuel value");
         }
     }
+#endif
 }

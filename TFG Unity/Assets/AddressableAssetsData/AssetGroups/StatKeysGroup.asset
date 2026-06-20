@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: StatKeysGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: StatKeysGroup
+  m_GUID: 8897b2e77eaa9f042b127ff96e736f6d
+  m_SerializeEntries:
+  - m_GUID: 04a38b7df2506484a995b7d23df93e33
+    m_Address: Assets/Data/Stats/MaxCarryWeight Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08c4e0aa659b6124aaa9c38028693aac
+    m_Address: Assets/Data/Stats/HealOnWaveCompleted Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e2df56f39e3c2147a6e1706bb8aecbe
+    m_Address: Assets/Data/Stats/AttackCooldown Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a74a2fe627e93b42a81a139a9ac8178
+    m_Address: Assets/Data/Stats/AttackDamage Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 594aeb66229f9e64c94320ac2da18a65
+    m_Address: Assets/Data/Stats/MaxConcurrentBatches Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e7235c1d6ac8a2478ffb55a8437e0ad
+    m_Address: Assets/Data/Stats/ProcessingSpeed Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f94e186081480c459b1389100bfb5a3
+    m_Address: Assets/Data/Stats/DetectionRadius Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c563d08f25be7a4ea927f50ffc3db76
+    m_Address: Assets/Data/Stats/MaxStorageCapacity Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb1ae1182b6d4d54895c318bee0b898c
+    m_Address: Assets/Data/Stats/ResearchSpeed Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc72a74f75958934393a31c46bbc654a
+    m_Address: Assets/Data/Stats/MoveSpeed Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb100b9b2add7c04396fb5f6fd138636
+    m_Address: Assets/Data/Stats/GatheringRadius Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f003bf0e95e143a4fb8fc9a9caa5f862
+    m_Address: Assets/Data/Stats/AttackRange Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffb5078836903c140907a779031e1426
+    m_Address: Assets/Data/Stats/MaxHealth Stat.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7fa0b7bddca129f43a89690752581862, type: 2}
+    - {fileID: 11400000, guid: 848e1c34e434b8744a22ba0acdc551ae, type: 2}

@@ -611,6 +611,7 @@ public class AgentSoldier : Agent, IOrderable, IGuardable
     {
         playerGuardPoint = guardPosition;
         hasGuardPoint = true;
+        isMovingToGuardSpot = false;
     }
 
     public void ClearGuardPoint()

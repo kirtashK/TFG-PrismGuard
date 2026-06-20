@@ -21,6 +21,7 @@ public class ModifyStatEffect : ResearchEffect
     public ModifierType modifierType = ModifierType.Additive;
     public float value = 0f;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -28,6 +29,7 @@ public class ModifyStatEffect : ResearchEffect
         Name = targetData != null ? $"Modify {targetData.Name} : {statKey.name}" : $"Modify {statKey.name}";
         description = $"Modifies {(statKey == null ? "[stat]" : statKey.Name)} of {(targetData != null ? targetData.Name : "global")} ({modifierType} {value})";
     }
+#endif
 
     public override void ApplyEffect(string researchId)
     {

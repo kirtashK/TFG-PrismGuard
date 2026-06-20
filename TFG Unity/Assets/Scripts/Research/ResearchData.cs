@@ -21,8 +21,10 @@ public class ResearchData : BaseData
     [Tooltip("Effects that will be applied once this research completes")]
     public ResearchEffect[] effects;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
     }
+#endif
 }

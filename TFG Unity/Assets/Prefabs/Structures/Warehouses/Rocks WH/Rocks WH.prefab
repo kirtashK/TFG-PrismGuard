@@ -164,7 +164,7 @@ MonoBehaviour:
   attackCooldown: 0
   nextAttackTime: 0
   dissolveDuration: 10
-  combatFeedbackPosition: {fileID: 6184472397325735009}
+  combatFeedbackPosition: {fileID: 4629840723039916193}
   attackPositionOffset: 0
   navMeshSampleDistance: 2
 --- !u!114 &3839334282225054200
@@ -197,6 +197,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropSpot: {fileID: 3817250393377877827}
+  priority: 3
+  interactionRange: 1
 --- !u!1001 &2002278734938435898
 PrefabInstance:
   m_ObjectHideFlags: 0

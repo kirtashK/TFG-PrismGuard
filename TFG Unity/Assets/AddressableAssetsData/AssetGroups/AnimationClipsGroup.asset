@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: AnimationClipsGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: AnimationClipsGroup
+  m_GUID: 4a5cf2796ffe8774190d985f0bfc6eda
+  m_SerializeEntries:
+  - m_GUID: 0e31b2ea288253e40a5aa8e87b3595ce
+    m_Address: Assets/Art/Animation/Clips/Attack/Slash 1H Armed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10fa50c59af8fd440a0348904414802a
+    m_Address: Assets/Art/Animation/Clips/Work/MiningLoop.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 192d808a81083504686c8ee1263b345c
+    m_Address: Assets/Art/Animation/Clips/Idle/Idle Sword And Shield.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24628873a9f8f114b8d8ec12ab3a4630
+    m_Address: Assets/Art/Animation/Clips/Work/Chop.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4636d00a3b7a9b042b2485af4b108525
+    m_Address: Assets/Art/Animation/Clips/Idle/Idle.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5374e53dafe239b43a9883e93a4becd9
+    m_Address: Assets/Art/Animation/Clips/Attack/Slash 2H.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a91cdece5d5dd64b807bce454b314d7
+    m_Address: Assets/Art/Animation/Clips/Walk/Walk 1H Armed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5dd8813a5d564cf4a98ea5ac586e9550
+    m_Address: Assets/Art/Animation/Clips/Attack/Slash Sword And Shield.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 635dc03e6dbb1d34584664211916f642
+    m_Address: Assets/Art/Animation/Clips/Work/Build/Build Loop.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 675c1faf97613dc47b3990e7464f7558
+    m_Address: Assets/Art/Animation/Clips/Run/Run 1H Armed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70b05a44cd5733b42be844ecd4e247a9
+    m_Address: Assets/Art/Animation/Clips/Walk/Walk Unarmed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78f71e68b06e7524a86c77337c1f920f
+    m_Address: Assets/Art/Animation/Clips/Abilities/HealingPotion.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 881ed49d8e7de144daf981e06ce38be9
+    m_Address: Assets/Art/Animation/Clips/Death/Death Sword And Shield.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8958e9745a6cf874a8583a336ee8c65a
+    m_Address: Assets/Art/Animation/Clips/Abilities/AoEHealing.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f319f07950d2b94da183fad3fcf9188
+    m_Address: Assets/Art/Animation/Clips/Walk/Walk Sword And Shield.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a09949f04916cea4c8beb84dc864bc8f
+    m_Address: Assets/Art/Animation/Clips/Work/Writing.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afdb563eff2eae84094e4b1db3cb1afe
+    m_Address: Assets/Art/Animation/Clips/Run/Run Sword And Shield.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b25a8bcf1ac35254f84b66cfa9157b29
+    m_Address: Assets/Art/Animation/Clips/Idle/Idle 1H Armed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bdaa272899c7d3d4fbb14d90cc867054
+    m_Address: Assets/Art/Animation/Clips/Run/Run Unarmed.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c61eddf58a6cc504eaef02a240137ac3
+    m_Address: Assets/Art/Animation/Clips/Work/Build/Build Start.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9905000a62f60848b7abf6b3b588f2d
+    m_Address: Assets/Art/Animation/Clips/Abilities/AoEAttack.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1284141735bce44eb10b682e3ac6f57
+    m_Address: Assets/Art/Animation/Clips/Death/Death Backward 01.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 26339ec0845c3094cb23cfeab9750e1c, type: 2}
+    - {fileID: 11400000, guid: 485602d736fb9e747a56242a6dc99d4c, type: 2}

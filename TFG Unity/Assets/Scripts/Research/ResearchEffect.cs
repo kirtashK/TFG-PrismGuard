@@ -7,6 +7,7 @@ public abstract class ResearchEffect : BaseData
     [TextArea(2, 6)]
     public string description;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -20,6 +21,7 @@ public abstract class ResearchEffect : BaseData
             Debug.LogWarning($"{name} missing {nameof(description)}");
         }
     }
+#endif
 
     /// <summary>
     /// Called when the research of this effect completes

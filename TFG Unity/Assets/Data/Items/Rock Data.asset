@@ -25,5 +25,5 @@ MonoBehaviour:
   fuelValue: 0
   canBeBought: 1
   buyPrice: 8
-  canBeSold: 1
+  canBeSold: 0
   sellFraction: 0.25

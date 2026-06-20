@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Unlock Structure Effect", menuName = "Data/Research/Effects/UnlockStructure")]
@@ -9,6 +8,7 @@ public class UnlockStructureEffect : ResearchEffect
     [Tooltip("StructureData that will be unlocked when this research completes")]
     public StructureData structureData;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -16,14 +16,15 @@ public class UnlockStructureEffect : ResearchEffect
         if (string.IsNullOrEmpty(description))
         {
             description = $"Unlocks structure: {structureData.Name}";
-            EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(this);
         }
         if (icon == null)
         {
             icon = structureData.icon;
-            EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(this);
         }
     }
+#endif
 
     public override void ApplyEffect(string researchId)
     {
