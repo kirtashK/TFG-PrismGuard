@@ -1498,6 +1498,22 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: -11
       objectReference: {fileID: 0}
+    - target: {fileID: 6538608420976143331, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.28627452
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538608420976143331, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.28627452
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538608420976143331, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538608420976143331, guid: 99166e32f842ba346b247a5cb477090d, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4282993151
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3106,9 +3122,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3956052904729305529, guid: 4b161fed7c9fead4bb8aec4f06e9dbd2, type: 3}
+      propertyPath: m_Size
+      value: 0.99999994
+      objectReference: {fileID: 0}
     - target: {fileID: 4925598366025975589, guid: 4b161fed7c9fead4bb8aec4f06e9dbd2, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 5531796923055355042, guid: 4b161fed7c9fead4bb8aec4f06e9dbd2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3622,6 +3642,18 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 3154145044074529015, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027789284930425395, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
+      propertyPath: m_Size
+      value: 0.9999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4866228584301223579, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
+      propertyPath: m_Size
+      value: 0.9999998
+      objectReference: {fileID: 0}
     - target: {fileID: 4909426798762270100, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -3766,7 +3798,12 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8318215912722986883, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.00000011920929
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8415444111969231749, guid: 962f5697d5741de48b1be5d80e36f477, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

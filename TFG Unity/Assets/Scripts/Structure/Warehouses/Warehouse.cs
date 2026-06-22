@@ -487,14 +487,38 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     // Returns a readonly snapshot of stored counts by item
     public IReadOnlyDictionary<ItemData, int> GetStoredCountsSnapshot()
     {
-        Dictionary<ItemData, int> snapshot = new();
+        Dictionary<string, ItemData> itemDataById = new();
+        Dictionary<string, int> countById = new();
+
         foreach (KeyValuePair<string, Queue<GameObject>> pair in storedItems)
         {
-            if (pair.Value.Count > 0 && pair.Value.Peek() != null && pair.Value.Peek().TryGetComponent<ItemInstance>(out ItemInstance instance))
+            if (pair.Value.Count <= 0)
             {
-                snapshot[instance.itemData] = pair.Value.Count;
+                continue;
             }
+
+            GameObject peeked = pair.Value.Peek();
+            if (peeked == null || !peeked.TryGetComponent<ItemInstance>(out ItemInstance instance) || instance.itemData == null)
+            {
+                continue;
+            }
+
+            string itemId = instance.itemData.id;
+            if (string.IsNullOrEmpty(itemId))
+            {
+                continue;
+            }
+
+            itemDataById[itemId] = instance.itemData;
+            countById[itemId] = pair.Value.Count;
         }
+
+        Dictionary<ItemData, int> snapshot = new();
+        foreach (KeyValuePair<string, int> entry in countById)
+        {
+            snapshot[itemDataById[entry.Key]] = entry.Value;
+        }
+
         return snapshot;
     }
 }

@@ -281,26 +281,6 @@ public class ResourceGatherer : MonoBehaviour
 
     #region Thresholds
 
-    public List<ItemData> GetOutputs()
-    {
-        HashSet<ItemData> outputs = new();
-
-        foreach (ResourceInstance instance in trackedNodes)
-        {
-            if (instance == null)
-            {
-                continue;
-            }
-
-            if (instance.TryGetGatherOutputItemData(out ItemData itemData))
-            {
-                outputs.Add(itemData);
-            }
-        }
-
-        return new List<ItemData>(outputs);
-    }
-
     public int GetThreshold(ItemData itemData)
     {
         string itemId = itemData.id;
@@ -353,7 +333,7 @@ public class ResourceGatherer : MonoBehaviour
 
     public IReadOnlyList<ItemData> GetManagedOutputItems()
     {
-        HashSet<ItemData> outputItems = new();
+        Dictionary<string, ItemData> outputItemsById = new();
 
         foreach (ResourceInstance instance in trackedNodes)
         {
@@ -362,13 +342,14 @@ public class ResourceGatherer : MonoBehaviour
                 continue;
             }
 
-            if (instance.TryGetGatherOutputItemData(out ItemData itemData))
+            if (instance.TryGetGatherOutputItemData(out ItemData itemData)
+                && itemData != null && !string.IsNullOrEmpty(itemData.id))
             {
-                outputItems.Add(itemData);
+                outputItemsById[itemData.id] = itemData;
             }
         }
 
-        return outputItems.ToList();
+        return outputItemsById.Values.ToList();
     }
 
     #endregion
