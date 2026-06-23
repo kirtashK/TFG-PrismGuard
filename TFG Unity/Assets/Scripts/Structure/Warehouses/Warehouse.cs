@@ -23,6 +23,9 @@ public class Warehouse : MonoBehaviour, IItemConsumer
     [SerializeField]
     private int currentCapacity = 0;
 
+    public int MaxCapacity => maxCapacity;
+    public int CurrentCapacity => currentCapacity;
+
     // Each ItemData has a queue of items stored in the warehouse
     private readonly Dictionary<string, Queue<GameObject>> storedItems = new();
 
