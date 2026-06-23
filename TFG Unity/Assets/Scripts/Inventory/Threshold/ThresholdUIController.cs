@@ -6,6 +6,8 @@ using UnityEngine;
 public class ThresholdUIController : BasePanel
 {
     [SerializeField] private TMP_Text structureNameText;
+    [SerializeField] private TMP_Text infoText;
+
     [SerializeField] private RectTransform rowsParent;
     [SerializeField] private ThresholdRowUI rowPrefab;
 
@@ -50,6 +52,11 @@ public class ThresholdUIController : BasePanel
             SelectionManager.Instance.OnSelectionChanged -= HandleSelectionChanged;
         }
 
+        if (currentProcessor != null)
+        {
+            currentProcessor.OnProcessingCountChanged -= HandleProcessingCountChanged;
+        }
+
         isRegistered = false;
     }
 
@@ -58,6 +65,12 @@ public class ThresholdUIController : BasePanel
     private void HandleSelectionChanged(IReadOnlyList<ISelectable> selection)
     {
         ClearRows();
+
+        if (currentProcessor != null)
+        {
+            currentProcessor.OnProcessingCountChanged -= HandleProcessingCountChanged;
+        }
+
         currentProcessor = null;
         currentGatherer = null;
 
@@ -108,6 +121,10 @@ public class ThresholdUIController : BasePanel
             structureNameText.text = title;
         }
 
+        RefreshProcessorInfoText();
+
+        currentProcessor.OnProcessingCountChanged += HandleProcessingCountChanged;
+
         BuildProcessorRows();
     }
 
@@ -123,7 +140,35 @@ public class ThresholdUIController : BasePanel
             structureNameText.text = title;
         }
 
+        RefreshGathererInfoText();
+
         BuildGathererRows();
+    }
+
+    private void HandleProcessingCountChanged(int newCount)
+    {
+        RefreshProcessorInfoText();
+    }
+
+    private void RefreshProcessorInfoText()
+    {
+        if (infoText == null || currentProcessor == null)
+        {
+            return;
+        }
+
+        infoText.text = $"Batches: {currentProcessor.ProcessingCount}/{currentProcessor.MaxConcurrentBatches}\n" +
+            $"Processing speed multiplier: {currentProcessor.ProcessingSpeed:0.0}";
+    }
+
+    private void RefreshGathererInfoText()
+    {
+        if (infoText == null || currentGatherer == null)
+        {
+            return;
+        }
+
+        infoText.text = $"Gathering radius: {currentGatherer.GatheringRadius}";
     }
 
     private void BuildProcessorRows()

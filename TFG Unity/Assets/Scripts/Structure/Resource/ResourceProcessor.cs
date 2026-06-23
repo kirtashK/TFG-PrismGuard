@@ -51,6 +51,12 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
     [SerializeField] 
     private float processingSpeed = 1;
 
+    public int MaxConcurrentBatches => maxConcurrentBatches;
+    public int ProcessingCount => processingCount;
+    public float ProcessingSpeed => processingSpeed;
+
+    public event System.Action<int> OnProcessingCountChanged;
+
     public Vector3 GetReceivePosition() => transform.position;
 
     private class InputState
@@ -281,6 +287,7 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
         reservedFuel = 0;
         storedFuel = 0;
         processingCount = 0;
+        OnProcessingCountChanged?.Invoke(processingCount);
 
         foreach (KeyValuePair<string, InputState> input in inputState)
         {
@@ -327,6 +334,8 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
                 recipeState.reservedOutput += recipeState.recipe.outputPerInput;
 
                 processingCount++;
+                OnProcessingCountChanged?.Invoke(processingCount);
+
                 StartCoroutine(ProcessBatch(recipeState));
 
                 readyForBatch = CanStartBatch(recipeState, state);
@@ -354,7 +363,9 @@ public class ResourceProcessor : MonoBehaviour, IItemConsumer, IThresholdProvide
 
         recipeState.storedOutput += recipeState.recipe.outputPerInput;
         recipeState.reservedOutput -= recipeState.recipe.outputPerInput;
+
         processingCount--;
+        OnProcessingCountChanged?.Invoke(processingCount);
 
 #if UNITY_EDITOR
         Debug.Log($"{name} has processed a batch of {recipeState.recipe.name}" +

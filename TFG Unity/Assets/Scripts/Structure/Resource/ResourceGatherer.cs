@@ -18,6 +18,7 @@ public class ResourceGatherer : MonoBehaviour
     [SerializeField] private StatKey gatheringRadiusStat;
 
     private float gatheringRadius;
+    public float GatheringRadius => gatheringRadius;
 
     [Header("Thresholds")]
 
