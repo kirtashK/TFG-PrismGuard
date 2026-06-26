@@ -79,6 +79,7 @@ public class WaveManager : MonoBehaviour
 
     [Tooltip("Seconds between waves")]
     public float waveInterval = 100f;
+    private static readonly WaitForSeconds spawnDelayWithinWave = new(0.25f);
 
     private bool waitingForNextWaveToComplete;
 
@@ -417,7 +418,7 @@ public class WaveManager : MonoBehaviour
             budget -= chosen.spawnCost;
 
             // Add a small delay so not all enemies spawn at the same instant
-            yield return new WaitForSeconds(0.25f);
+            yield return spawnDelayWithinWave;
         }
 
         yield return null;

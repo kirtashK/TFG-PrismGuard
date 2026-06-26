@@ -18,7 +18,7 @@ MonoBehaviour:
   requiredResearch: {fileID: 0}
   statBases: []
   resourceItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
-  workDuration: 15
+  workDuration: 45
   interactionRange: 2
   priority: 1
   minResourcesToSpawn: 1

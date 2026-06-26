@@ -151,15 +151,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99b16b0966d4764c90d1f4ab16fc39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 15
-  speedMultiplier: 2
-  dragPanSensitivity: 0.5
+  panSpeed: 20
+  speedMultiplier: 3
+  dragPanSensitivity: 1
   rotateSensitivity: 0.2
-  verticalScrollSpeed: 80
+  verticalScrollSpeed: 2
   pitchMin: -45
   pitchMax: 45
-  minHeight: 5
-  maxHeight: 80
+  minHeight: 2
+  maxHeight: 20
 --- !u!114 &7074115052903922804
 MonoBehaviour:
   m_ObjectHideFlags: 0

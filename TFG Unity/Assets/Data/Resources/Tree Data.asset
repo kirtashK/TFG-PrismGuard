@@ -18,4 +18,4 @@ MonoBehaviour:
   requiredResearch: {fileID: 0}
   statBases: []
   category: 0
-  respawnTime: 6.5
+  respawnTime: 18

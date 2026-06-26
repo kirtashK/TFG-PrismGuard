@@ -41,8 +41,8 @@ MonoBehaviour:
   scoreCost: 150
   createCosts:
   - itemData: {fileID: 11400000, guid: 18ef1e3a316b70e4eaa16005a14b1cfa, type: 2}
-    quantity: 10
+    quantity: 6
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 30
+    quantity: 27
   faction: 0
   isPlayerControllable: 1
