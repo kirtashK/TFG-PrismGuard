@@ -1,10 +1,8 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewItemCategory", menuName = "Data/ItemCategory")]
-public class ItemCategory : ScriptableObject
+public class ItemCategory : BaseData
 {
-    public string categoryName;
-
     [Tooltip("Parent category (optional) Used to implement a hierarchy")]
     public ItemCategory parentCategory;
 
@@ -14,15 +12,17 @@ public class ItemCategory : ScriptableObject
     /// </summary>
     public bool Matches(ItemCategory other)
     {
-        if (other == null)
+        if (other == null || string.IsNullOrEmpty(id))
         {
             return false;
         }
 
+        string targetId = id;
+
         ItemCategory current = other;
         while (current != null)
         {
-            if (current == this)
+            if (current.id == targetId)
             {
                 return true;
             }

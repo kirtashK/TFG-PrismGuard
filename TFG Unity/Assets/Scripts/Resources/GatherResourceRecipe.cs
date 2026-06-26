@@ -35,6 +35,7 @@ public class GatherResourceRecipe : BaseData
     [Min(0)]
     public int resourceMaxDeviation = 0;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -51,4 +52,5 @@ public class GatherResourceRecipe : BaseData
             }
         }
     }
+#endif
 }

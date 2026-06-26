@@ -42,7 +42,7 @@ public class StatModifierManager : MonoBehaviour
     /// </summary>
     public void AddModifier(string sourceId, string targetId, StatKey statKey, ModifierKind kind, float value)
     {
-        if (string.IsNullOrEmpty(statKey.id) || statKey == null || string.IsNullOrEmpty(sourceId))
+        if (statKey == null || string.IsNullOrEmpty(statKey.id) || string.IsNullOrEmpty(sourceId))
         {
             Debug.LogWarning($"{name}: invalid arguments");
             return;

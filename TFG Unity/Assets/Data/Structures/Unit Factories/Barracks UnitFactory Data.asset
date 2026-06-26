@@ -38,11 +38,11 @@ MonoBehaviour:
   faction: 0
   buildRequirements:
   - itemData: {fileID: 11400000, guid: 5c5c5bfad2a0ae84db9d36a8ff2e4f12, type: 2}
-    quantity: 5
+    quantity: 8
   - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-    quantity: 10
+    quantity: 3
   - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
-    quantity: 25
+    quantity: 10
   producibleUnits:
   - {fileID: 11400000, guid: 92a96283cf9bf2549b416e3cbc4d2254, type: 2}
   - {fileID: 11400000, guid: 74485857ba9c0224e97c0f4ae5fdca31, type: 2}

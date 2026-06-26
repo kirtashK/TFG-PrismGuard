@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Vertical (height) change speed via scroll wheel")]
-    [Range(5f, 200f)]
+    [Range(1f, 200f)]
     private float verticalScrollSpeed = 80f;
 
 
@@ -224,7 +224,7 @@ public class CameraController : MonoBehaviour
             }
 
             Vector3 position = transform.position;
-            position.y += scrollMove * verticalScrollSpeed * multiplier * Time.unscaledDeltaTime;
+            position.y += scrollMove * verticalScrollSpeed * multiplier;
             position.y = Mathf.Clamp(position.y, minHeight, maxHeight);
             transform.position = position;
         }

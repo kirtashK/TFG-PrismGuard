@@ -18,6 +18,7 @@ public class ResourceGatherer : MonoBehaviour
     [SerializeField] private StatKey gatheringRadiusStat;
 
     private float gatheringRadius;
+    public float GatheringRadius => gatheringRadius;
 
     [Header("Thresholds")]
 
@@ -260,6 +261,8 @@ public class ResourceGatherer : MonoBehaviour
 
     private bool HasTrackedNodeWithOutput(ItemData itemData)
     {
+        string itemId = itemData.id;
+
         foreach (ResourceInstance instance in trackedNodes)
         {
             if (instance == null)
@@ -268,7 +271,7 @@ public class ResourceGatherer : MonoBehaviour
             }
 
             if (instance.TryGetGatherOutputItemData(out ItemData outputItemData)
-                && outputItemData == itemData)
+                && outputItemData.id == itemId)
             {
                 return true;
             }
@@ -279,36 +282,18 @@ public class ResourceGatherer : MonoBehaviour
 
     #region Thresholds
 
-    public List<ItemData> GetOutputs()
-    {
-        HashSet<ItemData> outputs = new();
-
-        foreach (ResourceInstance instance in trackedNodes)
-        {
-            if (instance == null)
-            {
-                continue;
-            }
-
-            if (instance.TryGetGatherOutputItemData(out ItemData itemData))
-            {
-                outputs.Add(itemData);
-            }
-        }
-
-        return new List<ItemData>(outputs);
-    }
-
     public int GetThreshold(ItemData itemData)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
             return int.MaxValue;
         }
 
         foreach (OutputThresholdEntry entry in outputThresholds)
         {
-            if (entry != null && entry.itemData == itemData)
+            if (entry != null && entry.itemData.id == itemId)
             {
                 return Mathf.Max(0, entry.threshold);
             }
@@ -319,7 +304,9 @@ public class ResourceGatherer : MonoBehaviour
 
     public void SetThreshold(ItemData itemData, int threshold)
     {
-        if (itemData == null)
+        string itemId = itemData.id;
+
+        if (string.IsNullOrEmpty(itemId))
         {
             return;
         }
@@ -328,7 +315,7 @@ public class ResourceGatherer : MonoBehaviour
 
         foreach (OutputThresholdEntry entry in outputThresholds)
         {
-            if (entry != null && entry.itemData == itemData)
+            if (entry != null && entry.itemData.id == itemId)
             {
                 entry.threshold = normalizedThreshold;
                 RefreshTrackedNodes();
@@ -347,7 +334,7 @@ public class ResourceGatherer : MonoBehaviour
 
     public IReadOnlyList<ItemData> GetManagedOutputItems()
     {
-        HashSet<ItemData> outputItems = new();
+        Dictionary<string, ItemData> outputItemsById = new();
 
         foreach (ResourceInstance instance in trackedNodes)
         {
@@ -356,13 +343,14 @@ public class ResourceGatherer : MonoBehaviour
                 continue;
             }
 
-            if (instance.TryGetGatherOutputItemData(out ItemData itemData))
+            if (instance.TryGetGatherOutputItemData(out ItemData itemData)
+                && itemData != null && !string.IsNullOrEmpty(itemData.id))
             {
-                outputItems.Add(itemData);
+                outputItemsById[itemData.id] = itemData;
             }
         }
 
-        return outputItems.ToList();
+        return outputItemsById.Values.ToList();
     }
 
     #endregion

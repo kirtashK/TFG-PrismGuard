@@ -1,0 +1,393 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: MaterialsGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: MaterialsGroup
+  m_GUID: 90f1ef488724f00479e69d28b615c97a
+  m_SerializeEntries:
+  - m_GUID: 0294c558ca39c4c4d82d9062e18a3b8d
+    m_Address: Assets/Art/Materials/PreviewInvalid.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d2f193a1aa61324a92011aff0e12ae1
+    m_Address: Assets/Art/Models/Materials/Base color/Red Intense.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ffaa0b7117ba8c47a9d05ae701d4b4d
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Skybox_Mat.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 110099e41d2f8004ab55e1e42a86b917
+    m_Address: Assets/Art/Models/Materials/Textured/Towers.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12f7312dd149c3b4a92b4216a8ae4800
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Weapon market.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dcf44a7e9fbb32478f97fce0252ed8d
+    m_Address: Assets/Art/Models/Materials/Textured/Character Units URP.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2008870b05899a34ab75fb6e4440b20d
+    m_Address: Assets/Art/Models/Materials/Base color/Steel Light.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21473002f2871a548ae4f5f891dcd40c
+    m_Address: Assets/Art/Models/Materials/Base color/Stone 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2617f25c202f68841bf6b249829e0dd0
+    m_Address: Assets/Art/Models/Materials/Base color/Steel Dark 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c177f9e7f71a174bb3a7a27d3084844
+    m_Address: Assets/Art/Models/Materials/Textured/zcolors.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d55a34c098535f44b621edbb4539fc7
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Light 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3513e6040fc7b714299db25fc5be758d
+    m_Address: Assets/Art/Models/Materials/Base color/Crystal.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d6590f054a971d40b8cd490cf990a95
+    m_Address: Assets/Art/Models/Materials/Textured/GoldIngot.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41b5077822e81504db728064b68ada38
+    m_Address: Assets/Art/Models/Materials/Textured/Pallet.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 427be0d6d8c54ac4192c22127bc8fe06
+    m_Address: Assets/Art/Models/Materials/Base color/Red Light.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4634a6c36fdeed148a64f48f5993d480
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Dark 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4895b5726e8add34097d31718b6c5cf4
+    m_Address: Assets/Art/Models/Materials/Base color/Wood 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a4ef4c2dd4a06644a0139d51ff1dfd8
+    m_Address: Assets/Art/Models/Materials/Base color/Wood 5.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 509d56aa9848d69469f565295f267dd6
+    m_Address: Assets/Art/Models/Materials/Base color/Coal Warm.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5223083b15d4815499316ec9f681e608
+    m_Address: Assets/Art/Models/Materials/Base color/Red.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d19360b218d1be44921e97c5816098f
+    m_Address: Assets/Art/Models/Materials/Base color/Coal Hot.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5defbd098cad2b34b97e4b7a18e1c046
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Light 3.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5dfb33c7b35c32b48956f3553d83a5ee
+    m_Address: Assets/Art/Models/Materials/Base color/Steel Dark 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ef0a842680810d4894380a16b71c7d2
+    m_Address: Assets/Art/Models/Materials/Base color/Steel Light 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 628ba5547a79ffe4997b3904d45eb122
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/fish_market.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6385406acc2fd434ab4f914924cd9bb0
+    m_Address: Assets/Art/Models/Materials/Textured/MedievalProps.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c7ad2943b920fc468c6d9cd8c58fd06
+    m_Address: Assets/Art/Models/Materials/Base color/Stone Light.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 703bf365fda176a438341f5f7cd69945
+    m_Address: Assets/Art/Models/Materials/Base color/Handle_Wooden.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7199edfa5e9da4449a4d50d5e5197182
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Dark 3.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 724185915c302ff428e8fee0ecf72e5b
+    m_Address: Assets/Art/Materials/PreviewValid.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7311e04fb06813043aa5694f995fa13a
+    m_Address: Assets/Art/Models/Materials/Base color/Steel.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73b178df76501b34ebda8221bbb4956e
+    m_Address: Assets/Art/Models/Materials/Base color/Glass 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76c5b957171aa9b4991a8b98f143322f
+    m_Address: Assets/Art/Models/Materials/Base color/Coal.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79b0031f5dfcd8f4f8fdababd6c917b1
+    m_Address: Assets/Art/Models/Materials/Textured/CopperIngot.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ad48b53fc18c384e9a63f2616e3b1e2
+    m_Address: Assets/Art/Models/Materials/Textured/Sawmill.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80285f6ee98a78f4db234f6917e41074
+    m_Address: Assets/Art/Sprites/Materials/StructureSelectionRing.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81e605fe59c0240419292c7b84746feb
+    m_Address: Assets/Art/Models/Materials/Base color/Glass 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82e24738be0d3904f8067ad5ec6d240e
+    m_Address: Assets/Art/Models/Materials/Base color/Orange Light.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8444303dee6f21e4c943696eae671249
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Bakery matket.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87230ddaeaab5ba488420b029b215e4f
+    m_Address: Assets/Art/Models/Materials/Base color/Wood 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 884f78ccdfed94d4aa93a0774aae71c9
+    m_Address: Assets/Art/Models/Materials/Base color/Stone 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c86003a4d2e64d4796584dbc5b72bb1
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Dark 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d15d5b19ec149c4fbd5ebca5fe72959
+    m_Address: Assets/Art/Sprites/Materials/UnitSelectionRing.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d482b7194e18974484eb9ec0e9c065f
+    m_Address: Assets/Art/Models/Materials/Textured/tools.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e153a51647cf7f4cb57852c1a31d47d
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Laterns.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91a787966a3eeb445884e132418d9bae
+    m_Address: Assets/Art/Models/Materials/Base color/Melted.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95285b5d2361c66438bb85d7edf2f482
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Light 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9df43f27ec8c0314c8c0900cb1a68b60
+    m_Address: Assets/Art/Models/Materials/Textured/IronIngot.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e39d92bc60a6f84ba48b2121af56fd9
+    m_Address: Assets/Art/Models/Materials/Base color/Melted Darker.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a291be32ec43ce64d8c49e74fe31d82d
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Environment.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a54aa91ecd72ea24b86db0f02c460b87
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Ingot.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a67a41c3af0e51c4b8ef18ad97db6bd7
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Dark 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a842526bbddc4e44594b5c351ffa06b2
+    m_Address: Assets/Art/Models/Materials/Base color/Wood Weathered.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a84e2e1691c60094fbf053b1a2c978ec
+    m_Address: Assets/Art/Models/Materials/Base color/Red Dark.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac2d68933d1867b43a4c7ea56b2e7e8b
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Vegetables market.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af796e632d481b146b6f407a914be293
+    m_Address: Assets/Art/Models/Materials/Base color/Beige.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b14f81dd6f5c5414a9a12db81f8c5aa4
+    m_Address: Assets/Art/Models/Materials/Base color/Wood 4.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5fd0e18492811f4fbefb66f6fe8a52a
+    m_Address: Assets/Art/Models/Materials/Base color/Wood 3.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba582123b52fc8943a9e556d066033f9
+    m_Address: Assets/Art/Sprites/Materials/MarkerRing.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbce1dea1d779ef478805156415e0339
+    m_Address: Assets/Art/Models/Materials/Base color/Stone Dark 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd41fcce7d6116e4f88358ad1e5c5f2d
+    m_Address: Assets/Art/Models/Materials/Base color/Orange.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d088d5cff1357234b80222e3036a2198
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/New Material.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2be9ab15ce99124b8d82be5bb91ecf9
+    m_Address: Assets/Art/Sprites/Materials/R.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d34bd1e99f4a20e4f9cd66728a71a382
+    m_Address: Assets/Art/Models/Materials/Base color/Gold 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5cc2b16a61735748b7e4d7f0f59cd74
+    m_Address: Assets/Art/Sprites/Materials/SelectionRing.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcbc485444dd80042aa4228aea956ad1
+    m_Address: Assets/Art/Models/Materials/Base color/Gold 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0c133a0b25b68047bed9c1827502c67
+    m_Address: Assets/Art/Models/Materials/Base color/Steel Dark 3.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1725710fb9d6ba4983f586832b788d3
+    m_Address: Assets/Art/Models/Materials/Base color/Stone Dark 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6304fe36fa69d540814ee28387db1eb
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Light 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7164b0fb6fb2d947bc6af2bf9385611
+    m_Address: Assets/Art/Models/Materials/Textured/tools_map.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee6311e667feb2848a84578e9c3bf6b4
+    m_Address: Assets/Art/Low Poly Medieval Market/Materials/Meat market.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f26c02c0d11b17b47ac82d553cf2185b
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Light 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f81449959f87bce40bf43cd9771c438b
+    m_Address: Assets/Art/Models/Materials/Base color/Metal Dark 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe05aa8255cea9a40b73567fc1ee2d5c
+    m_Address: Assets/Art/Models/Materials/Base color/White.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1e362651ac762f2408992fe29bda8423, type: 2}
+    - {fileID: 11400000, guid: ebf9d5d42837be840adb21daefd93337, type: 2}

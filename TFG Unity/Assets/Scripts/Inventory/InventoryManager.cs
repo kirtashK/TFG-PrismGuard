@@ -7,7 +7,9 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
 
-    private readonly Dictionary<ItemData, int> totals = new();
+    private readonly Dictionary<string, int> totals = new();
+    private readonly Dictionary<string, ItemData> itemsById = new();
+    public IEnumerable<ItemData> GetAllTrackedItems() => itemsById.Values;
 
     public event Action<ItemData, int> OnInventoryChanged;
 
@@ -110,17 +112,33 @@ public class InventoryManager : MonoBehaviour
 
     private int AddInternal(ItemData itemData, int delta)
     {
-        if (!totals.TryGetValue(itemData, out int old))
+        if (itemData == null || string.IsNullOrEmpty(itemData.id))
+        {
+            Debug.LogError($"{name}: {nameof(AddInternal)}: null {nameof(ItemData)} or {nameof(itemData.id)}");
+            return 0;
+        }
+
+        string itemId = itemData.id;
+        itemsById[itemId] = itemData;
+
+        if (!totals.TryGetValue(itemId, out int old))
         {
             old = 0;
         }
 
         int next = Mathf.Max(0, old + delta);
-        totals[itemData] = next;
+        totals[itemId] = next;
 
         return next;
     }
 
     public int GetTotal(ItemData itemData)
-        => totals.TryGetValue(itemData, out int value) ? value : 0;
+    {
+        if (itemData == null || string.IsNullOrEmpty(itemData.id))
+        {
+            return 0;
+        }
+
+        return totals.TryGetValue(itemData.id, out int value) ? value : 0;
+    }
 }

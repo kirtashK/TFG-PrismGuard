@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ItemCategoryGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: ItemCategoryGroup
+  m_GUID: 2474bb7451089544ea0f838fee97e51b
+  m_SerializeEntries:
+  - m_GUID: 265b9f6907bde50438782ec3cefdac54
+    m_Address: Assets/Data/Items/Item Categories/Rocks Category.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4206b9f7f3283f749a40e0cdda112e0a
+    m_Address: Assets/Data/Items/Item Categories/Resources Category.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72029dbe55697c742b46e0eab939f50a
+    m_Address: Assets/Data/Items/Item Categories/Manufactured Category.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a07ef24556ffb8342a8ad373ae63d616
+    m_Address: Assets/Data/Items/Item Categories/Ores Category.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e01d75e305d1b4143b830e182d94342f
+    m_Address: Assets/Data/Items/Item Categories/Plants Category.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6ce13714715e5e04c9906c7b14f8d05b, type: 2}
+    - {fileID: 11400000, guid: aecfd38a2ac6ad644a87655f38133d40, type: 2}

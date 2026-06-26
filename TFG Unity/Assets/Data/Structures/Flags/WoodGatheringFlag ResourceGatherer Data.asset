@@ -22,9 +22,9 @@ MonoBehaviour:
   - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
     value: 0.25
   - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
-    value: 10
+    value: 15
   category: 2
-  buildDuration: 2
+  buildDuration: 5
   builtPrefab: {fileID: 2959668300810766323, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
   blueprintPrefab: {fileID: 9140260009033065384, guid: cb9e57d7244bc8048a057c2e604919d8, type: 3}
   previewPrefab: {fileID: 2341301800914738222, guid: 4ba4bf4e64ad3a149a11a7f14c4497ea, type: 3}

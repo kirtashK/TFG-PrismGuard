@@ -1,0 +1,358 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: SpritesGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: SpritesGroup
+  m_GUID: 9b1a333fe91c62a42839ad6b9a6da72d
+  m_SerializeEntries:
+  - m_GUID: 032d9c62ddc3287408e3e9f94d537a16
+    m_Address: Assets/Art/Sprites/Icons/Items/Gold Ore.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06924a880ddbe1847aaa37e19550b66e
+    m_Address: Assets/Art/Sprites/Icons/Structures/Quarry.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ca4f419704ab1d46803b014b785d835
+    m_Address: Assets/Art/Sprites/Icons/Stats/Cooldown.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10caf1bb2a1e16442b6cd9df5f5c01cf
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag Gold.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11c89c7a883140d47b20b50177801dda
+    m_Address: Assets/Art/Sprites/Icons/Structures/Tower.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11e5a67648aa61c4e97ce06711cf00bd
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16adfabf761583f4a9ad5823e0ea8c8e
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/Weapon market.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19ebbf93f18e1434aa22a0c79c38ede4
+    m_Address: Assets/Art/Models/Textures/Atlas_Pirate.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a50130c9b3ac6f4c87e7fae6d9960c2
+    m_Address: Assets/Art/Sprites/Icons/Misc/Lock.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b7d738317057814cb53fcb62c48b070
+    m_Address: Assets/Art/Sprites/Icons/Stats/Health.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 325f71e0a56a3c3419c68befe53e3641
+    m_Address: Assets/Art/Sprites/Icons/Structures/Log Wall.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 34978df9979467d44ae84ca050561570
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/Meat market texture.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3791aab19ef348f4c8db94756e5e9b1a
+    m_Address: Assets/Art/Sprites/Icons/Game Speed/VeryFastSpeed.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38514abbb1944f445a8ed892c24ee889
+    m_Address: Assets/Art/Sprites/Icons/Misc/StructureSelectionRing.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3908cc06cd1c0bf4b80f9109b72d3f90
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag Stone.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39ce43fd53c8e43408448576843c74dc
+    m_Address: Assets/Art/Sprites/Icons/Misc/MarkerRing.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c9e92226a8689f46aa324fb4b29aa99
+    m_Address: Assets/Art/Sprites/Icons/Misc/Shield.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 416acaf42a38b9f4baad680d0e6cc73e
+    m_Address: Assets/Art/Models/Textures/MedievalProps.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 488007d986efeca4faa66c06eef4c307
+    m_Address: Assets/Art/Sprites/Icons/Misc/Spear.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 533ff72790fd40144bf779d2e7d7377c
+    m_Address: Assets/Art/Sprites/Icons/Structures/crate.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5434b66cca049eb44843cf7e669fff79
+    m_Address: Assets/Art/Sprites/Icons/Structures/Saw.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 592cf5adaca6ca141b284ae23652e70d
+    m_Address: Assets/Art/Sprites/Icons/Items/Copper Ingot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c707bc8f03ddc844b4e554bf788fd7d
+    m_Address: Assets/Art/Sprites/Icons/Items/Plank.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cad05b858e72674390d595f132d5e43
+    m_Address: Assets/Art/Models/Textures/CopperIngot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f750aae0faff3d47b772af9f9e70c77
+    m_Address: Assets/Art/Sprites/Icons/Game Speed/NormalSpeed.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60e2adc602bbc4b48b81b45de2a3024e
+    m_Address: Assets/Art/Sprites/Icons/Game Speed/FastSpeed.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 626bf64cb9cd0a6458a86b6fadececa7
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/Environment.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d61edee420ed534ba55a40024200dd4
+    m_Address: Assets/Art/Models/Textures/tools_bits_texture.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74093e3fd654d6141a97cb4e8df055a0
+    m_Address: Assets/Art/Sprites/Icons/Items/Iron Ingot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 777c7c34d4a98f34799f7f7bd553c616
+    m_Address: Assets/Art/Sprites/Icons/Items/Gold Ingot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7892a68ea93a96c41a0de91cd21ded47
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/vegetables market.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79f31b92ab0372745ac7dbfeb1b594f4
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag Wood.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8470c1d8d8547cd409d271eb337862bc
+    m_Address: Assets/Art/Sprites/Icons/Items/Stone.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86f0cddc9cc3a87459e681f297801c0f
+    m_Address: Assets/Art/Sprites/Icons/Book.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d44bb74fe900a3409abd437ea873992
+    m_Address: Assets/Art/Sprites/Icons/Structures/pallet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8dce9f56c22eb79429bbe1bd158b048c
+    m_Address: Assets/Art/Sprites/Icons/Items/Stone Block.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e9241054a66e3a438712199709a34d6
+    m_Address: Assets/Art/Sprites/Icons/Stats/Arrows.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9953a0ee83264cf4a9bb535c0b1b6b71
+    m_Address: Assets/Art/Models/Textures/colormap.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4d94132302eaae4e9416dcad914efaf
+    m_Address: Assets/Art/Sprites/WhiteSprite Border.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae11735a4ba371d4b976ee3acae23dfb
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag Copper.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afcfed9a124edf84c8ec8d01ab669aa9
+    m_Address: Assets/Art/Sprites/Icons/Structures/bin.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b05e25f72fc74f5408cdc9c4f1db9384
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/LaternsEmission.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b195a7f36fe036b40974e684b71fc57e
+    m_Address: Assets/Art/Sprites/Icons/Misc/Hammer.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9514f672b46ee54d80b419d50131865
+    m_Address: Assets/Art/Sprites/Icons/Items/Iron Ore.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb055d4ecf1af5a42a0d302ae5d449ff
+    m_Address: Assets/Art/Sprites/Icons/Structures/Barrack.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb21d20824ddb2c4ba6dcffe37559ef8
+    m_Address: Assets/Art/Sprites/Icons/Flags/Flag Iron.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb2b4748cd21af64cbd4b2e8e9d4b3bc
+    m_Address: Assets/Art/Sprites/Icons/Stats/Backpack.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd7c2eb414f35fe479749cccd69191cb
+    m_Address: Assets/Art/Sprites/Icons/Items/Copper Ore.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be484b8d8bd59074594a94b63129e3df
+    m_Address: Assets/Art/Models/Textures/Towers.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c08df9614ce228a45b4c99e0a8dff6ae
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/Latens.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c381054c7265b6c409c6750895047ae7
+    m_Address: Assets/Art/Models/Textures/tools_bits_map.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5afced8c9e58ce44ab7f41a8a8984d5
+    m_Address: Assets/Art/Sprites/Icons/Misc/UnitSelectionRing.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c75b6b8b111f0544aabfbdbe8b785faa
+    m_Address: Assets/Art/Sprites/Icons/Items/Log.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cac5908482dc0b647be88bc9fedb328c
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/fish_market.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d909d5c2d38e06746b2b8e0115336582
+    m_Address: Assets/Art/Models/Textures/IronIngot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd2e21fb358baa649a7ad7d1d6e722f5
+    m_Address: Packages/com.unity.shadergraph/GraphTemplates/default_masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd4710dbef717f644ad6a8549d8d1f8f
+    m_Address: Assets/Art/Sprites/Icons/Misc/Bow.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de7c7f09e22594d4188b74d2bc760c70
+    m_Address: Assets/Art/Sprites/WhiteSprite.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df2ee9c5c205f04438152865155eef0f
+    m_Address: Assets/Art/Sprites/Perlin Noise Texture.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e31b06e422cdd224c929a9ffc5e6019f
+    m_Address: Assets/Art/Sprites/Icons/Structures/Shop.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e43c023f9eb4c1c4582c74d65cef3859
+    m_Address: Assets/Art/Sprites/Icons/Misc/Shield And Axe.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7def800fdd471746aa15ea9ef2fd6a0
+    m_Address: Assets/Art/Sprites/Icons/Tittle Banner.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: effa42e88498f33408c5d458a3d5c294
+    m_Address: Assets/Art/Sprites/Icons/Misc/Axe.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9d2b22a0786aa846b4a7052ad1854b1
+    m_Address: Assets/Art/Sprites/Icons/Game Speed/PausedSpeed.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbcaea10385462040a79c4950d5f65ed
+    m_Address: Assets/Art/Low Poly Medieval Market/Textures/Bakery market texture.tif
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdd8c7d04dd746340bae5849659af5da
+    m_Address: Assets/Art/Sprites/Icons/Structures/Smelter.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff51877e21441554c872cfc822264db8
+    m_Address: Assets/Art/Sprites/Icons/Misc/Sword.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 930bb4108d8511d4b803b1ce596faf24, type: 2}
+    - {fileID: 11400000, guid: 0bb5b98087988084c8709d0c0f752711, type: 2}

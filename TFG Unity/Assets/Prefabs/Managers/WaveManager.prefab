@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newWavesEnabled_TESTING: 1
-  InstantFirstWave_TESTING: 1
+  InstantFirstWave_TESTING: 0
   enableLimitBudget_TESTING: 0
   limitBudget_TESTING: 0
   enemyLabel: Unit
@@ -59,6 +59,8 @@ MonoBehaviour:
   linearDelta: 5
   exponentialRate: 1.02
   spawnPoints:
+  - spawnPoint: {fileID: 0}
+    waveFlag: {fileID: 0}
   - spawnPoint: {fileID: 0}
     waveFlag: {fileID: 0}
   - spawnPoint: {fileID: 0}

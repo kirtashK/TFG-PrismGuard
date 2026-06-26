@@ -144,6 +144,11 @@ public abstract class BasePanel : MonoBehaviour, IHideElement
             return;
         }
 
+        if (TooltipController.Instance != null)
+        {
+            TooltipController.Instance.Hide();
+        }
+
         panelRoot.SetActive(false);
 
         if (uiModePushed)

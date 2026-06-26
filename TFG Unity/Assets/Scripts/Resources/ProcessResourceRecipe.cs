@@ -36,6 +36,7 @@ public class ProcessResourceRecipe : BaseData
     [Range(0f, 1000f)]
     public float processingTime = 10f;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -49,4 +50,5 @@ public class ProcessResourceRecipe : BaseData
             Debug.LogWarning($"{name} missing {nameof(outputItemData)}");
         }
     }
+#endif
 }

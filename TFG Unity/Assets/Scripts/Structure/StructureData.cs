@@ -52,6 +52,7 @@ public class StructureData : BaseData
 
     public List<ResourceRequirement> buildRequirements = new();
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -73,4 +74,5 @@ public class StructureData : BaseData
             Debug.LogWarning($"{name}: {nameof(buildRequirements)} not configured");
         }
     }
+#endif
 }

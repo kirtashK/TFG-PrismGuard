@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Crude smelter
   id: 9dd51a9921b3c3240ba2c6cb5cf0e173
   icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
-  requiredResearch: {fileID: 0}
+  requiredResearch: {fileID: 11400000, guid: 16c5c14ecc40f6e449f5b03614d64604, type: 2}
   statBases:
   - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
     value: 125

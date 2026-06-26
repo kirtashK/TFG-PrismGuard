@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: afbe8f7465acdca4bb124c84efd72fbb
   m_SerializeEntries:
   - m_GUID: 11173b780a764d940bbf6ca4362cff6c
-    m_Address: Assets/Data/Research/2 Improve Worker Research Data.asset
+    m_Address: Assets/Data/Research/Improve Worker Research Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Research
@@ -120,4 +120,6 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: dbb5217716611e046b0c5e5c35bff6f3, type: 2}
+    - {fileID: 11400000, guid: 2460ecf78d5374e44b1c3a190ae81cc4, type: 2}

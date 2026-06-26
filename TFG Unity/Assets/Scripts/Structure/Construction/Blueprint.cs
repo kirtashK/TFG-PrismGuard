@@ -10,8 +10,8 @@ public class Blueprint : MonoBehaviour, IItemConsumer
     [Tooltip("Spot where delivered items will be put")]
     public Transform dropSpot;
 
-    private readonly Dictionary<ItemData, int> delivered = new();
-    private readonly Dictionary<ItemData, int> pending = new();
+    private readonly Dictionary<string, int> delivered = new();
+    private readonly Dictionary<string, int> pending = new();
     private readonly List<GameObject> storedObjects = new();
 
     public Vector3 GetReceivePosition() => dropSpot.transform.position;
@@ -45,7 +45,7 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         if (dropSpot == null)
         {
-            Debug.LogWarning($"{name} missing {dropSpot.name}");
+            Debug.LogWarning($"{name} missing {nameof(dropSpot)}");
         }
     }
 
@@ -57,8 +57,10 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
         foreach (StructureData.ResourceRequirement requirement in data.buildRequirements)
         {
-            delivered[requirement.itemData] = 0;
-            pending[requirement.itemData] = 0;
+            string itemId = requirement.itemData.id;
+
+            delivered[itemId] = 0;
+            pending[itemId] = 0;
         }
 
         isRegisteredToTaskManager = false;
@@ -117,7 +119,9 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     public int DeliveredCount(ItemData item)
     {
-        if (delivered.TryGetValue(item, out int count))
+        string itemId = item.id;
+
+        if (delivered.TryGetValue(itemId, out int count))
         {
             return count;
         }
@@ -141,45 +145,51 @@ public class Blueprint : MonoBehaviour, IItemConsumer
 
     public bool CanReceive(ItemData item)
     {
-        if (!delivered.ContainsKey(item))
+        string itemId = item.id;
+
+        if (!delivered.ContainsKey(itemId))
         {
             return false;
         }
 
-        int have = delivered[item];
-        int inFlight = pending[item];
+        int have = delivered[itemId];
+        int inFlight = pending[itemId];
         int needed = data.buildRequirements
-                          .Find(required => required.itemData == item).quantity;
+                          .Find(required => required.itemData.id == itemId).quantity;
 
         return (have + inFlight) < needed;
     }
 
     public bool Reserve(ItemData item)
     {
-        if (!delivered.ContainsKey(item))
+        string itemId = item.id;
+
+        if (!delivered.ContainsKey(itemId))
         {
             return false;
         }
 
-        int have = delivered[item];
-        int inFlight = pending[item];
+        int have = delivered[itemId];
+        int inFlight = pending[itemId];
         int needed = data.buildRequirements
-                          .Find(required => required.itemData == item).quantity;
+                          .Find(required => required.itemData.id == itemId).quantity;
 
         if ((have + inFlight) >= needed)
         {
             return false;
         }
 
-        pending[item] = inFlight + 1;
+        pending[itemId] = inFlight + 1;
         return true;
     }
 
     public void Release(ItemData item)
     {
-        if (pending.ContainsKey(item))
+        string itemId = item.id;
+
+        if (pending.ContainsKey(itemId))
         {
-            pending[item] = Mathf.Max(0, pending[item] - 1);
+            pending[itemId] = Mathf.Max(0, pending[itemId] - 1);
         }
     }
 
@@ -187,7 +197,11 @@ public class Blueprint : MonoBehaviour, IItemConsumer
     {
         Release(itemData);
 
-        delivered[itemData]++;
+        string itemId = itemData.id;
+        if (delivered.ContainsKey(itemId))
+        {
+            delivered[itemId]++;
+        }
 
         if (itemObj.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
         {

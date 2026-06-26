@@ -17,6 +17,7 @@ public class ProcessorData : StructureData
     [Range(0f, 100f)]
     public float fuelMaxCapacity = 5;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -30,4 +31,5 @@ public class ProcessorData : StructureData
             Debug.LogWarning($"{name} requires fuel but has no capacity for fuel");
         }
     }
+#endif
 }

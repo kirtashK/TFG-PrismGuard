@@ -9,6 +9,7 @@ public class UnlockUnitEffect : ResearchEffect
     [Tooltip("UnitData that will be unlocked when this research completes")]
     public UnitData unitData;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -24,6 +25,7 @@ public class UnlockUnitEffect : ResearchEffect
             EditorUtility.SetDirty(this);
         }
     }
+#endif
 
     public override void ApplyEffect(string researchId)
     {

@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5dc42f043264241b31234223ff2a06, type: 3}
   m_Name: Manufactured Category
   m_EditorClassIdentifier: Assembly-CSharp::ItemCategory
-  categoryName: Manufactured
+  Name: Manufactured
+  id: 72029dbe55697c742b46e0eab939f50a
+  icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
   parentCategory: {fileID: 0}

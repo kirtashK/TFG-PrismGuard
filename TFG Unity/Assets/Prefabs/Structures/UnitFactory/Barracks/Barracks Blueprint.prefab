@@ -20,13 +20,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barracks Blueprint
       objectReference: {fileID: 0}
+    - target: {fileID: 5335612158474111579, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
+      propertyPath: combatFeedbackPosition
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6094546624650498043, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8792035542860803975, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9091951440356832418, guid: 8124baa81a4c0fc4ab12f1d1b8e1d932, type: 3}
       propertyPath: m_LocalPosition.x

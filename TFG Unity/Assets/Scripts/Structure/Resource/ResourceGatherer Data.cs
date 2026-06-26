@@ -9,6 +9,7 @@ public class ResourceGathererData : StructureData
     [Tooltip("This gatherer will mark only the choosen categories")]
     public List<ResourceCategory> allowedCategories;
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -18,4 +19,5 @@ public class ResourceGathererData : StructureData
             Debug.LogWarning($"{name}: Allowed categories not configured");
         }
     }
+#endif
 }

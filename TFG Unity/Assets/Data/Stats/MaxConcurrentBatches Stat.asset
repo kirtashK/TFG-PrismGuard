@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4801df7adcb98624baf2c9e364c7eeec, type: 3}
   m_Name: MaxConcurrentBatches Stat
   m_EditorClassIdentifier: Assembly-CSharp::StatKey
-  Name: maximun concurrent processing batches
+  Name: maximum concurrent processing batches
   id: 594aeb66229f9e64c94320ac2da18a65
   icon: {fileID: 21300000, guid: 0ca4f419704ab1d46803b014b785d835, type: 3}
   requiredResearch: {fileID: 0}

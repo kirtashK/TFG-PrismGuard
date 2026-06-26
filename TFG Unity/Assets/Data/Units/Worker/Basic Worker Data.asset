@@ -31,10 +31,10 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  buildTime: 5
+  buildTime: 10
   scoreCost: 3
   createCosts:
-  - itemData: {fileID: 11400000, guid: e4cdb7ca4a93359479cb7cee7239be5b, type: 2}
-    quantity: 1
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 5
   faction: 0
   isPlayerControllable: 1

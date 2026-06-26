@@ -265,6 +265,7 @@ MonoBehaviour:
   scenesToSkipRedirect:
   - SampleScene
   - ML TrainingScene
+  - Demo Scene
   initialScene: MainMenu
   bootstrapScene: BootStrap
 --- !u!4 &1077349628

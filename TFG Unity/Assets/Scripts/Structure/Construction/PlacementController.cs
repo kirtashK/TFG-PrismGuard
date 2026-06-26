@@ -261,7 +261,7 @@ public class PlacementController : MonoBehaviour
                     {
                         continue;
                     }
-                    if (structure.structureData == currentStructure)
+                    if (structure.structureData.id == currentStructure.id)
                     {
                         placementErrorMessage = $"Only one {currentStructure.Name} can exist";
                         return false;
@@ -313,11 +313,6 @@ public class PlacementController : MonoBehaviour
             if (blueprintMaterial != null)
             {
                 ApplyMaterialToObject(blueprintObject, blueprintMaterial);
-            }
-
-            if (blueprintObject.TryGetComponent<Blueprint>(out Blueprint blueprint))
-            {
-                blueprint.enabled = true;
             }
         }
         else
@@ -459,6 +454,7 @@ public class PlacementController : MonoBehaviour
         Vector3 labelPos = combined.center + Vector3.up * (combined.extents.y + 0.3f);
         Handles.Label(labelPos, $"{label}\nSize: {combined.size.x:F2} × {combined.size.y:F2} × {combined.size.z:F2}");
     }
+#endif
 
     private Bounds CalculateCombinedBounds(GameObject root)
     {
@@ -479,5 +475,4 @@ public class PlacementController : MonoBehaviour
 
         return combined;
     }
-#endif
 }

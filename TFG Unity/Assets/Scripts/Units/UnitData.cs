@@ -28,6 +28,7 @@ public class UnitData : BaseData
         public int quantity;
     }
 
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
@@ -41,6 +42,7 @@ public class UnitData : BaseData
             Debug.LogWarning($"{name}: {nameof(createCosts)} not configured");
         }
     }
+#endif
 
     public AssetReferenceGameObject GetRandomPrefabReference()
     {

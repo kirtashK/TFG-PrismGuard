@@ -129,12 +129,16 @@ public class GatherResourceTask : MonoBehaviour, ITask
         {
             currentResourceAmount = Mathf.Max(0, currentResourceAmount - resourcesToSpawn);
 
+#if UNITY_EDITOR
             Debug.Log($"{name} has [{currentResourceAmount}/{gatherResourceRecipe.resourceAmount}] resources remaining ({resourcesToSpawn} consumed)");
+#endif
 
             // Resource is depleted:
             if (currentResourceAmount == 0)
             {
+#if UNITY_EDITOR
                 Debug.Log($"{name} has been depleted");
+#endif
                 Destroy(gameObject);
                 yield break;
             }

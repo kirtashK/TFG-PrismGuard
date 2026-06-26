@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Unit
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74485857ba9c0224e97c0f4ae5fdca31
+    m_Address: Assets/Data/Units/Soldiers/Medium Soldier Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90f6b53b391572542b6f136330ee140a
     m_Address: Assets/Data/Enemies/Basic Enemy Data.asset
     m_ReadOnly: 0
@@ -35,6 +41,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 92a96283cf9bf2549b416e3cbc4d2254
     m_Address: Assets/Data/Soldiers/Basic Soldier Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4c501a8425c12d4497955cecc1fa3e8
+    m_Address: Assets/Data/Units/Soldiers/Agent Soldier Data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Unit

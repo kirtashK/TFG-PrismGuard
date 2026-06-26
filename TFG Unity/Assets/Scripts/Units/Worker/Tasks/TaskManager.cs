@@ -98,6 +98,34 @@ public class TaskManager : MonoBehaviour
         return bestTask;
     }
 
+    public MoveItemTask RequestMoveItemTask(Vector3 fromPosition, float maxWeight, Vector3 destination, float maxDistance = Mathf.Infinity)
+    {
+        MoveItemTask best = null;
+        float bestDist = float.MaxValue;
+
+        foreach (ITask task in availableTasks)
+        {
+            if (task is MoveItemTask moveItemTask
+                && moveItemTask.TaskData.weight <= maxWeight
+                && moveItemTask.Destination == destination)
+            {
+                float dist = Vector3.Distance(fromPosition, moveItemTask.TaskPosition);
+                if (dist <= maxDistance && dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = moveItemTask;
+                }
+            }
+        }
+
+        if (best != null)
+        {
+            availableTasks.Remove(best);
+        }
+
+        return best;
+    }
+
     private float GetPathLength(Vector3 start, Vector3 end)
     {
         Debug.DrawRay(start, Vector3.up * 2, Color.green, 2f);
@@ -128,33 +156,5 @@ public class TaskManager : MonoBehaviour
         }
 
         return -1f;
-    }
-
-    public MoveItemTask RequestMoveItemTask(Vector3 fromPosition, float maxWeight, Vector3 destination, float maxDistance = Mathf.Infinity)
-    {
-        MoveItemTask best = null;
-        float bestDist = float.MaxValue;
-
-        foreach (ITask task in availableTasks)
-        {
-            if (task is MoveItemTask moveItemTask
-                && moveItemTask.TaskData.weight <= maxWeight
-                && moveItemTask.Destination == destination)
-            {
-                float dist = Vector3.Distance(fromPosition, moveItemTask.TaskPosition);
-                if (dist <= maxDistance && dist < bestDist)
-                {
-                    bestDist = dist;
-                    best = moveItemTask;
-                }
-            }
-        }
-
-        if (best != null)
-        {
-            availableTasks.Remove(best);
-        }
-
-        return best;
     }
 }
