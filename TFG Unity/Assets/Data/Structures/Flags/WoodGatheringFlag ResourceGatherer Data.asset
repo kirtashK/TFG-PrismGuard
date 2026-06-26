@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
+  m_Name: WoodGatheringFlag ResourceGatherer Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
+  Name: Wood gathering flag
+  id: fb95fba4ad7ad32408677ec8ced9752b
+  icon: {fileID: 21300000, guid: 79f31b92ab0372745ac7dbfeb1b594f4, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 0
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
+    value: 15
+  category: 2
+  buildDuration: 5
+  builtPrefab: {fileID: 2959668300810766323, guid: 1d1eeccea03f6174e9928fa4a8ab0ce4, type: 3}
+  blueprintPrefab: {fileID: 9140260009033065384, guid: cb9e57d7244bc8048a057c2e604919d8, type: 3}
+  previewPrefab: {fileID: 2341301800914738222, guid: 4ba4bf4e64ad3a149a11a7f14c4497ea, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  faction: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 1
+  allowedCategories: 00000000

@@ -1,0 +1,127 @@
+<linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="AgentSoldier" preserve="all" />
+    <type fullname="AnimationEventReceiver" preserve="all" />
+    <type fullname="AoEAttackAbility" preserve="all" />
+    <type fullname="AoEHealAbility" preserve="all" />
+    <type fullname="Blueprint" preserve="all" />
+    <type fullname="Crystal" preserve="all" />
+    <type fullname="Enemy" preserve="all" />
+    <type fullname="EnemyData" preserve="all" />
+    <type fullname="HealingPotionAbility" preserve="all" />
+    <type fullname="HealthBar" preserve="all" />
+    <type fullname="ItemCategory" preserve="all" />
+    <type fullname="ItemData" preserve="all" />
+    <type fullname="ItemInstance" preserve="all" />
+    <type fullname="ModifyStatEffect" preserve="all" />
+    <type fullname="MoveItemTask" preserve="all" />
+    <type fullname="ProcessorData" preserve="all" />
+    <type fullname="ProcessResourceRecipe" preserve="all" />
+    <type fullname="ResearchBench" preserve="all" />
+    <type fullname="ResearchData" preserve="all" />
+    <type fullname="ResourceGatherer" preserve="all" />
+    <type fullname="ResourceGathererData" preserve="all" />
+    <type fullname="ResourceProcessor" preserve="all" />
+    <type fullname="Selectable" preserve="all" />
+    <type fullname="Sensor" preserve="all" />
+    <type fullname="Shop" preserve="all" />
+    <type fullname="Soldier" preserve="all" />
+    <type fullname="SoldierData" preserve="all" />
+    <type fullname="StatKey" preserve="all" />
+    <type fullname="Structure" preserve="all" />
+    <type fullname="StructureData" preserve="all" />
+    <type fullname="Tower" preserve="all" />
+    <type fullname="TowerProjectile" preserve="all" />
+    <type fullname="Unit" preserve="all" />
+    <type fullname="UnitFactory" preserve="all" />
+    <type fullname="UnitFactoryData" preserve="all" />
+    <type fullname="UnlockStructureEffect" preserve="all" />
+    <type fullname="UnlockUnitEffect" preserve="all" />
+    <type fullname="Wall" preserve="all" />
+    <type fullname="Warehouse" preserve="all" />
+    <type fullname="WarehouseData" preserve="all" />
+    <type fullname="Worker" preserve="all" />
+    <type fullname="WorkerData" preserve="all" />
+    <type fullname="StatBaseEntry" preserve="nothing" serialized="true" />
+    <type fullname="UnitData/ResourceRequirement" preserve="nothing" serialized="true" />
+    <type fullname="Worker/ToolEntry" preserve="nothing" serialized="true" />
+    <type fullname="StructureData/ResourceRequirement" preserve="nothing" serialized="true" />
+    <type fullname="ResourceGatherer/OutputThresholdEntry" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+    <type fullname="UnityEngine.AddressableAssets.AssetReferenceGameObject" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Animation.Rigging, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Animations.Rigging.Rig" preserve="all" />
+    <type fullname="UnityEngine.Animations.Rigging.RigBuilder" preserve="all" />
+    <type fullname="UnityEngine.Animations.Rigging.RigTransform" preserve="all" />
+    <type fullname="UnityEngine.Animations.Rigging.TwoBoneIKConstraint" preserve="all" />
+    <type fullname="UnityEngine.Animations.Rigging.RigEffectorData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Animations.Rigging.RigEffectorData/Style" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Animations.Rigging.RigLayer" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Animations.Rigging.TwoBoneIKConstraintData" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.InferenceEngine, Version=2.5.5.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Unity.InferenceEngine.ModelAsset" preserve="all" />
+    <type fullname="Unity.InferenceEngine.ModelAssetData" preserve="all" />
+    <type fullname="Unity.InferenceEngine.ModelAssetWeightsData" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ML-Agents, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Unity.MLAgents.DecisionRequester" preserve="all" />
+    <type fullname="Unity.MLAgents.Policies.BehaviorParameters" preserve="all" />
+    <type fullname="Unity.MLAgents.Actuators.ActionSpec" preserve="nothing" serialized="true" />
+    <type fullname="Unity.MLAgents.Agent/AgentParameters" preserve="nothing" serialized="true" />
+    <type fullname="Unity.MLAgents.Policies.BehaviorType" preserve="nothing" serialized="true" />
+    <type fullname="Unity.MLAgents.Policies.BrainParameters" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AI.NavMeshAgent" preserve="all" />
+    <type fullname="UnityEngine.AI.NavMeshObstacle" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AnimationClip" preserve="all" />
+    <type fullname="UnityEngine.Animator" preserve="all" />
+    <type fullname="UnityEngine.AnimatorOverrideController" preserve="all" />
+    <type fullname="UnityEngine.Avatar" preserve="all" />
+    <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Mesh" preserve="all" />
+    <type fullname="UnityEngine.MeshFilter" preserve="all" />
+    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+    <type fullname="UnityEngine.Rigidbody" preserve="all" />
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
+    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.RectMask2D" preserve="all" />
+    <type fullname="UnityEngine.UI.MaskableGraphic/CullStateChangedEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Canvas" preserve="all" />
+    <type fullname="UnityEngine.CanvasRenderer" preserve="all" />
+  </assembly>
+</linker>

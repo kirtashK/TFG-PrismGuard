@@ -1,0 +1,78 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "NewStructureData", menuName = "Data/Structure/Structure")]
+public class StructureData : BaseData
+{
+    [Header("Structure")]
+
+    [Tooltip("Category to show in construction UI")]
+    public StructureCategory category = StructureCategory.Misc;
+
+    [Tooltip("Seconds needed to build the structure")]
+    [Min(0f)]
+    public float buildDuration = 5f;
+
+    [Tooltip("Prefab of the structure once built")]
+    public GameObject builtPrefab;
+
+    [Tooltip("Prefab of the structure while being built")]
+    public GameObject blueprintPrefab;
+
+    [Tooltip("Prefab of the preview during build placement")]
+    public GameObject previewPrefab;
+
+    [Header("Placement")]
+    [Tooltip("True to use snap to grid")]
+    public bool snapToGrid = true;
+
+    [Tooltip("Size of the grid if snapToGrid is true")]
+    [Range(0f, 100f)]
+    public float gridSize = 1f;
+
+    [Tooltip("Radius to check colisions while placing")]
+    [Range(0f, 100f)]
+    public float placementRadius = 1f;
+
+    [Tooltip("Allow rotation during placement")]
+    public bool allowRotation = true;
+
+    [Tooltip("If true, only one instance of this structure can exist in the scene at a time")]
+    public bool isUnique = false;
+
+    public Faction faction = Faction.Player;
+
+    [System.Serializable]
+    public struct ResourceRequirement
+    {
+        public ItemData itemData;
+        [Range(0f, 100f)]
+        public int quantity;
+    }
+
+    public List<ResourceRequirement> buildRequirements = new();
+
+#if UNITY_EDITOR
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+
+        if (builtPrefab == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(builtPrefab)}");
+        }
+        if (blueprintPrefab == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(blueprintPrefab)}");
+        }
+        if (previewPrefab == null)
+        {
+            Debug.LogWarning($"{name}: missing {nameof(previewPrefab)}");
+        }
+        if (faction == Faction.Player && (buildRequirements == null || buildRequirements.Count == 0))
+        {
+            Debug.LogWarning($"{name}: {nameof(buildRequirements)} not configured");
+        }
+    }
+#endif
+}

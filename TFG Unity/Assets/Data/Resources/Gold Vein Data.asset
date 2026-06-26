@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 422f3942f9e62294d8da8b35e08f4c07, type: 3}
+  m_Name: Gold Vein Data
+  m_EditorClassIdentifier: 
+  Name: Gold vein
+  id: 7b67a0e8b0c5b6c44915cc6d6575b5c7
+  icon: {fileID: 21300000, guid: 032d9c62ddc3287408e3e9f94d537a16, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  category: 4
+  respawnTime: 60

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ec6925d80205242a8202825a119a8a, type: 3}
+  m_Name: Modify Speed Global
+  m_EditorClassIdentifier: Assembly-CSharp::ModifyStatEffect
+  Name: Modify MoveSpeed Stat
+  id: 12d4295b8002e7e418530580aa5ce075
+  icon: {fileID: 21300000, guid: 8e9241054a66e3a438712199709a34d6, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: Modifies movement speed of global (Multiplicative 20)
+  targetData: {fileID: 0}
+  statKey: {fileID: 11400000, guid: cc72a74f75958934393a31c46bbc654a, type: 2}
+  modifierType: 1
+  value: 20

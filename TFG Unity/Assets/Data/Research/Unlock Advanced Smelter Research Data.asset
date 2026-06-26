@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54131000afe84cf4fabe1ee1df5e9d5b, type: 3}
+  m_Name: Unlock Advanced Smelter Research Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResearchData
+  Name: Advanced smelter
+  id: 784cb060219fac54b881df2804c74737
+  icon: {fileID: 21300000, guid: fdd8c7d04dd746340bae5849659af5da, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  description: Investigate how to gather heat efficiently and how to manipulate different
+    metals.
+  requiredResearchPoints: 250
+  basePointsPerCycle: 10
+  prerequisiteResearchDatas:
+  - {fileID: 11400000, guid: 16c5c14ecc40f6e449f5b03614d64604, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 07268c04d56179d43848a4933cd5f3f7, type: 2}

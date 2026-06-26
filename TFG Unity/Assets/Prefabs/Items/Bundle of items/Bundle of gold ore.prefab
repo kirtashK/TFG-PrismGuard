@@ -1,0 +1,348 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3759055370479976984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3377382498715681722}
+  m_Layer: 0
+  m_Name: Bundle of gold ore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3377382498715681722
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3759055370479976984}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6795717699036223957}
+  - {fileID: 5750607455223442330}
+  - {fileID: 7195500948054573422}
+  - {fileID: 8014326410060702626}
+  - {fileID: 5272714515696339292}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4821135268330661061
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3377382498715681722}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_Name
+      value: Gold Ore (4)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+--- !u!4 &5272714515696339292 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+  m_PrefabInstance: {fileID: 4821135268330661061}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4902781803076175363
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3377382498715681722}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_Name
+      value: Gold Ore (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+--- !u!4 &5750607455223442330 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+  m_PrefabInstance: {fileID: 4902781803076175363}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6164108665435927628
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3377382498715681722}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_Name
+      value: Gold Ore
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+--- !u!4 &6795717699036223957 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+  m_PrefabInstance: {fileID: 6164108665435927628}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7276962098908204603
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3377382498715681722}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_Name
+      value: Gold Ore (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+--- !u!4 &8014326410060702626 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+  m_PrefabInstance: {fileID: 7276962098908204603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7502962812484005111
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3377382498715681722}
+    m_Modifications:
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266297577157854077, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+      propertyPath: m_Name
+      value: Gold Ore (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+--- !u!4 &7195500948054573422 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 847922553205075353, guid: 0050e8c8eb290dd41afde5f48d36dbcd, type: 3}
+  m_PrefabInstance: {fileID: 7502962812484005111}
+  m_PrefabAsset: {fileID: 0}

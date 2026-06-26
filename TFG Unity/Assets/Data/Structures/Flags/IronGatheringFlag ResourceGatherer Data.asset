@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057884139406326429d217ab6ad4ca73, type: 3}
+  m_Name: IronGatheringFlag ResourceGatherer Data
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceGathererData
+  Name: Iron gathering flag
+  id: 3660304d644e65a47a4620da796a9ff5
+  icon: {fileID: 21300000, guid: bb21d20824ddb2c4ba6dcffe37559ef8, type: 3}
+  requiredResearch: {fileID: 11400000, guid: 23a80442c966ab04aab0dcfbc20148be, type: 2}
+  statBases:
+  - statKey: {fileID: 11400000, guid: ffb5078836903c140907a779031e1426, type: 2}
+    value: 0
+  - statKey: {fileID: 11400000, guid: 08c4e0aa659b6124aaa9c38028693aac, type: 2}
+    value: 0.25
+  - statKey: {fileID: 11400000, guid: eb100b9b2add7c04396fb5f6fd138636, type: 2}
+    value: 15
+  category: 2
+  buildDuration: 5
+  builtPrefab: {fileID: 3923448407394807079, guid: be91ff141696c29488dc17fc39a52ff7, type: 3}
+  blueprintPrefab: {fileID: 1332719990615219572, guid: ed32beff4080fd540931c91405ac8dda, type: 3}
+  previewPrefab: {fileID: 2689401688689900604, guid: 782ab73cc474c454382644db2c0d6adf, type: 3}
+  snapToGrid: 1
+  gridSize: 1
+  placementRadius: 1
+  allowRotation: 1
+  isUnique: 0
+  faction: 0
+  buildRequirements:
+  - itemData: {fileID: 11400000, guid: a77f0a53919663641b25d49361a76236, type: 2}
+    quantity: 1
+  allowedCategories: 03000000

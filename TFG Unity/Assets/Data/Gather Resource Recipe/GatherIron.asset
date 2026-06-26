@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071fda8c4ba09c04abe1ea37ace56983, type: 3}
+  m_Name: GatherIron
+  m_EditorClassIdentifier: 
+  Name: Mine iron vein
+  id: f1b6a6be5b655964b998651f702f675c
+  icon: {fileID: 0}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  resourceItemData: {fileID: 11400000, guid: 6a8026a0170d6ae44b82149f72c783db, type: 2}
+  workDuration: 45
+  interactionRange: 2
+  priority: 1
+  minResourcesToSpawn: 1
+  maxResourcesToSpawn: 2
+  resourceAmount: 20
+  resourceMaxDeviation: 5

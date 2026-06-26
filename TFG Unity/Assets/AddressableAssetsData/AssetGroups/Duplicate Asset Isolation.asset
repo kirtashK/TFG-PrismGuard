@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Duplicate Asset Isolation
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Duplicate Asset Isolation
+  m_GUID: 7bddfb75d8519b0479f8ae6d1b7f7148
+  m_SerializeEntries:
+  - m_GUID: 5bf63621772e59446ba7438980237e03
+    m_Address: Assets/Art/Models/Tools/Pickaxe 2.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7e850825dae4914db355ee3d70c40f0
+    m_Address: Assets/Art/Models/Tools/Hammer.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c260c682e93a5ce46812e33702aaca14
+    m_Address: Assets/Art/Models/Structures/5 Smelters.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e4709ad9b7e7213498086fd1d8b32215, type: 2}
+    - {fileID: 11400000, guid: 40d624cafd83a1943ae2cb1bb19094d1, type: 2}

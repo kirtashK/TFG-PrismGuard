@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UnitPrefabGroup
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: UnitPrefabGroup
+  m_GUID: 5beb7bf814a4b0e4e9079fd2a1e0ecbb
+  m_SerializeEntries:
+  - m_GUID: 0b1407893e8eb0949bd6061828ea8231
+    m_Address: Assets/Prefabs/Units/Enemies/Fast zombie Female.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83a4e4a3f3e5d644bb93f769b38f2314
+    m_Address: Assets/Prefabs/Soldiers/Medium Soldier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f3d6e970a529b74fbece11ddaabb6fa
+    m_Address: Assets/Prefabs/Soldiers/Basic Soldier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a70e0d193fd04154b8bbce7950c85ca0
+    m_Address: Assets/Prefabs/Enemies/Basic Enemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9118ed2c42dd014ca49170d806b707d
+    m_Address: Assets/Prefabs/Workers/Worker.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d149339113bda3047a081eee0ca9961c
+    m_Address: Assets/Prefabs/Units/Enemies/Weak zombie Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d554e948d5394334ea75f2430708bf98
+    m_Address: Assets/Prefabs/Units/Agent/AgentSoldier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1816d2047e50fe428105a3dd684a121
+    m_Address: Assets/Prefabs/Enemies/Medium Enemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c1c39cb2d4443d442810b92fff1334c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 60690ad01270b714b88bae3601a0cdf2, type: 2}
+    - {fileID: 11400000, guid: 0fd7d7727bc23c14aa5d6e6de7709380, type: 2}

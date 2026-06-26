@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a51e223f5496545419a5317368af6adb, type: 3}
+  m_Name: Iron Ore Data
+  m_EditorClassIdentifier: 
+  Name: Iron ore
+  id: 6a8026a0170d6ae44b82149f72c783db
+  icon: {fileID: 21300000, guid: b9514f672b46ee54d80b419d50131865, type: 3}
+  requiredResearch: {fileID: 0}
+  statBases: []
+  itemPrefab: {fileID: 1592414852830515788, guid: 849e94c628aecef4e8160ec3b16ed887, type: 3}
+  weight: 5
+  interactionRange: 1
+  category: {fileID: 11400000, guid: a07ef24556ffb8342a8ad373ae63d616, type: 2}
+  isFuel: 0
+  fuelValue: 0
+  canBeBought: 1
+  buyPrice: 5
+  canBeSold: 0
+  sellFraction: 1

@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6249790194490888404
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 878019025284666128, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3132084410443466483, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_Name
+      value: Gold Gathering Flag Blueprint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5150859890711454279, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8894544131976181233, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8548758030102401255, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+    - {fileID: 6698755587861898692, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+    - {fileID: 5154415911146534877, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+    - {fileID: 2692460724975909917, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 1631807969752446920, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0d4aabf670dc21b45b8b822f8eb971da, type: 3}
