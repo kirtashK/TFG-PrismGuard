@@ -1,0 +1,4 @@
+# GitHub language statistics (Linguist): exclude third-party and generated files
+TFG[[:space:]]Unity/Assets/TextMesh[[:space:]]Pro/** linguist-vendored
+TFG[[:space:]]Unity/Assets/Art/Polytope[[:space:]]Studio/** linguist-vendored
+TFG[[:space:]]Unity/Assets/InputSystem_Actions.cs linguist-generated
