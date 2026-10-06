@@ -4,7 +4,9 @@
 
 Prism Guard is a strategy and base-management prototype built in Unity. You build a base around a magic crystal, gather and process resources, research upgrades and produce units, and you defend the crystal from zombie waves. Workers handle the day-to-day work on their own. Soldiers, towers and an experimental hero unit trained with ML-Agents handle the fighting.
 
-This project is my Final Degree Project (*Trabajo Fin de Grado*) for the Degree in Computer Engineering (*Grado en Ingeniería Informática*) at the University of Cádiz. [Project report (Spanish)](NotaFinal.png)
+This project is my Final Degree Project (*Trabajo Fin de Grado*) for the Degree in Computer Engineering (*Grado en Ingeniería Informática*) at the University of Cádiz. [Project report (Spanish)](TFG_MarcosMoralesMarquez.pdf)
+
+**Want to try it?** Download the [Windows build](https://github.com/kirtashK/TFG-PrismGuard/releases/latest) and see [Playing the Windows build](#playing-the-windows-build).
 
 | | |
 |---|---|
@@ -172,6 +174,17 @@ The project uses a modular, component-based architecture that keeps **data**, **
 
 ## Getting started
 
+### Playing the Windows build
+You don't need Unity to play. A prebuilt version for 64-bit Windows is available on the [Releases page](https://github.com/kirtashK/TFG-PrismGuard/releases/latest).
+
+1. Download `Build.zip` from the latest release.
+2. Extract the whole archive. The game does not run from inside the zip, and `TFG.exe` needs the `TFG_Data` folder and the other files next to it.
+3. Run `TFG.exe` inside the extracted `Build` folder.
+
+The executable is not signed, so Windows SmartScreen may show a warning the first time. Choose **More info → Run anyway** to start the game.
+
+The rest of this section is only needed if you want to open the project in the Unity editor.
+
 ### Requirements
 - Windows 11 (the target platform during development)
 - Unity `6000.4.0f1`, installed through Unity Hub
@@ -181,12 +194,11 @@ The project uses a modular, component-based architecture that keeps **data**, **
 ### Opening the project
 1. Clone the repository:
    ```bash
-   git clone https://github.com/kirtashK/TFG-Unity.git
+   git clone https://github.com/kirtashK/TFG-PrismGuard.git
    ```
-2. **ML-Agents package**: `Packages/manifest.json` points to a local copy of ML-Agents (`file:C:/Users/Marco/Desktop/ml-agents/...`). Before opening the project, either clone [ml-agents](https://github.com/Unity-Technologies/ml-agents) and update that path, or replace the entry with a registry or git version of `com.unity.ml-agents`.
-3. Open the `TFG Unity` folder with Unity Hub and wait for the import and script compilation to finish.
-4. Check that the console shows no compilation errors.
-5. Open `Assets/Scenes/MainMenu`, or any scene, since the bootstrap redirects to the main menu. Then press Play.
+2. Open the `TFG Unity` folder with Unity Hub and wait for the import and script compilation to finish.
+3. Check that the console shows no compilation errors.
+4. Open `Assets/Scenes/MainMenu`, or any scene, since the bootstrap redirects to the main menu. Then press Play.
 
 ### Building
 1. Open **File → Build Profiles** (Build Settings).
