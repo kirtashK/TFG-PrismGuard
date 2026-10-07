@@ -8,19 +8,18 @@ This project is my Final Degree Project (*Trabajo Fin de Grado*) for the Degree 
 
 **Want to try it?** Download the [Windows build](https://github.com/kirtashK/TFG-PrismGuard/releases/latest) and see [Playing the Windows build](#playing-the-windows-build).
 
-<img width="1919" height="1079" alt="Recolection" src="https://github.com/user-attachments/assets/b45ee5d2-0c36-4e61-9d8c-fb15bdce0093" />
-<img width="891" height="794" alt="Combat" src="https://github.com/user-attachments/assets/44dff0c6-0072-4f53-a1f9-02d338b995a3" />
-<img width="1545" height="907" alt="Research" src="https://github.com/user-attachments/assets/5cf3e006-e0e8-4fce-a5ff-1a9dd56a4a31" />
-<img width="1252" height="876" alt="Construction" src="https://github.com/user-attachments/assets/7dd7a995-6da0-4154-ae6e-99743dc39692" />
-
-
 | | |
 |---|---|
 | **Author** | Marcos Morales Márquez |
 | **Director** | Kevin Jesús Valle Gómez |
 | **Co-director** | José Miguel Aragón Jurado |
-| **Date** | June 2026 |
+| **Date** | July 2026 |
 | **Rating** | 9/10 |
+
+<img width="1919" height="1079" alt="Gathering" src="https://github.com/user-attachments/assets/b45ee5d2-0c36-4e61-9d8c-fb15bdce0093" />
+<img width="891" height="794" alt="Combat" src="https://github.com/user-attachments/assets/44dff0c6-0072-4f53-a1f9-02d338b995a3" />
+<img width="1545" height="907" alt="Research" src="https://github.com/user-attachments/assets/5cf3e006-e0e8-4fce-a5ff-1a9dd56a4a31" />
+<img width="1252" height="876" alt="Construction" src="https://github.com/user-attachments/assets/7dd7a995-6da0-4154-ae6e-99743dc39692" />
 
 ## About the project
 
