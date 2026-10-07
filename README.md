@@ -8,6 +8,12 @@ This project is my Final Degree Project (*Trabajo Fin de Grado*) for the Degree 
 
 **Want to try it?** Download the [Windows build](https://github.com/kirtashK/TFG-PrismGuard/releases/latest) and see [Playing the Windows build](#playing-the-windows-build).
 
+<img width="1919" height="1079" alt="Recolection" src="https://github.com/user-attachments/assets/b45ee5d2-0c36-4e61-9d8c-fb15bdce0093" />
+<img width="891" height="794" alt="Combat" src="https://github.com/user-attachments/assets/44dff0c6-0072-4f53-a1f9-02d338b995a3" />
+<img width="1545" height="907" alt="Research" src="https://github.com/user-attachments/assets/5cf3e006-e0e8-4fce-a5ff-1a9dd56a4a31" />
+<img width="1252" height="876" alt="Construction" src="https://github.com/user-attachments/assets/7dd7a995-6da0-4154-ae6e-99743dc39692" />
+
+
 | | |
 |---|---|
 | **Author** | Marcos Morales Márquez |
@@ -44,17 +50,23 @@ Killing enemies and clearing waves grants **score**, which is also the currency 
 - Workers deliver the required materials to the blueprint and build it into the finished structure.
 - Defensive structures: wooden walls and arrow towers that fire projectiles.
 
+https://github.com/user-attachments/assets/88f61c5e-9285-474f-95f1-f9c0bfd046f8
+
 ### Resources, processing and storage
 - **Resource nodes**: trees, stone, and copper, iron and gold veins. Nodes can be finite or infinite and respawning.
 - **Gathering flags** mark the nodes within a radius around them, and workers harvest those nodes automatically.
 - **Processors** turn input items into output items using configurable recipes. Recipes can define batches, processing time, optional fuel and output caps.
-  - Sawmill: logs → planks
-  - Quarry: rocks → stone blocks
-  - Crude and Advanced Smelter: ores → copper, iron and gold ingots
+  - Sawmill: logs into planks
+  - Quarry: rocks into stone blocks
+  - Crude and Advanced Smelter: ores into copper, iron and gold ingots
 - **Warehouses** accept items by category (plants, rocks, ores, resources, manufactured goods) and have a limited capacity that can be upgraded.
 - **Thresholds** stop gatherers and processors from producing once there is enough stock.
 - **Inventory panel** showing the total stock across the base.
 - **Shop** to buy and sell items with score.
+
+https://github.com/user-attachments/assets/528bf545-8f89-4d06-96ee-a7542330930c
+
+https://github.com/user-attachments/assets/7fd28b62-a5cb-4654-8fb4-e812e3c9e91a
 
 ### Task system
 - A centralized `TaskManager` that structures register tasks with: gathering, item transport, construction and research.
@@ -69,6 +81,8 @@ Killing enemies and clearing waves grants **score**, which is also the currency 
   - **Unlock structure**: smelters, ore gathering flags, shop, tower.
   - **Unlock unit**: for example, the Medium Soldier.
 
+https://github.com/user-attachments/assets/f66bc042-1cf3-471f-9142-574703401b4f
+
 ### Units and production
 - **Workers**: a state machine (`Idle`, `Moving`, `Working`, `MultiTransport`) that executes tasks (`GatherResourceTask`, `MoveItemTask`, `BuildTask`, `ResearchTask`).
 - **Soldiers**: a state machine (`Idle`, `Move`, `Chase`, `Attack`). After a move order they guard the area around their destination, and they return to it once there are no enemies left.
@@ -80,6 +94,8 @@ Killing enemies and clearing waves grants **score**, which is also the currency 
 - Click to select, drag to box-select, `Shift` to add to the selection.
 - Right-click to send move/guard orders. Groups move in formation, and their destinations are spread out so the units don't all converge on the same point.
 - Selection halos on units and a marker at the ordered destination.
+
+https://github.com/user-attachments/assets/68bcb5c8-1cfe-4b06-8837-51e99151187e
 
 ### Waves
 - Each wave has a budget that grows over time: `(initialBudget + linearDelta · n) · rⁿ`.
